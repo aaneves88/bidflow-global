@@ -12,6 +12,9 @@ import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import Clients from "@/pages/clients/Clients";
 import Proposals from "@/pages/proposals/Proposals";
+import ProposalForm from "@/pages/proposals/ProposalForm";
+import ProposalView from "@/pages/proposals/ProposalView";
+import PublicProposal from "@/pages/proposals/PublicProposal";
 import Admin from "@/pages/admin/Admin";
 import SettingsPage from "@/pages/settings/SettingsPage";
 import NotFound from "@/pages/NotFound";
@@ -29,6 +32,7 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/p/:publicCode" element={<PublicProposal />} />
             <Route
               path="/dashboard"
               element={
@@ -50,6 +54,30 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <AppLayout><Proposals /></AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/proposals/new"
+              element={
+                <ProtectedRoute>
+                  <AppLayout><ProposalForm /></AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/proposals/:id"
+              element={
+                <ProtectedRoute>
+                  <AppLayout><ProposalView /></AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/proposals/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <AppLayout><ProposalForm /></AppLayout>
                 </ProtectedRoute>
               }
             />
