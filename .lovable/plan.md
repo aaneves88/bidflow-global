@@ -1,107 +1,93 @@
 
 
-# Phase 2 — MVP Core
+# Phase 3 — Admin & Settings
 
-Everything needed to make CloseFlow a usable, sellable product.
-
----
-
-## 1. Database: New Tables
-
-**clients**
-- id (UUID), user_id (ref auth.users), name, email, phone, company, notes, created_at, updated_at
-
-**proposals**
-- id (UUID), user_id, client_id (ref clients), public_code (unique, random 12-char), title, description, currency, total_amount, status_id (ref proposal_statuses), valid_until (nullable), created_at, updated_at
-
-**proposal_items**
-- id (UUID), proposal_id (ref proposals), description, quantity, unit_price, total, position, created_at
-
-**proposal_status_history**
-- id (UUID), proposal_id (ref proposals), status_id (ref proposal_statuses), changed_by (nullable UUID), notes, created_at
-
-RLS policies on all tables: users can only CRUD their own clients and proposals. Public page reads proposals by public_code without auth.
-
-Trigger: when proposal status_id changes, auto-insert into proposal_status_history.
-
-Enable realtime on proposals table for future use.
+Build the admin dashboard and settings interface so the system can be operated without code changes.
 
 ---
 
-## 2. Clients Module
+## 1. Admin Dashboard (`/admin`)
 
-- **List page** (`/clients`): searchable table with name, email, company, phone, proposal count
-- **Create/Edit dialog**: form with name (required), email, phone, company, notes
-- **Delete** with confirmation
-- All operations via Supabase with react-query
+Replace the placeholder with a real admin page containing:
 
----
+- **Users table**: list all users (from `profiles` joined with `user_roles`), showing name, email, role, registration date
+- **Actions per user**: toggle admin role, grant/revoke plan manually
+- **Stats cards**: total users, total proposals (system-wide), total approved revenue (system-wide)
 
-## 3. Proposals Module
-
-- **List page** (`/proposals`): table with title, client name, status badge (colored), total, date, actions
-- **Create/Edit page** (`/proposals/new`, `/proposals/:id/edit`): 
-  - Select client (or create inline)
-  - Title, description, currency, valid_until
-  - Line items editor (add/remove rows, auto-calculate totals)
-  - Status selector
-- **View page** (`/proposals/:id`): full proposal detail with status history timeline, actions (change status, copy public link, WhatsApp send)
+No new database tables needed -- uses existing `profiles`, `user_roles`, `user_plans`, `plans`, `proposals`.
 
 ---
 
-## 4. Proposal Public Page
+## 2. Admin Sub-routes
 
-- Route: `/p/:publicCode` (no auth required)
-- Clean, professional read-only view of the proposal
-- Shows: company info, client info, line items, total, status
-- "Accept Proposal" button that changes status to Approved
-- WhatsApp button to contact the sender
-- No app chrome (no sidebar, no header)
+Expand `/admin` into sub-pages via tabs or nested routes:
 
----
+- `/admin` — overview (stats + recent users)
+- `/admin/users` — full users management
+- `/admin/plans` — plans CRUD (create/edit/deactivate plans in `plans` table)
+- `/admin/statuses` — manage `proposal_statuses` (reorder, rename, change colors)
 
-## 5. Dashboard
-
-- Welcome message with user name
-- KPI cards:
-  - Total proposals (this month)
-  - Open proposals (pending)
-  - Approved value (sum of approved proposals)
-  - Conversion rate (approved / total)
-- Recent proposals list (last 5)
-- Mini pipeline: status distribution as a simple bar or column chart
+All protected with `requireAdmin`.
 
 ---
 
-## 6. Status History
+## 3. Settings Page (`/settings`)
 
-- Timeline component on proposal detail page
-- Shows each status change with timestamp, who changed it, and optional notes
+Replace the placeholder with a tabbed settings interface reading/writing from `app_settings`:
 
----
+- **General tab**: company name, default currency
+- **Integrations tab**: Stripe enabled/disabled, WhatsApp enabled/disabled + phone number
+- **Branding tab**: logo URL, primary color (future use)
 
-## 7. Routing Updates
-
-New routes in App.tsx:
-- `/proposals/new` — create proposal
-- `/proposals/:id` — view proposal
-- `/proposals/:id/edit` — edit proposal  
-- `/p/:publicCode` — public proposal page (no auth)
+Each tab loads settings by category from `app_settings` and saves via upsert.
 
 ---
 
-## 8. Update Roadmap
+## 4. Plans Management (Admin)
 
-Mark Phase 1 items as completed, Phase 2 items as in progress.
+- Table listing all plans (name, price, currency, interval, active/inactive)
+- Create/edit dialog with fields: name, description, price, currency, interval, features (JSON editor or tag input), is_active toggle
+- Soft-delete via `is_active = false`
+
+---
+
+## 5. User Plans Management (Admin)
+
+- On the users detail or from users list, admin can "Grant Plan" to a user
+- Dialog: select plan, set start/end dates, status
+- Inserts into `user_plans` with `granted_by = admin's UUID`
+- Show current plan badge on user row
+
+---
+
+## 6. Proposal Statuses Management (Admin)
+
+- Sortable list of `proposal_statuses`
+- Edit name, color (color picker), position, is_default, is_final flags
+- Add new status, reorder via drag or position input
+
+---
+
+## 7. Database Changes
+
+- **New RLS policy on `proposal_statuses`**: allow anon SELECT (public proposal page needs statuses)
+- **New RLS policy on `profiles`**: admin INSERT for system operations (already has admin SELECT)
+- No new tables required
+
+---
+
+## 8. Roadmap Update
+
+Mark Phase 3 items as "in progress" in `docs/product-roadmap.md`.
 
 ---
 
 ## Technical Details
 
-- All queries use `@tanstack/react-query` with Supabase client
-- Public code generation: `crypto.randomUUID().replace(/-/g, '').slice(0, 12)`
-- Currency formatting with `Intl.NumberFormat`
-- Status badges use colors from `proposal_statuses.color`
-- WhatsApp link: `https://wa.me/?text=...` with proposal public URL
-- Line items use controlled form state with add/remove/reorder
+- Admin pages use `useAuth().isAdmin` guard + `requireAdmin` on routes
+- Settings use a custom `useAppSettings` hook that queries/upserts `app_settings` by category
+- Plans CRUD uses a `usePlans` hook with react-query
+- Users management queries `profiles` joined with `user_roles` (admin can see all via existing RLS)
+- All forms use shadcn/ui `Dialog`, `Form`, `Input`, `Select`, `Switch` components
+- Color picker for statuses uses a simple hex input or predefined palette
 
