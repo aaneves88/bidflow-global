@@ -1,110 +1,107 @@
 
 
-# CloseFlow — Phase 1: Foundation
+# Phase 2 — MVP Core
 
-## O que vamos construir
-
-Toda a base estrutural do CloseFlow: documentação do produto, shell do app, autenticação, sistema de roles, modelo de dados e configurações centralizadas.
+Everything needed to make CloseFlow a usable, sellable product.
 
 ---
 
-## 1. Documentação do Produto
+## 1. Database: New Tables
 
-Criar dois arquivos internos no repositório:
+**clients**
+- id (UUID), user_id (ref auth.users), name, email, phone, company, notes, created_at, updated_at
 
-- **`docs/product-context.md`** — Visão, público-alvo, princípios de arquitetura, modelo de acesso, regras de admin, design global-first
-- **`docs/product-roadmap.md`** — Roadmap completo das 6 fases com marcadores de status (planned/in progress/completed)
+**proposals**
+- id (UUID), user_id, client_id (ref clients), public_code (unique, random 12-char), title, description, currency, total_amount, status_id (ref proposal_statuses), valid_until (nullable), created_at, updated_at
 
----
+**proposal_items**
+- id (UUID), proposal_id (ref proposals), description, quantity, unit_price, total, position, created_at
 
-## 2. Branding & App Shell
+**proposal_status_history**
+- id (UUID), proposal_id (ref proposals), status_id (ref proposal_statuses), changed_by (nullable UUID), notes, created_at
 
-- Nome: **CloseFlow**
-- Atualizar `index.html` com título e meta tags do CloseFlow
-- Criar layout principal com sidebar navigation (colapsável no mobile)
-- Módulos na navegação: **Dashboard, Clients, Proposals, Admin, Settings**
-- Design limpo, profissional, mobile-first
-- Textos em inglês, centralizados para futura i18n (arquivo de constantes)
+RLS policies on all tables: users can only CRUD their own clients and proposals. Public page reads proposals by public_code without auth.
 
----
+Trigger: when proposal status_id changes, auto-insert into proposal_status_history.
 
-## 3. Estrutura de Módulos
-
-Organizar o projeto:
-```
-src/pages/auth/        → Login, Register
-src/pages/dashboard/   → User dashboard
-src/pages/clients/     → (placeholder)
-src/pages/proposals/   → (placeholder)
-src/pages/admin/       → (placeholder)
-src/pages/settings/    → (placeholder)
-```
-
-Rotas protegidas por autenticação. Rotas admin protegidas por role.
+Enable realtime on proposals table for future use.
 
 ---
 
-## 4. Autenticação (Supabase via Lovable Cloud)
+## 2. Clients Module
 
-- Ativar Supabase com Lovable Cloud
-- Login por email/senha
-- Registro com criação automática de perfil
-- **Primeiro usuário registrado vira admin** (trigger ou lógica no registro)
-- Página de login e registro com branding CloseFlow
-
----
-
-## 5. Modelo de Dados (Supabase)
-
-### Tabelas:
-
-**profiles**
-- id (UUID, ref auth.users)
-- full_name, email, avatar_url, created_at
-
-**user_roles** (tabela separada — segurança)
-- id, user_id (ref auth.users), role (enum: admin, user)
-- RLS + função `has_role()` security definer
-
-**plans**
-- id, name, description, features (jsonb), price, currency, interval, is_active, created_at
-
-**user_plans** (acesso manual ou por assinatura)
-- id, user_id, plan_id, granted_by (nullable — admin ou stripe), status (active/cancelled/expired), starts_at, expires_at
-
-**proposal_statuses** (dados de domínio reutilizáveis)
-- id, name, color, position, is_default, is_final, created_at
-
-**app_settings** (configurações centralizadas)
-- id, key (unique), value (jsonb), category (general/stripe/whatsapp/branding), updated_at
-
-RLS em todas as tabelas. Policies adequadas por role.
+- **List page** (`/clients`): searchable table with name, email, company, phone, proposal count
+- **Create/Edit dialog**: form with name (required), email, phone, company, notes
+- **Delete** with confirmation
+- All operations via Supabase with react-query
 
 ---
 
-## 6. Configurações Centralizadas
+## 3. Proposals Module
 
-- Seed inicial de `app_settings` com chaves padrão:
-  - `stripe_enabled`, `whatsapp_enabled`, `default_currency`, `company_name`
-- Seed de `proposal_statuses`: Draft, Sent, Viewed, Approved, Rejected, Expired
-
----
-
-## 7. Páginas Iniciais Funcionais
-
-- **Login/Register** — com branding CloseFlow
-- **Dashboard** — shell com boas-vindas e espaço para futuros KPIs
-- **Placeholders** para Clients, Proposals, Admin, Settings — estrutura pronta para Phase 2
+- **List page** (`/proposals`): table with title, client name, status badge (colored), total, date, actions
+- **Create/Edit page** (`/proposals/new`, `/proposals/:id/edit`): 
+  - Select client (or create inline)
+  - Title, description, currency, valid_until
+  - Line items editor (add/remove rows, auto-calculate totals)
+  - Status selector
+- **View page** (`/proposals/:id`): full proposal detail with status history timeline, actions (change status, copy public link, WhatsApp send)
 
 ---
 
-## 8. Persistência de Memória
+## 4. Proposal Public Page
 
-Salvar no projeto as regras de produto, preferências de design e roadmap para guiar todas as sessões futuras.
+- Route: `/p/:publicCode` (no auth required)
+- Clean, professional read-only view of the proposal
+- Shows: company info, client info, line items, total, status
+- "Accept Proposal" button that changes status to Approved
+- WhatsApp button to contact the sender
+- No app chrome (no sidebar, no header)
 
 ---
 
-## Resultado esperado
+## 5. Dashboard
 
-Ao final: app funcional com login, registro, primeiro-user-admin, navegação modular, modelo de dados normalizado, documentação interna, e base arquitetural sólida para o MVP (Phase 2).
+- Welcome message with user name
+- KPI cards:
+  - Total proposals (this month)
+  - Open proposals (pending)
+  - Approved value (sum of approved proposals)
+  - Conversion rate (approved / total)
+- Recent proposals list (last 5)
+- Mini pipeline: status distribution as a simple bar or column chart
+
+---
+
+## 6. Status History
+
+- Timeline component on proposal detail page
+- Shows each status change with timestamp, who changed it, and optional notes
+
+---
+
+## 7. Routing Updates
+
+New routes in App.tsx:
+- `/proposals/new` — create proposal
+- `/proposals/:id` — view proposal
+- `/proposals/:id/edit` — edit proposal  
+- `/p/:publicCode` — public proposal page (no auth)
+
+---
+
+## 8. Update Roadmap
+
+Mark Phase 1 items as completed, Phase 2 items as in progress.
+
+---
+
+## Technical Details
+
+- All queries use `@tanstack/react-query` with Supabase client
+- Public code generation: `crypto.randomUUID().replace(/-/g, '').slice(0, 12)`
+- Currency formatting with `Intl.NumberFormat`
+- Status badges use colors from `proposal_statuses.color`
+- WhatsApp link: `https://wa.me/?text=...` with proposal public URL
+- Line items use controlled form state with add/remove/reorder
 
