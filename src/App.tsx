@@ -8,7 +8,8 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppLayout } from "@/components/AppLayout";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
-import Index from "@/pages/Index";
+import Landing from "@/pages/Landing";
+import Dashboard from "@/pages/Dashboard";
 import Clients from "@/pages/clients/Clients";
 import Proposals from "@/pages/proposals/Proposals";
 import Admin from "@/pages/admin/Admin";
@@ -25,13 +26,14 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route
-              path="/"
+              path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <AppLayout><Index /></AppLayout>
+                  <AppLayout><Dashboard /></AppLayout>
                 </ProtectedRoute>
               }
             />

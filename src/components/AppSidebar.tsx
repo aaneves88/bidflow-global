@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 const mainItems = [
-  { title: 'Dashboard', url: '/', icon: LayoutDashboard },
+  { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Clients', url: '/clients', icon: Users },
   { title: 'Proposals', url: '/proposals', icon: FileText },
 ];
@@ -34,7 +34,7 @@ export function AppSidebar() {
   const { isAdmin, signOut, user } = useAuth();
 
   const isActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
+    if (path === '/dashboard') return location.pathname === '/dashboard';
     return location.pathname.startsWith(path);
   };
 

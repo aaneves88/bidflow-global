@@ -32,7 +32,7 @@ export default function Register() {
       toast({ title: 'Registration failed', description: error.message, variant: 'destructive' });
     } else {
       toast({ title: 'Account created', description: 'You can now sign in.' });
-      navigate('/login');
+      navigate('/dashboard');
     }
     setLoading(false);
   };

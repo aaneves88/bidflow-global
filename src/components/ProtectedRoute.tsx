@@ -13,7 +13,7 @@ export function ProtectedRoute({ children, requireAdmin = false }: { children: R
   }
 
   if (!user) return <Navigate to="/login" replace />;
-  if (requireAdmin && !isAdmin) return <Navigate to="/" replace />;
+  if (requireAdmin && !isAdmin) return <Navigate to="/dashboard" replace />;
 
   return <>{children}</>;
 }
