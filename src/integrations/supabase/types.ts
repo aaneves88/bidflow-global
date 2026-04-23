@@ -38,6 +38,42 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       plans: {
         Row: {
           created_at: string
@@ -98,6 +134,89 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          position: number
+          proposal_id: string
+          quantity: number
+          total: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          position?: number
+          proposal_id: string
+          quantity?: number
+          total?: number
+          unit_price?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          position?: number
+          proposal_id?: string
+          quantity?: number
+          total?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_items_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_status_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          proposal_id: string
+          status_id: string | null
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          proposal_id: string
+          status_id?: string | null
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          proposal_id?: string
+          status_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_status_history_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_status_history_status_id_fkey"
+            columns: ["status_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_statuses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_statuses: {
         Row: {
           color: string
@@ -127,6 +246,66 @@ export type Database = {
           position?: number
         }
         Relationships: []
+      }
+      proposals: {
+        Row: {
+          client_id: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          public_code: string
+          status_id: string | null
+          title: string
+          total_amount: number
+          updated_at: string
+          user_id: string
+          valid_until: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          public_code?: string
+          status_id?: string | null
+          title: string
+          total_amount?: number
+          updated_at?: string
+          user_id: string
+          valid_until?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          public_code?: string
+          status_id?: string | null
+          title?: string
+          total_amount?: number
+          updated_at?: string
+          user_id?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_status_id_fkey"
+            columns: ["status_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_statuses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_plans: {
         Row: {
