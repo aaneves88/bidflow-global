@@ -1,0 +1,31 @@
+{
+  "title": "Planos e preços",
+  "subtitle": "Escolha o plano ideal para o seu negócio. Sem fidelidade — cancele quando quiser.",
+  "perMonth": "/mês",
+  "perYear": "/ano",
+  "interval": {
+    "month": "/mês",
+    "year": "/ano",
+    "week": "/semana",
+    "day": "/dia"
+  },
+  "free": "Grátis",
+  "trialBadge": "{{days}} dias grátis",
+  "starter": "Plano inicial",
+  "current": "Plano atual",
+  "subscribe": "Assinar",
+  "getStarted": "Começar agora",
+  "comingSoon": "Em breve",
+  "comingSoonDescription": "A assinatura online estará disponível em breve. Entre em contato para contratar.",
+  "noPlans": "Nenhum plano disponível no momento.",
+  "features": {
+    "unlimited": "Ilimitadas",
+    "unlimitedClients": "Clientes ilimitados",
+    "proposalsLimit_one": "{{count}} proposta",
+    "proposalsLimit_other": "{{count}} propostas",
+    "clientsLimit_one": "{{count}} cliente",
+    "clientsLimit_other": "{{count}} clientes"
+  },
+  "loading": "Carregando planos...",
+  "empty": "Nenhum plano disponível"
+}

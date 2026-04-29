@@ -1,0 +1,37 @@
+{
+  "title": "Clientes",
+  "newButton": "Novo cliente",
+  "searchPlaceholder": "Buscar clientes...",
+  "table": {
+    "name": "Nome",
+    "email": "E-mail",
+    "company": "Empresa",
+    "phone": "Telefone",
+    "proposals": "Propostas",
+    "actions": "Ações"
+  },
+  "empty": {
+    "noResults": "Nenhum cliente corresponde à busca",
+    "none": "Nenhum cliente cadastrado",
+    "addFirst": "Cadastrar primeiro cliente"
+  },
+  "dialog": {
+    "newTitle": "Novo cliente",
+    "editTitle": "Editar cliente",
+    "name": "Nome",
+    "nameRequired": "O nome é obrigatório",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "company": "Empresa",
+    "notes": "Observações"
+  },
+  "delete": {
+    "title": "Excluir cliente?",
+    "description": "Esta ação não pode ser desfeita. Propostas vinculadas a este cliente perderão a referência."
+  },
+  "messages": {
+    "created": "Cliente criado",
+    "updated": "Cliente atualizado",
+    "deleted": "Cliente excluído"
+  }
+}

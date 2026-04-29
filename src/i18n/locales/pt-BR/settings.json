@@ -1,0 +1,33 @@
+{
+  "title": "Configurações",
+  "tabs": {
+    "general": "Geral",
+    "integrations": "Integrações",
+    "branding": "Marca"
+  },
+  "general": {
+    "title": "Configurações gerais",
+    "companyName": "Nome da empresa",
+    "companyPlaceholder": "Sua empresa",
+    "defaultCurrency": "Moeda padrão",
+    "language": "Idioma da interface"
+  },
+  "integrations": {
+    "title": "Integrações",
+    "stripe": "Pagamentos via Stripe",
+    "stripeDescription": "Habilite para permitir assinatura de planos pelos seus clientes.",
+    "whatsapp": "WhatsApp",
+    "whatsappDescription": "Adicione um número padrão para envio de propostas.",
+    "whatsappPhone": "Número do WhatsApp",
+    "whatsappPlaceholder": "+5511999999999"
+  },
+  "branding": {
+    "title": "Marca",
+    "logoUrl": "URL do logotipo",
+    "primaryColor": "Cor primária"
+  },
+  "messages": {
+    "saved": "Configurações salvas",
+    "error": "Erro ao salvar configurações"
+  }
+}

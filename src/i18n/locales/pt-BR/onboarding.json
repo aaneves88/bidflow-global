@@ -1,0 +1,33 @@
+{
+  "title": "Bem-vindo(a) ao CloseFlow",
+  "subtitle": "Vamos configurar tudo em menos de 1 minuto.",
+  "step": "Passo {{current}} de {{total}}",
+  "welcome": {
+    "title": "Conte um pouco sobre seu negócio",
+    "description": "Esses dados aparecem nas suas propostas.",
+    "businessName": "Nome do seu negócio",
+    "businessPlaceholder": "Ex: Estúdio Aurora"
+  },
+  "client": {
+    "title": "Cadastre seu primeiro cliente",
+    "description": "Você pode pular e fazer isso depois.",
+    "name": "Nome do cliente",
+    "email": "E-mail",
+    "company": "Empresa"
+  },
+  "proposal": {
+    "title": "Pronto para sua primeira proposta?",
+    "description": "Vamos criar uma agora — leva poucos minutos.",
+    "create": "Criar proposta",
+    "later": "Faço depois"
+  },
+  "actions": {
+    "next": "Continuar",
+    "skip": "Pular",
+    "finish": "Ir para o painel"
+  },
+  "messages": {
+    "saved": "Configurações salvas",
+    "clientCreated": "Cliente cadastrado"
+  }
+}

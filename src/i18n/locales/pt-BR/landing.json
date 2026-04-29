@@ -1,0 +1,50 @@
+{
+  "tagline": "Propostas e pipeline para pequenos negócios",
+  "hero": {
+    "title1": "Crie propostas.",
+    "title2": "Acompanhe conversões.",
+    "title3": "Feche mais negócios.",
+    "subtitle": "O CloseFlow ajuda freelancers e pequenos negócios a enviar propostas profissionais, acompanhar o pipeline de vendas e entender o que converte — tudo em uma plataforma simples.",
+    "ctaPrimary": "Comece grátis",
+    "ctaSecondary": "Entrar"
+  },
+  "features": {
+    "heading": "Tudo que você precisa para vender mais",
+    "subheading": "Da criação da proposta ao acompanhamento do funil — o CloseFlow mantém suas vendas organizadas.",
+    "items": {
+      "create": {
+        "title": "Crie propostas",
+        "description": "Monte propostas profissionais em minutos. Compartilhe com um único link."
+      },
+      "share": {
+        "title": "Envie em segundos",
+        "description": "Mande pelo WhatsApp ou link público. O cliente vê e aprova online."
+      },
+      "track": {
+        "title": "Acompanhe o pipeline",
+        "description": "Veja quais propostas estão abertas, visualizadas, aprovadas ou perdidas — em um só painel."
+      },
+      "close": {
+        "title": "Feche mais negócios",
+        "description": "Entenda sua taxa de conversão, valor em pipeline e receita num piscar de olhos."
+      }
+    }
+  },
+  "how": {
+    "heading": "Como funciona",
+    "subheading": "Três passos para um processo de vendas melhor.",
+    "steps": {
+      "one": { "title": "Crie uma proposta", "description": "Adicione cliente, serviços e valores." },
+      "two": { "title": "Compartilhe", "description": "Envie por link ou WhatsApp em um clique." },
+      "three": { "title": "Acompanhe e feche", "description": "Faça follow-up e converta mais negócios." }
+    }
+  },
+  "cta": {
+    "heading": "Pronto para fechar mais negócios?",
+    "subheading": "Junte-se ao CloseFlow e gerencie suas propostas como um profissional.",
+    "button": "Começar — é grátis"
+  },
+  "footer": {
+    "rights": "Todos os direitos reservados."
+  }
+}

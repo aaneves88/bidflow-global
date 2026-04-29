@@ -1,0 +1,73 @@
+{
+  "title": "Propostas",
+  "newButton": "Nova proposta",
+  "searchPlaceholder": "Buscar propostas...",
+  "table": {
+    "title": "Título",
+    "client": "Cliente",
+    "status": "Status",
+    "total": "Total",
+    "date": "Data",
+    "actions": "Ações",
+    "views": "Visualizações"
+  },
+  "empty": {
+    "noResults": "Nenhuma proposta corresponde à busca",
+    "none": "Nenhuma proposta ainda",
+    "createFirst": "Criar sua primeira proposta"
+  },
+  "form": {
+    "newTitle": "Nova proposta",
+    "editTitle": "Editar proposta",
+    "details": "Detalhes",
+    "title": "Título",
+    "description": "Descrição",
+    "client": "Cliente",
+    "noClient": "Sem cliente",
+    "selectClient": "Selecione o cliente",
+    "status": "Status",
+    "selectStatus": "Selecione o status",
+    "currency": "Moeda",
+    "validUntil": "Válida até",
+    "items": "Itens",
+    "addItem": "Adicionar item",
+    "itemDescription": "Descrição",
+    "itemDescriptionPlaceholder": "Descrição do item",
+    "qty": "Qtd",
+    "unitPrice": "Valor unit.",
+    "itemTotal": "Total",
+    "grandTotal": "Total geral",
+    "submitNew": "Criar proposta",
+    "submitEdit": "Atualizar proposta"
+  },
+  "view": {
+    "copyLink": "Copiar link público",
+    "sendWhatsapp": "Enviar pelo WhatsApp",
+    "edit": "Editar",
+    "changeStatus": "Mudar status",
+    "validUntil": "Válida até {{date}}",
+    "items": "Itens",
+    "history": "Histórico de status",
+    "viewsTitle": "Visualizações",
+    "viewsCount_one": "{{count}} visualização",
+    "viewsCount_other": "{{count}} visualizações",
+    "neverViewed": "Ainda não visualizada",
+    "firstView": "Primeira visualização: {{date}}",
+    "lastView": "Última visualização: {{date}}",
+    "notFound": "Proposta não encontrada"
+  },
+  "delete": {
+    "title": "Excluir proposta?",
+    "description": "Esta ação não pode ser desfeita. Todos os itens e histórico serão removidos."
+  },
+  "messages": {
+    "created": "Proposta criada",
+    "updated": "Proposta atualizada",
+    "deleted": "Proposta excluída",
+    "statusUpdated": "Status atualizado",
+    "linkCopied": "Link copiado!"
+  },
+  "share": {
+    "whatsappText": "Veja esta proposta: {{url}}"
+  }
+}
