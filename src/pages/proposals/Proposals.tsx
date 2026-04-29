@@ -1,27 +1,26 @@
 import { useState } from 'react';
-import { Plus, Search, Eye, Pencil, Trash2, Copy, ExternalLink } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Plus, Search, Eye, Pencil, Trash2, Copy } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useProposals, useDeleteProposal } from '@/hooks/useProposals';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
 export default function Proposals() {
+  const { t } = useTranslation(['proposals', 'common', 'dashboard']);
   const { data: proposals, isLoading } = useProposals();
   const deleteProposal = useDeleteProposal();
+  const limits = usePlanLimits();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -38,22 +37,36 @@ export default function Proposals() {
   const copyPublicLink = (code: string) => {
     const url = `${window.location.origin}/p/${code}`;
     navigator.clipboard.writeText(url);
-    toast({ title: 'Link copied!' });
+    toast({ title: t('messages.linkCopied') });
   };
+
+  const newButton = (
+    <Button onClick={() => navigate('/proposals/new')} disabled={!limits.canCreateProposal}>
+      <Plus className="mr-2 h-4 w-4" /> {t('newButton')}
+    </Button>
+  );
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Proposals</h1>
-        <Button onClick={() => navigate('/proposals/new')}>
-          <Plus className="mr-2 h-4 w-4" /> New Proposal
-        </Button>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+        {!limits.canCreateProposal ? (
+          <Tooltip>
+            <TooltipTrigger asChild><span>{newButton}</span></TooltipTrigger>
+            <TooltipContent>
+              <div className="space-y-2">
+                <p>{t('dashboard:limit.proposalsReached')}</p>
+                <Button size="sm" asChild><Link to="/pricing">{t('dashboard:limit.upgrade')}</Link></Button>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        ) : newButton}
       </div>
 
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search proposals..."
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
@@ -61,15 +74,15 @@ export default function Proposals() {
       </div>
 
       {isLoading ? (
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t('common:actions.loading')}</p>
       ) : !filtered?.length ? (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16">
           <p className="text-muted-foreground mb-4">
-            {search ? 'No proposals match your search' : 'No proposals yet'}
+            {search ? t('empty.noResults') : t('empty.none')}
           </p>
-          {!search && (
+          {!search && limits.canCreateProposal && (
             <Button variant="outline" onClick={() => navigate('/proposals/new')}>
-              <Plus className="mr-2 h-4 w-4" /> Create your first proposal
+              <Plus className="mr-2 h-4 w-4" /> {t('empty.createFirst')}
             </Button>
           )}
         </div>
@@ -78,12 +91,12 @@ export default function Proposals() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Client</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Total</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="w-[140px]">Actions</TableHead>
+                <TableHead>{t('table.title')}</TableHead>
+                <TableHead>{t('table.client')}</TableHead>
+                <TableHead>{t('table.status')}</TableHead>
+                <TableHead className="text-right">{t('table.total')}</TableHead>
+                <TableHead>{t('table.date')}</TableHead>
+                <TableHead className="w-[140px]">{t('table.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -95,18 +108,13 @@ export default function Proposals() {
                     {p.proposal_statuses ? (
                       <Badge
                         variant="outline"
-                        style={{
-                          borderColor: p.proposal_statuses.color,
-                          color: p.proposal_statuses.color,
-                        }}
+                        style={{ borderColor: p.proposal_statuses.color, color: p.proposal_statuses.color }}
                       >
                         {p.proposal_statuses.name}
                       </Badge>
                     ) : '—'}
                   </TableCell>
-                  <TableCell className="text-right">
-                    {formatCurrency(Number(p.total_amount), p.currency)}
-                  </TableCell>
+                  <TableCell className="text-right">{formatCurrency(Number(p.total_amount), p.currency)}</TableCell>
                   <TableCell>{formatDate(p.created_at)}</TableCell>
                   <TableCell>
                     <div className="flex gap-1">
@@ -134,17 +142,15 @@ export default function Proposals() {
       <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete proposal?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. All items and history will be removed.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('delete.description')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common:actions.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => { if (deletingId) deleteProposal.mutate(deletingId); setDeletingId(null); }}
             >
-              Delete
+              {t('common:actions.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

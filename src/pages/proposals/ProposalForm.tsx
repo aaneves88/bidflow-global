@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,24 +10,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useClients } from '@/hooks/useClients';
 import {
-  useProposal,
-  useProposalItems,
-  useProposalStatuses,
-  useCreateProposal,
-  useUpdateProposal,
-  type ProposalItem,
+  useProposal, useProposalItems, useProposalStatuses,
+  useCreateProposal, useUpdateProposal, type ProposalItem,
 } from '@/hooks/useProposals';
 import { formatCurrency } from '@/lib/format';
 
 const emptyItem = (): ProposalItem => ({
-  description: '',
-  quantity: 1,
-  unit_price: 0,
-  total: 0,
-  position: 0,
+  description: '', quantity: 1, unit_price: 0, total: 0, position: 0,
 });
 
 export default function ProposalForm() {
+  const { t } = useTranslation(['proposals', 'common']);
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = !!id;
@@ -41,7 +35,7 @@ export default function ProposalForm() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [clientId, setClientId] = useState<string>('none');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('BRL');
   const [statusId, setStatusId] = useState<string>('');
   const [validUntil, setValidUntil] = useState('');
   const [items, setItems] = useState<ProposalItem[]>([emptyItem()]);
@@ -69,7 +63,6 @@ export default function ProposalForm() {
     }
   }, [existingItems, isEditing]);
 
-  // Set default status
   useEffect(() => {
     if (!statusId && statuses?.length) {
       const def = statuses.find((s) => s.is_default);
@@ -96,15 +89,12 @@ export default function ProposalForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
-      title,
-      description,
+      title, description,
       client_id: clientId === 'none' ? null : clientId,
-      currency,
-      status_id: statusId || null,
+      currency, status_id: statusId || null,
       valid_until: validUntil || null,
       items,
     };
-
     if (isEditing) {
       await update.mutateAsync({ ...data, id: id! });
     } else {
@@ -120,29 +110,29 @@ export default function ProposalForm() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">
-          {isEditing ? 'Edit Proposal' : 'New Proposal'}
+          {isEditing ? t('form.editTitle') : t('form.newTitle')}
         </h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
-          <CardHeader><CardTitle>Details</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t('form.details')}</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="title">Title *</Label>
+              <Label htmlFor="title">{t('form.title')} *</Label>
               <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t('form.description')}</Label>
               <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Client</Label>
+                <Label>{t('form.client')}</Label>
                 <Select value={clientId} onValueChange={setClientId}>
-                  <SelectTrigger><SelectValue placeholder="Select client" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('form.selectClient')} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">No client</SelectItem>
+                    <SelectItem value="none">{t('form.noClient')}</SelectItem>
                     {clients?.map((c) => (
                       <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                     ))}
@@ -150,9 +140,9 @@ export default function ProposalForm() {
                 </Select>
               </div>
               <div>
-                <Label>Status</Label>
+                <Label>{t('form.status')}</Label>
                 <Select value={statusId} onValueChange={setStatusId}>
-                  <SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('form.selectStatus')} /></SelectTrigger>
                   <SelectContent>
                     {statuses?.map((s) => (
                       <SelectItem key={s.id} value={s.id}>
@@ -168,18 +158,18 @@ export default function ProposalForm() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Currency</Label>
+                <Label>{t('form.currency')}</Label>
                 <Select value={currency} onValueChange={setCurrency}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    {['USD', 'EUR', 'GBP', 'BRL'].map((c) => (
+                    {['BRL', 'USD', 'EUR', 'GBP'].map((c) => (
                       <SelectItem key={c} value={c}>{c}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
-                <Label htmlFor="valid_until">Valid Until</Label>
+                <Label htmlFor="valid_until">{t('form.validUntil')}</Label>
                 <Input id="valid_until" type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} />
               </div>
             </div>
@@ -189,9 +179,9 @@ export default function ProposalForm() {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Line Items</CardTitle>
+              <CardTitle>{t('form.items')}</CardTitle>
               <Button type="button" variant="outline" size="sm" onClick={addItem}>
-                <Plus className="mr-1 h-4 w-4" /> Add Item
+                <Plus className="mr-1 h-4 w-4" /> {t('form.addItem')}
               </Button>
             </div>
           </CardHeader>
@@ -199,45 +189,27 @@ export default function ProposalForm() {
             {items.map((item, idx) => (
               <div key={idx} className="grid grid-cols-12 gap-2 items-end">
                 <div className="col-span-5">
-                  {idx === 0 && <Label className="text-xs">Description</Label>}
-                  <Input
-                    placeholder="Item description"
-                    value={item.description}
-                    onChange={(e) => updateItem(idx, 'description', e.target.value)}
-                  />
+                  {idx === 0 && <Label className="text-xs">{t('form.itemDescription')}</Label>}
+                  <Input placeholder={t('form.itemDescriptionPlaceholder')} value={item.description}
+                    onChange={(e) => updateItem(idx, 'description', e.target.value)} />
                 </div>
                 <div className="col-span-2">
-                  {idx === 0 && <Label className="text-xs">Qty</Label>}
-                  <Input
-                    type="number"
-                    min="0"
-                    step="any"
-                    value={item.quantity}
-                    onChange={(e) => updateItem(idx, 'quantity', Number(e.target.value))}
-                  />
+                  {idx === 0 && <Label className="text-xs">{t('form.qty')}</Label>}
+                  <Input type="number" min="0" step="any" value={item.quantity}
+                    onChange={(e) => updateItem(idx, 'quantity', Number(e.target.value))} />
                 </div>
                 <div className="col-span-2">
-                  {idx === 0 && <Label className="text-xs">Unit Price</Label>}
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={item.unit_price}
-                    onChange={(e) => updateItem(idx, 'unit_price', Number(e.target.value))}
-                  />
+                  {idx === 0 && <Label className="text-xs">{t('form.unitPrice')}</Label>}
+                  <Input type="number" min="0" step="0.01" value={item.unit_price}
+                    onChange={(e) => updateItem(idx, 'unit_price', Number(e.target.value))} />
                 </div>
                 <div className="col-span-2">
-                  {idx === 0 && <Label className="text-xs">Total</Label>}
+                  {idx === 0 && <Label className="text-xs">{t('form.itemTotal')}</Label>}
                   <Input value={formatCurrency(item.total, currency)} readOnly className="bg-muted" />
                 </div>
                 <div className="col-span-1">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeItem(idx)}
-                    disabled={items.length === 1}
-                  >
+                  <Button type="button" variant="ghost" size="icon"
+                    onClick={() => removeItem(idx)} disabled={items.length === 1}>
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
                 </div>
@@ -246,7 +218,7 @@ export default function ProposalForm() {
 
             <div className="flex justify-end pt-4 border-t">
               <div className="text-right">
-                <p className="text-sm text-muted-foreground">Grand Total</p>
+                <p className="text-sm text-muted-foreground">{t('form.grandTotal')}</p>
                 <p className="text-2xl font-bold">{formatCurrency(grandTotal, currency)}</p>
               </div>
             </div>
@@ -254,9 +226,9 @@ export default function ProposalForm() {
         </Card>
 
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={() => navigate('/proposals')}>Cancel</Button>
+          <Button type="button" variant="outline" onClick={() => navigate('/proposals')}>{t('common:actions.cancel')}</Button>
           <Button type="submit" disabled={create.isPending || update.isPending}>
-            {isEditing ? 'Update Proposal' : 'Create Proposal'}
+            {isEditing ? t('form.submitEdit') : t('form.submitNew')}
           </Button>
         </div>
       </form>
