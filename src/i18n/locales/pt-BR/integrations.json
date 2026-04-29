@@ -1,0 +1,85 @@
+{
+  "title": "Integrações",
+  "subtitle": "Conecte o CloseFlow com ferramentas externas. Ative, configure e gerencie integrações sem precisar mexer no código.",
+  "status": {
+    "active": "Ativa",
+    "inactive": "Inativa",
+    "comingSoon": "Em breve"
+  },
+  "actions": {
+    "save": "Salvar",
+    "saved": "Configurações salvas",
+    "saveError": "Erro ao salvar",
+    "configure": "Configurar",
+    "test": "Testar checkout",
+    "suggest": "Tenho interesse",
+    "interested": "Anotado! Vamos priorizar essa integração.",
+    "addSecret": "Adicionar secret",
+    "copy": "Copiar",
+    "copied": "Copiado"
+  },
+  "stripe": {
+    "name": "Stripe",
+    "description": "Receba pagamentos de assinaturas dos seus planos via Stripe Checkout.",
+    "enable": "Ativar integração com Stripe",
+    "mode": "Ambiente",
+    "modeTest": "Teste",
+    "modeLive": "Produção",
+    "publishableKey": "Publishable key",
+    "publishableKeyHint": "Começa com pk_test_ ou pk_live_. Pode ficar visível no app.",
+    "successUrl": "URL de sucesso",
+    "successUrlHint": "Para onde levar o cliente após pagamento aprovado.",
+    "cancelUrl": "URL de cancelamento",
+    "cancelUrlHint": "Para onde levar o cliente se ele desistir.",
+    "secretWarning": "A secret key (sk_...) e o webhook secret (whsec_...) NÃO ficam no banco. Salve em Lovable Cloud → Secrets como STRIPE_SECRET_KEY e STRIPE_WEBHOOK_SECRET.",
+    "productMapping": "Mapeamento de planos → preços do Stripe",
+    "productMappingHint": "Para cada plano cobrado, cole o Price ID criado no Stripe (price_...).",
+    "webhookUrl": "URL do webhook (configure no Stripe)",
+    "guide": {
+      "title": "Passo a passo",
+      "step1Title": "1. Crie sua conta no Stripe",
+      "step1": "Acesse stripe.com/register e finalize o cadastro da sua empresa.",
+      "step2Title": "2. Pegue suas chaves de API",
+      "step2": "No painel Stripe, vá em Developers → API keys. Copie a Publishable key e a Secret key. Use as chaves de teste (pk_test_/sk_test_) primeiro.",
+      "step3Title": "3. Cole a Publishable key abaixo",
+      "step3": "Preencha o campo Publishable key neste card e salve.",
+      "step4Title": "4. Adicione a Secret key como secret",
+      "step4": "Clique em \"Adicionar secret\" e cadastre STRIPE_SECRET_KEY com sua sk_test_ ou sk_live_.",
+      "step5Title": "5. Crie produtos e preços no Stripe",
+      "step5": "No Stripe, vá em Products → Add product. Para cada plano que você cobra aqui no CloseFlow, crie um produto com o preço recorrente equivalente. Copie o Price ID (começa com price_) e cole no mapeamento de planos abaixo.",
+      "step6Title": "6. Configure o webhook",
+      "step6": "No Stripe, vá em Developers → Webhooks → Add endpoint. Cole a URL do webhook exibida abaixo. Selecione o evento checkout.session.completed. Copie o Signing secret (whsec_...) e cadastre como STRIPE_WEBHOOK_SECRET nos secrets.",
+      "step7Title": "7. Teste e vire para produção",
+      "step7": "Faça uma compra de teste com o cartão 4242 4242 4242 4242. Quando estiver tudo certo, troque para chaves live e mude o ambiente para Produção."
+    },
+    "messages": {
+      "missingConfig": "Configure publishable key e mapeamento dos planos antes de testar."
+    }
+  },
+  "soon": {
+    "whatsapp": {
+      "name": "WhatsApp Business",
+      "description": "Envie propostas e notifique mudanças de status direto no WhatsApp do cliente."
+    },
+    "resend": {
+      "name": "E-mail (Resend)",
+      "description": "Envio de propostas por e-mail com template, lembrete de validade e notificação de aceite."
+    },
+    "pix": {
+      "name": "Pix / Mercado Pago",
+      "description": "Alternativa local ao Stripe para receber assinatura ou cobrar a própria proposta."
+    },
+    "calendar": {
+      "name": "Google Calendar",
+      "description": "Agendamento automático de reunião quando uma proposta é aceita."
+    },
+    "sheets": {
+      "name": "Google Sheets / Notion",
+      "description": "Exporte seu pipeline de propostas para planilhas ou bases do Notion."
+    },
+    "zapier": {
+      "name": "Zapier / Make",
+      "description": "Webhook genérico de saída para conectar com qualquer ferramenta."
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "title": "Integrations",
+  "subtitle": "Connect CloseFlow with external tools. Enable, configure and manage integrations without touching code.",
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "comingSoon": "Coming soon"
+  },
+  "actions": {
+    "save": "Save",
+    "saved": "Settings saved",
+    "saveError": "Failed to save",
+    "configure": "Configure",
+    "test": "Test checkout",
+    "suggest": "I'm interested",
+    "interested": "Noted! We'll prioritize this integration.",
+    "addSecret": "Add secret",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "stripe": {
+    "name": "Stripe",
+    "description": "Collect subscription payments for your plans via Stripe Checkout.",
+    "enable": "Enable Stripe integration",
+    "mode": "Environment",
+    "modeTest": "Test",
+    "modeLive": "Live",
+    "publishableKey": "Publishable key",
+    "publishableKeyHint": "Starts with pk_test_ or pk_live_. Safe to expose.",
+    "successUrl": "Success URL",
+    "successUrlHint": "Where to send the customer after a successful payment.",
+    "cancelUrl": "Cancel URL",
+    "cancelUrlHint": "Where to send the customer if they cancel.",
+    "secretWarning": "The secret key (sk_...) and webhook secret (whsec_...) are NOT stored in the database. Save them in Lovable Cloud → Secrets as STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET.",
+    "productMapping": "Plan → Stripe price mapping",
+    "productMappingHint": "For each paid plan, paste the Price ID created in Stripe (price_...).",
+    "webhookUrl": "Webhook URL (set this in Stripe)",
+    "guide": {
+      "title": "Step-by-step",
+      "step1Title": "1. Create a Stripe account",
+      "step1": "Go to stripe.com/register and finish your business onboarding.",
+      "step2Title": "2. Get your API keys",
+      "step2": "In the Stripe dashboard, go to Developers → API keys. Copy the Publishable key and Secret key. Use test keys (pk_test_/sk_test_) first.",
+      "step3Title": "3. Paste the Publishable key below",
+      "step3": "Fill in the Publishable key field on this card and save.",
+      "step4Title": "4. Add the Secret key as a secret",
+      "step4": "Click \"Add secret\" and register STRIPE_SECRET_KEY with your sk_test_ or sk_live_.",
+      "step5Title": "5. Create products and prices in Stripe",
+      "step5": "In Stripe, go to Products → Add product. For each plan you charge for in CloseFlow, create a product with the equivalent recurring price. Copy the Price ID (starts with price_) and paste it in the plan mapping below.",
+      "step6Title": "6. Configure the webhook",
+      "step6": "In Stripe, go to Developers → Webhooks → Add endpoint. Paste the webhook URL shown below. Select the checkout.session.completed event. Copy the Signing secret (whsec_...) and register it as STRIPE_WEBHOOK_SECRET in secrets.",
+      "step7Title": "7. Test and go live",
+      "step7": "Run a test purchase with card 4242 4242 4242 4242. When everything works, switch to live keys and change the environment to Live."
+    },
+    "messages": {
+      "missingConfig": "Configure the publishable key and plan mapping before testing."
+    }
+  },
+  "soon": {
+    "whatsapp": {
+      "name": "WhatsApp Business",
+      "description": "Send proposals and notify status changes directly to your client's WhatsApp."
+    },
+    "resend": {
+      "name": "Email (Resend)",
+      "description": "Send proposals by email with templates, validity reminders and acceptance notifications."
+    },
+    "pix": {
+      "name": "Pix / Mercado Pago",
+      "description": "Local alternative to Stripe for collecting subscription or proposal payments."
+    },
+    "calendar": {
+      "name": "Google Calendar",
+      "description": "Automatically schedule a meeting when a proposal is accepted."
+    },
+    "sheets": {
+      "name": "Google Sheets / Notion",
+      "description": "Export your proposal pipeline to spreadsheets or Notion databases."
+    },
+    "zapier": {
+      "name": "Zapier / Make",
+      "description": "Generic outbound webhook to integrate with any tool."
+    }
+  }
+}
