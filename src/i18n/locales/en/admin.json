@@ -1,6 +1,65 @@
 {
   "title": "Admin",
-  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations" },
+  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations", "qa": "QA" },
+  "qa": {
+    "title": "Launch validation checklist",
+    "subtitle": "Check each item after testing. Progress is saved locally in this browser.",
+    "reset": "Reset",
+    "sections": {
+      "auth": { "title": "Authentication", "items": {
+        "signup": { "title": "Signup works", "desc": "Create a new account with email and password." },
+        "login": { "title": "Login works", "desc": "Log in with the created account." },
+        "logout": { "title": "Logout works", "desc": "Logging out clears the session." },
+        "firstAdmin": { "title": "First user becomes admin", "desc": "The first signup automatically receives the admin role." }
+      }},
+      "trial": { "title": "Trial / Starter access", "items": {
+        "trialGranted": { "title": "New user gets trial", "desc": "New signups receive the Starter plan for 7 days." },
+        "trialBlocks": { "title": "Expired trial blocks actions", "desc": "After expiry, the user cannot create proposals/clients." },
+        "adminExtend": { "title": "Admin can extend access", "desc": "Admin can grant/renew a plan from /admin > Users." }
+      }},
+      "plans": { "title": "Plans", "items": {
+        "starterExists": { "title": "Starter plan exists", "desc": "The Starter plan is visible in /admin > Plans." },
+        "editPlan": { "title": "Admin can edit plan", "desc": "Price, limits and active state can be changed." },
+        "pricingShows": { "title": "/pricing shows the plans", "desc": "Active plans appear correctly on the public page." }
+      }},
+      "stripe": { "title": "Stripe", "items": {
+        "integrationSaves": { "title": "Settings save", "desc": "Stripe integration fields persist after saving." },
+        "priceMapped": { "title": "Price ID mapped", "desc": "Every paid plan has its Stripe price_id configured." },
+        "webhookConfigured": { "title": "Webhook configured in Stripe", "desc": "Webhook URL was added to the Stripe dashboard and is active." },
+        "testCheckout": { "title": "Test checkout opens", "desc": "Clicking Subscribe opens the Stripe checkout without errors." },
+        "planActivates": { "title": "Plan activates after payment", "desc": "After paying in test mode, the user plan becomes active." }
+      }},
+      "clients": { "title": "Clients", "items": {
+        "createClient": { "title": "Create client", "desc": "Adding a new client works." },
+        "editClient": { "title": "Edit client", "desc": "Updating client data works." },
+        "searchClient": { "title": "Search client", "desc": "Search filters the list correctly." }
+      }},
+      "proposals": { "title": "Proposals", "items": {
+        "createProposal": { "title": "Create proposal with items", "desc": "Adding items, totals match, saving works." },
+        "editProposal": { "title": "Edit proposal", "desc": "Editing data and items persists correctly." },
+        "statusHistory": { "title": "Status history recorded", "desc": "Each status change appears in history." },
+        "validUntil": { "title": "Valid until is shown", "desc": "Validity appears on internal and public proposal." }
+      }},
+      "sharing": { "title": "Sharing", "items": {
+        "copyLink": { "title": "Copy link works", "desc": "Button copies the public URL to clipboard." },
+        "whatsappOpens": { "title": "WhatsApp opens with message", "desc": "Opens wa.me with client phone (if any) and default message." },
+        "publicLoads": { "title": "Public page loads", "desc": "The /p/{code} link shows the proposal without login." },
+        "viewCounted": { "title": "View is counted", "desc": "Opening the public page increments view count." },
+        "acceptFlow": { "title": "Accept changes status", "desc": "Accept button updates the proposal status." }
+      }},
+      "pdf": { "title": "PDF", "items": {
+        "pdfOwner": { "title": "PDF downloads from owner view", "desc": "Download PDF button generates the file on the internal page." },
+        "pdfPublic": { "title": "PDF downloads from public page", "desc": "Client can download the PDF from the public link." }
+      }},
+      "i18n": { "title": "Languages", "items": {
+        "switchLang": { "title": "Language switching works", "desc": "Switching pt-BR ↔ en applies across the UI." },
+        "noMissing": { "title": "No missing keys", "desc": "No raw key text appears (e.g. 'view.copyLink')." }
+      }},
+      "mobile": { "title": "Mobile", "items": {
+        "mobileLayouts": { "title": "Main screens usable at 375px", "desc": "Login, dashboard, proposals, clients and admin look fine." }
+      }}
+    }
+  },
   "overview": {
     "totalUsers": "Total Users", "totalProposals": "Total Proposals",
     "approvedRevenue": "Approved Revenue", "recentUsers": "Recent Users", "noName": "No name"

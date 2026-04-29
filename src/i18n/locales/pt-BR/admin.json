@@ -5,7 +5,97 @@
     "users": "Usuários",
     "plans": "Planos",
     "statuses": "Status",
-    "integrations": "Integrações"
+    "integrations": "Integrações",
+    "qa": "QA"
+  },
+  "qa": {
+    "title": "Checklist de validação para lançamento",
+    "subtitle": "Marque cada item após testar. O progresso é salvo localmente neste navegador.",
+    "reset": "Limpar",
+    "sections": {
+      "auth": {
+        "title": "Autenticação",
+        "items": {
+          "signup": { "title": "Cadastro funciona", "desc": "Criar uma conta nova com e-mail e senha." },
+          "login": { "title": "Login funciona", "desc": "Entrar com a conta criada." },
+          "logout": { "title": "Logout funciona", "desc": "Sair da conta limpa a sessão." },
+          "firstAdmin": { "title": "Primeiro usuário vira admin", "desc": "O primeiro cadastro recebe o papel de admin automaticamente." }
+        }
+      },
+      "trial": {
+        "title": "Trial / Plano inicial",
+        "items": {
+          "trialGranted": { "title": "Novo usuário recebe trial", "desc": "Usuário novo ganha o plano Starter por 7 dias." },
+          "trialBlocks": { "title": "Trial expirado bloqueia ações", "desc": "Após o vencimento, o usuário não consegue criar propostas/clientes." },
+          "adminExtend": { "title": "Admin pode estender acesso", "desc": "Admin consegue conceder/renovar plano em /admin > Usuários." }
+        }
+      },
+      "plans": {
+        "title": "Planos",
+        "items": {
+          "starterExists": { "title": "Plano Starter existe", "desc": "O plano Starter (R$ 29,90/mês) está visível em /admin > Planos." },
+          "editPlan": { "title": "Admin pode editar plano", "desc": "É possível alterar preço, limites ou desativar o plano." },
+          "pricingShows": { "title": "Página /pricing mostra os planos", "desc": "Os planos ativos aparecem corretamente na página pública." }
+        }
+      },
+      "stripe": {
+        "title": "Stripe",
+        "items": {
+          "integrationSaves": { "title": "Configuração salva", "desc": "Os campos da integração Stripe persistem após salvar." },
+          "priceMapped": { "title": "Price ID mapeado", "desc": "Cada plano pago tem seu price_id do Stripe configurado." },
+          "webhookConfigured": { "title": "Webhook configurado no Stripe", "desc": "URL do webhook foi colada no dashboard do Stripe e está ativa." },
+          "testCheckout": { "title": "Checkout de teste abre", "desc": "Clicar em Assinar abre a página do Stripe sem erros." },
+          "planActivates": { "title": "Plano ativa após pagamento", "desc": "Após pagar no modo teste, o plano do usuário fica ativo." }
+        }
+      },
+      "clients": {
+        "title": "Clientes",
+        "items": {
+          "createClient": { "title": "Criar cliente", "desc": "Adicionar um cliente novo funciona." },
+          "editClient": { "title": "Editar cliente", "desc": "Atualizar dados do cliente funciona." },
+          "searchClient": { "title": "Buscar cliente", "desc": "A busca filtra a lista corretamente." }
+        }
+      },
+      "proposals": {
+        "title": "Propostas",
+        "items": {
+          "createProposal": { "title": "Criar proposta com itens", "desc": "Adicionar itens, totais batem, salvar funciona." },
+          "editProposal": { "title": "Editar proposta", "desc": "Alterar dados e itens persiste corretamente." },
+          "statusHistory": { "title": "Histórico de status registra", "desc": "Cada mudança de status aparece no histórico." },
+          "validUntil": { "title": "Data de validade exibida", "desc": "Validade aparece na proposta interna e pública." }
+        }
+      },
+      "sharing": {
+        "title": "Compartilhamento",
+        "items": {
+          "copyLink": { "title": "Copiar link funciona", "desc": "Botão copia a URL pública para a área de transferência." },
+          "whatsappOpens": { "title": "WhatsApp abre com mensagem", "desc": "Abre wa.me com o telefone do cliente (se houver) e a mensagem padrão." },
+          "publicLoads": { "title": "Página pública carrega", "desc": "O link /p/{code} mostra a proposta sem login." },
+          "viewCounted": { "title": "Visualização é contada", "desc": "Acessar a página pública incrementa as visualizações." },
+          "acceptFlow": { "title": "Aceite muda status", "desc": "Botão Aceitar atualiza o status da proposta." }
+        }
+      },
+      "pdf": {
+        "title": "PDF",
+        "items": {
+          "pdfOwner": { "title": "PDF baixa na visão do dono", "desc": "Botão Baixar PDF gera o arquivo na página interna." },
+          "pdfPublic": { "title": "PDF baixa na página pública", "desc": "Cliente consegue baixar o PDF pelo link público." }
+        }
+      },
+      "i18n": {
+        "title": "Idiomas",
+        "items": {
+          "switchLang": { "title": "Trocar idioma funciona", "desc": "Alternar pt-BR ↔ en aplica em toda a UI." },
+          "noMissing": { "title": "Sem chaves faltando", "desc": "Nenhum texto exibe a chave bruta (ex: 'view.copyLink')." }
+        }
+      },
+      "mobile": {
+        "title": "Mobile",
+        "items": {
+          "mobileLayouts": { "title": "Telas principais usáveis em 375px", "desc": "Login, dashboard, propostas, clientes e admin sem quebra visível." }
+        }
+      }
+    }
   },
   "overview": {
     "totalUsers": "Total de usuários",

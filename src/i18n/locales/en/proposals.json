@@ -21,7 +21,7 @@
     "submitNew": "Create Proposal", "submitEdit": "Update Proposal"
   },
   "view": {
-    "copyLink": "Copy public link", "sendWhatsapp": "Send via WhatsApp",
+    "copyLink": "Copy link", "sendWhatsapp": "Send via WhatsApp", "downloadPdf": "Download PDF",
     "edit": "Edit", "changeStatus": "Change status",
     "validUntil": "Valid until {{date}}", "items": "Line Items", "history": "Status History",
     "viewsTitle": "Views",
@@ -38,5 +38,14 @@
     "created": "Proposal created", "updated": "Proposal updated", "deleted": "Proposal deleted",
     "statusUpdated": "Status updated", "linkCopied": "Link copied!"
   },
-  "share": { "whatsappText": "Check out this proposal: {{url}}" }
+  "share": {
+    "defaultClient": "there",
+    "whatsappMessage": "Hi {{clientName}}, here's the proposal \"{{title}}\" for {{total}}.\nYou can view and accept it here: {{url}}\nLet me know if you have any questions."
+  },
+  "pdf": {
+    "proposalFor": "Client", "description": "Description", "items": "Items",
+    "qty": "Qty", "unitPrice": "Unit Price", "total": "Total", "grandTotal": "Grand Total",
+    "validUntil": "Valid until", "status": "Status",
+    "publicLink": "Proposal link", "generatedAt": "Generated on"
+  }
 }
