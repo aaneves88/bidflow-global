@@ -1,0 +1,22 @@
+{
+  "title": "Welcome to CloseFlow",
+  "subtitle": "Let's set everything up in less than 1 minute.",
+  "step": "Step {{current}} of {{total}}",
+  "welcome": {
+    "title": "Tell us about your business",
+    "description": "This information appears on your proposals.",
+    "businessName": "Business name", "businessPlaceholder": "e.g. Aurora Studio"
+  },
+  "client": {
+    "title": "Add your first client",
+    "description": "You can skip this and do it later.",
+    "name": "Client name", "email": "Email", "company": "Company"
+  },
+  "proposal": {
+    "title": "Ready for your first proposal?",
+    "description": "Let's create one now — it only takes a few minutes.",
+    "create": "Create proposal", "later": "I'll do it later"
+  },
+  "actions": { "next": "Continue", "skip": "Skip", "finish": "Go to dashboard" },
+  "messages": { "saved": "Settings saved", "clientCreated": "Client added" }
+}

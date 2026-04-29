@@ -1,0 +1,16 @@
+{
+  "title": "Settings",
+  "tabs": { "general": "General", "integrations": "Integrations", "branding": "Branding" },
+  "general": {
+    "title": "General Settings", "companyName": "Company Name", "companyPlaceholder": "Your Company",
+    "defaultCurrency": "Default Currency", "language": "Interface language"
+  },
+  "integrations": {
+    "title": "Integrations", "stripe": "Stripe Payments",
+    "stripeDescription": "Enable to allow customers to subscribe to plans.",
+    "whatsapp": "WhatsApp", "whatsappDescription": "Add a default phone number for sharing proposals.",
+    "whatsappPhone": "WhatsApp Phone Number", "whatsappPlaceholder": "+1234567890"
+  },
+  "branding": { "title": "Branding", "logoUrl": "Logo URL", "primaryColor": "Primary Color" },
+  "messages": { "saved": "Settings saved", "error": "Error saving settings" }
+}

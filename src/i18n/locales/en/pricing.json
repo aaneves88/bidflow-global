@@ -1,0 +1,19 @@
+{
+  "title": "Plans & Pricing",
+  "subtitle": "Choose the plan that fits your business. No commitment — cancel anytime.",
+  "perMonth": "/month", "perYear": "/year",
+  "interval": { "month": "/month", "year": "/year", "week": "/week", "day": "/day" },
+  "free": "Free",
+  "trialBadge": "{{days}}-day free trial",
+  "starter": "Starter plan", "current": "Current plan",
+  "subscribe": "Subscribe", "getStarted": "Get started",
+  "comingSoon": "Coming soon",
+  "comingSoonDescription": "Online subscription will be available soon. Contact us to upgrade.",
+  "noPlans": "No plans available right now.",
+  "features": {
+    "unlimited": "Unlimited", "unlimitedClients": "Unlimited clients",
+    "proposalsLimit_one": "{{count}} proposal", "proposalsLimit_other": "{{count}} proposals",
+    "clientsLimit_one": "{{count}} client", "clientsLimit_other": "{{count}} clients"
+  },
+  "loading": "Loading plans...", "empty": "No plans available"
+}

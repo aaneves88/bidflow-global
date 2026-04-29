@@ -1,0 +1,44 @@
+{
+  "title": "Admin",
+  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses" },
+  "overview": {
+    "totalUsers": "Total Users", "totalProposals": "Total Proposals",
+    "approvedRevenue": "Approved Revenue", "recentUsers": "Recent Users", "noName": "No name"
+  },
+  "users": {
+    "loading": "Loading users...",
+    "table": { "name": "Name", "email": "Email", "roles": "Roles", "plan": "Plan", "joined": "Joined", "actions": "Actions" },
+    "makeAdmin": "Make Admin", "removeAdmin": "Remove Admin", "grantPlan": "Grant Plan",
+    "cantRemoveSelf": "Can't remove your own admin",
+    "messages": {
+      "adminGranted": "Admin role granted", "adminRemoved": "Admin role removed",
+      "errorRole": "Error updating role", "planGranted": "Plan granted successfully", "errorPlan": "Error granting plan"
+    },
+    "grantDialog": {
+      "title": "Grant Plan to {{name}}", "plan": "Plan", "selectPlan": "Select a plan",
+      "expires": "Expires at (optional)", "submit": "Grant Plan"
+    }
+  },
+  "plans": {
+    "loading": "Loading plans...", "newButton": "New Plan",
+    "table": { "name": "Name", "price": "Price", "interval": "Interval", "status": "Status", "actions": "Actions" },
+    "active": "Active", "inactive": "Inactive",
+    "dialog": {
+      "newTitle": "New Plan", "editTitle": "Edit Plan",
+      "name": "Name", "description": "Description", "price": "Price", "currency": "Currency",
+      "interval": "Interval", "features": "Features (JSON array)", "isActive": "Active",
+      "isStarter": "Starter plan (granted to new users)",
+      "trialDays": "Trial days (0 = no trial)",
+      "maxProposals": "Max proposals (empty = unlimited)",
+      "maxClients": "Max clients (empty = unlimited)"
+    },
+    "messages": { "created": "Plan created", "updated": "Plan updated", "error": "Error saving plan" }
+  },
+  "statuses": {
+    "loading": "Loading statuses...", "newButton": "New Status",
+    "table": { "position": "Position", "color": "Color", "name": "Name", "default": "Default", "final": "Final", "actions": "Actions" },
+    "dialog": { "newTitle": "New Status", "editTitle": "Edit Status", "name": "Name", "color": "Color", "position": "Position", "default": "Default", "final": "Final" },
+    "deleteConfirm": "Delete this status? Proposals using it will lose their status.",
+    "messages": { "created": "Status created", "updated": "Status updated", "deleted": "Status deleted", "errorSaving": "Error saving status", "errorDeleting": "Error deleting status" }
+  }
+}

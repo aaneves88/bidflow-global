@@ -1,0 +1,42 @@
+{
+  "title": "Proposals", "newButton": "New Proposal", "searchPlaceholder": "Search proposals...",
+  "table": {
+    "title": "Title", "client": "Client", "status": "Status", "total": "Total",
+    "date": "Date", "actions": "Actions", "views": "Views"
+  },
+  "empty": {
+    "noResults": "No proposals match your search", "none": "No proposals yet",
+    "createFirst": "Create your first proposal"
+  },
+  "form": {
+    "newTitle": "New Proposal", "editTitle": "Edit Proposal",
+    "details": "Details", "title": "Title", "description": "Description",
+    "client": "Client", "noClient": "No client", "selectClient": "Select client",
+    "status": "Status", "selectStatus": "Select status",
+    "currency": "Currency", "validUntil": "Valid Until",
+    "items": "Line Items", "addItem": "Add Item",
+    "itemDescription": "Description", "itemDescriptionPlaceholder": "Item description",
+    "qty": "Qty", "unitPrice": "Unit Price", "itemTotal": "Total",
+    "grandTotal": "Grand Total",
+    "submitNew": "Create Proposal", "submitEdit": "Update Proposal"
+  },
+  "view": {
+    "copyLink": "Copy public link", "sendWhatsapp": "Send via WhatsApp",
+    "edit": "Edit", "changeStatus": "Change status",
+    "validUntil": "Valid until {{date}}", "items": "Line Items", "history": "Status History",
+    "viewsTitle": "Views",
+    "viewsCount_one": "{{count}} view", "viewsCount_other": "{{count}} views",
+    "neverViewed": "Not viewed yet",
+    "firstView": "First view: {{date}}", "lastView": "Last view: {{date}}",
+    "notFound": "Proposal not found"
+  },
+  "delete": {
+    "title": "Delete proposal?",
+    "description": "This action cannot be undone. All items and history will be removed."
+  },
+  "messages": {
+    "created": "Proposal created", "updated": "Proposal updated", "deleted": "Proposal deleted",
+    "statusUpdated": "Status updated", "linkCopied": "Link copied!"
+  },
+  "share": { "whatsappText": "Check out this proposal: {{url}}" }
+}
