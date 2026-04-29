@@ -41,7 +41,6 @@ Deno.serve(async (req) => {
       const planId = session.metadata?.plan_id as string | undefined;
 
       if (userId && planId) {
-        // Resolve plan interval to compute expires_at
         const { data: plan } = await admin
           .from("plans")
           .select("interval")
@@ -57,6 +56,13 @@ Deno.serve(async (req) => {
           default:     expires.setMonth(expires.getMonth() + 1);
         }
 
+        // Replace any prior active plan so useCurrentPlan returns the new paid plan
+        await admin
+          .from("user_plans")
+          .update({ status: "replaced" })
+          .eq("user_id", userId)
+          .eq("status", "active");
+
         await admin.from("user_plans").insert({
           user_id: userId,
           plan_id: planId,
@@ -64,6 +70,20 @@ Deno.serve(async (req) => {
           starts_at: now.toISOString(),
           expires_at: expires.toISOString(),
         });
+      }
+    }
+
+    if (event.type === "customer.subscription.deleted") {
+      const sub = event.data.object as Stripe.Subscription;
+      const userId = sub.metadata?.user_id as string | undefined;
+      const planId = sub.metadata?.plan_id as string | undefined;
+      if (userId && planId) {
+        await admin
+          .from("user_plans")
+          .update({ status: "cancelled" })
+          .eq("user_id", userId)
+          .eq("plan_id", planId)
+          .eq("status", "active");
       }
     }
 
