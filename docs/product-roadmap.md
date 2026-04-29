@@ -110,3 +110,18 @@ Status markers: ✅ completed | 🔄 in progress | 📋 planned
 | Reminders | 📋 planned |
 | Advanced analytics | 📋 planned |
 | White-label | 📋 planned |
+
+---
+
+## Integrations
+**Objective**: Make CloseFlow extensible without code changes.
+
+| Integration | Status |
+|-------------|--------|
+| Stripe (BYOK via admin) | 🔄 in progress (admin UI + edge functions ready, needs STRIPE_SECRET_KEY + webhook secret) |
+| WhatsApp Business | 📋 planned |
+| Email (Resend) | 📋 planned |
+| Pix / Mercado Pago | 📋 planned |
+| Google Calendar | 📋 planned |
+| Google Sheets / Notion | 📋 planned |
+| Zapier / Make (outbound webhook) | 📋 planned |

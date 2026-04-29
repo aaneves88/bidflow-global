@@ -26,7 +26,7 @@ export default function Pricing() {
     return map[interval] || `/${interval}`;
   };
 
-  const handleSubscribe = (planId: string) => {
+  const handleSubscribe = async (planId: string) => {
     if (!user) {
       navigate(`/register?plan=${planId}`);
       return;
@@ -35,8 +35,20 @@ export default function Pricing() {
       toast({ title: t('comingSoon'), description: t('comingSoonDescription') });
       return;
     }
-    // Stripe checkout will be wired up after admin approval
-    toast({ title: t('comingSoon'), description: t('comingSoonDescription') });
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('stripe-create-checkout', {
+        body: { plan_id: planId },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (e: any) {
+      toast({ title: 'Erro', description: e.message, variant: 'destructive' });
+    }
   };
 
   return (

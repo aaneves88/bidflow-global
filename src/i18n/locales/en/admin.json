@@ -1,6 +1,6 @@
 {
   "title": "Admin",
-  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses" },
+  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations" },
   "overview": {
     "totalUsers": "Total Users", "totalProposals": "Total Proposals",
     "approvedRevenue": "Approved Revenue", "recentUsers": "Recent Users", "noName": "No name"

@@ -4,7 +4,8 @@
     "overview": "Visão geral",
     "users": "Usuários",
     "plans": "Planos",
-    "statuses": "Status"
+    "statuses": "Status",
+    "integrations": "Integrações"
   },
   "overview": {
     "totalUsers": "Total de usuários",

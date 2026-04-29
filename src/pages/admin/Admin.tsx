@@ -5,6 +5,7 @@ import AdminOverview from './AdminOverview';
 import AdminUsers from './AdminUsers';
 import AdminPlans from './AdminPlans';
 import AdminStatuses from './AdminStatuses';
+import AdminIntegrations from './AdminIntegrations';
 
 export default function Admin() {
   const { t } = useTranslation('admin');
@@ -20,11 +21,13 @@ export default function Admin() {
           <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
           <TabsTrigger value="plans">{t('tabs.plans')}</TabsTrigger>
           <TabsTrigger value="statuses">{t('tabs.statuses')}</TabsTrigger>
+          <TabsTrigger value="integrations">{t('tabs.integrations')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
         <TabsContent value="plans"><AdminPlans /></TabsContent>
         <TabsContent value="statuses"><AdminStatuses /></TabsContent>
+        <TabsContent value="integrations"><AdminIntegrations /></TabsContent>
       </Tabs>
     </div>
   );

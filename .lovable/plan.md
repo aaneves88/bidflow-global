@@ -1,190 +1,76 @@
+# Página de Integrações no Admin
 
-# Plano — Tradução pt-BR + Phase 4 (Commercial Readiness)
+## 1. Nova aba "Integrações" em `/admin?tab=integrations`
 
-CloseFlow continua como marca global. Lançamento comercial em **Português do Brasil**, com arquitetura preparada para futuras línguas. Código, banco e identificadores permanecem em inglês.
+Atualizar `src/pages/admin/Admin.tsx` adicionando a tab `integrations` ao lado de overview/users/plans/statuses.
 
----
+Criar `src/pages/admin/AdminIntegrations.tsx` com layout em cards, um por integração, mostrando status (Ativo / Inativo / Em breve).
 
-## Parte 1 — Internacionalização (i18n) e tradução pt-BR
+## 2. Card Stripe — gerenciamento + passo a passo
 
-### 1.1 Stack de i18n
+Componente `src/pages/admin/integrations/StripeIntegrationCard.tsx`:
 
-- Adicionar `i18next` + `react-i18next` (leve, padrão de mercado, suporta interpolação e plurais).
-- Idioma padrão: `pt-BR`. Fallback: `en`.
-- Detecção: localStorage > navegador > pt-BR.
-- Inicialização em `src/i18n/index.ts`, importado uma vez no `main.tsx`.
+- **Status** lido de `app_settings` categoria `stripe`:
+  - `stripe.enabled` (bool)
+  - `stripe.mode` (`test` | `live`)
+  - `stripe.publishable_key` (string, pode ficar no banco — é pública)
+  - `stripe.success_url`, `stripe.cancel_url`
+  - `stripe.product_mapping` (jsonb: `{ plan_id: stripe_price_id }`)
+- Switch para ativar/desativar
+- Form para preencher publishable key, URLs e modo
+- Tabela mapeando cada plano (lê `usePlans`) para um `price_id` do Stripe
+- Botão **"Testar checkout"** (só habilita quando configurado)
+- Aviso destacado: a **secret key** vai em Lovable Cloud → Secrets (não no banco). Botão abre painel de secrets via `add_secret` (`STRIPE_SECRET_KEY`).
 
-### 1.2 Estrutura de arquivos de tradução
+**Passo a passo guiado** (Accordion dentro do card, em pt-BR):
+1. Criar conta no Stripe (link stripe.com/register)
+2. Pegar as chaves em Developers → API keys (test/live)
+3. Colar a publishable key no form
+4. Adicionar a secret key como secret `STRIPE_SECRET_KEY`
+5. Criar produtos/preços no Stripe e colar cada `price_id` no mapeamento de planos
+6. Configurar webhook apontando para a edge function `stripe-webhook` (URL exibida no card) e colar o `STRIPE_WEBHOOK_SECRET` em secrets
+7. Testar em modo `test`, depois virar para `live`
 
-```text
-src/i18n/
-  index.ts                  # init i18next
-  locales/
-    pt-BR/
-      common.json           # botões, ações, validações genéricas
-      landing.json
-      auth.json
-      dashboard.json
-      clients.json
-      proposals.json
-      public.json           # página pública da proposta
-      settings.json
-      admin.json
-      pricing.json
-      onboarding.json
-    en/
-      (mesma estrutura, traduzido)
-```
+## 3. Edge functions Stripe (estrutura mínima)
 
-Namespaces por área evitam JSON gigante e permitem code-splitting futuro.
+- `supabase/functions/stripe-create-checkout/index.ts` — recebe `plan_id`, lê mapeamento de `app_settings`, cria sessão de checkout com `STRIPE_SECRET_KEY`, retorna URL. JWT validado em código.
+- `supabase/functions/stripe-webhook/index.ts` — público (sem JWT), valida assinatura com `STRIPE_WEBHOOK_SECRET`, em `checkout.session.completed` faz upsert em `user_plans` (status `active`, expires conforme intervalo do plano).
+- Wire do botão "Assinar" em `src/pages/Pricing.tsx`: quando `stripe.enabled = true`, chama `stripe-create-checkout` e redireciona; senão mantém "Em breve".
 
-### 1.3 Padrões de uso
+`supabase/config.toml`: adicionar `verify_jwt = false` para `stripe-webhook`.
 
-- Uso via hook: `const { t } = useTranslation('dashboard')`.
-- Chaves hierárquicas: `t('kpis.approvedRevenue')`.
-- Datas/moedas: atualizar `src/lib/format.ts` para usar `pt-BR` por padrão (`Intl.NumberFormat('pt-BR', { currency: 'BRL' })`) lendo o currency das settings.
-- Plurais com `t('proposals_one' / 'proposals_other', { count })`.
+## 4. Outras integrações (cards "Em breve")
 
-### 1.4 Escopo de tradução (todas as áreas user-facing)
+Mostrar como placeholders no mesmo grid, sem lógica ainda, só descrição do valor:
 
-Landing, Auth (login/register), Dashboard, Clients (lista, dialog, validações), Proposals (lista, form, view, public), Settings (todas as abas), Admin (overview, users, plans, statuses), Pricing (nova), Onboarding (nova), AppSidebar, NotFound, toasts e mensagens de validação de formulários.
+- **WhatsApp Business** — enviar proposta e notificar mudanças de status pelo WhatsApp do cliente (alto valor no Brasil)
+- **E-mail transacional (Resend)** — enviar proposta por e-mail com template, lembrete de validade, notificação de aceite
+- **Pix / Mercado Pago** — alternativa local ao Stripe para receber pagamento da assinatura ou da própria proposta
+- **Google Calendar** — agendar reunião automática quando proposta é aceita
+- **Notion / Google Sheets** — exportar pipeline de propostas
+- **Zapier / Make** — webhook genérico de saída para integrar com qualquer ferramenta
 
-Tom: claro, prático, voltado a pequenos negócios. Ex.: "Criar proposta", "Enviar pelo WhatsApp", "Aprovada", "Receita aprovada", "Taxa de conversão", "Acessar painel".
+Cada card tem botão "Sugerir" (só registra interesse via toast por enquanto) e badge "Em breve".
 
-### 1.5 Marca
+## 5. i18n
 
-"CloseFlow" permanece em todos os idiomas. Tagline pt-BR: *"Propostas e pipeline de vendas para pequenos negócios."*
+Novo namespace `integrations` em `src/i18n/locales/pt-BR/integrations.json` e `en/integrations.json` com todos os textos do card Stripe, passo a passo e dos cards futuros.
 
----
+Adicionar entrada `tabs.integrations` em `admin.json`.
 
-## Parte 2 — Phase 4: Commercial Readiness
+## 6. Roadmap
 
-### 2.1 Página de preços (`/pricing`)
-
-- Rota pública nova, link no nav da landing e no header autenticado.
-- Lê os planos ativos da tabela `plans` (já existe).
-- Cards comparativos: nome, preço, intervalo, features (do JSON), CTA.
-- CTA depende do estado:
-  - Visitante → "Começar agora" → leva ao registro com `?plan=<id>`.
-  - Logado sem plano pago → "Assinar" → inicia checkout Stripe.
-  - Logado com plano ativo → "Plano atual" desabilitado.
-- Toggle mensal/anual se houver planos com `interval` diferentes.
-
-### 2.2 Onboarding pós-signup (`/onboarding`)
-
-Fluxo simples de 3 passos exibido na primeira sessão após registro:
-
-1. **Boas-vindas** — nome do negócio (atualiza `profiles.full_name` se vazio + cria entrada em `app_settings` `branding.company_name` se for o admin).
-2. **Primeiro cliente** (opcional, com "Pular").
-3. **Primeira proposta** (opcional, com "Pular") → leva ao `ProposalForm`.
-
-Marcador de conclusão: chave `onboarded_at` em `profiles` via novo campo, OU armazenar em `localStorage` por simplicidade. **Decisão:** usar localStorage por usuário (sem mudança de schema, atende ao requisito "simples"). Quem quiser refazer pode acessar `/onboarding` direto.
-
-Redirecionamento: após registro bem-sucedido → `/onboarding` em vez de `/dashboard`.
-
-### 2.3 Modelo de trial / starter
-
-- Ao criar usuário (trigger `handle_new_user`), conceder automaticamente o plano marcado como **starter** em `plans` (nova flag `is_starter boolean`) por X dias (campo novo em plans: `trial_days int default 0`).
-- Insert em `user_plans` com `expires_at = now() + trial_days`.
-- Se nenhum plano starter existir, usuário fica sem plano (acesso limitado).
-
-**Mudanças de banco (migration):**
-```sql
-ALTER TABLE plans ADD COLUMN is_starter boolean DEFAULT false;
-ALTER TABLE plans ADD COLUMN trial_days int DEFAULT 0;
-ALTER TABLE plans ADD COLUMN max_proposals int; -- null = ilimitado
-ALTER TABLE plans ADD COLUMN max_clients int;   -- null = ilimitado
-
--- Atualiza handle_new_user para conceder starter
-```
-
-Admin UI (`AdminPlans`): novos campos no formulário (starter switch, trial days, limites).
-
-### 2.4 Controle de acesso por plano
-
-- Hook novo `useCurrentPlan()` — retorna plano ativo do usuário (join `user_plans` + `plans`), expiração e flags.
-- Hook `usePlanLimits()` — retorna `{ canCreateProposal, canCreateClient, proposalsUsed, clientsUsed, ... }`.
-- Aplicar bloqueios:
-  - Botão "Nova proposta" desabilitado quando atingiu limite, com tooltip + CTA para `/pricing`.
-  - Mesmo para clientes.
-  - Banner global se plano expirado: "Seu período de teste terminou — escolha um plano".
-- Admin sempre tem acesso total (bypass via `isAdmin`).
-
-### 2.5 Stripe checkout configurável
-
-Stripe será habilitado via integração nativa do Lovable (`enable_stripe_payments`) **somente após aprovação do usuário neste plano**. Como o usuário ainda não confirmou, o plano contempla:
-
-- **Etapa A (este passo):** estrutura preparada — settings `integrations.stripe.enabled` lido do `app_settings`; botão "Assinar" só aparece quando habilitado; quando desabilitado, mostra mensagem "Em breve" ou contato manual.
-- **Etapa B (após aprovação):** rodar `recommend_payment_provider` → `enable_stripe_payments` → criar produtos via `batch_create_product` espelhando os planos → edge function `create-checkout` que recebe `plan_id`, busca preço Stripe e cria sessão → webhook que ativa `user_plans` ao confirmar pagamento.
-
-Pergunto sobre habilitação do Stripe agora ou depois (ver perguntas no fim).
-
-### 2.6 Tracking de visualização de proposta
-
-**Mudança de banco:**
-```sql
-CREATE TABLE proposal_views (
-  id uuid PK default gen_random_uuid(),
-  proposal_id uuid NOT NULL,
-  viewed_at timestamptz NOT NULL default now(),
-  user_agent text,
-  ip_hash text  -- hash, sem PII
-);
-
--- RLS
--- INSERT público (anon) com check do proposal existir
--- SELECT só pelo dono da proposta
-```
-
-- `PublicProposal` registra view no mount (uma vez por sessão via sessionStorage).
-- `ProposalView` (interno) mostra: nº de visualizações, primeira/última view.
-- Indicador "Visualizada" na lista de propostas (badge azul claro).
-
-### 2.7 KPIs do dashboard
-
-Refinar `Dashboard.tsx` com 3 KPIs financeiros principais (em pt-BR):
-
-- **Pipeline em aberto (R$)**: soma de `total_amount` das propostas com status não-final.
-- **Receita aprovada (R$)**: soma das propostas com status "Aprovada" (já existe, formalizar).
-- **Taxa de conversão (%)**: aprovadas / total enviadas (excluindo rascunhos).
-
-Adicionar filtro de período: Este mês / Últimos 30 dias / Este ano (state local, sem mudança de banco).
-
-### 2.8 Roadmap update
-
-Marcar como ✅ completed em `docs/product-roadmap.md`:
-- Pricing page
-- Simple onboarding
-- Trial or starter plan
-- Access control by plan
-- Viewed proposal tracking
-- Pipeline value
-- Approved revenue
-- Conversion rate
-
-E marcar **Stripe checkout** como ✅ ou 🔄 conforme a decisão sobre habilitação.
-
----
+Atualizar `docs/product-roadmap.md` adicionando a seção **Integrações** marcando Stripe como em progresso e listando as outras como planejadas.
 
 ## Detalhes técnicos
 
-- i18n: `i18next` + `react-i18next` + `i18next-browser-languagedetector`.
-- Novos hooks: `useCurrentPlan`, `usePlanLimits`, `useProposalViews`.
-- Nova tabela: `proposal_views` (com RLS apropriada).
-- Novas colunas em `plans`: `is_starter`, `trial_days`, `max_proposals`, `max_clients`.
-- `handle_new_user` atualizado para conceder starter automaticamente.
-- Nova rota pública: `/pricing`.
-- Nova rota autenticada: `/onboarding`.
-- `formatCurrency` passa a aceitar locale e ler `BRL` por padrão.
-- Sem alterações em `client.ts`, `types.ts` (regenerado), `config.toml`.
-- Stripe: estrutura preparada; ativação real depende da resposta da pergunta abaixo.
+- Usar tool `payments--enable_stripe_payments` **não** será usado — o usuário pediu explicitamente gerenciar a integração do Stripe pelo admin (BYOK). Será chamado `stripe--enable_stripe` apenas se necessário; caso contrário, secret manual via `add_secret`.
+- Hook novo `useIntegrationSettings('stripe')` reaproveitando `useAppSettings`.
+- Acesso à página: `requireAdmin` já aplicado em `/admin`.
+- Não muda schema do banco — só adiciona linhas em `app_settings`.
 
----
+## Fora do escopo agora
 
-## Perguntas antes de implementar
-
-1. **Stripe agora?** Habilito a integração de pagamentos do Lovable (Stripe) já nesta etapa ou deixo só a estrutura pronta para ativar depois?
-2. **Moeda padrão:** travo em **BRL** para o lançamento brasileiro, ou mantenho a moeda configurável em `app_settings` (admin escolhe BRL/USD/EUR)?
-3. **Trial:** plano starter dá **14 dias grátis** com limites (5 propostas, 10 clientes), ou plano free permanente com limites menores (3 propostas/mês)?
-
-Posso seguir com defaults sensatos (Stripe estrutura-only, BRL padrão configurável, 14 dias de trial 5/10) se preferir não responder agora.
+- Customer Portal Stripe
+- Faturas/recibos no app do usuário
+- Ativação real das integrações "Em breve"
