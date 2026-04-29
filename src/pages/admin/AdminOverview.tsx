@@ -3,9 +3,11 @@ import { useAdminUsers } from '@/hooks/useAdminUsers';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Users, FileText, DollarSign } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '@/lib/format';
 
 export default function AdminOverview() {
+  const { t } = useTranslation('admin');
   const { users } = useAdminUsers();
 
   const { data: stats } = useQuery({
@@ -18,10 +20,9 @@ export default function AdminOverview() {
       const { data: statuses } = await supabase
         .from('proposal_statuses')
         .select('id, name')
-        .ilike('name', '%approv%');
-      
+        .or('name.ilike.%approv%,name.ilike.%aprov%');
+
       const approvedIds = (statuses ?? []).map((s) => s.id);
-      
       let approvedRevenue = 0;
       if (approvedIds.length > 0) {
         const { data: approved } = await supabase
@@ -30,15 +31,14 @@ export default function AdminOverview() {
           .in('status_id', approvedIds);
         approvedRevenue = (approved ?? []).reduce((sum, p) => sum + Number(p.total_amount), 0);
       }
-
       return { totalProposals: totalProposals ?? 0, approvedRevenue };
     },
   });
 
   const cards = [
-    { title: 'Total Users', value: users.length, icon: Users },
-    { title: 'Total Proposals', value: stats?.totalProposals ?? 0, icon: FileText },
-    { title: 'Approved Revenue', value: formatCurrency(stats?.approvedRevenue ?? 0), icon: DollarSign },
+    { title: t('overview.totalUsers'), value: users.length, icon: Users },
+    { title: t('overview.totalProposals'), value: stats?.totalProposals ?? 0, icon: FileText },
+    { title: t('overview.approvedRevenue'), value: formatCurrency(stats?.approvedRevenue ?? 0), icon: DollarSign },
   ];
 
   return (
@@ -58,13 +58,13 @@ export default function AdminOverview() {
       </div>
 
       <Card>
-        <CardHeader><CardTitle>Recent Users</CardTitle></CardHeader>
+        <CardHeader><CardTitle>{t('overview.recentUsers')}</CardTitle></CardHeader>
         <CardContent>
           <div className="space-y-2">
             {users.slice(0, 5).map((u) => (
               <div key={u.id} className="flex items-center justify-between py-2 border-b last:border-0">
                 <div>
-                  <p className="font-medium">{u.full_name || 'No name'}</p>
+                  <p className="font-medium">{u.full_name || t('overview.noName')}</p>
                   <p className="text-sm text-muted-foreground">{u.email}</p>
                 </div>
                 <div className="flex gap-1">

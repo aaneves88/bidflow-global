@@ -9,10 +9,12 @@ import { useAdminUsers } from '@/hooks/useAdminUsers';
 import { usePlans } from '@/hooks/usePlans';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from '@/hooks/use-toast';
 import { Shield, Gift } from 'lucide-react';
 
 export default function AdminUsers() {
+  const { t } = useTranslation('admin');
   const { users, isLoading, toggleAdmin, grantPlan } = useAdminUsers();
   const { plans } = usePlans();
   const { user } = useAuth();
@@ -23,9 +25,9 @@ export default function AdminUsers() {
   const handleToggleAdmin = async (userId: string, isCurrentlyAdmin: boolean) => {
     try {
       await toggleAdmin.mutateAsync({ userId, isCurrentlyAdmin });
-      toast({ title: isCurrentlyAdmin ? 'Admin role removed' : 'Admin role granted' });
+      toast({ title: isCurrentlyAdmin ? t('users.messages.adminRemoved') : t('users.messages.adminGranted') });
     } catch {
-      toast({ title: 'Error updating role', variant: 'destructive' });
+      toast({ title: t('users.messages.errorRole'), variant: 'destructive' });
     }
   };
 
@@ -38,28 +40,28 @@ export default function AdminUsers() {
         grantedBy: user.id,
         expiresAt: expiresAt || undefined,
       });
-      toast({ title: 'Plan granted successfully' });
+      toast({ title: t('users.messages.planGranted') });
       setGrantDialog(null);
       setSelectedPlan('');
       setExpiresAt('');
     } catch {
-      toast({ title: 'Error granting plan', variant: 'destructive' });
+      toast({ title: t('users.messages.errorPlan'), variant: 'destructive' });
     }
   };
 
-  if (isLoading) return <p className="text-muted-foreground mt-4">Loading users...</p>;
+  if (isLoading) return <p className="text-muted-foreground mt-4">{t('users.loading')}</p>;
 
   return (
     <div className="mt-4">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Roles</TableHead>
-            <TableHead>Plan</TableHead>
-            <TableHead>Joined</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t('users.table.name')}</TableHead>
+            <TableHead>{t('users.table.email')}</TableHead>
+            <TableHead>{t('users.table.roles')}</TableHead>
+            <TableHead>{t('users.table.plan')}</TableHead>
+            <TableHead>{t('users.table.joined')}</TableHead>
+            <TableHead>{t('users.table.actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -83,26 +85,26 @@ export default function AdminUsers() {
                     variant="outline"
                     onClick={() => handleToggleAdmin(u.id, u.roles.includes('admin'))}
                     disabled={u.id === user?.id}
-                    title={u.id === user?.id ? "Can't remove your own admin" : ''}
+                    title={u.id === user?.id ? t('users.cantRemoveSelf') : ''}
                   >
                     <Shield className="h-3 w-3 mr-1" />
-                    {u.roles.includes('admin') ? 'Remove Admin' : 'Make Admin'}
+                    {u.roles.includes('admin') ? t('users.removeAdmin') : t('users.makeAdmin')}
                   </Button>
                   <Dialog open={grantDialog === u.id} onOpenChange={(open) => setGrantDialog(open ? u.id : null)}>
                     <DialogTrigger asChild>
                       <Button size="sm" variant="outline">
-                        <Gift className="h-3 w-3 mr-1" /> Grant Plan
+                        <Gift className="h-3 w-3 mr-1" /> {t('users.grantPlan')}
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Grant Plan to {u.full_name || u.email}</DialogTitle>
+                        <DialogTitle>{t('users.grantDialog.title', { name: u.full_name || u.email })}</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
                         <div>
-                          <Label>Plan</Label>
+                          <Label>{t('users.grantDialog.plan')}</Label>
                           <Select value={selectedPlan} onValueChange={setSelectedPlan}>
-                            <SelectTrigger><SelectValue placeholder="Select a plan" /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder={t('users.grantDialog.selectPlan')} /></SelectTrigger>
                             <SelectContent>
                               {plans.map((p) => (
                                 <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
@@ -111,11 +113,11 @@ export default function AdminUsers() {
                           </Select>
                         </div>
                         <div>
-                          <Label>Expires at (optional)</Label>
+                          <Label>{t('users.grantDialog.expires')}</Label>
                           <Input type="date" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
                         </div>
                         <Button onClick={handleGrantPlan} disabled={!selectedPlan} className="w-full">
-                          Grant Plan
+                          {t('users.grantDialog.submit')}
                         </Button>
                       </div>
                     </DialogContent>

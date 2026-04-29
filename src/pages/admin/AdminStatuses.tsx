@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useProposalStatuses } from '@/hooks/useProposalStatuses';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from '@/hooks/use-toast';
 import { Plus, Trash2 } from 'lucide-react';
 
@@ -21,6 +22,7 @@ interface StatusForm {
 const emptyForm: StatusForm = { name: '', color: '#6B7280', position: 0, is_default: false, is_final: false };
 
 export default function AdminStatuses() {
+  const { t } = useTranslation(['admin', 'common']);
   const { statuses, isLoading, upsertStatus, deleteStatus } = useProposalStatuses();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<StatusForm>(emptyForm);
@@ -34,49 +36,46 @@ export default function AdminStatuses() {
     try {
       await upsertStatus.mutateAsync({
         ...(form.id ? { id: form.id } : {}),
-        name: form.name,
-        color: form.color,
-        position: form.position,
-        is_default: form.is_default,
-        is_final: form.is_final,
+        name: form.name, color: form.color, position: form.position,
+        is_default: form.is_default, is_final: form.is_final,
       });
-      toast({ title: form.id ? 'Status updated' : 'Status created' });
+      toast({ title: form.id ? t('statuses.messages.updated') : t('statuses.messages.created') });
       setOpen(false);
       setForm(emptyForm);
     } catch {
-      toast({ title: 'Error saving status', variant: 'destructive' });
+      toast({ title: t('statuses.messages.errorSaving'), variant: 'destructive' });
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this status? Proposals using it will lose their status.')) return;
+    if (!confirm(t('statuses.deleteConfirm'))) return;
     try {
       await deleteStatus.mutateAsync(id);
-      toast({ title: 'Status deleted' });
+      toast({ title: t('statuses.messages.deleted') });
     } catch {
-      toast({ title: 'Error deleting status', variant: 'destructive' });
+      toast({ title: t('statuses.messages.errorDeleting'), variant: 'destructive' });
     }
   };
 
-  if (isLoading) return <p className="text-muted-foreground mt-4">Loading statuses...</p>;
+  if (isLoading) return <p className="text-muted-foreground mt-4">{t('statuses.loading')}</p>;
 
   return (
     <div className="mt-4 space-y-4">
       <div className="flex justify-end">
         <Button onClick={() => { setForm({ ...emptyForm, position: statuses.length }); setOpen(true); }}>
-          <Plus className="h-4 w-4 mr-1" /> New Status
+          <Plus className="h-4 w-4 mr-1" /> {t('statuses.newButton')}
         </Button>
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Position</TableHead>
-            <TableHead>Color</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Default</TableHead>
-            <TableHead>Final</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t('statuses.table.position')}</TableHead>
+            <TableHead>{t('statuses.table.color')}</TableHead>
+            <TableHead>{t('statuses.table.name')}</TableHead>
+            <TableHead>{t('statuses.table.default')}</TableHead>
+            <TableHead>{t('statuses.table.final')}</TableHead>
+            <TableHead>{t('statuses.table.actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -94,7 +93,7 @@ export default function AdminStatuses() {
               <TableCell>{s.is_final ? '✓' : ''}</TableCell>
               <TableCell>
                 <div className="flex gap-1">
-                  <Button size="sm" variant="outline" onClick={() => openEdit(s)}>Edit</Button>
+                  <Button size="sm" variant="outline" onClick={() => openEdit(s)}>{t('common:actions.edit')}</Button>
                   <Button size="sm" variant="outline" onClick={() => handleDelete(s.id)}>
                     <Trash2 className="h-3 w-3" />
                   </Button>
@@ -108,35 +107,35 @@ export default function AdminStatuses() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{form.id ? 'Edit Status' : 'New Status'}</DialogTitle>
+            <DialogTitle>{form.id ? t('statuses.dialog.editTitle') : t('statuses.dialog.newTitle')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label>Name</Label>
+              <Label>{t('statuses.dialog.name')}</Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </div>
             <div>
-              <Label>Color</Label>
+              <Label>{t('statuses.dialog.color')}</Label>
               <div className="flex gap-2 items-center">
                 <input type="color" value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })} className="h-8 w-8 rounded cursor-pointer" />
                 <Input value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })} className="flex-1" />
               </div>
             </div>
             <div>
-              <Label>Position</Label>
+              <Label>{t('statuses.dialog.position')}</Label>
               <Input type="number" value={form.position} onChange={(e) => setForm({ ...form, position: Number(e.target.value) })} />
             </div>
             <div className="flex gap-6">
               <div className="flex items-center gap-2">
                 <Switch checked={form.is_default} onCheckedChange={(v) => setForm({ ...form, is_default: v })} />
-                <Label>Default</Label>
+                <Label>{t('statuses.dialog.default')}</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch checked={form.is_final} onCheckedChange={(v) => setForm({ ...form, is_final: v })} />
-                <Label>Final</Label>
+                <Label>{t('statuses.dialog.final')}</Label>
               </div>
             </div>
-            <Button onClick={handleSave} disabled={!form.name} className="w-full">Save</Button>
+            <Button onClick={handleSave} disabled={!form.name} className="w-full">{t('common:actions.save')}</Button>
           </div>
         </DialogContent>
       </Dialog>

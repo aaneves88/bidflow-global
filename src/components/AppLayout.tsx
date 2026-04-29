@@ -1,8 +1,10 @@
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
 
 export function AppLayout({ children }: { children: ReactNode }) {
+  useTranslation();
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
