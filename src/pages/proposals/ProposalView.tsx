@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Copy, Pencil, MessageCircle, Eye } from 'lucide-react';
+import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,8 +11,16 @@ import {
   useProposalStatusHistory, useUpdateProposalStatus,
 } from '@/hooks/useProposals';
 import { useProposalViews } from '@/hooks/useProposalViews';
+import { useAppSettings } from '@/hooks/useAppSettings';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
+import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
+
+function buildWhatsAppUrl(phone: string | null | undefined, message: string) {
+  const digits = (phone || '').replace(/\D/g, '');
+  const base = digits ? `https://wa.me/${digits}` : 'https://wa.me/';
+  return `${base}?text=${encodeURIComponent(message)}`;
+}
 
 export default function ProposalView() {
   const { t } = useTranslation(['proposals', 'common']);
@@ -23,6 +31,7 @@ export default function ProposalView() {
   const { data: statuses } = useProposalStatuses();
   const { data: history } = useProposalStatusHistory(id);
   const { data: views } = useProposalViews(id);
+  const { getSetting } = useAppSettings('general');
   const updateStatus = useUpdateProposalStatus();
 
   if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
@@ -33,7 +42,38 @@ export default function ProposalView() {
     navigator.clipboard.writeText(publicUrl);
     toast({ title: t('messages.linkCopied') });
   };
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { url: publicUrl }))}`;
+
+  const clientName = proposal.clients?.name || '';
+  const totalFmt = formatCurrency(Number(proposal.total_amount), proposal.currency);
+  const whatsappMessage = t('share.whatsappMessage', {
+    clientName: clientName || t('share.defaultClient'),
+    title: proposal.title,
+    total: totalFmt,
+    url: publicUrl,
+  });
+  const whatsappUrl = buildWhatsAppUrl(proposal.clients?.phone, whatsappMessage);
+
+  const handlePdf = () => {
+    if (!items) return;
+    const companyName = (getSetting('company_name') as string) || undefined;
+    generateProposalPdf(proposal as any, items as any[], {
+      companyName,
+      publicUrlBase: window.location.origin,
+      labels: {
+        proposalFor: t('pdf.proposalFor'),
+        description: t('pdf.description'),
+        items: t('pdf.items'),
+        qty: t('pdf.qty'),
+        unitPrice: t('pdf.unitPrice'),
+        total: t('pdf.total'),
+        grandTotal: t('pdf.grandTotal'),
+        validUntil: t('pdf.validUntil'),
+        status: t('pdf.status'),
+        publicLink: t('pdf.publicLink'),
+        generatedAt: t('pdf.generatedAt'),
+      },
+    });
+  };
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -41,25 +81,33 @@ export default function ProposalView() {
         <Button variant="ghost" size="icon" onClick={() => navigate('/proposals')}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight">{proposal.title}</h1>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-3xl font-bold tracking-tight truncate">{proposal.title}</h1>
           {proposal.clients && (
-            <p className="text-muted-foreground">{proposal.clients.name} {proposal.clients.company ? `· ${proposal.clients.company}` : ''}</p>
+            <p className="text-muted-foreground truncate">{proposal.clients.name} {proposal.clients.company ? `· ${proposal.clients.company}` : ''}</p>
           )}
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="icon" onClick={copyLink} title={t('view.copyLink')}>
-            <Copy className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" asChild>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" title={t('view.sendWhatsapp')}>
-              <MessageCircle className="h-4 w-4" />
-            </a>
-          </Button>
-          <Button variant="outline" onClick={() => navigate(`/proposals/${id}/edit`)}>
-            <Pencil className="mr-2 h-4 w-4" /> {t('view.edit')}
-          </Button>
-        </div>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/proposals/${id}/edit`)}>
+          <Pencil className="h-4 w-4 sm:mr-2" />
+          <span className="hidden sm:inline">{t('view.edit')}</span>
+        </Button>
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        <Button variant="outline" onClick={copyLink}>
+          <Copy className="mr-2 h-4 w-4" />
+          {t('view.copyLink')}
+        </Button>
+        <Button variant="outline" asChild>
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+            <MessageCircle className="mr-2 h-4 w-4" />
+            {t('view.sendWhatsapp')}
+          </a>
+        </Button>
+        <Button variant="outline" onClick={handlePdf} disabled={!items}>
+          <FileDown className="mr-2 h-4 w-4" />
+          {t('view.downloadPdf')}
+        </Button>
       </div>
 
       <div className="flex items-center gap-4 flex-wrap">
@@ -129,7 +177,7 @@ export default function ProposalView() {
           <div className="flex justify-end pt-4 border-t mt-4">
             <div className="text-right">
               <p className="text-sm text-muted-foreground">{t('form.grandTotal')}</p>
-              <p className="text-2xl font-bold">{formatCurrency(Number(proposal.total_amount), proposal.currency)}</p>
+              <p className="text-2xl font-bold">{totalFmt}</p>
             </div>
           </div>
         </CardContent>

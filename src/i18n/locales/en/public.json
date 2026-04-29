@@ -9,7 +9,7 @@
   "items": "Items",
   "table": { "description": "Description", "qty": "Qty", "unitPrice": "Unit Price", "total": "Total" },
   "totalLabel": "Total",
-  "actions": { "accept": "Accept Proposal", "whatsapp": "Contact via WhatsApp" },
+  "actions": { "accept": "Accept Proposal", "whatsapp": "Contact via WhatsApp", "downloadPdf": "Download PDF" },
   "accepted": "Proposal Accepted",
   "messages": {
     "accepted": "Proposal accepted!", "errorAccepting": "Error accepting proposal",

@@ -6,6 +6,7 @@ import AdminUsers from './AdminUsers';
 import AdminPlans from './AdminPlans';
 import AdminStatuses from './AdminStatuses';
 import AdminIntegrations from './AdminIntegrations';
+import AdminQAChecklist from './AdminQAChecklist';
 
 export default function Admin() {
   const { t } = useTranslation('admin');
@@ -22,12 +23,14 @@ export default function Admin() {
           <TabsTrigger value="plans">{t('tabs.plans')}</TabsTrigger>
           <TabsTrigger value="statuses">{t('tabs.statuses')}</TabsTrigger>
           <TabsTrigger value="integrations">{t('tabs.integrations')}</TabsTrigger>
+          <TabsTrigger value="qa">{t('tabs.qa')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
         <TabsContent value="plans"><AdminPlans /></TabsContent>
         <TabsContent value="statuses"><AdminStatuses /></TabsContent>
         <TabsContent value="integrations"><AdminIntegrations /></TabsContent>
+        <TabsContent value="qa"><AdminQAChecklist /></TabsContent>
       </Tabs>
     </div>
   );
