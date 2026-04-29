@@ -83,8 +83,12 @@ export type Database = {
           id: string
           interval: string | null
           is_active: boolean | null
+          is_starter: boolean
+          max_clients: number | null
+          max_proposals: number | null
           name: string
           price: number | null
+          trial_days: number
         }
         Insert: {
           created_at?: string
@@ -94,8 +98,12 @@ export type Database = {
           id?: string
           interval?: string | null
           is_active?: boolean | null
+          is_starter?: boolean
+          max_clients?: number | null
+          max_proposals?: number | null
           name: string
           price?: number | null
+          trial_days?: number
         }
         Update: {
           created_at?: string
@@ -105,8 +113,12 @@ export type Database = {
           id?: string
           interval?: string | null
           is_active?: boolean | null
+          is_starter?: boolean
+          max_clients?: number | null
+          max_proposals?: number | null
           name?: string
           price?: number | null
+          trial_days?: number
         }
         Relationships: []
       }
@@ -244,6 +256,30 @@ export type Database = {
           is_final?: boolean | null
           name?: string
           position?: number
+        }
+        Relationships: []
+      }
+      proposal_views: {
+        Row: {
+          id: string
+          ip_hash: string | null
+          proposal_id: string
+          user_agent: string | null
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          ip_hash?: string | null
+          proposal_id: string
+          user_agent?: string | null
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          ip_hash?: string | null
+          proposal_id?: string
+          user_agent?: string | null
+          viewed_at?: string
         }
         Relationships: []
       }
