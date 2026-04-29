@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from '@/hooks/use-toast';
 
 export default function Login() {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,11 +19,9 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-
     if (error) {
-      toast({ title: 'Login failed', description: error.message, variant: 'destructive' });
+      toast({ title: t('login.errorTitle'), description: error.message, variant: 'destructive' });
     } else {
       navigate('/dashboard');
     }
@@ -33,26 +33,26 @@ export default function Login() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">CloseFlow</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardDescription>{t('login.title')}</CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
+              <Label htmlFor="email">{t('login.email')}</Label>
+              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="voce@exemplo.com" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('login.password')}</Label>
               <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? t('login.submitting') : t('login.submit')}
             </Button>
             <p className="text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-primary underline">Sign up</Link>
+              {t('login.noAccount')}{' '}
+              <Link to="/register" className="text-primary underline">{t('login.signUp')}</Link>
             </p>
           </CardFooter>
         </form>
