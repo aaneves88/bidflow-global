@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle, MessageCircle, Clock } from 'lucide-react';
+import { CheckCircle, MessageCircle, Clock, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { usePublicProposal, useProposalStatuses } from '@/hooks/useProposals';
 import { useRecordProposalView } from '@/hooks/useProposalViews';
 import { formatCurrency, formatDate } from '@/lib/format';
+import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
 
 export default function PublicProposal() {
@@ -164,6 +165,16 @@ export default function PublicProposal() {
               <CheckCircle className="mr-2 h-5 w-5" /> {t('accepted')}
             </Badge>
           )}
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => generateProposalPdf(proposal as any, sortedItems as any[], {
+              publicUrlBase: window.location.origin,
+            })}
+          >
+            <FileDown className="mr-2 h-5 w-5" />
+            {t('actions.downloadPdf')}
+          </Button>
           <Button size="lg" variant="outline" asChild>
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="mr-2 h-5 w-5" />
