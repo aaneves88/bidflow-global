@@ -67,15 +67,16 @@ Status markers: ✅ completed | 🔄 in progress | 📋 planned
 | Item | Status |
 |------|--------|
 | Landing page | ✅ completed |
-| Pricing page | 📋 planned |
-| Simple onboarding | 📋 planned |
-| Trial or starter plan | 📋 planned |
-| Access control by plan | 📋 planned |
-| Stripe checkout (configurable) | 📋 planned |
-| Viewed proposal tracking | 📋 planned |
-| Pipeline value | 📋 planned |
-| Approved revenue | 📋 planned |
-| Conversion rate | 📋 planned |
+| Brazilian Portuguese localization (i18n) | ✅ completed |
+| Pricing page | ✅ completed |
+| Simple onboarding | ✅ completed |
+| Trial or starter plan | ✅ completed |
+| Access control by plan | ✅ completed |
+| Stripe checkout (configurable) | 🔄 in progress (UI ready, awaiting Stripe enable approval) |
+| Viewed proposal tracking | ✅ completed |
+| Pipeline value | ✅ completed |
+| Approved revenue | ✅ completed |
+| Conversion rate | ✅ completed |
 
 ---
 

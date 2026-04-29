@@ -1,25 +1,25 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useClientsWithProposalCount, useDeleteClient } from '@/hooks/useClients';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 import { ClientDialog } from '@/pages/clients/ClientDialog';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
 export default function Clients() {
+  const { t } = useTranslation(['clients', 'common', 'dashboard']);
   const { data: clients, isLoading } = useClientsWithProposalCount();
   const deleteClient = useDeleteClient();
+  const limits = usePlanLimits();
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<any>(null);
@@ -35,19 +35,33 @@ export default function Clients() {
     );
   });
 
+  const newButton = (
+    <Button onClick={() => { setEditingClient(null); setDialogOpen(true); }} disabled={!limits.canCreateClient}>
+      <Plus className="mr-2 h-4 w-4" /> {t('newButton')}
+    </Button>
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Clients</h1>
-        <Button onClick={() => { setEditingClient(null); setDialogOpen(true); }}>
-          <Plus className="mr-2 h-4 w-4" /> New Client
-        </Button>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+        {!limits.canCreateClient ? (
+          <Tooltip>
+            <TooltipTrigger asChild><span>{newButton}</span></TooltipTrigger>
+            <TooltipContent>
+              <div className="space-y-2">
+                <p>{t('dashboard:limit.clientsReached')}</p>
+                <Button size="sm" asChild><Link to="/pricing">{t('dashboard:limit.upgrade')}</Link></Button>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        ) : newButton}
       </div>
 
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search clients..."
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
@@ -55,15 +69,15 @@ export default function Clients() {
       </div>
 
       {isLoading ? (
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t('common:actions.loading')}</p>
       ) : !filtered?.length ? (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16">
           <p className="text-muted-foreground mb-4">
-            {search ? 'No clients match your search' : 'No clients yet'}
+            {search ? t('empty.noResults') : t('empty.none')}
           </p>
-          {!search && (
+          {!search && limits.canCreateClient && (
             <Button variant="outline" onClick={() => { setEditingClient(null); setDialogOpen(true); }}>
-              <Plus className="mr-2 h-4 w-4" /> Add your first client
+              <Plus className="mr-2 h-4 w-4" /> {t('empty.addFirst')}
             </Button>
           )}
         </div>
@@ -72,12 +86,12 @@ export default function Clients() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Company</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Proposals</TableHead>
-                <TableHead className="w-[100px]">Actions</TableHead>
+                <TableHead>{t('table.name')}</TableHead>
+                <TableHead>{t('table.email')}</TableHead>
+                <TableHead>{t('table.company')}</TableHead>
+                <TableHead>{t('table.phone')}</TableHead>
+                <TableHead>{t('table.proposals')}</TableHead>
+                <TableHead className="w-[100px]">{t('table.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -92,18 +106,10 @@ export default function Clients() {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => { setEditingClient(client); setDialogOpen(true); }}
-                      >
+                      <Button variant="ghost" size="icon" onClick={() => { setEditingClient(client); setDialogOpen(true); }}>
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setDeletingId(client.id)}
-                      >
+                      <Button variant="ghost" size="icon" onClick={() => setDeletingId(client.id)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
@@ -124,17 +130,15 @@ export default function Clients() {
       <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete client?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. Proposals linked to this client will keep their data but lose the client reference.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('delete.description')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common:actions.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => { if (deletingId) deleteClient.mutate(deletingId); setDeletingId(null); }}
             >
-              Delete
+              {t('common:actions.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

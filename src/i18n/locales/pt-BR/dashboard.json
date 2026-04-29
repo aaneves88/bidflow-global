@@ -1,0 +1,37 @@
+{
+  "title": "Painel",
+  "welcome": "Olá",
+  "welcomeBack": "Bem-vindo(a) de volta",
+  "kpis": {
+    "thisMonth": "Propostas (este mês)",
+    "openPipeline": "Pipeline em aberto",
+    "approvedRevenue": "Receita aprovada",
+    "conversionRate": "Taxa de conversão"
+  },
+  "period": {
+    "label": "Período",
+    "thisMonth": "Este mês",
+    "last30Days": "Últimos 30 dias",
+    "thisYear": "Este ano",
+    "allTime": "Todo o período"
+  },
+  "pipeline": {
+    "title": "Pipeline",
+    "empty": "Sem dados ainda"
+  },
+  "recent": {
+    "title": "Propostas recentes",
+    "empty": "Nenhuma proposta ainda",
+    "noClient": "Sem cliente"
+  },
+  "trial": {
+    "active": "Período de teste ativo — {{days}} dias restantes",
+    "expired": "Seu período de teste terminou. Escolha um plano para continuar.",
+    "upgrade": "Ver planos"
+  },
+  "limit": {
+    "proposalsReached": "Limite de propostas do seu plano atingido",
+    "clientsReached": "Limite de clientes do seu plano atingido",
+    "upgrade": "Fazer upgrade"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "loading": "Carregando proposta...",
+  "notFound": {
+    "title": "Proposta não encontrada",
+    "description": "Este link pode ser inválido ou a proposta pode ter sido removida."
+  },
+  "preparedFor": "Preparada para {{name}}",
+  "validUntil": "Válida até {{date}}",
+  "items": "Itens",
+  "table": {
+    "description": "Descrição",
+    "qty": "Qtd",
+    "unitPrice": "Valor unit.",
+    "total": "Total"
+  },
+  "totalLabel": "Total",
+  "actions": {
+    "accept": "Aceitar proposta",
+    "whatsapp": "Falar pelo WhatsApp"
+  },
+  "accepted": "Proposta aceita",
+  "messages": {
+    "accepted": "Proposta aceita!",
+    "errorAccepting": "Erro ao aceitar a proposta",
+    "acceptedNote": "Aceita pelo cliente via link público"
+  },
+  "share": {
+    "whatsappText": "Sobre a proposta: {{title}}"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "title": "Administração",
+  "tabs": {
+    "overview": "Visão geral",
+    "users": "Usuários",
+    "plans": "Planos",
+    "statuses": "Status"
+  },
+  "overview": {
+    "totalUsers": "Total de usuários",
+    "totalProposals": "Total de propostas",
+    "approvedRevenue": "Receita aprovada",
+    "recentUsers": "Usuários recentes",
+    "noName": "Sem nome"
+  },
+  "users": {
+    "loading": "Carregando usuários...",
+    "table": {
+      "name": "Nome",
+      "email": "E-mail",
+      "roles": "Papéis",
+      "plan": "Plano",
+      "joined": "Cadastro",
+      "actions": "Ações"
+    },
+    "makeAdmin": "Tornar admin",
+    "removeAdmin": "Remover admin",
+    "grantPlan": "Conceder plano",
+    "cantRemoveSelf": "Não é possível remover o próprio admin",
+    "messages": {
+      "adminGranted": "Permissão de admin concedida",
+      "adminRemoved": "Permissão de admin removida",
+      "errorRole": "Erro ao alterar permissão",
+      "planGranted": "Plano concedido",
+      "errorPlan": "Erro ao conceder plano"
+    },
+    "grantDialog": {
+      "title": "Conceder plano para {{name}}",
+      "plan": "Plano",
+      "selectPlan": "Selecione um plano",
+      "expires": "Expira em (opcional)",
+      "submit": "Conceder plano"
+    }
+  },
+  "plans": {
+    "loading": "Carregando planos...",
+    "newButton": "Novo plano",
+    "table": {
+      "name": "Nome",
+      "price": "Preço",
+      "interval": "Intervalo",
+      "status": "Status",
+      "actions": "Ações"
+    },
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "dialog": {
+      "newTitle": "Novo plano",
+      "editTitle": "Editar plano",
+      "name": "Nome",
+      "description": "Descrição",
+      "price": "Preço",
+      "currency": "Moeda",
+      "interval": "Intervalo",
+      "features": "Recursos (array JSON)",
+      "isActive": "Ativo",
+      "isStarter": "Plano inicial (concedido a novos usuários)",
+      "trialDays": "Dias de teste (0 = sem trial)",
+      "maxProposals": "Máx. de propostas (vazio = ilimitado)",
+      "maxClients": "Máx. de clientes (vazio = ilimitado)"
+    },
+    "messages": {
+      "created": "Plano criado",
+      "updated": "Plano atualizado",
+      "error": "Erro ao salvar plano"
+    }
+  },
+  "statuses": {
+    "loading": "Carregando status...",
+    "newButton": "Novo status",
+    "table": {
+      "position": "Posição",
+      "color": "Cor",
+      "name": "Nome",
+      "default": "Padrão",
+      "final": "Final",
+      "actions": "Ações"
+    },
+    "dialog": {
+      "newTitle": "Novo status",
+      "editTitle": "Editar status",
+      "name": "Nome",
+      "color": "Cor",
+      "position": "Posição",
+      "default": "Padrão",
+      "final": "Final"
+    },
+    "deleteConfirm": "Excluir este status? Propostas que o utilizam ficarão sem status.",
+    "messages": {
+      "created": "Status criado",
+      "updated": "Status atualizado",
+      "deleted": "Status excluído",
+      "errorSaving": "Erro ao salvar status",
+      "errorDeleting": "Erro ao excluir status"
+    }
+  }
+}

@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle, MessageCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,20 +8,27 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
 import { usePublicProposal, useProposalStatuses } from '@/hooks/useProposals';
+import { useRecordProposalView } from '@/hooks/useProposalViews';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
-import { useState } from 'react';
 
 export default function PublicProposal() {
+  const { t } = useTranslation(['public', 'common']);
   const { publicCode } = useParams();
   const { data: proposal, isLoading, refetch } = usePublicProposal(publicCode);
   const { data: statuses } = useProposalStatuses();
+  const recordView = useRecordProposalView();
   const [accepting, setAccepting] = useState(false);
+
+  useEffect(() => {
+    if (proposal?.id) recordView.mutate(proposal.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proposal?.id]);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-muted-foreground">Loading proposal...</p>
+        <p className="text-muted-foreground">{t('loading')}</p>
       </div>
     );
   }
@@ -28,21 +37,22 @@ export default function PublicProposal() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Proposal not found</h1>
-          <p className="text-muted-foreground">This link may be invalid or the proposal may have been removed.</p>
+          <h1 className="text-2xl font-bold mb-2">{t('notFound.title')}</h1>
+          <p className="text-muted-foreground">{t('notFound.description')}</p>
         </div>
       </div>
     );
   }
 
-  const isApproved = proposal.proposal_statuses?.name === 'Approved';
-  const isRejected = proposal.proposal_statuses?.name === 'Rejected';
+  const statusName = proposal.proposal_statuses?.name || '';
+  const isApproved = /aprov|approv/i.test(statusName);
+  const isRejected = /reject|rejeit|perdid|lost/i.test(statusName);
   const isFinal = isApproved || isRejected;
 
   const handleAccept = async () => {
     setAccepting(true);
     try {
-      const approvedStatus = statuses?.find((s) => s.name === 'Approved');
+      const approvedStatus = statuses?.find((s) => /aprov|approv/i.test(s.name));
       if (!approvedStatus) throw new Error('Status not found');
 
       const { error } = await supabase
@@ -54,19 +64,19 @@ export default function PublicProposal() {
       await supabase.from('proposal_status_history').insert({
         proposal_id: proposal.id,
         status_id: approvedStatus.id,
-        notes: 'Accepted by client via public link',
+        notes: t('messages.acceptedNote'),
       });
 
-      toast({ title: 'Proposal accepted!' });
+      toast({ title: t('messages.accepted') });
       refetch();
     } catch {
-      toast({ title: 'Error accepting proposal', variant: 'destructive' });
+      toast({ title: t('messages.errorAccepting'), variant: 'destructive' });
     } finally {
       setAccepting(false);
     }
   };
 
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Regarding proposal: ${proposal.title}`)}`;
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { title: proposal.title }))}`;
 
   const items = (proposal as any).proposal_items || [];
   const sortedItems = [...items].sort((a: any, b: any) => a.position - b.position);
@@ -79,7 +89,7 @@ export default function PublicProposal() {
             <h1 className="text-3xl font-bold tracking-tight">{proposal.title}</h1>
             {proposal.clients && (
               <p className="text-muted-foreground mt-1">
-                Prepared for {proposal.clients.name}
+                {t('preparedFor', { name: proposal.clients.name })}
                 {proposal.clients.company ? ` · ${proposal.clients.company}` : ''}
               </p>
             )}
@@ -98,7 +108,7 @@ export default function PublicProposal() {
         {proposal.valid_until && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="h-4 w-4" />
-            Valid until {formatDate(proposal.valid_until)}
+            {t('validUntil', { date: formatDate(proposal.valid_until) })}
           </div>
         )}
 
@@ -111,15 +121,15 @@ export default function PublicProposal() {
         )}
 
         <Card>
-          <CardHeader><CardTitle>Items</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t('items')}</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Description</TableHead>
-                  <TableHead className="text-right">Qty</TableHead>
-                  <TableHead className="text-right">Unit Price</TableHead>
-                  <TableHead className="text-right">Total</TableHead>
+                  <TableHead>{t('table.description')}</TableHead>
+                  <TableHead className="text-right">{t('table.qty')}</TableHead>
+                  <TableHead className="text-right">{t('table.unitPrice')}</TableHead>
+                  <TableHead className="text-right">{t('table.total')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -135,31 +145,29 @@ export default function PublicProposal() {
             </Table>
             <div className="flex justify-end pt-4 border-t mt-4">
               <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total</p>
+                <p className="text-sm text-muted-foreground">{t('totalLabel')}</p>
                 <p className="text-3xl font-bold">{formatCurrency(Number(proposal.total_amount), proposal.currency)}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <div className="flex gap-3 justify-center pt-4">
+        <div className="flex gap-3 justify-center pt-4 flex-wrap">
           {!isFinal && (
             <Button size="lg" onClick={handleAccept} disabled={accepting}>
               <CheckCircle className="mr-2 h-5 w-5" />
-              Accept Proposal
+              {t('actions.accept')}
             </Button>
           )}
           {isApproved && (
-            <div className="text-center">
-              <Badge className="bg-green-100 text-green-800 text-base px-4 py-2">
-                <CheckCircle className="mr-2 h-5 w-5" /> Proposal Accepted
-              </Badge>
-            </div>
+            <Badge className="bg-green-100 text-green-800 text-base px-4 py-2">
+              <CheckCircle className="mr-2 h-5 w-5" /> {t('accepted')}
+            </Badge>
           )}
           <Button size="lg" variant="outline" asChild>
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="mr-2 h-5 w-5" />
-              Contact via WhatsApp
+              {t('actions.whatsapp')}
             </a>
           </Button>
         </div>

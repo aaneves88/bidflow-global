@@ -1,0 +1,19 @@
+{
+  "loading": "Loading proposal...",
+  "notFound": {
+    "title": "Proposal not found",
+    "description": "This link may be invalid or the proposal may have been removed."
+  },
+  "preparedFor": "Prepared for {{name}}",
+  "validUntil": "Valid until {{date}}",
+  "items": "Items",
+  "table": { "description": "Description", "qty": "Qty", "unitPrice": "Unit Price", "total": "Total" },
+  "totalLabel": "Total",
+  "actions": { "accept": "Accept Proposal", "whatsapp": "Contact via WhatsApp" },
+  "accepted": "Proposal Accepted",
+  "messages": {
+    "accepted": "Proposal accepted!", "errorAccepting": "Error accepting proposal",
+    "acceptedNote": "Accepted by client via public link"
+  },
+  "share": { "whatsappText": "Regarding proposal: {{title}}" }
+}

@@ -1,0 +1,62 @@
+{
+  "brand": "CloseFlow",
+  "actions": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "update": "Atualizar",
+    "new": "Novo",
+    "back": "Voltar",
+    "loading": "Carregando...",
+    "search": "Buscar",
+    "confirm": "Confirmar",
+    "skip": "Pular",
+    "next": "Avançar",
+    "previous": "Anterior",
+    "finish": "Concluir",
+    "view": "Ver",
+    "copy": "Copiar",
+    "send": "Enviar",
+    "close": "Fechar",
+    "tryAgain": "Tentar novamente"
+  },
+  "states": {
+    "loading": "Carregando...",
+    "empty": "Nenhum registro",
+    "error": "Algo deu errado"
+  },
+  "messages": {
+    "saved": "Alterações salvas",
+    "deleted": "Excluído com sucesso",
+    "linkCopied": "Link copiado!",
+    "errorSaving": "Erro ao salvar",
+    "errorDeleting": "Erro ao excluir"
+  },
+  "validation": {
+    "required": "Campo obrigatório",
+    "invalidEmail": "E-mail inválido",
+    "minLength": "Mínimo de {{count}} caracteres"
+  },
+  "currency": {
+    "default": "BRL"
+  },
+  "nav": {
+    "dashboard": "Painel",
+    "clients": "Clientes",
+    "proposals": "Propostas",
+    "admin": "Administração",
+    "settings": "Configurações",
+    "pricing": "Planos",
+    "signIn": "Entrar",
+    "signOut": "Sair",
+    "getStarted": "Começar agora",
+    "administration": "Administração"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Ops! Página não encontrada",
+    "back": "Voltar ao início"
+  }
+}

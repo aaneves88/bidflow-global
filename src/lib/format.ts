@@ -1,13 +1,24 @@
-export function formatCurrency(amount: number, currency = 'USD') {
-  return new Intl.NumberFormat('en-US', {
+import i18n from '@/i18n';
+
+function getLocale() {
+  const lang = i18n.language || 'pt-BR';
+  return lang === 'en' ? 'en-US' : 'pt-BR';
+}
+
+function defaultCurrency() {
+  return i18n.language === 'en' ? 'USD' : 'BRL';
+}
+
+export function formatCurrency(amount: number, currency?: string) {
+  return new Intl.NumberFormat(getLocale(), {
     style: 'currency',
-    currency,
+    currency: currency || defaultCurrency(),
     minimumFractionDigits: 2,
   }).format(amount);
 }
 
 export function formatDate(date: string) {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(getLocale(), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -15,7 +26,7 @@ export function formatDate(date: string) {
 }
 
 export function formatDateTime(date: string) {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(getLocale(), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

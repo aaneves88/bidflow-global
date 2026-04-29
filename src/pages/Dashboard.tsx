@@ -1,57 +1,115 @@
+import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProposals, useProposalStatuses } from '@/hooks/useProposals';
+import { useCurrentPlan } from '@/hooks/useCurrentPlan';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { formatCurrency, formatDate } from '@/lib/format';
-import { FileText, Clock, CheckCircle, TrendingUp } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { FileText, Clock, CheckCircle, TrendingUp, AlertTriangle } from 'lucide-react';
+
+type Period = 'thisMonth' | 'last30Days' | 'thisYear' | 'allTime';
 
 export default function Dashboard() {
+  const { t } = useTranslation(['dashboard', 'common']);
   const { user } = useAuth();
   const { data: proposals } = useProposals();
   const { data: statuses } = useProposalStatuses();
+  const { data: currentPlan } = useCurrentPlan();
   const navigate = useNavigate();
+  const [period, setPeriod] = useState<Period>('thisMonth');
 
-  const now = new Date();
-  const thisMonth = proposals?.filter((p) => {
-    const d = new Date(p.created_at);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  });
+  const filtered = useMemo(() => {
+    if (!proposals) return [];
+    const now = new Date();
+    return proposals.filter((p) => {
+      const d = new Date(p.created_at);
+      switch (period) {
+        case 'thisMonth':
+          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        case 'last30Days':
+          return (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24) <= 30;
+        case 'thisYear':
+          return d.getFullYear() === now.getFullYear();
+        default:
+          return true;
+      }
+    });
+  }, [proposals, period]);
 
-  const approvedStatus = statuses?.find((s) => s.name === 'Approved');
-  const approved = proposals?.filter((p) => p.status_id === approvedStatus?.id) || [];
-  const approvedValue = approved.reduce((s, p) => s + Number(p.total_amount), 0);
-
+  const approvedStatus = statuses?.find((s) => /aprov|approv/i.test(s.name));
   const finalStatuses = statuses?.filter((s) => s.is_final).map((s) => s.id) || [];
-  const openProposals = proposals?.filter((p) => !finalStatuses.includes(p.status_id || '')) || [];
 
-  const total = proposals?.length || 0;
+  const approved = filtered.filter((p) => p.status_id === approvedStatus?.id);
+  const approvedRevenue = approved.reduce((s, p) => s + Number(p.total_amount), 0);
+
+  const open = filtered.filter((p) => !finalStatuses.includes(p.status_id || ''));
+  const openValue = open.reduce((s, p) => s + Number(p.total_amount), 0);
+
+  const total = filtered.length;
   const conversionRate = total > 0 ? ((approved.length / total) * 100).toFixed(1) : '0';
 
-  const recentProposals = proposals?.slice(0, 5) || [];
+  const recentProposals = (proposals ?? []).slice(0, 5);
 
-  // Pipeline: count per status
   const pipeline = statuses?.map((s) => ({
     ...s,
-    count: proposals?.filter((p) => p.status_id === s.id).length || 0,
+    count: filtered.filter((p) => p.status_id === s.id).length,
   })) || [];
   const maxCount = Math.max(...pipeline.map((p) => p.count), 1);
 
   const kpis = [
-    { label: 'Proposals (this month)', value: String(thisMonth?.length || 0), icon: FileText },
-    { label: 'Open Pipeline', value: String(openProposals.length), icon: Clock },
-    { label: 'Approved Revenue', value: formatCurrency(approvedValue), icon: CheckCircle },
-    { label: 'Conversion Rate', value: `${conversionRate}%`, icon: TrendingUp },
+    { label: t('kpis.thisMonth'), value: String(filtered.length), icon: FileText },
+    { label: t('kpis.openPipeline'), value: formatCurrency(openValue), icon: Clock },
+    { label: t('kpis.approvedRevenue'), value: formatCurrency(approvedRevenue), icon: CheckCircle },
+    { label: t('kpis.conversionRate'), value: `${conversionRate}%`, icon: TrendingUp },
   ];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">
-          Welcome back{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''}!
-        </p>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+          <p className="text-muted-foreground mt-1">
+            {t('welcomeBack')}{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''}!
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">{t('period.label')}:</span>
+          <Select value={period} onValueChange={(v) => setPeriod(v as Period)}>
+            <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="thisMonth">{t('period.thisMonth')}</SelectItem>
+              <SelectItem value="last30Days">{t('period.last30Days')}</SelectItem>
+              <SelectItem value="thisYear">{t('period.thisYear')}</SelectItem>
+              <SelectItem value="allTime">{t('period.allTime')}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+
+      {currentPlan?.isExpired && (
+        <Card className="border-destructive">
+          <CardContent className="pt-6 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              <p className="text-sm">{t('trial.expired')}</p>
+            </div>
+            <Button asChild><Link to="/pricing">{t('trial.upgrade')}</Link></Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {currentPlan && !currentPlan.isExpired && currentPlan.daysLeft !== null && currentPlan.daysLeft <= 7 && (
+        <Card>
+          <CardContent className="pt-6 flex items-center justify-between gap-4">
+            <p className="text-sm">{t('trial.active', { days: currentPlan.daysLeft })}</p>
+            <Button variant="outline" asChild><Link to="/pricing">{t('trial.upgrade')}</Link></Button>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {kpis.map((kpi) => (
@@ -71,10 +129,10 @@ export default function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader><CardTitle>Pipeline</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t('pipeline.title')}</CardTitle></CardHeader>
           <CardContent>
             {pipeline.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No data yet</p>
+              <p className="text-sm text-muted-foreground">{t('pipeline.empty')}</p>
             ) : (
               <div className="space-y-3">
                 {pipeline.map((s) => (
@@ -99,10 +157,10 @@ export default function Dashboard() {
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Recent Proposals</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t('recent.title')}</CardTitle></CardHeader>
           <CardContent>
             {recentProposals.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No proposals yet</p>
+              <p className="text-sm text-muted-foreground">{t('recent.empty')}</p>
             ) : (
               <div className="space-y-3">
                 {recentProposals.map((p) => (
@@ -113,7 +171,7 @@ export default function Dashboard() {
                   >
                     <div>
                       <p className="text-sm font-medium">{p.title}</p>
-                      <p className="text-xs text-muted-foreground">{p.clients?.name || 'No client'} · {formatDate(p.created_at)}</p>
+                      <p className="text-xs text-muted-foreground">{p.clients?.name || t('recent.noClient')} · {formatDate(p.created_at)}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">{formatCurrency(Number(p.total_amount), p.currency)}</span>

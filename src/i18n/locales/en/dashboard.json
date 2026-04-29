@@ -1,0 +1,23 @@
+{
+  "title": "Dashboard", "welcome": "Welcome", "welcomeBack": "Welcome back",
+  "kpis": {
+    "thisMonth": "Proposals (this month)", "openPipeline": "Open Pipeline",
+    "approvedRevenue": "Approved Revenue", "conversionRate": "Conversion Rate"
+  },
+  "period": {
+    "label": "Period", "thisMonth": "This month", "last30Days": "Last 30 days",
+    "thisYear": "This year", "allTime": "All time"
+  },
+  "pipeline": { "title": "Pipeline", "empty": "No data yet" },
+  "recent": { "title": "Recent Proposals", "empty": "No proposals yet", "noClient": "No client" },
+  "trial": {
+    "active": "Trial active — {{days}} days left",
+    "expired": "Your trial has ended. Choose a plan to continue.",
+    "upgrade": "View plans"
+  },
+  "limit": {
+    "proposalsReached": "Your plan's proposal limit has been reached",
+    "clientsReached": "Your plan's client limit has been reached",
+    "upgrade": "Upgrade"
+  }
+}

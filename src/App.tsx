@@ -9,6 +9,8 @@ import { AppLayout } from "@/components/AppLayout";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import Landing from "@/pages/Landing";
+import Pricing from "@/pages/Pricing";
+import Onboarding from "@/pages/Onboarding";
 import Dashboard from "@/pages/Dashboard";
 import Clients from "@/pages/clients/Clients";
 import Proposals from "@/pages/proposals/Proposals";
@@ -30,9 +32,18 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute>
+                  <Onboarding />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/dashboard"
               element={

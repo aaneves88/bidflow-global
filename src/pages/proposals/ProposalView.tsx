@@ -1,40 +1,39 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Copy, Pencil, MessageCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, Copy, Pencil, MessageCircle, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
-  useProposal,
-  useProposalItems,
-  useProposalStatuses,
-  useProposalStatusHistory,
-  useUpdateProposalStatus,
+  useProposal, useProposalItems, useProposalStatuses,
+  useProposalStatusHistory, useUpdateProposalStatus,
 } from '@/hooks/useProposals';
+import { useProposalViews } from '@/hooks/useProposalViews';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
 
 export default function ProposalView() {
+  const { t } = useTranslation(['proposals', 'common']);
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: proposal, isLoading } = useProposal(id);
   const { data: items } = useProposalItems(id);
   const { data: statuses } = useProposalStatuses();
   const { data: history } = useProposalStatusHistory(id);
+  const { data: views } = useProposalViews(id);
   const updateStatus = useUpdateProposalStatus();
 
-  if (isLoading) return <p className="text-muted-foreground">Loading...</p>;
-  if (!proposal) return <p className="text-muted-foreground">Proposal not found</p>;
+  if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
+  if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
 
   const publicUrl = `${window.location.origin}/p/${proposal.public_code}`;
-
   const copyLink = () => {
     navigator.clipboard.writeText(publicUrl);
-    toast({ title: 'Link copied!' });
+    toast({ title: t('messages.linkCopied') });
   };
-
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Check out this proposal: ${publicUrl}`)}`;
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { url: publicUrl }))}`;
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -49,21 +48,21 @@ export default function ProposalView() {
           )}
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="icon" onClick={copyLink} title="Copy public link">
+          <Button variant="outline" size="icon" onClick={copyLink} title={t('view.copyLink')}>
             <Copy className="h-4 w-4" />
           </Button>
           <Button variant="outline" size="icon" asChild>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" title="Send via WhatsApp">
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" title={t('view.sendWhatsapp')}>
               <MessageCircle className="h-4 w-4" />
             </a>
           </Button>
           <Button variant="outline" onClick={() => navigate(`/proposals/${id}/edit`)}>
-            <Pencil className="mr-2 h-4 w-4" /> Edit
+            <Pencil className="mr-2 h-4 w-4" /> {t('view.edit')}
           </Button>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 flex-wrap">
         {proposal.proposal_statuses && (
           <Badge variant="outline" style={{ borderColor: proposal.proposal_statuses.color, color: proposal.proposal_statuses.color }}>
             {proposal.proposal_statuses.name}
@@ -74,7 +73,7 @@ export default function ProposalView() {
           onValueChange={(val) => updateStatus.mutate({ id: proposal.id, status_id: val })}
         >
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="Change status" />
+            <SelectValue placeholder={t('view.changeStatus')} />
           </SelectTrigger>
           <SelectContent>
             {statuses?.map((s) => (
@@ -88,8 +87,12 @@ export default function ProposalView() {
           </SelectContent>
         </Select>
         {proposal.valid_until && (
-          <span className="text-sm text-muted-foreground">Valid until {formatDate(proposal.valid_until)}</span>
+          <span className="text-sm text-muted-foreground">{t('view.validUntil', { date: formatDate(proposal.valid_until) })}</span>
         )}
+        <Badge variant="secondary" className="ml-auto">
+          <Eye className="mr-1 h-3 w-3" />
+          {views ? t('view.viewsCount', { count: views.count }) : t('view.viewsCount', { count: 0 })}
+        </Badge>
       </div>
 
       {proposal.description && (
@@ -101,15 +104,15 @@ export default function ProposalView() {
       )}
 
       <Card>
-        <CardHeader><CardTitle>Line Items</CardTitle></CardHeader>
+        <CardHeader><CardTitle>{t('view.items')}</CardTitle></CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Description</TableHead>
-                <TableHead className="text-right">Qty</TableHead>
-                <TableHead className="text-right">Unit Price</TableHead>
-                <TableHead className="text-right">Total</TableHead>
+                <TableHead>{t('form.itemDescription')}</TableHead>
+                <TableHead className="text-right">{t('form.qty')}</TableHead>
+                <TableHead className="text-right">{t('form.unitPrice')}</TableHead>
+                <TableHead className="text-right">{t('form.itemTotal')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -125,23 +128,42 @@ export default function ProposalView() {
           </Table>
           <div className="flex justify-end pt-4 border-t mt-4">
             <div className="text-right">
-              <p className="text-sm text-muted-foreground">Grand Total</p>
+              <p className="text-sm text-muted-foreground">{t('form.grandTotal')}</p>
               <p className="text-2xl font-bold">{formatCurrency(Number(proposal.total_amount), proposal.currency)}</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
+      {views && (
+        <Card>
+          <CardHeader><CardTitle>{t('view.viewsTitle')}</CardTitle></CardHeader>
+          <CardContent className="space-y-1 text-sm">
+            {views.count === 0 ? (
+              <p className="text-muted-foreground">{t('view.neverViewed')}</p>
+            ) : (
+              <>
+                <p>{t('view.viewsCount', { count: views.count })}</p>
+                {views.firstView && <p className="text-muted-foreground">{t('view.firstView', { date: formatDateTime(views.firstView) })}</p>}
+                {views.lastView && views.lastView !== views.firstView && (
+                  <p className="text-muted-foreground">{t('view.lastView', { date: formatDateTime(views.lastView) })}</p>
+                )}
+              </>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {history && history.length > 0 && (
         <Card>
-          <CardHeader><CardTitle>Status History</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t('view.history')}</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-3">
               {history.map((h: any) => (
                 <div key={h.id} className="flex items-start gap-3">
                   <div className="h-2 w-2 rounded-full mt-2" style={{ backgroundColor: h.proposal_statuses?.color || '#6B7280' }} />
                   <div>
-                    <p className="text-sm font-medium">{h.proposal_statuses?.name || 'Unknown'}</p>
+                    <p className="text-sm font-medium">{h.proposal_statuses?.name || '—'}</p>
                     <p className="text-xs text-muted-foreground">{formatDateTime(h.created_at)}</p>
                     {h.notes && <p className="text-sm text-muted-foreground mt-1">{h.notes}</p>}
                   </div>
