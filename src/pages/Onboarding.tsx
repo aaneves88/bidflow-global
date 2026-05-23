@@ -35,7 +35,7 @@ export default function Onboarding() {
 
   const finish = () => {
     if (user) localStorage.setItem(`cf_onboarded_${user.id}`, '1');
-    navigate('/dashboard');
+    navigate('/dashboard', { replace: true });
   };
 
   const handleStep1 = async () => {

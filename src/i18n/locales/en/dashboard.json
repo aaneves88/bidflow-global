@@ -2,7 +2,8 @@
   "title": "Dashboard", "welcome": "Welcome", "welcomeBack": "Welcome back",
   "kpis": {
     "thisMonth": "Proposals (this month)", "openPipeline": "Open Pipeline",
-    "approvedRevenue": "Approved Revenue", "conversionRate": "Conversion Rate"
+    "approvedRevenue": "Approved Revenue", "conversionRate": "Conversion Rate",
+    "avgTicket": "Average Ticket", "vsPrev": "vs. previous period"
   },
   "period": {
     "label": "Period", "thisMonth": "This month", "last30Days": "Last 30 days",
@@ -10,6 +11,19 @@
   },
   "pipeline": { "title": "Pipeline", "empty": "No data yet" },
   "recent": { "title": "Recent Proposals", "empty": "No proposals yet", "noClient": "No client" },
+  "activity": {
+    "title": "Recent activity",
+    "empty": "No activity yet",
+    "statusChange": "{{title}} → {{status}}"
+  },
+  "quickStart": {
+    "title": "Welcome to CloseFlow!",
+    "subtitle": "Two steps and you send your first proposal.",
+    "step1": "Add a client",
+    "step2": "Create and send a proposal",
+    "addClient": "Add client",
+    "createProposal": "Create proposal"
+  },
   "trial": {
     "active": "Trial active — {{days}} days left",
     "expired": "Your trial has ended. Choose a plan to continue.",

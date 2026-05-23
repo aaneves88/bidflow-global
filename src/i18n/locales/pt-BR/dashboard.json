@@ -6,7 +6,9 @@
     "thisMonth": "Propostas (este mês)",
     "openPipeline": "Pipeline em aberto",
     "approvedRevenue": "Receita aprovada",
-    "conversionRate": "Taxa de conversão"
+    "conversionRate": "Taxa de conversão",
+    "avgTicket": "Ticket médio",
+    "vsPrev": "vs. período anterior"
   },
   "period": {
     "label": "Período",
@@ -23,6 +25,19 @@
     "title": "Propostas recentes",
     "empty": "Nenhuma proposta ainda",
     "noClient": "Sem cliente"
+  },
+  "activity": {
+    "title": "Atividade recente",
+    "empty": "Nenhuma atividade ainda",
+    "statusChange": "{{title}} → {{status}}"
+  },
+  "quickStart": {
+    "title": "Bem-vindo(a) ao CloseFlow!",
+    "subtitle": "Em 2 passos você envia sua primeira proposta.",
+    "step1": "Cadastrar um cliente",
+    "step2": "Criar e enviar uma proposta",
+    "addClient": "Adicionar cliente",
+    "createProposal": "Criar proposta"
   },
   "trial": {
     "active": "Período de teste ativo — {{days}} dias restantes",
