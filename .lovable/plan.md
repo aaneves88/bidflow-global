@@ -1,82 +1,68 @@
+# Plano: Vídeo demo CloseFlow (~90s)
 
-# Pre-Launch QA Pass — CloseFlow
+Demo de produto estilo SaaS moderno (Linear/Vercel), renderizado via Remotion como MP4 1080p/30fps, sem áudio, com legendas em pt-BR e UI reproduzida em código (mockups fiéis ao produto real).
 
-Goal: validate every existing flow end-to-end before enabling Stripe billing. No new features; only fixes for issues found.
+## Estilo visual
 
-## Approach
+- Paleta: fundo grafite quase preto (`#0B0D10`), superfície (`#14171C`), primário azul CloseFlow (`#3B82F6`), accent verde sucesso (`#22C55E`), texto cremoso (`#F5F5F4`).
+- Tipografia: Inter (UI) + Space Grotesk (display) via `@remotion/google-fonts`.
+- Motion system: entrada padrão = blur-to-sharp + leve translate Y (spring damping 20). Accent = scale-up com overshoot. Transições entre cenas = wipe direcional + crossfade curto.
+- Mockups das telas reconstruídos em JSX/Tailwind imitando o design real (sidebar, cards de KPI, tabelas, dialog de proposta, página pública). Ponteiro do mouse animado para indicar interação.
 
-Execute QA in three layers, in order:
+## Roteiro (9 cenas, ~90s total @ 30fps = 2700 frames)
 
-1. **Static review** — read all flow-critical files and cross-check against the requirements list. Catches type errors, missing i18n keys, wrong query fields, RLS mismatches, dead routes, broken imports.
-2. **Database / backend review** — query Supabase to confirm triggers, RLS, and seed data behave as the UI expects (trial grant, first-user-admin, public_code, status history).
-3. **Live browser pass** — drive the preview through each flow at desktop, tablet, and mobile viewports. Capture console + network errors. Verify PT-BR strings, loading/empty/error states, and public proposal as anon.
+| # | Cena | Frames | Legenda pt-BR |
+|---|------|--------|---------------|
+| 1 | Hook — caos: WhatsApp + Word + planilha flutuando, riscados | 180 (6s) | "Propostas perdidas no WhatsApp, Word, planilhas..." |
+| 2 | Logo CloseFlow + tagline | 120 (4s) | "CloseFlow — CRM de propostas para pequenos negócios" |
+| 3 | Dashboard: KPIs animando (pipeline, receita, conversão) + lista recente | 360 (12s) | "Acompanhe seu funil em tempo real" |
+| 4 | Clientes: lista → dialog "Novo cliente" preenchendo | 240 (8s) | "Cadastre clientes em segundos" |
+| 5 | Nova proposta: form, itens sendo adicionados, total calculando | 360 (12s) | "Crie propostas com cálculo automático" |
+| 6 | Compartilhamento: link copiado → WhatsApp → PDF | 270 (9s) | "Envie por link, WhatsApp ou PDF" |
+| 7 | Página pública: cliente clica "Aceitar proposta", check verde | 240 (8s) | "Seu cliente aceita com um clique" |
+| 8 | Dashboard atualizando: receita sobe, conversão sobe (counter animado) | 240 (8s) | "Resultados visíveis na hora" |
+| 9 | CTA final: logo + tagline EN | 210 (7s) | "Create proposals. Track deals. Close more business." |
 
-For each issue: log severity (P0 blocker / P1 launch-blocker / P2 polish / P3 nice-to-have), root cause, and fix scope. Only P0/P1 get fixed in this pass; P2/P3 go into the QA checklist as known items.
+Transições entre cenas (~15 frames cada) sobrepostas — duração final ajustada para ~90s.
 
-## Scope checklist (mirrors the request)
+## Estrutura do projeto
 
-```text
-AUTH        signup · first-user→admin · login · logout · route guards
-PLANS       trial auto-grant · plan limits enforcement · admin grant · expired UX
-CLIENTS     CRUD · validation · list
-PROPOSALS   CRUD · items · totals · status change · history log
-PUBLIC      anon view · view tracking · accept flow · approved_at/viewed_at
-SHARING     copy link · wa.me · client phone · default message PT-BR
-PDF         export · totals · branding · layout
-DASHBOARD   totals · pipeline · approved revenue · conversion · recent · refresh
-ADMIN       overview · users · plans · statuses · settings · integrations · QA
-I18N        PT-BR coverage · no EN leftovers · no placeholders
-RESPONSIVE  375 · 768 · 1280
-ERRORS      404 · invalid id · missing data · loading skeletons
+```
+remotion/
+  src/
+    index.ts
+    Root.tsx
+    MainVideo.tsx
+    scenes/
+      01_Hook.tsx
+      02_Intro.tsx
+      03_Dashboard.tsx
+      04_Clients.tsx
+      05_NewProposal.tsx
+      06_Share.tsx
+      07_Accept.tsx
+      08_DashboardUpdate.tsx
+      09_CTA.tsx
+    components/
+      AppFrame.tsx        # sidebar + topbar reutilizável
+      Cursor.tsx          # ponteiro animado
+      KpiCard.tsx
+      Caption.tsx         # legenda inferior
+  scripts/render-remotion.mjs
+  public/
 ```
 
-## Files to read (static pass)
+## Execução
 
-- `src/App.tsx`, `src/components/ProtectedRoute.tsx`, `src/contexts/AuthContext.tsx`
-- `src/pages/auth/*`, `src/pages/Onboarding.tsx`
-- `src/hooks/useCurrentPlan.ts`, `usePlanLimits.ts`, `usePlans.ts`, `useClients.ts`, `useProposals.ts`, `useProposalViews.ts`, `useProposalStatuses.ts`, `useAdminUsers.ts`, `useAppSettings.ts`
-- `src/pages/clients/*`, `src/pages/proposals/*` (Form, View, Public, List)
-- `src/pages/admin/*` (Overview, Users, Plans, Statuses, Integrations, QAChecklist, StripeIntegrationCard)
-- `src/pages/Dashboard.tsx`, `src/pages/Landing.tsx`, `src/pages/Pricing.tsx`
-- `src/lib/proposalPdf.ts`, `src/lib/format.ts`
-- `src/i18n/locales/pt-BR/*.json` vs `en/*.json` — diff key sets, flag missing keys
-- `supabase/functions/stripe-webhook/index.ts`, `stripe-create-checkout/index.ts`
+1. Scaffold `remotion/` + bun install + fix do compositor (musl→gnu) + symlink ffmpeg/ffprobe.
+2. Carregar Inter e Space Grotesk via `@remotion/google-fonts`.
+3. Construir componentes base (`AppFrame`, `Cursor`, `KpiCard`, `Caption`).
+4. Implementar 9 cenas com mockups fiéis ao CloseFlow (sidebar com itens em pt-BR: Dashboard, Clientes, Propostas, Configurações).
+5. Encadear via `<TransitionSeries>` com wipe + fade.
+6. Spot-check de frames-chave com `remotion still`.
+7. Render final via `scripts/render-remotion.mjs` (chrome-for-testing, muted, concurrency 1) → `/mnt/documents/closeflow-demo.mp4`.
+8. QA: extrair 6-8 frames distribuídos e revisar (overflow, contraste, alinhamento). Iterar até limpo.
 
-## Backend checks (read-only SQL)
+## Entregável
 
-- Confirm `is_starter=true` plan exists with `trial_days=7`
-- Confirm default `proposal_statuses` seeded (default + final flags)
-- Spot-check a recent signup: profile row, `user_roles` row, `user_plans` trial row with `expires_at`
-- Confirm `proposals.public_code` is generated and unique
-- Run `supabase--linter` for RLS / security warnings
-
-## Browser pass (preview)
-
-Run each at 1280, 768, 375. One session as admin (first user), one fresh signup as normal user, one anon tab for public proposal.
-
-1. Signup → expect trial banner, redirect to dashboard
-2. Create client (valid + invalid), edit, delete
-3. Create proposal, add items, totals recompute, save
-4. Change status → verify `proposal_status_history` insert
-5. Open proposal view → copy link → open anon → verify `proposal_views` insert and `viewed_at`
-6. Accept on public page → verify `approved_at` and status flip
-7. WhatsApp button → verify `wa.me/<digits>?text=...` with PT-BR default message and client phone
-8. Export PDF → inspect file for totals, branding, layout overflow
-9. Dashboard KPIs reconcile with raw counts
-10. Admin: users list, grant plan, edit plan, edit statuses, integrations tab loads, QA checklist persists
-11. 404 + invalid `/proposals/:id` + logged-out access to `/dashboard`
-12. Logout → guards redirect to `/login`
-
-## Deliverables (what I will return after the run)
-
-1. **Issues table** — id, area, severity, repro, root cause
-2. **Fixes applied** — file list + one-line description per fix (P0/P1 only)
-3. **Deferred items** — P2/P3 added as unchecked rows on `/admin?tab=qa`
-4. **Final QA checklist status** — pass/fail per scope row above
-5. **Go/no-go recommendation** for enabling Stripe billing
-
-## Out of scope
-
-- New features, redesigns, copy rewrites beyond fixing broken/missing strings
-- Stripe live transaction testing (covered by separate Stripe configuration step)
-- Performance profiling beyond obvious regressions
+`/mnt/documents/closeflow-demo.mp4` (~90s, 1920×1080, H.264, mudo) pronto para o sweepstake e reuso comercial. Tag `<presentation-artifact>` no final.
