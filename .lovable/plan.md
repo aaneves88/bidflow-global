@@ -1,68 +1,65 @@
-# Plano: Vídeo demo CloseFlow (~90s)
+# CloseFlow Demo Video — English Edition
 
-Demo de produto estilo SaaS moderno (Linear/Vercel), renderizado via Remotion como MP4 1080p/30fps, sem áudio, com legendas em pt-BR e UI reproduzida em código (mockups fiéis ao produto real).
+Build a polished English-language version of the CloseFlow product demo, reusing the existing Remotion scaffold from the pt-BR render. Target ~100 seconds, 1920×1080, 30fps, silent (on-screen captions tell the story).
 
-## Estilo visual
+## Approach
 
-- Paleta: fundo grafite quase preto (`#0B0D10`), superfície (`#14171C`), primário azul CloseFlow (`#3B82F6`), accent verde sucesso (`#22C55E`), texto cremoso (`#F5F5F4`).
-- Tipografia: Inter (UI) + Space Grotesk (display) via `@remotion/google-fonts`.
-- Motion system: entrada padrão = blur-to-sharp + leve translate Y (spring damping 20). Accent = scale-up com overshoot. Transições entre cenas = wipe direcional + crossfade curto.
-- Mockups das telas reconstruídos em JSX/Tailwind imitando o design real (sidebar, cards de KPI, tabelas, dialog de proposta, página pública). Ponteiro do mouse animado para indicar interação.
+Reuse the existing `remotion/` project. Duplicate the scene set into an English variant rather than overwriting — this keeps the pt-BR `closeflow-demo.mp4` intact and lets us re-render either language later.
 
-## Roteiro (9 cenas, ~90s total @ 30fps = 2700 frames)
+- New composition id: `main-en`
+- New entry scenes under `remotion/src/scenes-en/` (copies of the 9 pt-BR scenes with English copy + English UI labels in mockups)
+- New `MainVideoEn.tsx` wired into `Root.tsx` alongside the existing composition
+- Output: `/mnt/documents/closeflow-demo-en.mp4`
 
-| # | Cena | Frames | Legenda pt-BR |
-|---|------|--------|---------------|
-| 1 | Hook — caos: WhatsApp + Word + planilha flutuando, riscados | 180 (6s) | "Propostas perdidas no WhatsApp, Word, planilhas..." |
-| 2 | Logo CloseFlow + tagline | 120 (4s) | "CloseFlow — CRM de propostas para pequenos negócios" |
-| 3 | Dashboard: KPIs animando (pipeline, receita, conversão) + lista recente | 360 (12s) | "Acompanhe seu funil em tempo real" |
-| 4 | Clientes: lista → dialog "Novo cliente" preenchendo | 240 (8s) | "Cadastre clientes em segundos" |
-| 5 | Nova proposta: form, itens sendo adicionados, total calculando | 360 (12s) | "Crie propostas com cálculo automático" |
-| 6 | Compartilhamento: link copiado → WhatsApp → PDF | 270 (9s) | "Envie por link, WhatsApp ou PDF" |
-| 7 | Página pública: cliente clica "Aceitar proposta", check verde | 240 (8s) | "Seu cliente aceita com um clique" |
-| 8 | Dashboard atualizando: receita sobe, conversão sobe (counter animado) | 240 (8s) | "Resultados visíveis na hora" |
-| 9 | CTA final: logo + tagline EN | 210 (7s) | "Create proposals. Track deals. Close more business." |
+## Story & Captions (English)
 
-Transições entre cenas (~15 frames cada) sobrepostas — duração final ajustada para ~90s.
+1. **Hook (6s)** — "Proposals are still a mess." Floating WhatsApp / Word / spreadsheet fragments.
+2. **Intro (4s)** — Logo + "Meet CloseFlow — a lightweight proposal CRM for small businesses."
+3. **Dashboard (12s)** — KPI cards animate in: Pipeline, Approved Revenue, Conversion Rate + recent proposals list. Caption: "See your pipeline, revenue, and conversion at a glance."
+4. **Clients (8s)** — Client list → "New client" dialog. Caption: "Manage every client in one place."
+5. **New Proposal (14s)** — Form, line items appear, total auto-calculates. Caption: "Build proposals in seconds. Totals update automatically."
+6. **Share (10s)** — Public link copied → WhatsApp share → PDF export. Caption: "Share via link, WhatsApp, or PDF."
+7. **Accept (8s)** — Public proposal page, customer clicks "Accept". Caption: "Customers accept with one click."
+8. **Dashboard Update (8s)** — Revenue counter ticks up, conversion rate increases. Caption: "Watch your business grow in real time."
+9. **CTA (8s)** — "CloseFlow" + tagline "Create proposals. Track deals. Close more business."
 
-## Estrutura do projeto
+Total: ~78s of scene content + transition overlaps → composition duration ~2700–3000 frames (~90–100s).
+
+## English UI in Mockups
+
+All mockup labels translated:
+- Sidebar: Dashboard, Clients, Proposals, Settings
+- KPIs: Pipeline, Approved Revenue, Conversion Rate, Active Proposals
+- Buttons: New client, New proposal, Share, Copy link, Accept proposal, Download PDF
+- Status badges: Draft, Sent, Accepted, Rejected
+- Currency stays BRL→USD ($) for the English version with realistic sample numbers (e.g. $48,200 pipeline, $12,800 approved, 34% conversion).
+
+## Visual System (unchanged from pt-BR build)
+
+- Palette: bg `#0B0D10`, surface `#14171C`, primary `#3B82F6`, success `#22C55E`, text `#F5F5F4`
+- Type: Inter (body) + Space Grotesk (display) via `@remotion/google-fonts`
+- Motion: blur-to-sharp entrances, spring overshoot on hero moments, wipe + crossfade transitions between scenes
+- Captions: bottom-aligned, Inter Medium, fade + subtle Y-translate
+
+## Files to create
+
+- `remotion/src/MainVideoEn.tsx`
+- `remotion/src/scenes-en/01_Hook.tsx` … `09_CTA.tsx` (9 files)
+- `remotion/src/captions-en.ts` — central English caption strings
+
+## Files to edit
+
+- `remotion/src/Root.tsx` — register second `<Composition id="main-en" component={MainVideoEn} />`
+- `remotion/scripts/render-remotion.mjs` — accept composition id via env (`COMP_ID`) and output path (`OUT`) so we can render either language
+
+## Rendering
 
 ```
-remotion/
-  src/
-    index.ts
-    Root.tsx
-    MainVideo.tsx
-    scenes/
-      01_Hook.tsx
-      02_Intro.tsx
-      03_Dashboard.tsx
-      04_Clients.tsx
-      05_NewProposal.tsx
-      06_Share.tsx
-      07_Accept.tsx
-      08_DashboardUpdate.tsx
-      09_CTA.tsx
-    components/
-      AppFrame.tsx        # sidebar + topbar reutilizável
-      Cursor.tsx          # ponteiro animado
-      KpiCard.tsx
-      Caption.tsx         # legenda inferior
-  scripts/render-remotion.mjs
-  public/
+cd remotion && COMP_ID=main-en OUT=/mnt/documents/closeflow-demo-en.mp4 node scripts/render-remotion.mjs
 ```
 
-## Execução
+Spot-check frames at scenes 3, 5, 7, 9 via `bunx remotion still` before final render.
 
-1. Scaffold `remotion/` + bun install + fix do compositor (musl→gnu) + symlink ffmpeg/ffprobe.
-2. Carregar Inter e Space Grotesk via `@remotion/google-fonts`.
-3. Construir componentes base (`AppFrame`, `Cursor`, `KpiCard`, `Caption`).
-4. Implementar 9 cenas com mockups fiéis ao CloseFlow (sidebar com itens em pt-BR: Dashboard, Clientes, Propostas, Configurações).
-5. Encadear via `<TransitionSeries>` com wipe + fade.
-6. Spot-check de frames-chave com `remotion still`.
-7. Render final via `scripts/render-remotion.mjs` (chrome-for-testing, muted, concurrency 1) → `/mnt/documents/closeflow-demo.mp4`.
-8. QA: extrair 6-8 frames distribuídos e revisar (overflow, contraste, alinhamento). Iterar até limpo.
+## Deliverable
 
-## Entregável
-
-`/mnt/documents/closeflow-demo.mp4` (~90s, 1920×1080, H.264, mudo) pronto para o sweepstake e reuso comercial. Tag `<presentation-artifact>` no final.
+`/mnt/documents/closeflow-demo-en.mp4` — 1920×1080, 30fps, H.264, muted, ~95s. Original pt-BR file untouched.
