@@ -410,6 +410,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_proposal: { Args: { p_code: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
