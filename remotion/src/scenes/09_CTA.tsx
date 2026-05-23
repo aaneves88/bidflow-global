@@ -57,7 +57,7 @@ export const CTA: React.FC = () => {
                 fontFamily: fontDisplay,
                 fontSize: 52,
                 fontWeight: 600,
-                color: i === 2 ? colors.primaryGlow : colors.text,
+                color: i === 2 ? "#60A5FA" : colors.text,
                 letterSpacing: -1.5,
                 opacity: opl,
                 transform: `translateY(${y}px)`,
