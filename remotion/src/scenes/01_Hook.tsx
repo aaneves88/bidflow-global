@@ -39,7 +39,7 @@ const Doc: React.FC<{
       }}
     >
       <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>{title}</div>
-      <div style={{ fontSize: 13, lineHeight: 1.5, color: "#444" }}>{body}</div>
+      <div style={{ fontSize: 13, lineHeight: 1.5, color: "#444", whiteSpace: "pre-line" }}>{body}</div>
       {/* red cross overlay */}
       <svg
         viewBox="0 0 360 230"
