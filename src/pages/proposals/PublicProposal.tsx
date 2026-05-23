@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
-import { usePublicProposal, useProposalStatuses } from '@/hooks/useProposals';
+import { usePublicProposal } from '@/hooks/useProposals';
 import { useRecordProposalView } from '@/hooks/useProposalViews';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
@@ -17,7 +17,6 @@ export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
   const { publicCode } = useParams();
   const { data: proposal, isLoading, refetch } = usePublicProposal(publicCode);
-  const { data: statuses } = useProposalStatuses();
   const recordView = useRecordProposalView();
   const [accepting, setAccepting] = useState(false);
 
