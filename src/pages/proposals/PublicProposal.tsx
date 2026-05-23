@@ -53,21 +53,8 @@ export default function PublicProposal() {
   const handleAccept = async () => {
     setAccepting(true);
     try {
-      const approvedStatus = statuses?.find((s) => /aprov|approv/i.test(s.name));
-      if (!approvedStatus) throw new Error('Status not found');
-
-      const { error } = await supabase
-        .from('proposals')
-        .update({ status_id: approvedStatus.id })
-        .eq('public_code', publicCode!);
+      const { error } = await supabase.rpc('accept_proposal', { p_code: publicCode! });
       if (error) throw error;
-
-      await supabase.from('proposal_status_history').insert({
-        proposal_id: proposal.id,
-        status_id: approvedStatus.id,
-        notes: t('messages.acceptedNote'),
-      });
-
       toast({ title: t('messages.accepted') });
       refetch();
     } catch {

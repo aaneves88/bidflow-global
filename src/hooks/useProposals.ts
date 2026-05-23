@@ -173,10 +173,10 @@ export function useCreateProposal() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
-      toast({ title: 'Proposal created' });
+      toast({ title: tr('messages.created') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -220,10 +220,10 @@ export function useUpdateProposal() {
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
       qc.invalidateQueries({ queryKey: ['proposal-items', vars.id] });
-      toast({ title: 'Proposal updated' });
+      toast({ title: tr('messages.updated') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -243,10 +243,10 @@ export function useUpdateProposalStatus() {
       qc.invalidateQueries({ queryKey: ['proposals'] });
       qc.invalidateQueries({ queryKey: ['proposals', vars.id] });
       qc.invalidateQueries({ queryKey: ['proposal-history', vars.id] });
-      toast({ title: 'Status updated' });
+      toast({ title: tr('messages.statusUpdated') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -261,10 +261,10 @@ export function useDeleteProposal() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
-      toast({ title: 'Proposal deleted' });
+      toast({ title: tr('messages.deleted') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorDeleting'), description: e.message, variant: 'destructive' });
     },
   });
 }
