@@ -2,6 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import i18n from '@/i18n';
+
+const tr = (key: string) => i18n.t(key, { ns: 'proposals' });
+const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
 
 export type ProposalItem = {
   id?: string;
@@ -169,10 +173,10 @@ export function useCreateProposal() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
-      toast({ title: 'Proposal created' });
+      toast({ title: tr('messages.created') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -216,10 +220,10 @@ export function useUpdateProposal() {
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
       qc.invalidateQueries({ queryKey: ['proposal-items', vars.id] });
-      toast({ title: 'Proposal updated' });
+      toast({ title: tr('messages.updated') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -239,10 +243,10 @@ export function useUpdateProposalStatus() {
       qc.invalidateQueries({ queryKey: ['proposals'] });
       qc.invalidateQueries({ queryKey: ['proposals', vars.id] });
       qc.invalidateQueries({ queryKey: ['proposal-history', vars.id] });
-      toast({ title: 'Status updated' });
+      toast({ title: tr('messages.statusUpdated') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -257,10 +261,10 @@ export function useDeleteProposal() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
-      toast({ title: 'Proposal deleted' });
+      toast({ title: tr('messages.deleted') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorDeleting'), description: e.message, variant: 'destructive' });
     },
   });
 }

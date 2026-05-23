@@ -2,6 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import i18n from '@/i18n';
+
+const tr = (key: string) => i18n.t(key, { ns: 'clients' });
+const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
 
 export type Client = {
   id: string;
@@ -88,10 +92,10 @@ export function useCreateClient() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['clients'] });
-      toast({ title: 'Client created' });
+      toast({ title: tr('messages.created') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -106,10 +110,10 @@ export function useUpdateClient() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['clients'] });
-      toast({ title: 'Client updated' });
+      toast({ title: tr('messages.updated') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
     },
   });
 }
@@ -124,10 +128,10 @@ export function useDeleteClient() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['clients'] });
-      toast({ title: 'Client deleted' });
+      toast({ title: tr('messages.deleted') });
     },
     onError: (e: Error) => {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: trCommon('messages.errorDeleting'), description: e.message, variant: 'destructive' });
     },
   });
 }
