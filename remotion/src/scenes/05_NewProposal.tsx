@@ -169,7 +169,7 @@ export const NewProposal: React.FC = () => {
 };
 
 const Field: React.FC<{ label: string; value: string; active?: boolean; wide?: boolean }> = ({ label, value, active, wide }) => (
-  <div style={{ flex: wide ? 2 : 1 }}>
+  <div style={{ flex: wide !== undefined ? (wide ? 2 : 1) : "none" }}>
     <div style={{ fontFamily: fontUI, fontSize: 13, color: colors.muted, marginBottom: 8, fontWeight: 500 }}>{label}</div>
     <div
       style={{
