@@ -68,6 +68,21 @@
     "linkCopied": "Link copiado!"
   },
   "share": {
-    "whatsappText": "Veja esta proposta: {{url}}"
+    "whatsappText": "Veja esta proposta: {{url}}",
+    "defaultClient": "Olá",
+    "whatsappMessage": "Oi {{clientName}}, segue a proposta \"{{title}}\" no valor de {{total}}.\nVocê pode visualizar e aceitar por aqui: {{url}}\nFico à disposição para qualquer dúvida."
+  },
+  "pdf": {
+    "proposalFor": "Cliente",
+    "description": "Descrição",
+    "items": "Itens",
+    "qty": "Qtd",
+    "unitPrice": "Valor unit.",
+    "total": "Total",
+    "grandTotal": "Total geral",
+    "validUntil": "Válida até",
+    "status": "Status",
+    "publicLink": "Link da proposta",
+    "generatedAt": "Gerado em"
   }
 }

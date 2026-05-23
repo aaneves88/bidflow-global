@@ -2,6 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import i18n from '@/i18n';
+
+const tr = (key: string) => i18n.t(key, { ns: 'proposals' });
+const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
 
 export type ProposalItem = {
   id?: string;
