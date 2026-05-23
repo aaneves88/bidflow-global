@@ -1,17 +1,26 @@
 import { colors, fontUI, fontDisplay } from "../theme";
 
-const items = [
+const itemsPt = [
   { label: "Dashboard", icon: "▦" },
   { label: "Clientes", icon: "◉" },
   { label: "Propostas", icon: "◈" },
   { label: "Configurações", icon: "✺" },
+];
+const itemsEn = [
+  { label: "Dashboard", icon: "▦" },
+  { label: "Clients", icon: "◉" },
+  { label: "Proposals", icon: "◈" },
+  { label: "Settings", icon: "✺" },
 ];
 
 export const AppFrame: React.FC<{
   active: string;
   pageTitle: string;
   children: React.ReactNode;
-}> = ({ active, pageTitle, children }) => {
+  lang?: "pt" | "en";
+}> = ({ active, pageTitle, children, lang = "pt" }) => {
+  const items = lang === "en" ? itemsEn : itemsPt;
+  const searchLabel = lang === "en" ? "Search..." : "Buscar...";
   return (
     <div
       style={{
@@ -158,7 +167,7 @@ export const AppFrame: React.FC<{
                 color: colors.muted,
               }}
             >
-              ⌕ &nbsp; Buscar...
+              ⌕ &nbsp; {searchLabel}
             </div>
           </div>
         </div>
