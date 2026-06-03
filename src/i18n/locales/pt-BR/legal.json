@@ -1,0 +1,42 @@
+{
+  "back": "Voltar",
+  "lastUpdated": "Última atualização: {{date}}",
+  "terms": {
+    "title": "Termos de Uso",
+    "subtitle": "Termos e condições do serviço {{company}}",
+    "sections": [
+      { "heading": "1. Aceitação dos Termos", "body": "Ao criar uma conta e utilizar a plataforma {{company}}, você concorda com estes Termos de Uso. Se não concordar, por favor, não utilize o serviço." },
+      { "heading": "2. Descrição do Serviço", "body": "A {{company}} oferece uma plataforma online para criação, envio e acompanhamento de propostas comerciais para freelancers e pequenos negócios." },
+      { "heading": "3. Cadastro e Conta", "body": "Você é responsável por manter a confidencialidade da sua senha e por todas as atividades realizadas na sua conta. Notifique-nos imediatamente caso identifique uso não autorizado." },
+      { "heading": "4. Uso Permitido", "body": "Você concorda em utilizar a plataforma apenas para fins legais e em conformidade com a legislação aplicável. É proibido enviar conteúdo ofensivo, fraudulento ou que viole direitos de terceiros." },
+      { "heading": "5. Planos e Pagamento", "body": "O serviço oferece um plano gratuito limitado e planos pagos. Cobranças são processadas no início de cada ciclo. Você pode cancelar a qualquer momento, sem reembolso proporcional do período em curso." },
+      { "heading": "6. Limitação de Responsabilidade", "body": "O serviço é fornecido 'como está'. Não nos responsabilizamos por perdas indiretas decorrentes do uso da plataforma. Faça backup regular dos seus dados importantes." },
+      { "heading": "7. Modificações", "body": "Podemos atualizar estes termos a qualquer momento. Mudanças relevantes serão comunicadas por e-mail ou dentro da plataforma." },
+      { "heading": "8. Contato", "body": "Em caso de dúvidas, entre em contato através de {{email}}." }
+    ]
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "subtitle": "Como a {{company}} coleta e protege seus dados",
+    "sections": [
+      { "heading": "1. Dados que Coletamos", "body": "Coletamos: nome, e-mail, dados de cobrança (quando aplicável), informações dos clientes e propostas que você cadastra, além de dados técnicos de navegação (IP, navegador, páginas visitadas)." },
+      { "heading": "2. Como Usamos Seus Dados", "body": "Usamos seus dados para: fornecer o serviço, processar pagamentos, melhorar a plataforma, enviar comunicações relevantes sobre sua conta e cumprir obrigações legais." },
+      { "heading": "3. Compartilhamento", "body": "Não vendemos seus dados. Podemos compartilhá-los apenas com provedores de infraestrutura (hospedagem, e-mail, pagamentos), sempre sob contratos de confidencialidade." },
+      { "heading": "4. Seus Direitos (LGPD)", "body": "Você pode solicitar acesso, correção, exclusão ou portabilidade dos seus dados a qualquer momento. Basta enviar um pedido para {{email}}." },
+      { "heading": "5. Segurança", "body": "Aplicamos medidas técnicas e organizacionais para proteger seus dados, incluindo criptografia em trânsito e em repouso, controle de acesso e backups regulares." },
+      { "heading": "6. Retenção", "body": "Mantemos seus dados enquanto sua conta estiver ativa. Após cancelamento, dados pessoais são excluídos em até 90 dias, exceto quando a lei exigir retenção maior." },
+      { "heading": "7. Cookies", "body": "Usamos cookies essenciais para autenticação e preferências. Detalhes na nossa Política de Cookies." },
+      { "heading": "8. Contato do Encarregado (DPO)", "body": "Para questões relacionadas a privacidade: {{email}}." }
+    ]
+  },
+  "cookies": {
+    "title": "Política de Cookies",
+    "subtitle": "Uso de cookies na plataforma {{company}}",
+    "sections": [
+      { "heading": "1. O que são cookies", "body": "Cookies são pequenos arquivos armazenados no seu dispositivo para lembrar preferências e manter você conectado." },
+      { "heading": "2. Cookies que usamos", "body": "Apenas cookies essenciais para o funcionamento: sessão de autenticação, idioma escolhido e preferências de exibição. Não usamos cookies de rastreamento de terceiros." },
+      { "heading": "3. Gerenciamento", "body": "Você pode bloquear cookies nas configurações do seu navegador, mas isso pode afetar funcionalidades como manter você conectado." },
+      { "heading": "4. Mais informações", "body": "Dúvidas? Escreva para {{email}}." }
+    ]
+  }
+}

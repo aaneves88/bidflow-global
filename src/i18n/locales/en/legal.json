@@ -1,0 +1,42 @@
+{
+  "back": "Back",
+  "lastUpdated": "Last updated: {{date}}",
+  "terms": {
+    "title": "Terms of Service",
+    "subtitle": "Terms and conditions for the {{company}} service",
+    "sections": [
+      { "heading": "1. Acceptance of Terms", "body": "By creating an account and using {{company}}, you agree to these Terms. If you do not agree, please do not use the service." },
+      { "heading": "2. Service Description", "body": "{{company}} provides an online platform for creating, sending, and tracking commercial proposals for freelancers and small businesses." },
+      { "heading": "3. Account Registration", "body": "You are responsible for maintaining the confidentiality of your password and for all activities under your account. Notify us immediately of any unauthorized use." },
+      { "heading": "4. Acceptable Use", "body": "You agree to use the platform only for lawful purposes. Offensive, fraudulent, or rights-infringing content is prohibited." },
+      { "heading": "5. Plans and Billing", "body": "We offer a limited free tier and paid plans. Charges occur at the start of each cycle. You may cancel anytime; no prorated refunds." },
+      { "heading": "6. Limitation of Liability", "body": "The service is provided 'as is'. We are not liable for indirect losses. Always back up important data." },
+      { "heading": "7. Changes", "body": "We may update these terms. Material changes will be communicated by email or in-app." },
+      { "heading": "8. Contact", "body": "Questions? Reach us at {{email}}." }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "How {{company}} collects and protects your data",
+    "sections": [
+      { "heading": "1. Data We Collect", "body": "We collect: name, email, billing data (when applicable), client and proposal data you create, and technical data (IP, browser, page views)." },
+      { "heading": "2. How We Use It", "body": "To deliver the service, process payments, improve the platform, send account communications, and meet legal obligations." },
+      { "heading": "3. Sharing", "body": "We do not sell your data. We share only with infrastructure providers (hosting, email, payments) under confidentiality agreements." },
+      { "heading": "4. Your Rights (GDPR/LGPD)", "body": "You can request access, correction, deletion, or portability of your data anytime by emailing {{email}}." },
+      { "heading": "5. Security", "body": "We apply encryption in transit and at rest, access controls, and regular backups." },
+      { "heading": "6. Retention", "body": "Data is retained while your account is active. After cancellation, personal data is deleted within 90 days unless legally required." },
+      { "heading": "7. Cookies", "body": "We use essential cookies for authentication and preferences. See our Cookie Policy." },
+      { "heading": "8. DPO Contact", "body": "Privacy inquiries: {{email}}." }
+    ]
+  },
+  "cookies": {
+    "title": "Cookie Policy",
+    "subtitle": "How {{company}} uses cookies",
+    "sections": [
+      { "heading": "1. What are cookies", "body": "Small files stored on your device to remember preferences and keep you signed in." },
+      { "heading": "2. Cookies we use", "body": "Only essential ones: authentication session, language, and display preferences. No third-party tracking." },
+      { "heading": "3. Management", "body": "You can block cookies in your browser, but features like staying signed in may be affected." },
+      { "heading": "4. More info", "body": "Questions? Email {{email}}." }
+    ]
+  }
+}
