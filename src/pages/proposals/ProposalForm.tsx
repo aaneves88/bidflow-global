@@ -33,6 +33,15 @@ export default function ProposalForm() {
   const { data: statuses } = useProposalStatuses();
   const create = useCreateProposal();
   const update = useUpdateProposal();
+  const limits = usePlanLimits();
+  const [blocked, setBlocked] = useState(false);
+
+  useEffect(() => {
+    if (!isEditing && !limits.canCreateProposal) {
+      setBlocked(true);
+    }
+  }, [isEditing, limits.canCreateProposal]);
+
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
