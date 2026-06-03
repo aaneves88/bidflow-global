@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { LegalFooter } from '@/components/LegalFooter';
@@ -6,6 +7,19 @@ import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-
 
 export default function Landing() {
   const { t } = useTranslation('landing');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(window.navigator.userAgent);
+    if (isStandalone || isMobile) {
+      navigate('/app', { replace: true });
+    }
+  }, [navigate]);
+
 
   const features = [
     { icon: FileText, key: 'create' },
