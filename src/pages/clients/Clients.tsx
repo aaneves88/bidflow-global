@@ -86,6 +86,7 @@ export default function Clients() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-[60px]"></TableHead>
                 <TableHead>{t('table.name')}</TableHead>
                 <TableHead>{t('table.email')}</TableHead>
                 <TableHead>{t('table.company')}</TableHead>
@@ -95,8 +96,17 @@ export default function Clients() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((client) => (
+              {filtered.map((client: any) => (
                 <TableRow key={client.id}>
+                  <TableCell>
+                    {client.logo_url ? (
+                      <img src={client.logo_url} alt="" className="h-8 w-8 rounded object-contain bg-muted" />
+                    ) : (
+                      <div className="h-8 w-8 rounded bg-muted flex items-center justify-center text-xs font-medium text-muted-foreground">
+                        {client.name?.[0]?.toUpperCase() || '?'}
+                      </div>
+                    )}
+                  </TableCell>
                   <TableCell className="font-medium">{client.name}</TableCell>
                   <TableCell>{client.email || '—'}</TableCell>
                   <TableCell>{client.company || '—'}</TableCell>
@@ -117,6 +127,7 @@ export default function Clients() {
                 </TableRow>
               ))}
             </TableBody>
+
           </Table>
         </div>
       )}

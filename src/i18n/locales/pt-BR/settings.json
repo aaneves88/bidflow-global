@@ -23,8 +23,15 @@
   },
   "branding": {
     "title": "Marca",
-    "logoUrl": "URL do logotipo",
-    "primaryColor": "Cor primária"
+    "subtitle": "Estes elementos aparecem nas propostas públicas e PDFs enviados aos clientes.",
+    "logo": "Logotipo da empresa",
+    "primaryColor": "Cor primária",
+    "primaryHelp": "Usada no cabeçalho da proposta, botão de aceitar e total.",
+    "secondaryColor": "Cor secundária",
+    "secondaryHelp": "Usada em detalhes de texto e no rodapé do PDF.",
+    "accentColor": "Cor de destaque",
+    "accentHelp": "Realça o valor total e badges de status.",
+    "preview": "Pré-visualização"
   },
   "messages": {
     "saved": "Configurações salvas",
