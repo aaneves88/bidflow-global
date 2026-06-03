@@ -125,6 +125,15 @@ export default function ProposalForm() {
         </h1>
       </div>
 
+      <UpgradeModal
+        open={blocked}
+        onOpenChange={(open) => {
+          setBlocked(open);
+          if (!open) navigate('/proposals');
+        }}
+      />
+
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader><CardTitle>{t('form.details')}</CardTitle></CardHeader>
