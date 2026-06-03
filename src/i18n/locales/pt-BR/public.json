@@ -16,6 +16,7 @@
   "totalLabel": "Total",
   "actions": {
     "accept": "Aceitar proposta",
+    "signAndAccept": "Assinar e aceitar",
     "whatsapp": "Falar pelo WhatsApp",
     "downloadPdf": "Baixar PDF"
   },
@@ -24,6 +25,25 @@
     "accepted": "Proposta aceita!",
     "errorAccepting": "Erro ao aceitar a proposta",
     "acceptedNote": "Aceita pelo cliente via link público"
+  },
+  "signature": {
+    "title": "Assinar e aceitar proposta",
+    "description": "Confirme seu nome para registrar a aceitação desta proposta.",
+    "name": "Nome completo",
+    "namePlaceholder": "Seu nome completo",
+    "email": "E-mail (opcional)",
+    "preview": "Pré-visualização da assinatura",
+    "timestamp": "Assinada em {{date}}",
+    "agree": "Li e concordo com os",
+    "terms": "termos",
+    "confirm": "Assinar agora",
+    "signing": "Assinando...",
+    "success": "Proposta assinada com sucesso!",
+    "error": "Erro ao assinar",
+    "nameTooShort": "Informe seu nome completo",
+    "mustAgree": "Você precisa aceitar os termos para continuar",
+    "signed": "Proposta assinada",
+    "signedOn": "Assinada em {{date}}"
   },
   "share": {
     "whatsappText": "Sobre a proposta: {{title}}"
