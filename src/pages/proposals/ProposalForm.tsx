@@ -13,6 +13,8 @@ import {
   useProposal, useProposalItems, useProposalStatuses,
   useCreateProposal, useUpdateProposal, type ProposalItem,
 } from '@/hooks/useProposals';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
+import { UpgradeModal } from '@/components/UpgradeModal';
 import { formatCurrency } from '@/lib/format';
 
 const emptyItem = (): ProposalItem => ({
@@ -31,6 +33,15 @@ export default function ProposalForm() {
   const { data: statuses } = useProposalStatuses();
   const create = useCreateProposal();
   const update = useUpdateProposal();
+  const limits = usePlanLimits();
+  const [blocked, setBlocked] = useState(false);
+
+  useEffect(() => {
+    if (!isEditing && !limits.canCreateProposal) {
+      setBlocked(true);
+    }
+  }, [isEditing, limits.canCreateProposal]);
+
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -113,6 +124,15 @@ export default function ProposalForm() {
           {isEditing ? t('form.editTitle') : t('form.newTitle')}
         </h1>
       </div>
+
+      <UpgradeModal
+        open={blocked}
+        onOpenChange={(open) => {
+          setBlocked(open);
+          if (!open) navigate('/proposals');
+        }}
+      />
+
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>

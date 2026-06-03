@@ -24,5 +24,22 @@
     "signIn": "Sign in", "signOut": "Sign out", "getStarted": "Get started",
     "administration": "Administration"
   },
-  "notFound": { "title": "404", "message": "Oops! Page not found", "back": "Return to home" }
+  "notFound": { "title": "404", "message": "Oops! Page not found", "back": "Return to home" },
+  "upgradeModal": {
+    "title": "Free limit reached",
+    "description": "You have used your free proposal. To keep creating proposals and tracking your deals, choose a plan.",
+    "viewPlans": "View plans",
+    "upgrade": "Upgrade"
+  },
+  "usage": {
+    "freeAvailable": "You still have 1 free proposal available.",
+    "freeAvailableHint": "Create your first proposal — no plan required.",
+    "freeUsed": "You have used your free proposal.",
+    "freeUsedHint": "Choose a plan to keep creating proposals.",
+    "unlimited": "Unlimited proposals",
+    "unlimitedHint": "You have created {{used}} proposals on this plan.",
+    "planUsage": "{{used}} of {{max}} proposals used",
+    "planRemaining": "{{remaining}} left on your plan.",
+    "planLimitReached": "You reached your plan limit."
+  }
 }

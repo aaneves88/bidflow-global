@@ -58,5 +58,22 @@
     "title": "404",
     "message": "Ops! Página não encontrada",
     "back": "Voltar ao início"
+  },
+  "upgradeModal": {
+    "title": "Limite gratuito atingido",
+    "description": "Você já utilizou sua proposta gratuita. Para continuar criando propostas e acompanhar seus negócios, escolha um plano.",
+    "viewPlans": "Ver planos",
+    "upgrade": "Fazer upgrade"
+  },
+  "usage": {
+    "freeAvailable": "Você ainda possui 1 proposta gratuita disponível.",
+    "freeAvailableHint": "Crie sua primeira proposta sem precisar de plano.",
+    "freeUsed": "Você já utilizou sua proposta gratuita.",
+    "freeUsedHint": "Escolha um plano para continuar criando propostas.",
+    "unlimited": "Propostas ilimitadas",
+    "unlimitedHint": "Você já criou {{used}} propostas neste plano.",
+    "planUsage": "{{used}} de {{max}} propostas usadas",
+    "planRemaining": "Restam {{remaining}} no seu plano.",
+    "planLimitReached": "Você atingiu o limite do seu plano."
   }
 }

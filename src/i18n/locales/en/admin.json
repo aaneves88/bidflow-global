@@ -1,6 +1,16 @@
 {
   "title": "Admin",
-  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations", "qa": "QA" },
+  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations", "qa": "QA", "roadmap": "Roadmap" },
+  "roadmap": {
+    "title": "Product roadmap",
+    "subtitle": "What is shipped and what is planned. Editable.",
+    "loading": "Loading roadmap...",
+    "edit": "Edit", "cancel": "Cancel", "save": "Save",
+    "saved": "Roadmap updated", "error": "Error saving roadmap",
+    "editorTitle": "Markdown", "previewTitle": "Preview",
+    "hint": "Use ## for phases and - ✅ / - 🔄 / - 📋 for items (done, in progress, planned).",
+    "status": { "done": "Done", "progress": "In progress", "planned": "Planned" }
+  },
   "qa": {
     "title": "Launch validation checklist",
     "subtitle": "Check each item after testing. Progress is saved locally in this browser.",
@@ -57,6 +67,15 @@
       }},
       "mobile": { "title": "Mobile", "items": {
         "mobileLayouts": { "title": "Main screens usable at 375px", "desc": "Login, dashboard, proposals, clients and admin look fine." }
+      }},
+      "monetization": { "title": "Monetization", "items": {
+        "freeFirstProposal": { "title": "New user creates 1st proposal free", "desc": "A user without a plan can create one proposal." },
+        "secondTriggersModal": { "title": "2nd proposal triggers upgrade modal", "desc": "Trying to create the second proposal opens the 'Free limit reached' modal." },
+        "planUnblocks": { "title": "Active plan unlocks creation", "desc": "After subscribing/activating a plan, the user can create again." },
+        "adminUnlimited": { "title": "Admin has no limits", "desc": "Admin accounts never see the upgrade modal." },
+        "manualGrant": { "title": "Manually granted plan unlocks", "desc": "Granting a plan via Admin > Users removes the block." },
+        "usageDashboard": { "title": "Usage indicator on Dashboard", "desc": "Usage card appears on Dashboard with the right message." },
+        "usageProposals": { "title": "Usage indicator on Proposals", "desc": "Usage banner appears on Proposals with the right message." }
       }}
     }
   },

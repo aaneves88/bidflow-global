@@ -1,123 +1,106 @@
-# Sprint de Lançamento — CloseFlow
+## Modelo Freemium "1ª proposta grátis" + Aba Roadmap no Admin
 
-Plano focado nos **5 itens críticos** para tornar o app vendável. Os outros 5 (emails, recuperação de senha, landing, billing fim-a-fim, legal) ficam para o sprint seguinte.
-
-Ordem de execução é importante: cada passo destrava o próximo.
+Adapta a lógica atual de planos para suportar limites e feature-flags por plano, aplica a regra "primeira proposta grátis", e adiciona uma aba **Roadmap** no Admin documentando o que já existe e o que está planejado.
 
 ---
 
-## 1. Fix Configurações (Settings travado)
+### 1. Schema — feature flags por plano
 
-**Problema:** página `/settings` não salva nada.
+Migration em `public.plans` adicionando colunas booleanas (nullable, default false):
+- `allow_pdf_export`
+- `allow_templates`
+- `allow_custom_branding`
 
-**Causa provável:** mesmo padrão do bug de login — `useAppSettings` faz query no Supabase que pode estar bloqueada por RLS ou retornando vazio sem feedback. Vou:
-- Inspecionar policies da tabela `app_settings` (hoje só admin pode escrever?)
-- Validar que o usuário admin consegue dar `upsert`
-- Adicionar tratamento de erro visível no toast (hoje engole o erro)
-- Verificar que `getSetting` retorna o valor após salvar (invalidação de cache)
+`max_proposals` e `max_clients` já existem — manter. Não criar regras hardcoded: tudo lido da tabela.
 
-**Entregável:** as 3 abas (Geral, Integrações, Marca) salvam e relêem corretamente.
+Backfill: planos pagos existentes recebem `allow_pdf_export=true`, `allow_custom_branding=true`. Starter mantém defaults.
 
----
+### 2. Regra "primeira proposta grátis"
 
-## 2. Branding aplicado de verdade (cores + logo)
-
-Hoje os campos existem mas **não são usados em lugar nenhum**.
-
-**Mudanças no schema (`app_settings`):**
-- Adicionar chaves: `secondary_color`, `accent_color` (mantém `primary_color` e `logo_url` existentes)
-
-**Mudanças no app:**
-- Criar hook `useBranding()` que lê as cores e injeta como CSS variables (`--brand-primary`, `--brand-secondary`, `--brand-accent`) no `:root` via `<style>` dinâmico no `AppLayout`
-- Aba "Marca" em Settings ganha 3 color pickers + preview ao vivo
-- Logo aparece no `AppSidebar` (substituindo/complementando o nome)
-
-**Mudanças na proposta pública e PDF (onde o branding importa de verdade):**
-- `PublicProposal.tsx`: barra colorida no topo (primary), logo da empresa à esquerda, total destacado com cor accent, botão "Aceitar" com primary
-- `proposalPdf.ts`: header com faixa colorida + logo, total com cor primary, rodapé com cor secondary
-
----
-
-## 3. Cadastro de cliente mais completo
-
-**Migration:** adicionar à tabela `clients`:
-- `logo_url` (text)
-- `tax_id` (text) — CPF/CNPJ/EIN genérico
-- `address_line` (text)
-- `city`, `state`, `postal_code`, `country` (text)
-- `notes` (text) — observações internas
-
-**UI (`ClientDialog.tsx`):**
-- Reorganizar em seções: "Identificação" / "Contato" / "Endereço" / "Notas"
-- Upload de logo (usa o bucket criado no passo 4)
-- Mostrar logo na lista de clientes (`Clients.tsx`) e no header da proposta
-
-**i18n:** novas chaves em `clients.json` (pt-BR e en).
-
----
-
-## 4. Storage para logos
-
-**Bucket único `branding`** (público) para:
-- Logo da empresa (`company/logo.{ext}`)
-- Logo de clientes (`clients/{client_id}/logo.{ext}`)
-
-**RLS em `storage.objects`:**
-- SELECT público (logos precisam aparecer em propostas públicas)
-- INSERT/UPDATE/DELETE: apenas usuários autenticados, e para `clients/{client_id}/*` validar via subquery que o client pertence ao user
-
-**Componente reutilizável:** `<LogoUpload value={url} onChange={...} folder="company" />` usado em Settings e ClientDialog.
-
----
-
-## 5. Conceito de "valor fechado" (deal finalizado)
-
-**Migration em `proposals`:**
-- `closed_amount` numeric — valor real fechado (pode diferir do `total_amount`)
-- `closed_at` timestamptz — quando foi marcado como final
-- `closed_notes` text — observação opcional (ex: "10% desconto negociado")
-
-**Trigger:** quando `status_id` muda para um status `is_final=true` e `is_won=true` (nova coluna em `proposal_statuses` para distinguir aprovado vs rejeitado), preencher `closed_at = now()` e `closed_amount = total_amount` por padrão.
-
-**UI:**
-- Em `ProposalView.tsx`, ao mover manualmente para "Aprovada", abrir dialog: "Valor fechado: [R$ X] Observação: [...]"
-- Aceitação via link público continua usando `total_amount` (cliente aceita o que viu)
-
-**Dashboard:**
-- KPI "Receita aprovada" passa a somar `closed_amount` (não `total_amount`) das propostas finais ganhas
-- Conversão = propostas ganhas / propostas enviadas (já existe, mas garantir que usa o flag `is_won`)
-
----
-
-## Ordem de implementação (1 entregável por vez)
+Adaptar `usePlanLimits.ts` para o seguinte cálculo de `canCreateProposal`:
 
 ```text
-1. Fix Settings           → destrava todo o resto (precisamos salvar branding)
-2. Storage bucket         → destrava upload de logos
-3. Branding aplicado      → vitrine do produto
-4. Cliente completo       → completa o cadastro
-5. Valor fechado          → fecha o ciclo comercial
+- isAdmin                                  → sempre permitido
+- hasPlan && !isExpired && dentro do limite → permitido
+- sem plano OU plano expirado:
+    - proposalsUsed === 0                  → permitido (cota grátis)
+    - proposalsUsed >= 1                   → bloqueado
 ```
 
----
+Retornar também `freeProposalUsed: boolean` e `isOnFreeTier: boolean` para a UI.
 
-## Fora deste sprint (próximo)
+Sem mudança de schema — a cota grátis é derivada da contagem existente de propostas.
 
-- Recuperação de senha + verificação de email
-- Emails transacionais (proposta visualizada/aceita)
-- Landing page comercial + pricing público
-- Customer portal Stripe + enforcement de limites de plano
-- Páginas legais (Privacidade, Termos) + consentimento LGPD
+### 3. Indicadores de uso
 
----
+**Dashboard** (`src/pages/Dashboard.tsx`): card "Uso de propostas" mostrando:
+- Free tier sem uso: "Você ainda possui 1 proposta gratuita disponível."
+- Free tier usado: "Você já utilizou sua proposta gratuita." + botão "Ver planos"
+- Com plano + limite: "X de Y propostas usadas neste plano"
+- Com plano ilimitado: "Propostas ilimitadas"
 
-## Detalhes técnicos
+**Tela de Propostas** (`src/pages/proposals/Proposals.tsx`): mesma mensagem em formato banner acima da lista.
 
-- **Migrations:** 3 no total (clients, proposals, proposal_statuses com `is_won` + nova chave em app_settings se preciso)
-- **Bucket:** 1 (`branding`, público) via `storage_create_bucket`
-- **i18n:** atualizar `clients.json`, `settings.json`, `proposals.json` em pt-BR + en
-- **Nenhum breaking change** em dados existentes — todos os novos campos são nullable
-- **Sem novas dependências** — usa shadcn, jsPDF e Supabase Storage já presentes
+### 4. Modal de upgrade
 
-Pronto para começar pelo passo 1 (fix Settings) assim que aprovar.
+Novo componente `src/components/UpgradeModal.tsx` (shadcn `Dialog`):
+- Título: "Limite gratuito atingido"
+- Descrição: "Você já utilizou sua proposta gratuita. Para continuar criando propostas e acompanhar seus negócios, escolha um plano."
+- Botões: "Ver planos" → `/pricing` · "Fazer upgrade" → `/pricing#plans` (destacado)
 
+Disparado quando o usuário clica em **Nova Proposta** sem permissão. Substitui o bloqueio atual silencioso.
+
+Pontos de integração: botão "Nova" em `Proposals.tsx`, atalho em `Dashboard.tsx`, e guarda dentro de `ProposalForm.tsx` ao montar em modo create.
+
+**Não bloquear:** visualizar, editar, compartilhar, PDF e WhatsApp da proposta existente continuam liberados.
+
+### 5. Aba "Roadmap" no Admin
+
+Nova aba ao lado de QA em `src/pages/admin/Admin.tsx`:
+- Componente `AdminRoadmap.tsx` que renderiza `docs/product-roadmap.md` parseado em fases.
+- Fonte: nova chave em `app_settings` `roadmap_markdown` (texto) — editável inline por admin via textarea + preview.
+- Inicialização: seed com o conteúdo atual de `docs/product-roadmap.md` + nova entrada de monetização.
+- Renderização: badges coloridos por status (✅ / 🔄 / 📋), agrupado por fase.
+
+Adicionar tradução `tabs.roadmap` em `admin.json` (pt-BR + en).
+
+### 6. Atualizações documentais
+
+- **`docs/product-roadmap.md`**: nova seção "Monetização" com itens (primeira proposta grátis ✅, feature flags por plano ✅, modal de upgrade ✅, billing fim-a-fim 🔄, customer portal 📋).
+- **`AdminQAChecklist`**: nova seção `monetization` com itens:
+  - "Novo usuário cria 1ª proposta grátis"
+  - "2ª proposta dispara modal de upgrade"
+  - "Plano ativo libera novas propostas"
+  - "Admin sem limites"
+  - "Plano concedido manualmente libera criação"
+  - "Indicador de uso visível no Dashboard"
+  - "Indicador de uso visível em Propostas"
+- **`.lovable/plan.md`**: arquivar sprint anterior e registrar este como próximo entregue.
+
+### 7. i18n
+
+Novas chaves em `pt-BR` + `en`:
+- `common:upgradeModal.*` (título, descrição, botões)
+- `dashboard:usage.*` (4 variantes de mensagem)
+- `proposals:usage.*` (mesmo)
+- `admin:tabs.roadmap`, `admin:roadmap.*` (status labels, edit/save, preview)
+- `admin:qa.sections.monetization.*`
+
+### 8. Ordem de execução
+
+```text
+1. Migration: plans + feature flags + backfill
+2. usePlanLimits: regra free tier + feature flags helpers
+3. UpgradeModal + integração nos pontos de criação
+4. Indicadores no Dashboard e Propostas
+5. AdminRoadmap (aba + storage em app_settings)
+6. Atualizar QA checklist + docs/product-roadmap.md + i18n
+```
+
+### Detalhes técnicos
+
+- Sem novas dependências.
+- Sem breaking changes: colunas novas são nullable; `canCreateProposal` mantém assinatura, só adiciona campos extras.
+- `useAppSettings` já suporta `getSetting`/`upsert` — `roadmap_markdown` é só mais uma chave categoria `general`.
+- Feature flags consumidas via helpers: `useFeatureFlag('allow_pdf_export')` que retorna `true` para admin, `true` se plano ativo libera, `false` caso contrário. Botão de PDF/templates/branding em proposta passa a checar isso (no MVP só exposto; bloqueio efetivo só se o admin desligar a flag no plano).
+- Modal de upgrade reaproveitado em qualquer guarda futura (clientes, exports, etc.).
