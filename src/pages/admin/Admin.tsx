@@ -7,6 +7,7 @@ import AdminPlans from './AdminPlans';
 import AdminStatuses from './AdminStatuses';
 import AdminIntegrations from './AdminIntegrations';
 import AdminQAChecklist from './AdminQAChecklist';
+import AdminRoadmap from './AdminRoadmap';
 
 export default function Admin() {
   const { t } = useTranslation('admin');
