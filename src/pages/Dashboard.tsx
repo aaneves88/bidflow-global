@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { formatCurrency, formatDate } from '@/lib/format';
+import { UsageIndicator } from '@/components/UsageIndicator';
 import {
   FileText, Clock, CheckCircle, TrendingUp, AlertTriangle,
   DollarSign, ArrowUpRight, ArrowDownRight, Users, PlusCircle, Activity,
