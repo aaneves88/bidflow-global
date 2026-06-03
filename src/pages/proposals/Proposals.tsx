@@ -79,8 +79,8 @@ export default function Proposals() {
           <p className="text-muted-foreground mb-4">
             {search ? t('empty.noResults') : t('empty.none')}
           </p>
-          {!search && limits.canCreateProposal && (
-            <Button variant="outline" onClick={() => navigate('/proposals/new')}>
+          {!search && (
+            <Button variant="outline" onClick={handleNew}>
               <Plus className="mr-2 h-4 w-4" /> {t('empty.createFirst')}
             </Button>
           )}
