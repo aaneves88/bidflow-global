@@ -68,6 +68,15 @@ const SECTIONS: Section[] = [
   { key: 'mobile', items: [
     { id: 'mobileLayouts' },
   ]},
+  { key: 'monetization', items: [
+    { id: 'freeFirstProposal', href: '/proposals' },
+    { id: 'secondTriggersModal', href: '/proposals' },
+    { id: 'planUnblocks' },
+    { id: 'adminUnlimited' },
+    { id: 'manualGrant', href: '/admin?tab=users' },
+    { id: 'usageDashboard', href: '/dashboard' },
+    { id: 'usageProposals', href: '/proposals' },
+  ]},
 ];
 
 export default function AdminQAChecklist() {
