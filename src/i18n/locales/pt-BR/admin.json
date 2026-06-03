@@ -109,6 +109,18 @@
         "items": {
           "mobileLayouts": { "title": "Telas principais usáveis em 375px", "desc": "Login, dashboard, propostas, clientes e admin sem quebra visível." }
         }
+      },
+      "monetization": {
+        "title": "Monetização",
+        "items": {
+          "freeFirstProposal": { "title": "Novo usuário cria 1ª proposta grátis", "desc": "Usuário sem plano consegue criar uma proposta sem bloqueio." },
+          "secondTriggersModal": { "title": "2ª proposta dispara modal de upgrade", "desc": "Ao tentar criar a segunda, abre o modal 'Limite gratuito atingido'." },
+          "planUnblocks": { "title": "Plano ativo libera novas propostas", "desc": "Após assinar/ativar um plano, o usuário consegue criar novamente." },
+          "adminUnlimited": { "title": "Admin sem limites", "desc": "Conta admin nunca vê o modal de upgrade." },
+          "manualGrant": { "title": "Plano manual libera criação", "desc": "Conceder plano via Admin > Usuários remove o bloqueio." },
+          "usageDashboard": { "title": "Indicador no Dashboard", "desc": "Card de uso aparece no Dashboard com a mensagem correta." },
+          "usageProposals": { "title": "Indicador em Propostas", "desc": "Banner de uso aparece na tela de Propostas com a mensagem correta." }
+        }
       }
     }
   },
