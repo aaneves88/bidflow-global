@@ -235,6 +235,8 @@ export default function Dashboard() {
         </Card>
       )}
 
+      <UsageIndicator />
+
       {isEmpty && (
         <Card className="border-primary/30 bg-primary/5">
           <CardHeader>
