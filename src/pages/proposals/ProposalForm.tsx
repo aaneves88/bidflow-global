@@ -13,6 +13,8 @@ import {
   useProposal, useProposalItems, useProposalStatuses,
   useCreateProposal, useUpdateProposal, type ProposalItem,
 } from '@/hooks/useProposals';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
+import { UpgradeModal } from '@/components/UpgradeModal';
 import { formatCurrency } from '@/lib/format';
 
 const emptyItem = (): ProposalItem => ({
