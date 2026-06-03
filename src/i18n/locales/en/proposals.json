@@ -34,9 +34,10 @@
     "title": "Delete proposal?",
     "description": "This action cannot be undone. All items and history will be removed."
   },
+  "actions": { "duplicate": "Duplicate proposal" },
   "messages": {
     "created": "Proposal created", "updated": "Proposal updated", "deleted": "Proposal deleted",
-    "statusUpdated": "Status updated", "linkCopied": "Link copied!"
+    "duplicated": "Proposal duplicated", "statusUpdated": "Status updated", "linkCopied": "Link copied!"
   },
   "share": {
     "defaultClient": "there",

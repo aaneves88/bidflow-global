@@ -54,6 +54,12 @@
     "getStarted": "Começar agora",
     "administration": "Administração"
   },
+  "notifications": {
+    "title": "Notificações",
+    "empty": "Nenhuma novidade por aqui",
+    "viewed": "Sua proposta foi visualizada",
+    "viewedBy": "{{name}} visualizou sua proposta"
+  },
   "notFound": {
     "title": "404",
     "message": "Ops! Página não encontrada",

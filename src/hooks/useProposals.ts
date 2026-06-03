@@ -275,6 +275,76 @@ export function useDeleteProposal() {
   });
 }
 
+export function useDuplicateProposal() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+
+  return useMutation({
+    mutationFn: async (sourceId: string) => {
+      // Fetch source
+      const { data: src, error: srcErr } = await supabase
+        .from('proposals')
+        .select('*')
+        .eq('id', sourceId)
+        .single();
+      if (srcErr) throw srcErr;
+
+      const { data: items, error: itemsErr } = await supabase
+        .from('proposal_items')
+        .select('*')
+        .eq('proposal_id', sourceId)
+        .order('position');
+      if (itemsErr) throw itemsErr;
+
+      // Find initial (non-final) status
+      const { data: statuses } = await supabase
+        .from('proposal_statuses')
+        .select('id, is_final, position')
+        .order('position');
+      const initial = statuses?.find((s: any) => !s.is_final) ?? statuses?.[0];
+
+      const { data: created, error: createErr } = await supabase
+        .from('proposals')
+        .insert({
+          user_id: user!.id,
+          client_id: src.client_id,
+          title: `${src.title} (cópia)`,
+          description: src.description,
+          currency: src.currency,
+          total_amount: src.total_amount,
+          status_id: initial?.id ?? null,
+          valid_until: src.valid_until,
+        })
+        .select()
+        .single();
+      if (createErr) throw createErr;
+
+      if (items && items.length > 0) {
+        const newItems = items.map((it: any, idx: number) => ({
+          proposal_id: created.id,
+          description: it.description,
+          quantity: it.quantity,
+          unit_price: it.unit_price,
+          total: it.total,
+          position: idx,
+        }));
+        const { error: insErr } = await supabase.from('proposal_items').insert(newItems);
+        if (insErr) throw insErr;
+      }
+
+      return created;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['proposals'] });
+      qc.invalidateQueries({ queryKey: ['plan-limits-counts'] });
+      toast({ title: tr('messages.duplicated') });
+    },
+    onError: (e: Error) => {
+      toast({ title: trCommon('messages.errorSaving'), description: e.message, variant: 'destructive' });
+    },
+  });
+}
+
 // For public page — uses anon access
 export function usePublicProposal(publicCode: string | undefined) {
   return useQuery({

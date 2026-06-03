@@ -60,10 +60,14 @@
     "title": "Excluir proposta?",
     "description": "Esta ação não pode ser desfeita. Todos os itens e histórico serão removidos."
   },
+  "actions": {
+    "duplicate": "Duplicar proposta"
+  },
   "messages": {
     "created": "Proposta criada",
     "updated": "Proposta atualizada",
     "deleted": "Proposta excluída",
+    "duplicated": "Proposta duplicada com sucesso",
     "statusUpdated": "Status atualizado",
     "linkCopied": "Link copiado!"
   },

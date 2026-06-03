@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle, MessageCircle, Clock, FileDown } from 'lucide-react';
+import { CheckCircle, MessageCircle, Clock, FileDown, PenLine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,21 +11,32 @@ import { supabase } from '@/integrations/supabase/client';
 import { usePublicProposal } from '@/hooks/useProposals';
 import { useRecordProposalView } from '@/hooks/useProposalViews';
 import { fetchPublicBranding } from '@/hooks/useBranding';
-import { formatCurrency, formatDate } from '@/lib/format';
+import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
+import { SignatureDialog } from '@/components/SignatureDialog';
+import { LegalFooter } from '@/components/LegalFooter';
 
 export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
   const { publicCode } = useParams();
   const { data: proposal, isLoading, refetch } = usePublicProposal(publicCode);
   const recordView = useRecordProposalView();
-  const [accepting, setAccepting] = useState(false);
+  const [signatureOpen, setSignatureOpen] = useState(false);
 
   const { data: branding } = useQuery({
     queryKey: ['public-branding'],
     queryFn: () => fetchPublicBranding(supabase),
     staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: signature, refetch: refetchSig } = useQuery({
+    queryKey: ['public-signature', publicCode],
+    enabled: !!publicCode,
+    queryFn: async () => {
+      const { data } = await supabase.rpc('get_proposal_signature', { p_code: publicCode! });
+      return Array.isArray(data) && data.length > 0 ? data[0] : null;
+    },
   });
 
   useEffect(() => {
@@ -61,18 +72,10 @@ export default function PublicProposal() {
   const secondary = branding?.secondaryColor || '#1F2937';
   const accent = branding?.accentColor || '#22C55E';
 
-  const handleAccept = async () => {
-    setAccepting(true);
-    try {
-      const { error } = await supabase.rpc('accept_proposal', { p_code: publicCode! });
-      if (error) throw error;
-      toast({ title: t('messages.accepted') });
-      refetch();
-    } catch {
-      toast({ title: t('messages.errorAccepting'), variant: 'destructive' });
-    } finally {
-      setAccepting(false);
-    }
+  const handleSigned = () => {
+    refetch();
+    refetchSig();
+    toast({ title: t('messages.accepted') });
   };
 
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { title: proposal.title }))}`;
@@ -175,13 +178,12 @@ export default function PublicProposal() {
           {!isFinal && (
             <Button
               size="lg"
-              onClick={handleAccept}
-              disabled={accepting}
+              onClick={() => setSignatureOpen(true)}
               style={{ backgroundColor: primary, color: '#fff' }}
               className="hover:opacity-90"
             >
-              <CheckCircle className="mr-2 h-5 w-5" />
-              {t('actions.accept')}
+              <PenLine className="mr-2 h-5 w-5" />
+              {t('actions.signAndAccept')}
             </Button>
           )}
           {isApproved && (
@@ -212,16 +214,48 @@ export default function PublicProposal() {
           </Button>
         </div>
 
+        {signature && (
+          <Card className="border-dashed">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <CheckCircle className="h-4 w-4" style={{ color: accent }} />
+                {t('signature.signed')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p
+                className="text-2xl mb-2 border-b border-dashed pb-2"
+                style={{ fontFamily: '"Brush Script MT", cursive', color: primary }}
+              >
+                {signature.signer_name}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {t('signature.signedOn', { date: formatDateTime(signature.signed_at) })}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Branded footer */}
         {branding?.companyName && (
-          <div className="pt-8 mt-8 border-t text-center">
+          <div className="pt-8 mt-8 border-t text-center space-y-3">
             <p className="text-xs text-muted-foreground">
               {t('preparedFor', { name: '' }).replace('{{name}}', '').trim() || 'Sent by'}{' '}
               <span style={{ color: secondary }} className="font-medium">{branding.companyName}</span>
             </p>
+            <LegalFooter variant="compact" />
           </div>
         )}
       </div>
+
+      <SignatureDialog
+        open={signatureOpen}
+        onOpenChange={setSignatureOpen}
+        publicCode={publicCode!}
+        defaultEmail={proposal.clients?.email || undefined}
+        primaryColor={primary}
+        onSigned={handleSigned}
+      />
     </div>
   );
 }

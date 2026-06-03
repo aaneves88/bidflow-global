@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { LegalFooter } from '@/components/LegalFooter';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
 
 export default function Landing() {
@@ -126,9 +127,9 @@ export default function Landing() {
       </section>
 
       <footer className="border-t py-8">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-3">
+          <LegalFooter />
           <span className="text-sm text-muted-foreground">© {new Date().getFullYear()} CloseFlow. {t('footer.rights')}</span>
-          <span className="text-sm font-medium">CloseFlow</span>
         </div>
       </footer>
     </div>

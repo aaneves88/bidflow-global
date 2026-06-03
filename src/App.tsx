@@ -20,6 +20,7 @@ import PublicProposal from "@/pages/proposals/PublicProposal";
 import Admin from "@/pages/admin/Admin";
 import SettingsPage from "@/pages/settings/SettingsPage";
 import NotFound from "@/pages/NotFound";
+import LegalPage from "@/pages/legal/LegalPage";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
+            <Route path="/legal/:doc" element={<LegalPage />} />
             <Route
               path="/onboarding"
               element={

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Search, Eye, Pencil, Trash2, Copy } from 'lucide-react';
+import { Plus, Search, Eye, Pencil, Trash2, Copy, Files } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { useProposals, useDeleteProposal } from '@/hooks/useProposals';
+import { useProposals, useDeleteProposal, useDuplicateProposal } from '@/hooks/useProposals';
 import { usePlanLimits } from '@/hooks/usePlanLimits';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
@@ -21,6 +21,7 @@ export default function Proposals() {
   const { t } = useTranslation(['proposals', 'common', 'dashboard']);
   const { data: proposals, isLoading } = useProposals();
   const deleteProposal = useDeleteProposal();
+  const duplicate = useDuplicateProposal();
   const limits = usePlanLimits();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -123,8 +124,19 @@ export default function Proposals() {
                       <Button variant="ghost" size="icon" onClick={() => navigate(`/proposals/${p.id}/edit`)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => copyPublicLink(p.public_code)}>
+                      <Button variant="ghost" size="icon" onClick={() => copyPublicLink(p.public_code)} title={t('view.copyLink')}>
                         <Copy className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title={t('actions.duplicate')}
+                        onClick={() => {
+                          if (!limits.canCreateProposal) { setShowUpgrade(true); return; }
+                          duplicate.mutate(p.id);
+                        }}
+                      >
+                        <Files className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => setDeletingId(p.id)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
