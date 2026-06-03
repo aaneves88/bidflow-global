@@ -24,6 +24,12 @@
     "signIn": "Sign in", "signOut": "Sign out", "getStarted": "Get started",
     "administration": "Administration"
   },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Nothing new here",
+    "viewed": "Your proposal was viewed",
+    "viewedBy": "{{name}} viewed your proposal"
+  },
   "notFound": { "title": "404", "message": "Oops! Page not found", "back": "Return to home" },
   "upgradeModal": {
     "title": "Free limit reached",
