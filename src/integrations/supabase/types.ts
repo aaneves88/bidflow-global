@@ -217,6 +217,47 @@ export type Database = {
           },
         ]
       }
+      proposal_signatures: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string | null
+          proposal_id: string
+          signed_at: string
+          signer_email: string | null
+          signer_name: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          proposal_id: string
+          signed_at?: string
+          signer_email?: string | null
+          signer_name: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          proposal_id?: string
+          signed_at?: string
+          signer_email?: string | null
+          signer_name?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_signatures_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_status_history: {
         Row: {
           changed_by: string | null
@@ -453,12 +494,28 @@ export type Database = {
     }
     Functions: {
       accept_proposal: { Args: { p_code: string }; Returns: undefined }
+      get_proposal_signature: {
+        Args: { p_code: string }
+        Returns: {
+          signed_at: string
+          signer_name: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      sign_proposal: {
+        Args: {
+          p_code: string
+          p_signer_email?: string
+          p_signer_name: string
+          p_user_agent?: string
+        }
+        Returns: string
       }
     }
     Enums: {
