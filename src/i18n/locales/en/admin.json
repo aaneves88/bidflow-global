@@ -1,6 +1,16 @@
 {
   "title": "Admin",
-  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations", "qa": "QA" },
+  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations", "qa": "QA", "roadmap": "Roadmap" },
+  "roadmap": {
+    "title": "Product roadmap",
+    "subtitle": "What is shipped and what is planned. Editable.",
+    "loading": "Loading roadmap...",
+    "edit": "Edit", "cancel": "Cancel", "save": "Save",
+    "saved": "Roadmap updated", "error": "Error saving roadmap",
+    "editorTitle": "Markdown", "previewTitle": "Preview",
+    "hint": "Use ## for phases and - ✅ / - 🔄 / - 📋 for items (done, in progress, planned).",
+    "status": { "done": "Done", "progress": "In progress", "planned": "Planned" }
+  },
   "qa": {
     "title": "Launch validation checklist",
     "subtitle": "Check each item after testing. Progress is saved locally in this browser.",
