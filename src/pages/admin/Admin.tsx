@@ -25,6 +25,7 @@ export default function Admin() {
           <TabsTrigger value="statuses">{t('tabs.statuses')}</TabsTrigger>
           <TabsTrigger value="integrations">{t('tabs.integrations')}</TabsTrigger>
           <TabsTrigger value="qa">{t('tabs.qa')}</TabsTrigger>
+          <TabsTrigger value="roadmap">{t('tabs.roadmap')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
@@ -32,6 +33,7 @@ export default function Admin() {
         <TabsContent value="statuses"><AdminStatuses /></TabsContent>
         <TabsContent value="integrations"><AdminIntegrations /></TabsContent>
         <TabsContent value="qa"><AdminQAChecklist /></TabsContent>
+        <TabsContent value="roadmap"><AdminRoadmap /></TabsContent>
       </Tabs>
     </div>
   );
