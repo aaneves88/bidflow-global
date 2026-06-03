@@ -39,7 +39,13 @@ export default function ProposalView() {
   const { data: history } = useProposalStatusHistory(id);
   const { data: views } = useProposalViews(id);
   const { getSetting } = useAppSettings('general');
+  const branding = useBranding();
   const updateStatus = useUpdateProposalStatus();
+
+  const [closeOpen, setCloseOpen] = useState(false);
+  const [pendingStatusId, setPendingStatusId] = useState<string>('');
+  const [closedAmount, setClosedAmount] = useState<string>('');
+  const [closedNotes, setClosedNotes] = useState<string>('');
 
   if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
   if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
@@ -60,12 +66,38 @@ export default function ProposalView() {
   });
   const whatsappUrl = buildWhatsAppUrl(proposal.clients?.phone, whatsappMessage);
 
+  const handleStatusChange = (newStatusId: string) => {
+    const target = statuses?.find((s: any) => s.id === newStatusId);
+    if (target && (target as any).is_won) {
+      setPendingStatusId(newStatusId);
+      setClosedAmount(String(proposal.total_amount));
+      setClosedNotes('');
+      setCloseOpen(true);
+    } else {
+      updateStatus.mutate({ id: proposal.id, status_id: newStatusId });
+    }
+  };
+
+  const confirmClose = () => {
+    updateStatus.mutate({
+      id: proposal.id,
+      status_id: pendingStatusId,
+      closed_amount: closedAmount ? Number(closedAmount) : null,
+      closed_notes: closedNotes || null,
+    });
+    setCloseOpen(false);
+  };
+
   const handlePdf = () => {
     if (!items) return;
-    const companyName = (getSetting('company_name') as string) || undefined;
+    const companyName = (getSetting('company_name') as string) || branding.companyName || undefined;
     generateProposalPdf(proposal as any, items as any[], {
       companyName,
       publicUrlBase: window.location.origin,
+      logoDataUrl: branding.logoUrl,
+      primaryColor: branding.primaryColor,
+      secondaryColor: branding.secondaryColor,
+      accentColor: branding.accentColor,
       labels: {
         proposalFor: t('pdf.proposalFor'),
         description: t('pdf.description'),
@@ -81,6 +113,7 @@ export default function ProposalView() {
       },
     });
   };
+
 
   return (
     <div className="space-y-6 max-w-3xl">
