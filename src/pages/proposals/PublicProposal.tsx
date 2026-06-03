@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 import { CheckCircle, MessageCircle, Clock, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { supabase } from '@/integrations/supabase/client';
 import { usePublicProposal } from '@/hooks/useProposals';
 import { useRecordProposalView } from '@/hooks/useProposalViews';
+import { fetchPublicBranding } from '@/hooks/useBranding';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
@@ -19,6 +21,12 @@ export default function PublicProposal() {
   const { data: proposal, isLoading, refetch } = usePublicProposal(publicCode);
   const recordView = useRecordProposalView();
   const [accepting, setAccepting] = useState(false);
+
+  const { data: branding } = useQuery({
+    queryKey: ['public-branding'],
+    queryFn: () => fetchPublicBranding(supabase),
+    staleTime: 5 * 60 * 1000,
+  });
 
   useEffect(() => {
     if (proposal?.id) recordView.mutate(proposal.id);
@@ -49,6 +57,10 @@ export default function PublicProposal() {
   const isRejected = /reject|rejeit|perdid|lost/i.test(statusName);
   const isFinal = isApproved || isRejected;
 
+  const primary = branding?.primaryColor || '#3B82F6';
+  const secondary = branding?.secondaryColor || '#1F2937';
+  const accent = branding?.accentColor || '#22C55E';
+
   const handleAccept = async () => {
     setAccepting(true);
     try {
@@ -64,14 +76,32 @@ export default function PublicProposal() {
   };
 
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { title: proposal.title }))}`;
-
   const items = (proposal as any).proposal_items || [];
   const sortedItems = [...items].sort((a: any, b: any) => a.position - b.position);
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Brand top bar */}
+      <div className="h-2 w-full" style={{ backgroundColor: primary }} />
+
+      {/* Brand header */}
+      {(branding?.logoUrl || branding?.companyName) && (
+        <div className="border-b">
+          <div className="max-w-3xl mx-auto p-4 sm:px-10 flex items-center gap-3">
+            {branding.logoUrl && (
+              <img src={branding.logoUrl} alt="" className="h-10 w-auto object-contain" />
+            )}
+            {branding.companyName && (
+              <span className="font-semibold" style={{ color: secondary }}>
+                {branding.companyName}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="max-w-3xl mx-auto p-6 sm:p-10 space-y-6">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{proposal.title}</h1>
             {proposal.clients && (
@@ -133,7 +163,9 @@ export default function PublicProposal() {
             <div className="flex justify-end pt-4 border-t mt-4">
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">{t('totalLabel')}</p>
-                <p className="text-3xl font-bold">{formatCurrency(Number(proposal.total_amount), proposal.currency)}</p>
+                <p className="text-3xl font-bold" style={{ color: accent }}>
+                  {formatCurrency(Number(proposal.total_amount), proposal.currency)}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -141,13 +173,19 @@ export default function PublicProposal() {
 
         <div className="flex gap-3 justify-center pt-4 flex-wrap">
           {!isFinal && (
-            <Button size="lg" onClick={handleAccept} disabled={accepting}>
+            <Button
+              size="lg"
+              onClick={handleAccept}
+              disabled={accepting}
+              style={{ backgroundColor: primary, color: '#fff' }}
+              className="hover:opacity-90"
+            >
               <CheckCircle className="mr-2 h-5 w-5" />
               {t('actions.accept')}
             </Button>
           )}
           {isApproved && (
-            <Badge className="bg-green-100 text-green-800 text-base px-4 py-2">
+            <Badge className="text-base px-4 py-2" style={{ backgroundColor: accent, color: '#fff' }}>
               <CheckCircle className="mr-2 h-5 w-5" /> {t('accepted')}
             </Badge>
           )}
@@ -156,6 +194,11 @@ export default function PublicProposal() {
             variant="outline"
             onClick={() => generateProposalPdf(proposal as any, sortedItems as any[], {
               publicUrlBase: window.location.origin,
+              companyName: branding?.companyName,
+              logoDataUrl: branding?.logoUrl,
+              primaryColor: primary,
+              secondaryColor: secondary,
+              accentColor: accent,
             })}
           >
             <FileDown className="mr-2 h-5 w-5" />
@@ -168,6 +211,16 @@ export default function PublicProposal() {
             </a>
           </Button>
         </div>
+
+        {/* Branded footer */}
+        {branding?.companyName && (
+          <div className="pt-8 mt-8 border-t text-center">
+            <p className="text-xs text-muted-foreground">
+              {t('preparedFor', { name: '' }).replace('{{name}}', '').trim() || 'Sent by'}{' '}
+              <span style={{ color: secondary }} className="font-medium">{branding.companyName}</span>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

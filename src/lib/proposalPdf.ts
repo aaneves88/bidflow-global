@@ -29,7 +29,11 @@ interface ItemLike {
 
 interface Options {
   companyName?: string;
-  publicUrlBase?: string; // e.g. https://app.example.com
+  publicUrlBase?: string;
+  logoDataUrl?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  accentColor?: string;
   labels?: {
     proposalFor?: string;
     description?: string;
@@ -43,6 +47,12 @@ interface Options {
     publicLink?: string;
     generatedAt?: string;
   };
+}
+
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace('#', '');
+  const n = parseInt(h.length === 3 ? h.split('').map((c) => c + c).join('') : h, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
 export function generateProposalPdf(
@@ -65,26 +75,54 @@ export function generateProposalPdf(
     ...(options.labels || {}),
   };
 
+  const primary = options.primaryColor || '#3B82F6';
+  const secondary = options.secondaryColor || '#1F2937';
+  const accent = options.accentColor || '#22C55E';
+  const [pr, pg, pb] = hexToRgb(primary);
+  const [sr, sg, sb] = hexToRgb(secondary);
+  const [ar, ag, ab] = hexToRgb(accent);
+
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 40;
+
+  // Top brand bar
+  doc.setFillColor(pr, pg, pb);
+  doc.rect(0, 0, pageWidth, 8, 'F');
+
   let y = margin;
 
-  // Header
-  if (options.companyName) {
-    doc.setFontSize(10);
-    doc.setTextColor(120);
+  // Logo + company name
+  if (options.logoDataUrl) {
+    try {
+      const fmt = options.logoDataUrl.includes('image/png') ? 'PNG' : 'JPEG';
+      doc.addImage(options.logoDataUrl, fmt, margin, y - 5, 60, 30, undefined, 'FAST');
+      if (options.companyName) {
+        doc.setFontSize(11);
+        doc.setTextColor(sr, sg, sb);
+        doc.text(options.companyName, margin + 70, y + 12);
+      }
+      y += 36;
+    } catch {
+      // ignore bad image
+    }
+  } else if (options.companyName) {
+    doc.setFontSize(11);
+    doc.setTextColor(sr, sg, sb);
     doc.text(options.companyName, margin, y);
-    y += 14;
+    y += 18;
   }
-  doc.setFontSize(20);
+
+  // Title
+  doc.setFontSize(22);
   doc.setTextColor(20);
   doc.text(proposal.title, margin, y);
   y += 24;
 
   // Meta line
   doc.setFontSize(10);
-  doc.setTextColor(100);
+  doc.setTextColor(110);
   const metaParts: string[] = [];
   if (proposal.proposal_statuses?.name) metaParts.push(`${labels.status}: ${proposal.proposal_statuses.name}`);
   if (proposal.valid_until) metaParts.push(`${labels.validUntil} ${formatDate(proposal.valid_until)}`);
@@ -95,18 +133,13 @@ export function generateProposalPdf(
   // Client block
   if (proposal.clients) {
     doc.setFontSize(11);
-    doc.setTextColor(20);
+    doc.setTextColor(sr, sg, sb);
     doc.text(labels.proposalFor, margin, y);
     y += 14;
     doc.setFontSize(10);
     doc.setTextColor(80);
     const c = proposal.clients;
-    const lines = [
-      c.name,
-      c.company,
-      c.email,
-      c.phone,
-    ].filter(Boolean) as string[];
+    const lines = [c.name, c.company, c.email, c.phone].filter(Boolean) as string[];
     lines.forEach((l) => {
       doc.text(l, margin, y);
       y += 13;
@@ -117,7 +150,7 @@ export function generateProposalPdf(
   // Description
   if (proposal.description) {
     doc.setFontSize(11);
-    doc.setTextColor(20);
+    doc.setTextColor(sr, sg, sb);
     doc.text(labels.description, margin, y);
     y += 14;
     doc.setFontSize(10);
@@ -138,7 +171,7 @@ export function generateProposalPdf(
       formatCurrency(Number(i.total), proposal.currency),
     ]),
     styles: { fontSize: 10, cellPadding: 6 },
-    headStyles: { fillColor: [30, 30, 30], textColor: 255 },
+    headStyles: { fillColor: [pr, pg, pb], textColor: 255 },
     columnStyles: {
       1: { halign: 'right', cellWidth: 50 },
       2: { halign: 'right', cellWidth: 90 },
@@ -150,19 +183,23 @@ export function generateProposalPdf(
   // @ts-ignore - lastAutoTable injected by autotable
   y = doc.lastAutoTable.finalY + 18;
 
-  // Total
-  doc.setFontSize(12);
-  doc.setTextColor(20);
+  // Total (in accent color)
+  doc.setFontSize(13);
+  doc.setTextColor(ar, ag, ab);
   const totalText = `${labels.grandTotal}: ${formatCurrency(Number(proposal.total_amount), proposal.currency)}`;
   doc.text(totalText, pageWidth - margin, y, { align: 'right' });
   y += 24;
+
+  // Brand footer bar
+  doc.setFillColor(sr, sg, sb);
+  doc.rect(0, pageHeight - 18, pageWidth, 4, 'F');
 
   // Public link footer
   if (options.publicUrlBase) {
     const url = `${options.publicUrlBase}/p/${proposal.public_code}`;
     doc.setFontSize(9);
     doc.setTextColor(120);
-    doc.text(`${labels.publicLink}: ${url}`, margin, doc.internal.pageSize.getHeight() - 24);
+    doc.text(`${labels.publicLink}: ${url}`, margin, pageHeight - 24);
   }
 
   doc.save(`proposta-${proposal.public_code}.pdf`);
