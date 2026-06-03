@@ -1,106 +1,78 @@
-## Modelo Freemium "1ª proposta grátis" + Aba Roadmap no Admin
+# Sprint de evolução — CloseFlow
 
-Adapta a lógica atual de planos para suportar limites e feature-flags por plano, aplica a regra "primeira proposta grátis", e adiciona uma aba **Roadmap** no Admin documentando o que já existe e o que está planejado.
+Vamos avançar com 7 frentes priorizadas. Tudo respeitando o estilo enxuto do app e os tokens do design system.
 
----
+## 1. Ajuste de bugs na Configurações
+Hoje a aba Configurações às vezes não salva (problema reportado anteriormente). Vou:
+- Revalidar `useAppSettings.upsert` (conflito em `key`, RLS de admin vs user).
+- Garantir que campos vazios não sobrescrevam outras categorias.
+- Mostrar feedback de erro real (toast com mensagem do Postgres).
+- Confirmar que `BrandingTab`, `GeneralTab` e `IntegrationsTab` recarregam após salvar (invalidação de cache).
 
-### 1. Schema — feature flags por plano
+## 2. Páginas legais
+Criar páginas públicas (sem auth):
+- `/legal/terms` — Termos de Uso
+- `/legal/privacy` — Política de Privacidade
+- `/legal/cookies` — Aviso de cookies (curto)
 
-Migration em `public.plans` adicionando colunas booleanas (nullable, default false):
-- `allow_pdf_export`
-- `allow_templates`
-- `allow_custom_branding`
+Conteúdo em pt-BR + en, com placeholders editáveis em `app_settings` (`legal_company_name`, `legal_contact_email`) para o admin personalizar sem mexer em código. Links no rodapé do Landing, Login, Register e na proposta pública.
 
-`max_proposals` e `max_clients` já existem — manter. Não criar regras hardcoded: tudo lido da tabela.
+## 3. Assinatura digital na proposta
+No `PublicProposal`, ao clicar "Aceitar":
+- Modal pedindo **nome completo** + **checkbox** "Li e concordo com os termos".
+- Captura: nome, email (se houver no cliente), IP (via edge function), user agent, timestamp.
+- Renderiza assinatura tipográfica (fonte cursiva) sobre uma linha.
+- Persistir em nova tabela `proposal_signatures` (proposal_id, signer_name, signer_email, ip, user_agent, signed_at).
+- Mostrar bloco "Assinada por X em DD/MM/YYYY" no PublicProposal e no PDF.
+- Trigger continua chamando `accept_proposal(code)` para mudar status.
 
-Backfill: planos pagos existentes recebem `allow_pdf_export=true`, `allow_custom_branding=true`. Starter mantém defaults.
+## 4. Duplicar proposta
+- Botão "Duplicar" no `ProposalView` e no menu da linha em `Proposals`.
+- Cria nova proposta copiando: cliente, título, descrição, itens, validade (recalculada), moeda, branding.
+- Reset: status volta para o inicial, `public_code` novo, `closed_at/closed_amount` nulos, `accepted_at` nulo.
+- Respeita o limite freemium (`canCreateProposal`).
 
-### 2. Regra "primeira proposta grátis"
+## 5. Notificação de proposta vista
+- Já existe `proposal_views`. Vou:
+  - Criar hook `useUnseenViews` que detecta views novas desde o último `last_seen_at` (em `profiles` ou localStorage por proposta).
+  - Badge no sidebar "Propostas" com contador de propostas com novas visualizações.
+  - Toast/notificação no Dashboard: "Cliente X visualizou sua proposta agora".
+  - Email opcional via Lovable Cloud (apenas se domínio de email configurado — caso contrário, só in-app).
 
-Adaptar `usePlanLimits.ts` para o seguinte cálculo de `canCreateProposal`:
+## 6. Métricas avançadas no Dashboard
+Hoje o dashboard tem KPIs básicos. Vou adicionar:
+- **Taxa de conversão** (propostas ganhas / enviadas).
+- **Ticket médio** (closed_amount médio).
+- **Tempo médio até fechar** (created_at → closed_at).
+- **Funil** (count por status, barras horizontais).
+- **Evolução mensal** (line chart de propostas criadas vs ganhas — usando Recharts já instalado).
+- Filtro de período (7d / 30d / 90d / ano).
 
-```text
-- isAdmin                                  → sempre permitido
-- hasPlan && !isExpired && dentro do limite → permitido
-- sem plano OU plano expirado:
-    - proposalsUsed === 0                  → permitido (cota grátis)
-    - proposalsUsed >= 1                   → bloqueado
-```
+## 7. Onboarding melhor
+Hoje o `Onboarding.tsx` tem 3 passos básicos. Vou redesenhar:
+- Step 1: Boas-vindas com nome do usuário + escolha de "Como você cobra?" (por hora / por projeto / mensalidade) — guarda como dica.
+- Step 2: Dados do negócio (nome + logo + cor primária) — alimenta branding direto.
+- Step 3: Primeiro cliente (opcional, pula fácil).
+- Step 4: Tour rápido (3 cards) explicando: criar proposta → compartilhar link → acompanhar status.
+- Progress bar visual, animações sutis, ilustrações simples (ícones lucide grandes).
+- Skip global em qualquer momento.
 
-Retornar também `freeProposalUsed: boolean` e `isOnFreeTier: boolean` para a UI.
+## Ordem de execução
+1. Migrations (assinatura digital, app_settings legais).
+2. Fix bugs configurações.
+3. Páginas legais + links rodapé.
+4. Duplicar proposta.
+5. Assinatura digital.
+6. Notificação de visualização.
+7. Dashboard com métricas.
+8. Onboarding redesenhado.
+9. Atualizar roadmap markdown no admin + QA checklist + i18n pt-BR/en.
 
-Sem mudança de schema — a cota grátis é derivada da contagem existente de propostas.
+## Detalhes técnicos
+- Nova tabela `proposal_signatures` com RLS (owner pode ver, público pode insert via RPC `sign_proposal(code, name, email)`).
+- Edge function `capture-signature` para registrar IP/user-agent (não exposto ao client).
+- Hook `useDashboardMetrics` centraliza queries agregadas.
+- Componentes novos: `LegalPage`, `SignatureDialog`, `DuplicateProposalButton`, `MetricsCards`, `ConversionFunnel`, `OnboardingV2` (substitui).
+- Sem mudanças no AuthContext ou na estrutura de roles.
 
-### 3. Indicadores de uso
-
-**Dashboard** (`src/pages/Dashboard.tsx`): card "Uso de propostas" mostrando:
-- Free tier sem uso: "Você ainda possui 1 proposta gratuita disponível."
-- Free tier usado: "Você já utilizou sua proposta gratuita." + botão "Ver planos"
-- Com plano + limite: "X de Y propostas usadas neste plano"
-- Com plano ilimitado: "Propostas ilimitadas"
-
-**Tela de Propostas** (`src/pages/proposals/Proposals.tsx`): mesma mensagem em formato banner acima da lista.
-
-### 4. Modal de upgrade
-
-Novo componente `src/components/UpgradeModal.tsx` (shadcn `Dialog`):
-- Título: "Limite gratuito atingido"
-- Descrição: "Você já utilizou sua proposta gratuita. Para continuar criando propostas e acompanhar seus negócios, escolha um plano."
-- Botões: "Ver planos" → `/pricing` · "Fazer upgrade" → `/pricing#plans` (destacado)
-
-Disparado quando o usuário clica em **Nova Proposta** sem permissão. Substitui o bloqueio atual silencioso.
-
-Pontos de integração: botão "Nova" em `Proposals.tsx`, atalho em `Dashboard.tsx`, e guarda dentro de `ProposalForm.tsx` ao montar em modo create.
-
-**Não bloquear:** visualizar, editar, compartilhar, PDF e WhatsApp da proposta existente continuam liberados.
-
-### 5. Aba "Roadmap" no Admin
-
-Nova aba ao lado de QA em `src/pages/admin/Admin.tsx`:
-- Componente `AdminRoadmap.tsx` que renderiza `docs/product-roadmap.md` parseado em fases.
-- Fonte: nova chave em `app_settings` `roadmap_markdown` (texto) — editável inline por admin via textarea + preview.
-- Inicialização: seed com o conteúdo atual de `docs/product-roadmap.md` + nova entrada de monetização.
-- Renderização: badges coloridos por status (✅ / 🔄 / 📋), agrupado por fase.
-
-Adicionar tradução `tabs.roadmap` em `admin.json` (pt-BR + en).
-
-### 6. Atualizações documentais
-
-- **`docs/product-roadmap.md`**: nova seção "Monetização" com itens (primeira proposta grátis ✅, feature flags por plano ✅, modal de upgrade ✅, billing fim-a-fim 🔄, customer portal 📋).
-- **`AdminQAChecklist`**: nova seção `monetization` com itens:
-  - "Novo usuário cria 1ª proposta grátis"
-  - "2ª proposta dispara modal de upgrade"
-  - "Plano ativo libera novas propostas"
-  - "Admin sem limites"
-  - "Plano concedido manualmente libera criação"
-  - "Indicador de uso visível no Dashboard"
-  - "Indicador de uso visível em Propostas"
-- **`.lovable/plan.md`**: arquivar sprint anterior e registrar este como próximo entregue.
-
-### 7. i18n
-
-Novas chaves em `pt-BR` + `en`:
-- `common:upgradeModal.*` (título, descrição, botões)
-- `dashboard:usage.*` (4 variantes de mensagem)
-- `proposals:usage.*` (mesmo)
-- `admin:tabs.roadmap`, `admin:roadmap.*` (status labels, edit/save, preview)
-- `admin:qa.sections.monetization.*`
-
-### 8. Ordem de execução
-
-```text
-1. Migration: plans + feature flags + backfill
-2. usePlanLimits: regra free tier + feature flags helpers
-3. UpgradeModal + integração nos pontos de criação
-4. Indicadores no Dashboard e Propostas
-5. AdminRoadmap (aba + storage em app_settings)
-6. Atualizar QA checklist + docs/product-roadmap.md + i18n
-```
-
-### Detalhes técnicos
-
-- Sem novas dependências.
-- Sem breaking changes: colunas novas são nullable; `canCreateProposal` mantém assinatura, só adiciona campos extras.
-- `useAppSettings` já suporta `getSetting`/`upsert` — `roadmap_markdown` é só mais uma chave categoria `general`.
-- Feature flags consumidas via helpers: `useFeatureFlag('allow_pdf_export')` que retorna `true` para admin, `true` se plano ativo libera, `false` caso contrário. Botão de PDF/templates/branding em proposta passa a checar isso (no MVP só exposto; bloqueio efetivo só se o admin desligar a flag no plano).
-- Modal de upgrade reaproveitado em qualquer guarda futura (clientes, exports, etc.).
+Posso começar pela ordem listada — me confirma se quer ajustar algo (priorizar, remover frente, etc) ou se já posso executar tudo.
