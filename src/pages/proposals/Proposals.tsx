@@ -25,6 +25,7 @@ export default function Proposals() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const filtered = proposals?.filter((p) => {
     const q = search.toLowerCase();
@@ -41,28 +42,25 @@ export default function Proposals() {
     toast({ title: t('messages.linkCopied') });
   };
 
-  const newButton = (
-    <Button onClick={() => navigate('/proposals/new')} disabled={!limits.canCreateProposal}>
-      <Plus className="mr-2 h-4 w-4" /> {t('newButton')}
-    </Button>
-  );
+  const handleNew = () => {
+    if (!limits.canCreateProposal) {
+      setShowUpgrade(true);
+      return;
+    }
+    navigate('/proposals/new');
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
-        {!limits.canCreateProposal ? (
-          <Tooltip>
-            <TooltipTrigger asChild><span>{newButton}</span></TooltipTrigger>
-            <TooltipContent>
-              <div className="space-y-2">
-                <p>{t('dashboard:limit.proposalsReached')}</p>
-                <Button size="sm" asChild><Link to="/pricing">{t('dashboard:limit.upgrade')}</Link></Button>
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        ) : newButton}
+        <Button onClick={handleNew}>
+          <Plus className="mr-2 h-4 w-4" /> {t('newButton')}
+        </Button>
       </div>
+
+      <UsageIndicator variant="banner" />
+
 
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
