@@ -97,6 +97,9 @@ export type Database = {
       }
       plans: {
         Row: {
+          allow_custom_branding: boolean
+          allow_pdf_export: boolean
+          allow_templates: boolean
           created_at: string
           currency: string | null
           description: string | null
@@ -112,6 +115,9 @@ export type Database = {
           trial_days: number
         }
         Insert: {
+          allow_custom_branding?: boolean
+          allow_pdf_export?: boolean
+          allow_templates?: boolean
           created_at?: string
           currency?: string | null
           description?: string | null
@@ -127,6 +133,9 @@ export type Database = {
           trial_days?: number
         }
         Update: {
+          allow_custom_branding?: boolean
+          allow_pdf_export?: boolean
+          allow_templates?: boolean
           created_at?: string
           currency?: string | null
           description?: string | null
