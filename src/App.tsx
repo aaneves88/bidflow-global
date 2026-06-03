@@ -21,6 +21,7 @@ import Admin from "@/pages/admin/Admin";
 import SettingsPage from "@/pages/settings/SettingsPage";
 import NotFound from "@/pages/NotFound";
 import LegalPage from "@/pages/legal/LegalPage";
+import MobileEntry from "@/pages/MobileEntry";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/app" element={<MobileEntry />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
