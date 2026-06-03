@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown } from 'lucide-react';
@@ -6,15 +7,21 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   useProposal, useProposalItems, useProposalStatuses,
   useProposalStatusHistory, useUpdateProposalStatus,
 } from '@/hooks/useProposals';
 import { useProposalViews } from '@/hooks/useProposalViews';
 import { useAppSettings } from '@/hooks/useAppSettings';
+import { useBranding } from '@/hooks/useBranding';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
+
 
 function buildWhatsAppUrl(phone: string | null | undefined, message: string) {
   const digits = (phone || '').replace(/\D/g, '');
@@ -32,7 +39,13 @@ export default function ProposalView() {
   const { data: history } = useProposalStatusHistory(id);
   const { data: views } = useProposalViews(id);
   const { getSetting } = useAppSettings('general');
+  const branding = useBranding();
   const updateStatus = useUpdateProposalStatus();
+
+  const [closeOpen, setCloseOpen] = useState(false);
+  const [pendingStatusId, setPendingStatusId] = useState<string>('');
+  const [closedAmount, setClosedAmount] = useState<string>('');
+  const [closedNotes, setClosedNotes] = useState<string>('');
 
   if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
   if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
@@ -53,12 +66,38 @@ export default function ProposalView() {
   });
   const whatsappUrl = buildWhatsAppUrl(proposal.clients?.phone, whatsappMessage);
 
+  const handleStatusChange = (newStatusId: string) => {
+    const target = statuses?.find((s: any) => s.id === newStatusId);
+    if (target && (target as any).is_won) {
+      setPendingStatusId(newStatusId);
+      setClosedAmount(String(proposal.total_amount));
+      setClosedNotes('');
+      setCloseOpen(true);
+    } else {
+      updateStatus.mutate({ id: proposal.id, status_id: newStatusId });
+    }
+  };
+
+  const confirmClose = () => {
+    updateStatus.mutate({
+      id: proposal.id,
+      status_id: pendingStatusId,
+      closed_amount: closedAmount ? Number(closedAmount) : null,
+      closed_notes: closedNotes || null,
+    });
+    setCloseOpen(false);
+  };
+
   const handlePdf = () => {
     if (!items) return;
-    const companyName = (getSetting('company_name') as string) || undefined;
+    const companyName = (getSetting('company_name') as string) || branding.companyName || undefined;
     generateProposalPdf(proposal as any, items as any[], {
       companyName,
       publicUrlBase: window.location.origin,
+      logoDataUrl: branding.logoUrl,
+      primaryColor: branding.primaryColor,
+      secondaryColor: branding.secondaryColor,
+      accentColor: branding.accentColor,
       labels: {
         proposalFor: t('pdf.proposalFor'),
         description: t('pdf.description'),
@@ -74,6 +113,7 @@ export default function ProposalView() {
       },
     });
   };
+
 
   return (
     <div className="space-y-6 max-w-3xl">
