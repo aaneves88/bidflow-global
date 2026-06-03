@@ -77,6 +77,11 @@ Status markers: ✅ completed | 🔄 in progress | 📋 planned
 | Pipeline value | ✅ completed |
 | Approved revenue | ✅ completed |
 | Conversion rate | ✅ completed |
+| **Freemium: first proposal free** | ✅ completed |
+| **Feature flags per plan (PDF, templates, branding)** | ✅ completed |
+| **Upgrade modal on free limit reached** | ✅ completed |
+| **Usage indicator (Dashboard + Proposals)** | ✅ completed |
+| Customer portal Stripe | 📋 planned |
 
 ---
 
