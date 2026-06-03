@@ -23,7 +23,21 @@
     "email": "E-mail",
     "phone": "Telefone",
     "company": "Empresa",
-    "notes": "Observações"
+    "notes": "Observações",
+    "logo": "Logotipo",
+    "taxId": "CPF / CNPJ",
+    "taxIdPlaceholder": "Documento",
+    "addressLine": "Endereço",
+    "city": "Cidade",
+    "state": "Estado",
+    "postalCode": "CEP",
+    "country": "País",
+    "sections": {
+      "identification": "Identificação",
+      "contact": "Contato",
+      "address": "Endereço",
+      "notes": "Notas internas"
+    }
   },
   "delete": {
     "title": "Excluir cliente?",

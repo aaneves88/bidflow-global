@@ -15,6 +15,13 @@ export type Client = {
   phone: string | null;
   company: string | null;
   notes: string | null;
+  logo_url: string | null;
+  tax_id: string | null;
+  address_line: string | null;
+  city: string | null;
+  state: string | null;
+  postal_code: string | null;
+  country: string | null;
   created_at: string;
   updated_at: string;
   proposal_count?: number;
@@ -26,6 +33,13 @@ export type ClientFormData = {
   phone?: string;
   company?: string;
   notes?: string;
+  logo_url?: string;
+  tax_id?: string;
+  address_line?: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  country?: string;
 };
 
 export function useClients() {
@@ -39,7 +53,7 @@ export function useClients() {
         .select('*')
         .order('name');
       if (error) throw error;
-      return data as Client[];
+      return data as unknown as Client[];
     },
     enabled: !!user,
   });
@@ -67,7 +81,7 @@ export function useClientsWithProposalCount() {
         if (p.client_id) countMap[p.client_id] = (countMap[p.client_id] || 0) + 1;
       });
 
-      return (clients as Client[]).map((c) => ({
+      return (clients as unknown as Client[]).map((c) => ({
         ...c,
         proposal_count: countMap[c.id] || 0,
       }));
@@ -84,7 +98,7 @@ export function useCreateClient() {
     mutationFn: async (data: ClientFormData) => {
       const { data: result, error } = await supabase
         .from('clients')
-        .insert({ ...data, user_id: user!.id })
+        .insert({ ...data, user_id: user!.id } as any)
         .select()
         .single();
       if (error) throw error;
@@ -105,7 +119,7 @@ export function useUpdateClient() {
 
   return useMutation({
     mutationFn: async ({ id, ...data }: ClientFormData & { id: string }) => {
-      const { error } = await supabase.from('clients').update(data).eq('id', id);
+      const { error } = await supabase.from('clients').update(data as any).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
