@@ -232,10 +232,15 @@ export function useUpdateProposalStatus() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, status_id }: { id: string; status_id: string }) => {
+    mutationFn: async ({
+      id, status_id, closed_amount, closed_notes,
+    }: { id: string; status_id: string; closed_amount?: number | null; closed_notes?: string | null }) => {
+      const update: any = { status_id };
+      if (closed_amount !== undefined) update.closed_amount = closed_amount;
+      if (closed_notes !== undefined) update.closed_notes = closed_notes;
       const { error } = await supabase
         .from('proposals')
-        .update({ status_id })
+        .update(update)
         .eq('id', id);
       if (error) throw error;
     },
@@ -250,6 +255,7 @@ export function useUpdateProposalStatus() {
     },
   });
 }
+
 
 export function useDeleteProposal() {
   const qc = useQueryClient();
