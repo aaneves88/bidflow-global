@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
 import { BrandingStyle } from '@/components/BrandingStyle';
 import { useBranding } from '@/hooks/useBranding';
+import { NotificationsBell } from '@/components/NotificationsBell';
 
 export function AppLayout({ children }: { children: ReactNode }) {
   useTranslation();
@@ -19,9 +20,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
             {logoUrl ? (
               <img src={logoUrl} alt="" className="h-7 w-auto object-contain" />
             ) : null}
-            <span className="font-semibold text-lg truncate">
+            <span className="font-semibold text-lg truncate flex-1">
               {companyName || 'CloseFlow'}
             </span>
+            <NotificationsBell />
           </header>
           <main className="flex-1 p-6">
             {children}
