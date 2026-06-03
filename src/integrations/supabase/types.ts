@@ -40,35 +40,56 @@ export type Database = {
       }
       clients: {
         Row: {
+          address_line: string | null
+          city: string | null
           company: string | null
+          country: string | null
           created_at: string
           email: string | null
           id: string
+          logo_url: string | null
           name: string
           notes: string | null
           phone: string | null
+          postal_code: string | null
+          state: string | null
+          tax_id: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          address_line?: string | null
+          city?: string | null
           company?: string | null
+          country?: string | null
           created_at?: string
           email?: string | null
           id?: string
+          logo_url?: string | null
           name: string
           notes?: string | null
           phone?: string | null
+          postal_code?: string | null
+          state?: string | null
+          tax_id?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          address_line?: string | null
+          city?: string | null
           company?: string | null
+          country?: string | null
           created_at?: string
           email?: string | null
           id?: string
+          logo_url?: string | null
           name?: string
           notes?: string | null
           phone?: string | null
+          postal_code?: string | null
+          state?: string | null
+          tax_id?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -236,6 +257,7 @@ export type Database = {
           id: string
           is_default: boolean | null
           is_final: boolean | null
+          is_won: boolean
           name: string
           position: number
         }
@@ -245,6 +267,7 @@ export type Database = {
           id?: string
           is_default?: boolean | null
           is_final?: boolean | null
+          is_won?: boolean
           name: string
           position?: number
         }
@@ -254,6 +277,7 @@ export type Database = {
           id?: string
           is_default?: boolean | null
           is_final?: boolean | null
+          is_won?: boolean
           name?: string
           position?: number
         }
@@ -286,6 +310,9 @@ export type Database = {
       proposals: {
         Row: {
           client_id: string | null
+          closed_amount: number | null
+          closed_at: string | null
+          closed_notes: string | null
           created_at: string
           currency: string
           description: string | null
@@ -300,6 +327,9 @@ export type Database = {
         }
         Insert: {
           client_id?: string | null
+          closed_amount?: number | null
+          closed_at?: string | null
+          closed_notes?: string | null
           created_at?: string
           currency?: string
           description?: string | null
@@ -314,6 +344,9 @@ export type Database = {
         }
         Update: {
           client_id?: string | null
+          closed_amount?: number | null
+          closed_at?: string | null
+          closed_notes?: string | null
           created_at?: string
           currency?: string
           description?: string | null
