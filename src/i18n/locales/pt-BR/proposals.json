@@ -43,6 +43,7 @@
   "view": {
     "copyLink": "Copiar link público",
     "sendWhatsapp": "Enviar pelo WhatsApp",
+    "downloadPdf": "Baixar PDF",
     "edit": "Editar",
     "changeStatus": "Mudar status",
     "validUntil": "Válida até {{date}}",

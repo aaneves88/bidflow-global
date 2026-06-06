@@ -130,6 +130,7 @@ export function useCreateProposal() {
     mutationFn: async (data: ProposalFormData) => {
       const totalAmount = data.items.reduce((s, i) => s + i.total, 0);
 
+      const public_code = Math.random().toString(36).substring(2, 12);
       const { data: proposal, error } = await supabase
         .from('proposals')
         .insert({
@@ -141,6 +142,7 @@ export function useCreateProposal() {
           total_amount: totalAmount,
           status_id: data.status_id || null,
           valid_until: data.valid_until || null,
+          public_code,
         })
         .select()
         .single();
