@@ -135,10 +135,7 @@ export default function Onboarding() {
                 <p className="text-sm text-muted-foreground">{t('proposal.description')}</p>
               </div>
               <div className="flex flex-col gap-2">
-                <Button onClick={() => {
-                  if (user) localStorage.setItem(`cf_onboarded_${user.id}`, '1');
-                  navigate('/proposals/new', { replace: true });
-                }}>
+                <Button onClick={() => { finish(); navigate('/proposals/new'); }}>
                   {t('proposal.create')}
                 </Button>
                 <Button variant="outline" onClick={finish}>{t('proposal.later')}</Button>
