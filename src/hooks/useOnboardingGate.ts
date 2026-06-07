@@ -11,7 +11,10 @@ import { useAuth } from '@/contexts/AuthContext';
  */
 export function useOnboardingGate() {
   const { user, loading } = useAuth();
-  const [checking, setChecking] = useState(true);
+  const [checking, setChecking] = useState(() => {
+    const hasAnyOnboardingFlag = Object.keys(localStorage).some((key) => key.startsWith('cf_onboarded_'));
+    return !hasAnyOnboardingFlag;
+  });
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
 
   useEffect(() => {
