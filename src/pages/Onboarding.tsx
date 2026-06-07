@@ -33,13 +33,17 @@ export default function Onboarding() {
     }
   }, [user, businessName]);
 
-  const finish = () => {
-    if (user) localStorage.setItem(`cf_onboarded_${user.id}`, '1');
+  const finish = async () => {
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+    const uid = currentUser?.id || user?.id;
+    if (uid) localStorage.setItem(`cf_onboarded_${uid}`, '1');
     navigate('/dashboard', { replace: true });
   };
 
-  const finishAndGo = (path: string) => {
-    if (user) localStorage.setItem(`cf_onboarded_${user.id}`, '1');
+  const finishAndGo = async (path: string) => {
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+    const uid = currentUser?.id || user?.id;
+    if (uid) localStorage.setItem(`cf_onboarded_${uid}`, '1');
     navigate(path, { replace: true });
   };
 
