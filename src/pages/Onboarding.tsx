@@ -35,15 +35,19 @@ export default function Onboarding() {
 
   const finish = async () => {
     const { data: { user: currentUser } } = await supabase.auth.getUser();
-    const uid = currentUser?.id || user?.id;
-    if (uid) localStorage.setItem(`cf_onboarded_${uid}`, '1');
+    const uid = currentUser?.id;
+    if (uid) {
+      await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
+    }
     navigate('/dashboard', { replace: true });
   };
 
   const finishAndGo = async (path: string) => {
     const { data: { user: currentUser } } = await supabase.auth.getUser();
-    const uid = currentUser?.id || user?.id;
-    if (uid) localStorage.setItem(`cf_onboarded_${uid}`, '1');
+    const uid = currentUser?.id;
+    if (uid) {
+      await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
+    }
     navigate(path, { replace: true });
   };
 
