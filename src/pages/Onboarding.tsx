@@ -38,6 +38,7 @@ export default function Onboarding() {
     const uid = currentUser?.id;
     if (uid) {
       await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
+      await new Promise((resolve) => setTimeout(resolve, 300));
     }
     navigate('/dashboard', { replace: true });
   };
@@ -47,6 +48,7 @@ export default function Onboarding() {
     const uid = currentUser?.id;
     if (uid) {
       await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
+      await new Promise((resolve) => setTimeout(resolve, 300));
     }
     navigate(path, { replace: true });
   };
