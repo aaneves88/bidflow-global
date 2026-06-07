@@ -38,6 +38,11 @@ export default function Onboarding() {
     navigate('/dashboard', { replace: true });
   };
 
+  const finishAndGo = (path: string) => {
+    if (user) localStorage.setItem(`cf_onboarded_${user.id}`, '1');
+    navigate(path, { replace: true });
+  };
+
   const handleStep1 = async () => {
     try {
       if (businessName.trim()) {
@@ -135,7 +140,7 @@ export default function Onboarding() {
                 <p className="text-sm text-muted-foreground">{t('proposal.description')}</p>
               </div>
               <div className="flex flex-col gap-2">
-                <Button onClick={() => { finish(); navigate('/proposals/new'); }}>
+                <Button onClick={() => finishAndGo('/proposals/new')}>
                   {t('proposal.create')}
                 </Button>
                 <Button variant="outline" onClick={finish}>{t('proposal.later')}</Button>
