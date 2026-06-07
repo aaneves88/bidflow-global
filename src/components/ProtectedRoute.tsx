@@ -8,9 +8,8 @@ export function ProtectedRoute({ children, requireAdmin = false }: { children: R
   const { t } = useTranslation('common');
   const location = useLocation();
   const { needsOnboarding, checking } = useOnboardingGate();
-  const hasOnboardingFlag = Object.keys(localStorage).some((key) => key.startsWith('cf_onboarded_'));
 
-  if (loading || (user && checking && !hasOnboardingFlag)) {
+  if (loading || (user && checking)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-muted-foreground">{t('actions.loading')}</p>
