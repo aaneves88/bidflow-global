@@ -16,7 +16,7 @@ const TOTAL_STEPS = 3;
 
 export default function Onboarding() {
   const { t } = useTranslation(['onboarding', 'common']);
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, refreshOnboarding } = useAuth();
   const { upsert } = useAppSettings('general');
   const createClient = useCreateClient();
   const navigate = useNavigate();
@@ -26,19 +26,6 @@ export default function Onboarding() {
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientCompany, setClientCompany] = useState('');
-
-  useEffect(() => {
-    if (!user) return;
-    supabase.from('profiles')
-      .select('onboarding_complete')
-      .eq('id', user.id)
-      .single()
-      .then(({ data }) => {
-        if (data?.onboarding_complete) {
-          navigate('/dashboard', { replace: true });
-        }
-      });
-  }, [user, navigate]);
 
   useEffect(() => {
     if (user?.user_metadata?.full_name && !businessName) {
@@ -51,7 +38,7 @@ export default function Onboarding() {
     const uid = currentUser?.id;
     if (uid) {
       await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await refreshOnboarding();
     }
     navigate('/dashboard', { replace: true });
   };
@@ -61,7 +48,7 @@ export default function Onboarding() {
     const uid = currentUser?.id;
     if (uid) {
       await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await refreshOnboarding();
     }
     navigate(path, { replace: true });
   };
