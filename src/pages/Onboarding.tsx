@@ -28,6 +28,19 @@ export default function Onboarding() {
   const [clientCompany, setClientCompany] = useState('');
 
   useEffect(() => {
+    if (!user) return;
+    supabase.from('profiles')
+      .select('onboarding_complete')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.onboarding_complete) {
+          navigate('/dashboard', { replace: true });
+        }
+      });
+  }, [user, navigate]);
+
+  useEffect(() => {
     if (user?.user_metadata?.full_name && !businessName) {
       setBusinessName(user.user_metadata.full_name);
     }
