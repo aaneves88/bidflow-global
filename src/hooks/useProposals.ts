@@ -24,6 +24,8 @@ export type Proposal = {
   public_code: string;
   title: string;
   description: string | null;
+  notes: string | null;
+  terms: string | null;
   currency: string;
   total_amount: number;
   status_id: string | null;
@@ -38,6 +40,8 @@ export type ProposalFormData = {
   client_id?: string | null;
   title: string;
   description?: string;
+  notes?: string;
+  terms?: string;
   currency: string;
   valid_until?: string | null;
   status_id?: string | null;
