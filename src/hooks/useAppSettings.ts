@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export function useAppSettings(category?: string) {
@@ -27,10 +28,10 @@ export function useAppSettings(category?: string) {
     },
   });
 
-  const getSetting = (key: string) => {
-    const item = query.data?.find((s) => s.key === key);
-    return item?.value;
-  };
+  const getSetting = useCallback(
+    (key: string) => query.data?.find((s) => s.key === key)?.value,
+    [query.data],
+  );
 
   return { settings: query.data ?? [], isLoading: query.isLoading, getSetting, upsert };
 }
