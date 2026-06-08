@@ -38,10 +38,11 @@ export default function Proposals() {
     );
   });
 
+  const publicBase = usePublicAppUrl();
   const copyPublicLink = (code: string) => {
-    const url = `${window.location.origin}/p/${code}`;
+    const url = buildPublicProposalUrl(publicBase, code);
     navigator.clipboard.writeText(url);
-    toast({ title: t('messages.linkCopied') });
+    toast({ title: t('messages.linkCopied'), description: url });
   };
 
   const handleNew = () => {
