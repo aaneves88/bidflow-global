@@ -2,9 +2,9 @@
   "title": "Configurações",
   "tabs": {
     "general": "Geral",
-    "integrations": "Integrações",
     "branding": "Marca"
   },
+  "integrationsCta": "Gerencie integrações em Administração → Integrações",
   "general": {
     "title": "Configurações gerais",
     "companyName": "Nome da empresa",

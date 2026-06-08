@@ -81,5 +81,10 @@
     "planUsage": "{{used}} de {{max}} propostas usadas",
     "planRemaining": "Restam {{remaining}} no seu plano.",
     "planLimitReached": "Você atingiu o limite do seu plano."
+  },
+  "upload": {
+    "invalidImage": "Arquivo inválido. Selecione uma imagem.",
+    "logoTooLarge": "Logo muito grande",
+    "logoTooLargeHint": "{{size}}KB. Tente uma imagem menor."
   }
 }

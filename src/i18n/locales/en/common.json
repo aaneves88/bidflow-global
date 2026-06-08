@@ -47,5 +47,10 @@
     "planUsage": "{{used}} of {{max}} proposals used",
     "planRemaining": "{{remaining}} left on your plan.",
     "planLimitReached": "You reached your plan limit."
+  },
+  "upload": {
+    "invalidImage": "Invalid file. Please select an image.",
+    "logoTooLarge": "Logo too large",
+    "logoTooLargeHint": "{{size}}KB. Try a smaller image."
   }
 }
