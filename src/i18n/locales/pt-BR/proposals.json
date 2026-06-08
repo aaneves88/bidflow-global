@@ -53,6 +53,8 @@
     "changeStatus": "Mudar status",
     "validUntil": "Válida até {{date}}",
     "items": "Itens",
+    "notes": "Observações",
+    "terms": "Termos e condições",
     "history": "Histórico de status",
     "viewsTitle": "Visualizações",
     "viewsCount_one": "{{count}} visualização",
