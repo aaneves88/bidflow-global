@@ -104,7 +104,7 @@ export default function ProposalForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
-      title, description,
+      title, description, notes, terms,
       client_id: clientId === 'none' ? null : clientId,
       currency, status_id: statusId || null,
       valid_until: validUntil || null,
