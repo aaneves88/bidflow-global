@@ -320,6 +320,8 @@ export function useDuplicateProposal() {
           client_id: src.client_id,
           title: `${src.title} (cópia)`,
           description: src.description,
+          notes: src.notes,
+          terms: src.terms,
           currency: src.currency,
           total_amount: src.total_amount,
           status_id: initial?.id ?? null,
