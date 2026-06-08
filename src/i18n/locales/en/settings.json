@@ -1,6 +1,7 @@
 {
   "title": "Settings",
-  "tabs": { "general": "General", "integrations": "Integrations", "branding": "Branding" },
+  "tabs": { "general": "General", "branding": "Branding" },
+  "integrationsCta": "Manage integrations in Admin → Integrations",
   "general": {
     "title": "General Settings", "companyName": "Company Name", "companyPlaceholder": "Your Company",
     "defaultCurrency": "Default Currency", "language": "Interface language"

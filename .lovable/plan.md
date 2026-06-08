@@ -1,52 +1,46 @@
-## Objetivo
+# Correções na tela de Configurações
 
-Criar uma experiência de entrada estilo app mobile: sem landing longa, vai direto para login/criar conta com Google como opção principal. Mantém a landing atual para acesso desktop/web marketing, mas detecta mobile e direciona para a nova entrada.
+## Diagnóstico
 
-## O que será feito
+### 1. "Não consigo alterar nada" (bug crítico)
+Nos três tabs (`GeneralTab`, `IntegrationsTab`, `BrandingTab`) de `src/pages/settings/SettingsPage.tsx` o `useEffect` que carrega valores do banco depende de `getSetting` — uma função recriada a cada render do hook `useAppSettings`. Resultado: o efeito roda em **todo render** e sobrescreve o que o usuário digita com o valor original do banco. Os campos parecem "não aceitar" alterações.
 
-### 1. Nova página `/app` — entrada mobile-first
-- Tela cheia, mobile-first (funciona bem em desktop também).
-- Logo CloseFlow no topo, tagline curta (1 linha).
-- Botão primário: **Continuar com Google**.
-- Divisor "ou".
-- Campos email + senha com tabs/toggle entre "Entrar" e "Criar conta".
-- Link "Esqueci minha senha".
-- Footer minúsculo com links legais (termos/privacidade).
-- Sem hero, sem features, sem pricing — direto ao ponto.
+**Correção:** trocar a dependência por `query.data` (ou por valores derivados estáveis) e ler os settings dentro do efeito uma única vez quando os dados chegam. Alternativamente, memoizar `getSetting` no `useAppSettings` com `useCallback` dependendo de `query.data`.
 
-### 2. Google Sign-In (Lovable Cloud Managed)
-- Habilitar provider Google via `configure_social_auth`.
-- Usar `lovable.auth.signInWithOAuth("google", ...)`.
-- Após login bem-sucedido, redirecionar para `/dashboard` (ou `/onboarding` se primeiro acesso — já existe lógica de primeiro usuário virar admin).
+### 2. Upload de logo falha ("Logo too large – 367KB")
+O `LogoUpload` está com `maxKb=300` e a logo do usuário tem 367KB depois do resize. Como o arquivo é salvo como data URL em `app_settings.value` (texto), podemos relaxar com segurança:
+- Aumentar `maxKb` para **600** (ainda confortável para JSONB do Postgres).
+- Reduzir `maxSize` padrão de 512px para **384px** e baixar a qualidade JPEG de 0.85 → **0.8** para que a maioria das logos passe sem aviso.
+- Mensagem de erro traduzida via i18n em vez de string fixa em inglês.
 
-### 3. Roteamento inteligente
-- Em `/` (Landing atual): detectar user-agent mobile → redirect automático para `/app`.
-- Desktop continua vendo a landing completa.
-- Usuário já autenticado em `/app` → redireciona para `/dashboard`.
-- Adicionar `/app` como rota pública no `App.tsx`.
+### 3. Tab "Integrações" em Configurações vs página `/admin/integrations`
+Hoje existem **duas** UIs de integração:
+- `/settings` → aba *Integrações* com toggles soltos de Stripe e WhatsApp (sem efeito real).
+- `/admin/integrations` → card completo do Stripe (com chaves) + "Em breve" para WhatsApp, Resend, PIX, etc.
 
-### 4. Manifest PWA (instalável)
-- Adicionar `public/manifest.webmanifest` com `display: standalone`, theme color, nome CloseFlow.
-- Ícones 192/512 (gerar via imagegen, fundo da marca).
-- Tags `<link rel="manifest">`, `<meta name="theme-color">`, `apple-touch-icon` no `index.html`.
-- **Sem service worker** (sem offline) — só home-screen install. Quando migrar para Capacitor/Dreamflow no futuro, esse manifest já ajuda.
+A aba em Configurações confunde porque promete configurar coisas que não configuram nada. **Remover a aba "Integrações" de `/settings`** e deixar apenas General + Branding. Adicionar um pequeno link/CTA no topo dizendo "Gerencie integrações em Administração → Integrações" (visível só para admin).
 
-### 5. i18n
-- Novas strings em `pt-BR/auth.json` e `en/auth.json` para tela de entrada mobile.
+### 4. Mobile: conteúdo cortado
+- `AppLayout` usa `<main className="flex-1 p-6">`. Em telas estreitas, `p-6` (24px) + sidebar trigger + título no header espreme demais. Trocar para `p-4 md:p-6`.
+- `SettingsPage` `<h1 className="text-3xl">` quebra mal no mobile → `text-2xl md:text-3xl`.
+- `TabsList` do shadcn não rola horizontalmente; com 2 abas após remover Integrações cabe, mas garantir `w-full` e `grid grid-cols-2 md:inline-flex`.
+- `BrandingTab` grid `lg:grid-cols-[1fr_360px]` já empilha no mobile — ok. Mas o `ColorField` tem `<input type="color">` de `h-9 w-12` + `Input` `flex-1` que estoura em telas <360px. Adicionar `min-w-0` no Input e `flex-wrap` no container.
+- `LogoUpload`: o bloco de preview + botões pode estourar. Trocar `flex items-center gap-3` por `flex flex-wrap items-center gap-3`.
 
-### 6. Atualizar roadmap e QA checklist no admin
-- Marcar "Entrada mobile-first" e "Google Sign-In" como entregues.
+## Arquivos a alterar
 
-## Detalhes técnicos
+- `src/hooks/useAppSettings.ts` — memoizar `getSetting` com `useCallback([query.data])`.
+- `src/pages/settings/SettingsPage.tsx` — corrigir deps do `useEffect` nos 3 tabs (usar `query.data` via hook ajustado), remover aba Integrações, ajustes responsivos (`text-2xl md:text-3xl`, tabs `grid grid-cols-2 md:inline-flex`), adicionar link para `/admin/integrations` para admins.
+- `src/components/LogoUpload.tsx` — `maxKb=600`, `maxSize=384`, qualidade 0.8, mensagem via `t()`, `flex-wrap` no container.
+- `src/components/AppLayout.tsx` — `p-4 md:p-6` no `<main>`.
+- `src/i18n/locales/{pt-BR,en}/settings.json` — remover chaves do tab `integrations`, adicionar string "Gerencie integrações em Administração".
+- `src/i18n/locales/{pt-BR,en}/common.json` — chaves de erro de upload (`logoTooLarge`, `invalidImage`).
 
-- **Arquivos novos**: `src/pages/MobileEntry.tsx`, `public/manifest.webmanifest`, `public/icon-192.png`, `public/icon-512.png`, `public/apple-touch-icon.png`.
-- **Editados**: `src/App.tsx` (rota `/app`), `src/pages/Landing.tsx` (redirect mobile via `useEffect` + `navigator.userAgent`), `index.html` (manifest + meta tags), locales i18n, `AdminRoadmap.tsx`, `AdminQAChecklist.tsx`.
-- **Backend**: `configure_social_auth` com `providers: ["google"]` (mantém email habilitado).
-- **Auth flow**: usar `lovable.auth.signInWithOAuth` (managed); email/senha continua via `supabase.auth.signInWithPassword` / `signUp` como hoje.
+## Fora de escopo
+- Refazer fluxo de onboarding (já tratado em mensagens anteriores).
+- Mexer em lógica de Stripe/integrações reais.
 
-## Fora do escopo (próximos passos)
-
-- Capacitor / build nativo iOS/Android (você mencionou Dreamflow no futuro).
-- Service worker offline.
-- Push notifications nativas.
-- Onboarding visual de 4 passos pós-signup (fica para próxima iteração se quiser).
+## Verificação
+- Abrir `/settings` em viewport mobile (375px) e desktop, alterar nome da empresa, idioma, cores, salvar e recarregar para confirmar persistência.
+- Fazer upload de uma logo ~400KB e confirmar sucesso.
+- Confirmar que aba "Integrações" desapareceu de `/settings` e o link leva para `/admin/integrations`.
