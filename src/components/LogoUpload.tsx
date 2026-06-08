@@ -17,13 +17,13 @@ type Props = {
  * Stores logos as base64 data URLs directly in the DB. Suitable for small
  * logos (<200KB after resize). No bucket required.
  */
-export function LogoUpload({ value, onChange, maxSize = 512, maxKb = 300 }: Props) {
+export function LogoUpload({ value, onChange, maxSize = 384, maxKb = 600 }: Props) {
   const { t } = useTranslation('common');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith('image/')) {
-      toast({ title: 'Invalid file', description: 'Please select an image.', variant: 'destructive' });
+      toast({ title: t('upload.invalidImage'), variant: 'destructive' });
       return;
     }
     const reader = new FileReader();
@@ -43,12 +43,12 @@ export function LogoUpload({ value, onChange, maxSize = 512, maxKb = 300 }: Prop
         const isPng = file.type === 'image/png';
         const dataUrl = isPng
           ? canvas.toDataURL('image/png')
-          : canvas.toDataURL('image/jpeg', 0.85);
+          : canvas.toDataURL('image/jpeg', 0.8);
         const sizeKb = Math.round((dataUrl.length * 0.75) / 1024);
         if (sizeKb > maxKb) {
           toast({
-            title: 'Logo too large',
-            description: `${sizeKb}KB. Try a smaller image.`,
+            title: t('upload.logoTooLarge'),
+            description: t('upload.logoTooLargeHint', { size: sizeKb }),
             variant: 'destructive',
           });
           return;
