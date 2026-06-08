@@ -51,7 +51,9 @@
     "whatsappMessage": "Hi {{clientName}}, here's the proposal \"{{title}}\" for {{total}}.\nYou can view and accept it here: {{url}}\nLet me know if you have any questions."
   },
   "pdf": {
-    "proposalFor": "Client", "description": "Description", "items": "Items",
+    "proposalFor": "Client", "description": "Description",
+    "notes": "Notes", "terms": "Terms and conditions",
+    "items": "Items",
     "qty": "Qty", "unitPrice": "Unit Price", "total": "Total", "grandTotal": "Grand Total",
     "validUntil": "Valid until", "status": "Status",
     "publicLink": "Proposal link", "generatedAt": "Generated on"
