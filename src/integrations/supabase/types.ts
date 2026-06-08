@@ -370,8 +370,10 @@ export type Database = {
           currency: string
           description: string | null
           id: string
+          notes: string | null
           public_code: string
           status_id: string | null
+          terms: string | null
           title: string
           total_amount: number
           updated_at: string
@@ -387,8 +389,10 @@ export type Database = {
           currency?: string
           description?: string | null
           id?: string
+          notes?: string | null
           public_code?: string
           status_id?: string | null
+          terms?: string | null
           title: string
           total_amount?: number
           updated_at?: string
@@ -404,8 +408,10 @@ export type Database = {
           currency?: string
           description?: string | null
           id?: string
+          notes?: string | null
           public_code?: string
           status_id?: string | null
+          terms?: string | null
           title?: string
           total_amount?: number
           updated_at?: string
