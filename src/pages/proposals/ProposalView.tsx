@@ -225,6 +225,24 @@ export default function ProposalView() {
         </CardContent>
       </Card>
 
+      {(proposal as any).notes && (
+        <Card>
+          <CardHeader><CardTitle>{t('view.notes')}</CardTitle></CardHeader>
+          <CardContent>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed">{(proposal as any).notes}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {(proposal as any).terms && (
+        <Card>
+          <CardHeader><CardTitle>{t('view.terms')}</CardTitle></CardHeader>
+          <CardContent>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed">{(proposal as any).terms}</p>
+          </CardContent>
+        </Card>
+      )}
+
       {views && (
         <Card>
           <CardHeader><CardTitle>{t('view.viewsTitle')}</CardTitle></CardHeader>
