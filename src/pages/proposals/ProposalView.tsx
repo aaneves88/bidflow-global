@@ -101,6 +101,8 @@ export default function ProposalView() {
       labels: {
         proposalFor: t('pdf.proposalFor'),
         description: t('pdf.description'),
+        notes: t('pdf.notes'),
+        terms: t('pdf.terms'),
         items: t('pdf.items'),
         qty: t('pdf.qty'),
         unitPrice: t('pdf.unitPrice'),
