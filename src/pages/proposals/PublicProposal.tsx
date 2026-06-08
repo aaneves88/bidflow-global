@@ -81,21 +81,23 @@ export default function PublicProposal() {
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { title: proposal.title }))}`;
   const items = (proposal as any).proposal_items || [];
   const sortedItems = [...items].sort((a: any, b: any) => a.position - b.position);
+  const notes = (proposal as any).notes as string | null;
+  const terms = (proposal as any).terms as string | null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-muted/30">
       {/* Brand top bar */}
-      <div className="h-2 w-full" style={{ backgroundColor: primary }} />
+      <div className="h-1.5 w-full" style={{ backgroundColor: primary }} />
 
       {/* Brand header */}
       {(branding?.logoUrl || branding?.companyName) && (
-        <div className="border-b">
-          <div className="max-w-3xl mx-auto p-4 sm:px-10 flex items-center gap-3">
+        <div className="bg-background border-b">
+          <div className="max-w-3xl mx-auto px-6 sm:px-10 py-5 flex items-center gap-4">
             {branding.logoUrl && (
-              <img src={branding.logoUrl} alt="" className="h-10 w-auto object-contain" />
+              <img src={branding.logoUrl} alt="" className="h-12 w-auto object-contain" />
             )}
             {branding.companyName && (
-              <span className="font-semibold" style={{ color: secondary }}>
+              <span className="text-lg font-semibold tracking-tight" style={{ color: secondary }}>
                 {branding.companyName}
               </span>
             )}
@@ -103,21 +105,24 @@ export default function PublicProposal() {
         </div>
       )}
 
-      <div className="max-w-3xl mx-auto p-6 sm:p-10 space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">{proposal.title}</h1>
-            {proposal.clients && (
-              <p className="text-muted-foreground mt-1">
-                {t('preparedFor', { name: proposal.clients.name })}
-                {proposal.clients.company ? ` · ${proposal.clients.company}` : ''}
-              </p>
+      <div className="max-w-3xl mx-auto px-4 sm:px-10 py-8 sm:py-12 space-y-6">
+        {/* Title + status */}
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
+              {proposal.title}
+            </h1>
+            {proposal.valid_until && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-3">
+                <Clock className="h-4 w-4" />
+                {t('validUntil', { date: formatDate(proposal.valid_until) })}
+              </div>
             )}
           </div>
           {proposal.proposal_statuses && (
             <Badge
               variant="outline"
-              className="text-sm"
+              className="text-sm shrink-0"
               style={{ borderColor: proposal.proposal_statuses.color, color: proposal.proposal_statuses.color }}
             >
               {proposal.proposal_statuses.name}
@@ -125,48 +130,78 @@ export default function PublicProposal() {
           )}
         </div>
 
-        {proposal.valid_until && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Clock className="h-4 w-4" />
-            {t('validUntil', { date: formatDate(proposal.valid_until) })}
-          </div>
-        )}
-
-        {proposal.description && (
+        {/* Client card */}
+        {proposal.clients && (
           <Card>
-            <CardContent className="pt-6">
-              <p className="whitespace-pre-wrap">{proposal.description}</p>
+            <CardContent className="pt-5 pb-5">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                {t('client')}
+              </p>
+              <p className="font-medium text-base">{proposal.clients.name}</p>
+              {proposal.clients.company && (
+                <p className="text-sm text-muted-foreground">{proposal.clients.company}</p>
+              )}
+              {proposal.clients.email && (
+                <p className="text-sm text-muted-foreground">{proposal.clients.email}</p>
+              )}
             </CardContent>
           </Card>
         )}
 
+        {/* Description */}
+        {proposal.description && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">{t('description')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+                {proposal.description}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Items */}
         <Card>
           <CardHeader><CardTitle>{t('items')}</CardTitle></CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t('table.description')}</TableHead>
-                  <TableHead className="text-right">{t('table.qty')}</TableHead>
-                  <TableHead className="text-right">{t('table.unitPrice')}</TableHead>
-                  <TableHead className="text-right">{t('table.total')}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedItems.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell className="text-right">{item.quantity}</TableCell>
-                    <TableCell className="text-right">{formatCurrency(Number(item.unit_price), proposal.currency)}</TableCell>
-                    <TableCell className="text-right">{formatCurrency(Number(item.total), proposal.currency)}</TableCell>
+            <div className="overflow-x-auto -mx-6 sm:mx-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/40 hover:bg-muted/40">
+                    <TableHead className="text-xs font-semibold uppercase tracking-wider">{t('table.description')}</TableHead>
+                    <TableHead className="text-right text-xs font-semibold uppercase tracking-wider">{t('table.qty')}</TableHead>
+                    <TableHead className="text-right text-xs font-semibold uppercase tracking-wider">{t('table.unitPrice')}</TableHead>
+                    <TableHead className="text-right text-xs font-semibold uppercase tracking-wider">{t('table.total')}</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <div className="flex justify-end pt-4 border-t mt-4">
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">{t('totalLabel')}</p>
-                <p className="text-3xl font-bold" style={{ color: accent }}>
+                </TableHeader>
+                <TableBody>
+                  {sortedItems.map((item: any) => (
+                    <TableRow key={item.id}>
+                      <TableCell className="font-medium">{item.description}</TableCell>
+                      <TableCell className="text-right tabular-nums">{item.quantity}</TableCell>
+                      <TableCell className="text-right tabular-nums">{formatCurrency(Number(item.unit_price), proposal.currency)}</TableCell>
+                      <TableCell className="text-right tabular-nums font-medium">{formatCurrency(Number(item.total), proposal.currency)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Total box */}
+            <div className="flex justify-end pt-6">
+              <div
+                className="rounded-lg px-6 py-4 text-center"
+                style={{ backgroundColor: `${accent}15`, border: `1px solid ${accent}40` }}
+              >
+                <p
+                  className="text-[11px] font-semibold uppercase tracking-wider mb-1"
+                  style={{ color: accent }}
+                >
+                  {t('totalLabel')}
+                </p>
+                <p className="text-3xl font-bold tabular-nums" style={{ color: accent }}>
                   {formatCurrency(Number(proposal.total_amount), proposal.currency)}
                 </p>
               </div>
@@ -174,7 +209,36 @@ export default function PublicProposal() {
           </CardContent>
         </Card>
 
-        <div className="flex gap-3 justify-center pt-4 flex-wrap">
+        {/* Notes */}
+        {notes && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">{t('notes')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+                {notes}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Terms */}
+        {terms && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">{t('terms')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+                {terms}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Actions */}
+        <div className="flex gap-3 justify-center pt-2 flex-wrap">
           {!isFinal && (
             <Button
               size="lg"

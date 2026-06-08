@@ -24,6 +24,8 @@ export type Proposal = {
   public_code: string;
   title: string;
   description: string | null;
+  notes: string | null;
+  terms: string | null;
   currency: string;
   total_amount: number;
   status_id: string | null;
@@ -38,6 +40,8 @@ export type ProposalFormData = {
   client_id?: string | null;
   title: string;
   description?: string;
+  notes?: string;
+  terms?: string;
   currency: string;
   valid_until?: string | null;
   status_id?: string | null;
@@ -138,6 +142,8 @@ export function useCreateProposal() {
           client_id: data.client_id || null,
           title: data.title,
           description: data.description || null,
+          notes: data.notes || null,
+          terms: data.terms || null,
           currency: data.currency,
           total_amount: totalAmount,
           status_id: data.status_id || null,
@@ -196,6 +202,8 @@ export function useUpdateProposal() {
           client_id: data.client_id || null,
           title: data.title,
           description: data.description || null,
+          notes: data.notes || null,
+          terms: data.terms || null,
           currency: data.currency,
           total_amount: totalAmount,
           status_id: data.status_id || null,
@@ -312,6 +320,8 @@ export function useDuplicateProposal() {
           client_id: src.client_id,
           title: `${src.title} (cópia)`,
           description: src.description,
+          notes: src.notes,
+          terms: src.terms,
           currency: src.currency,
           total_amount: src.total_amount,
           status_id: initial?.id ?? null,

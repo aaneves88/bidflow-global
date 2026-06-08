@@ -11,6 +11,11 @@
   "form": {
     "newTitle": "New Proposal", "editTitle": "Edit Proposal",
     "details": "Details", "title": "Title", "description": "Description",
+    "notesAndTerms": "Notes and terms",
+    "notes": "Notes",
+    "notesPlaceholder": "Additional details about scope, deliverables, or anything relevant to the client. Appears on the PDF and public link.",
+    "terms": "Terms and conditions",
+    "termsPlaceholder": "e.g. 50% upfront, 50% on delivery. Proposal valid for 30 days. 90-day warranty after completion.",
     "client": "Client", "noClient": "No client", "selectClient": "Select client",
     "status": "Status", "selectStatus": "Select status",
     "currency": "Currency", "validUntil": "Valid Until",
@@ -23,7 +28,9 @@
   "view": {
     "copyLink": "Copy link", "sendWhatsapp": "Send via WhatsApp", "downloadPdf": "Download PDF",
     "edit": "Edit", "changeStatus": "Change status",
-    "validUntil": "Valid until {{date}}", "items": "Line Items", "history": "Status History",
+    "validUntil": "Valid until {{date}}", "items": "Line Items",
+    "notes": "Notes", "terms": "Terms and conditions",
+    "history": "Status History",
     "viewsTitle": "Views",
     "viewsCount_one": "{{count}} view", "viewsCount_other": "{{count}} views",
     "neverViewed": "Not viewed yet",
@@ -44,7 +51,9 @@
     "whatsappMessage": "Hi {{clientName}}, here's the proposal \"{{title}}\" for {{total}}.\nYou can view and accept it here: {{url}}\nLet me know if you have any questions."
   },
   "pdf": {
-    "proposalFor": "Client", "description": "Description", "items": "Items",
+    "proposalFor": "Client", "description": "Description",
+    "notes": "Notes", "terms": "Terms and conditions",
+    "items": "Items",
     "qty": "Qty", "unitPrice": "Unit Price", "total": "Total", "grandTotal": "Grand Total",
     "validUntil": "Valid until", "status": "Status",
     "publicLink": "Proposal link", "generatedAt": "Generated on"

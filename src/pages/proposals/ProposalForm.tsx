@@ -45,6 +45,8 @@ export default function ProposalForm() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [notes, setNotes] = useState('');
+  const [terms, setTerms] = useState('');
   const [clientId, setClientId] = useState<string>('none');
   const [currency, setCurrency] = useState('BRL');
   const [statusId, setStatusId] = useState<string>('');
@@ -55,6 +57,8 @@ export default function ProposalForm() {
     if (proposal && isEditing) {
       setTitle(proposal.title);
       setDescription(proposal.description || '');
+      setNotes((proposal as any).notes || '');
+      setTerms((proposal as any).terms || '');
       setClientId(proposal.client_id || 'none');
       setCurrency(proposal.currency);
       setStatusId(proposal.status_id || '');
@@ -100,7 +104,7 @@ export default function ProposalForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
-      title, description,
+      title, description, notes, terms,
       client_id: clientId === 'none' ? null : clientId,
       currency, status_id: statusId || null,
       valid_until: validUntil || null,
@@ -244,6 +248,33 @@ export default function ProposalForm() {
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader><CardTitle>{t('form.notesAndTerms')}</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="notes">{t('form.notes')}</Label>
+              <Textarea
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={4}
+                placeholder={t('form.notesPlaceholder')}
+              />
+            </div>
+            <div>
+              <Label htmlFor="terms">{t('form.terms')}</Label>
+              <Textarea
+                id="terms"
+                value={terms}
+                onChange={(e) => setTerms(e.target.value)}
+                rows={5}
+                placeholder={t('form.termsPlaceholder')}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => navigate('/proposals')}>{t('common:actions.cancel')}</Button>

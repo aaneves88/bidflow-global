@@ -101,6 +101,8 @@ export default function ProposalView() {
       labels: {
         proposalFor: t('pdf.proposalFor'),
         description: t('pdf.description'),
+        notes: t('pdf.notes'),
+        terms: t('pdf.terms'),
         items: t('pdf.items'),
         qty: t('pdf.qty'),
         unitPrice: t('pdf.unitPrice'),
@@ -222,6 +224,24 @@ export default function ProposalView() {
           </div>
         </CardContent>
       </Card>
+
+      {(proposal as any).notes && (
+        <Card>
+          <CardHeader><CardTitle>{t('view.notes')}</CardTitle></CardHeader>
+          <CardContent>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed">{(proposal as any).notes}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {(proposal as any).terms && (
+        <Card>
+          <CardHeader><CardTitle>{t('view.terms')}</CardTitle></CardHeader>
+          <CardContent>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed">{(proposal as any).terms}</p>
+          </CardContent>
+        </Card>
+      )}
 
       {views && (
         <Card>
