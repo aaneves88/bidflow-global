@@ -45,6 +45,8 @@ export default function ProposalForm() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [notes, setNotes] = useState('');
+  const [terms, setTerms] = useState('');
   const [clientId, setClientId] = useState<string>('none');
   const [currency, setCurrency] = useState('BRL');
   const [statusId, setStatusId] = useState<string>('');
@@ -55,6 +57,8 @@ export default function ProposalForm() {
     if (proposal && isEditing) {
       setTitle(proposal.title);
       setDescription(proposal.description || '');
+      setNotes((proposal as any).notes || '');
+      setTerms((proposal as any).terms || '');
       setClientId(proposal.client_id || 'none');
       setCurrency(proposal.currency);
       setStatusId(proposal.status_id || '');
