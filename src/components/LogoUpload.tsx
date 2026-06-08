@@ -62,7 +62,7 @@ export function LogoUpload({ value, onChange, maxSize = 384, maxKb = 600 }: Prop
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <div className="h-16 w-16 rounded-md border bg-muted flex items-center justify-center overflow-hidden shrink-0">
           {value ? (
             <img src={value} alt="Logo preview" className="h-full w-full object-contain" />
