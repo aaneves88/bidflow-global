@@ -9,6 +9,10 @@
   "items": "Items",
   "table": { "description": "Description", "qty": "Qty", "unitPrice": "Unit Price", "total": "Total" },
   "totalLabel": "Total",
+  "client": "Client",
+  "description": "Description",
+  "notes": "Notes",
+  "terms": "Terms and conditions",
   "actions": { "accept": "Accept Proposal", "signAndAccept": "Sign and accept", "whatsapp": "Contact via WhatsApp", "downloadPdf": "Download PDF" },
   "accepted": "Proposal Accepted",
   "messages": {
