@@ -42,6 +42,7 @@ export default function ProposalView() {
   const { getSetting } = useAppSettings('general');
   const branding = useBranding();
   const updateStatus = useUpdateProposalStatus();
+  const publicBase = usePublicAppUrl();
 
   const [closeOpen, setCloseOpen] = useState(false);
   const [pendingStatusId, setPendingStatusId] = useState<string>('');
