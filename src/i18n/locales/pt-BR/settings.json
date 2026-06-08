@@ -10,7 +10,9 @@
     "companyName": "Nome da empresa",
     "companyPlaceholder": "Sua empresa",
     "defaultCurrency": "Moeda padrão",
-    "language": "Idioma da interface"
+    "language": "Idioma da interface",
+    "publicAppUrl": "URL pública do app",
+    "publicAppUrlHelp": "Domínio usado nos links de propostas enviados aos clientes (ex: https://suamarca.com). Se vazio, usa a URL atual do navegador — o que não funciona em links de pré-visualização."
   },
   "integrations": {
     "title": "Integrações",

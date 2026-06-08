@@ -4,7 +4,9 @@
   "integrationsCta": "Manage integrations in Admin → Integrations",
   "general": {
     "title": "General Settings", "companyName": "Company Name", "companyPlaceholder": "Your Company",
-    "defaultCurrency": "Default Currency", "language": "Interface language"
+    "defaultCurrency": "Default Currency", "language": "Interface language",
+    "publicAppUrl": "Public app URL",
+    "publicAppUrlHelp": "Domain used for proposal links shared with clients (e.g. https://yourbrand.com). If empty, falls back to the current browser URL — which won't work from preview links."
   },
   "integrations": {
     "title": "Integrations", "stripe": "Stripe Payments",

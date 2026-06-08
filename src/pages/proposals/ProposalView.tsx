@@ -18,6 +18,7 @@ import {
 import { useProposalViews } from '@/hooks/useProposalViews';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useBranding } from '@/hooks/useBranding';
+import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
@@ -41,6 +42,7 @@ export default function ProposalView() {
   const { getSetting } = useAppSettings('general');
   const branding = useBranding();
   const updateStatus = useUpdateProposalStatus();
+  const publicBase = usePublicAppUrl();
 
   const [closeOpen, setCloseOpen] = useState(false);
   const [pendingStatusId, setPendingStatusId] = useState<string>('');
@@ -50,7 +52,7 @@ export default function ProposalView() {
   if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
   if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
 
-  const publicUrl = `${window.location.origin}/p/${proposal.public_code}`;
+  const publicUrl = buildPublicProposalUrl(publicBase, proposal.public_code);
   const copyLink = () => {
     navigator.clipboard.writeText(publicUrl);
     toast({ title: t('messages.linkCopied') });
@@ -93,7 +95,7 @@ export default function ProposalView() {
     const companyName = (getSetting('company_name') as string) || branding.companyName || undefined;
     generateProposalPdf(proposal as any, items as any[], {
       companyName,
-      publicUrlBase: window.location.origin,
+      publicUrlBase: publicBase,
       logoDataUrl: branding.logoUrl,
       primaryColor: branding.primaryColor,
       secondaryColor: branding.secondaryColor,
