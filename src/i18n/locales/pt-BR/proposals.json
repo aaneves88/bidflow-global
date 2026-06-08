@@ -85,6 +85,8 @@
   "pdf": {
     "proposalFor": "Cliente",
     "description": "Descrição",
+    "notes": "Observações",
+    "terms": "Termos e condições",
     "items": "Itens",
     "qty": "Qtd",
     "unitPrice": "Valor unit.",
