@@ -14,6 +14,10 @@
     "total": "Total"
   },
   "totalLabel": "Total",
+  "client": "Cliente",
+  "description": "Descrição",
+  "notes": "Observações",
+  "terms": "Termos e condições",
   "actions": {
     "accept": "Aceitar proposta",
     "signAndAccept": "Assinar e aceitar",
