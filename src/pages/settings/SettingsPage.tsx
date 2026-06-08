@@ -18,6 +18,7 @@ function GeneralTab() {
   const [companyName, setCompanyName] = useState('');
   const [currency, setCurrency] = useState('BRL');
   const [language, setLanguage] = useState(i18n.language);
+  const [publicAppUrl, setPublicAppUrl] = useState('');
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function GeneralTab() {
       setCompanyName((getSetting('company_name') as string) || '');
       setCurrency((getSetting('default_currency') as string) || 'BRL');
       setLanguage((getSetting('language') as string) || i18n.language);
+      setPublicAppUrl((getSetting('public_app_url') as string) || '');
       setHydrated(true);
     }
   }, [isLoading, hydrated, getSetting, i18n.language]);
@@ -34,6 +36,7 @@ function GeneralTab() {
       await upsert.mutateAsync({ key: 'company_name', value: companyName, category: 'general' });
       await upsert.mutateAsync({ key: 'default_currency', value: currency, category: 'general' });
       await upsert.mutateAsync({ key: 'language', value: language, category: 'general' });
+      await upsert.mutateAsync({ key: 'public_app_url', value: publicAppUrl.replace(/\/+$/, ''), category: 'general' });
       i18n.changeLanguage(language);
       toast({ title: t('messages.saved') });
     } catch (e: any) {
@@ -48,6 +51,15 @@ function GeneralTab() {
         <div>
           <Label>{t('general.companyName')}</Label>
           <Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder={t('general.companyPlaceholder')} />
+        </div>
+        <div>
+          <Label>{t('general.publicAppUrl')}</Label>
+          <Input
+            value={publicAppUrl}
+            onChange={(e) => setPublicAppUrl(e.target.value)}
+            placeholder="https://suamarca.com"
+          />
+          <p className="text-xs text-muted-foreground mt-1">{t('general.publicAppUrlHelp')}</p>
         </div>
         <div>
           <Label>{t('general.defaultCurrency')}</Label>
