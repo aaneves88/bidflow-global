@@ -52,7 +52,7 @@ export default function ProposalView() {
   if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
   if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
 
-  const publicUrl = `${window.location.origin}/p/${proposal.public_code}`;
+  const publicUrl = buildPublicProposalUrl(publicBase, proposal.public_code);
   const copyLink = () => {
     navigator.clipboard.writeText(publicUrl);
     toast({ title: t('messages.linkCopied') });
