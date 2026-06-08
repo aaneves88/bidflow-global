@@ -249,6 +249,33 @@ export default function ProposalForm() {
           </CardContent>
         </Card>
 
+        <Card>
+          <CardHeader><CardTitle>{t('form.notesAndTerms')}</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="notes">{t('form.notes')}</Label>
+              <Textarea
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={4}
+                placeholder={t('form.notesPlaceholder')}
+              />
+            </div>
+            <div>
+              <Label htmlFor="terms">{t('form.terms')}</Label>
+              <Textarea
+                id="terms"
+                value={terms}
+                onChange={(e) => setTerms(e.target.value)}
+                rows={5}
+                placeholder={t('form.termsPlaceholder')}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => navigate('/proposals')}>{t('common:actions.cancel')}</Button>
           <Button type="submit" disabled={create.isPending || update.isPending}>
