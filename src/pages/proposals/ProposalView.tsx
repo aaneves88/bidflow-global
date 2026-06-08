@@ -95,7 +95,7 @@ export default function ProposalView() {
     const companyName = (getSetting('company_name') as string) || branding.companyName || undefined;
     generateProposalPdf(proposal as any, items as any[], {
       companyName,
-      publicUrlBase: window.location.origin,
+      publicUrlBase: publicBase,
       logoDataUrl: branding.logoUrl,
       primaryColor: branding.primaryColor,
       secondaryColor: branding.secondaryColor,
