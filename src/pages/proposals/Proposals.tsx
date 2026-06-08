@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useProposals, useDeleteProposal, useDuplicateProposal } from '@/hooks/useProposals';
+import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { usePlanLimits } from '@/hooks/usePlanLimits';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
