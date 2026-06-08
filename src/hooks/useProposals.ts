@@ -202,6 +202,8 @@ export function useUpdateProposal() {
           client_id: data.client_id || null,
           title: data.title,
           description: data.description || null,
+          notes: data.notes || null,
+          terms: data.terms || null,
           currency: data.currency,
           total_amount: totalAmount,
           status_id: data.status_id || null,
