@@ -51,5 +51,10 @@
   },
   "share": {
     "whatsappText": "Sobre a proposta: {{title}}"
+  },
+  "poweredBy": "Feito com Orca",
+  "freeOwner": {
+    "tagline": "Proposta criada com Orca",
+    "poweredBy": "Crie suas propostas grátis em Orca"
   }
 }
