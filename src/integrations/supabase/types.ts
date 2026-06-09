@@ -154,28 +154,43 @@ export type Database = {
       }
       profiles: {
         Row: {
+          accent_color: string | null
           avatar_url: string | null
+          company_name: string | null
           created_at: string
           email: string | null
           full_name: string | null
           id: string
+          logo_url: string | null
           onboarding_complete: boolean
+          primary_color: string | null
+          secondary_color: string | null
         }
         Insert: {
+          accent_color?: string | null
           avatar_url?: string | null
+          company_name?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id: string
+          logo_url?: string | null
           onboarding_complete?: boolean
+          primary_color?: string | null
+          secondary_color?: string | null
         }
         Update: {
+          accent_color?: string | null
           avatar_url?: string | null
+          company_name?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
+          logo_url?: string | null
           onboarding_complete?: boolean
+          primary_color?: string | null
+          secondary_color?: string | null
         }
         Relationships: []
       }
@@ -503,6 +518,17 @@ export type Database = {
     }
     Functions: {
       accept_proposal: { Args: { p_code: string }; Returns: undefined }
+      get_proposal_branding: {
+        Args: { p_code: string }
+        Returns: {
+          accent_color: string
+          company_name: string
+          has_active_plan: boolean
+          logo_url: string
+          primary_color: string
+          secondary_color: string
+        }[]
+      }
       get_proposal_signature: {
         Args: { p_code: string }
         Returns: {
