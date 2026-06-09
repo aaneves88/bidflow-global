@@ -1,85 +1,150 @@
-## Onda 1.5 — PDF híbrido (canvas + texto)
 
-Problemas no PDF atual (confirmados pelo upload):
-- Título "Consultoria (cópia)" sobrepõe "Statematch Global" no topo
-- Cabeçalho da tabela com letras espaçadas ("D escrição", "Q td", "V a l o r u n i t.")
-- "Total geral" sai como texto verde corrido em vez da caixa accent prevista
-- Sem bloco do cliente, sem "Powered by Orca" visível, página vazia abaixo da tabela
+# Roadmap até o lançamento comercial da Orca
 
-### Abordagem escolhida: híbrido
+## Visão geral
 
-**Hero/cabeçalho via html2canvas** (logo grande, nome da empresa, título, status, validade, bloco cliente, total destacado) — fica visualmente idêntico à página pública, com a marca do usuário aplicada.
-
-**Tabela + descrição + notas + termos em texto nativo jsPDF** — selecionável, copiável, pesquisável, leve.
-
-### Implementação
-
-1. Criar `src/components/pdf/PdfHero.tsx` — componente React off-screen renderizado num portal invisível (posição absoluta, -9999px), com:
-   - Faixa superior na cor primária da marca
-   - Logo grande + nome da empresa (ou logo Orca + "Orca" para free)
-   - Título da proposta, status, validade, data
-   - Card do cliente (nome, empresa, email, telefone)
-   - Card "Total" destacado com a cor accent
-   - Para free: faixa "Criada com Orca" no topo em vez do logo do cliente
-
-2. Reescrever `src/lib/proposalPdf.ts`:
-   - Receber `heroElement: HTMLElement` (renderizado pelo chamador)
-   - `html2canvas(heroElement, { scale: 2, useCORS: true, backgroundColor: '#fff' })`
-   - `addImage` do hero no topo
-   - Continuar com `autoTable` para itens — corrigir kerning forçando `font: 'helvetica'` no `styles` (o espaçamento estranho vem de fallback para fonte sem métricas)
-   - Caixa de total nativa (corrigir o bug de medida) ou pular pois já está no hero
-   - Descrição/Notas/Termos com `splitTextToSize` + paginação que já existe
-   - Watermark "Orca" diagonal no free continua igual
-   - Rodapé "Feito com Orca" pequeno em todas as páginas (não-Business)
-
-3. Atualizar `ProposalView.tsx` e `PublicProposal.tsx`:
-   - Renderizar `<PdfHero ref={...} />` invisível
-   - Passar o ref ao gerador
-   - Aguardar logo carregar antes de capturar (`img.decode()`)
-
-### Por que não jsPDF puro
-A caixa accent e o cabeçalho ficam frágeis em jsPDF (já quebraram). Canvas para o hero garante fidelidade visual à marca; texto nativo na tabela mantém PDF leve e selecionável onde importa.
+Vamos organizar tudo em **ondas numeradas** com versão semântica (v0.x → v1.0 no lançamento). Cada onda gera um **release documentado** em `docs/releases/` com changelog, screenshots e notas para stores/marketing.
 
 ---
 
-## Onda 2 — Auditoria de Segurança
+## Sistema de Releases (cria primeiro, usa em todas as ondas)
 
-Entregue como **relatório em chat** + correções aplicadas onde for crítico.
+**Estrutura nova:**
+```
+docs/
+├── ROADMAP.md                    ← Visão geral viva, status de cada onda
+├── releases/
+│   ├── README.md                 ← Índice de releases
+│   ├── v0.3.0-pdf-hibrido.md
+│   ├── v0.4.0-seguranca.md
+│   └── (próximas)
+└── marketing/
+    ├── app-description-pt.md     ← Texto curto + longo para stores/landing
+    ├── app-description-en.md
+    ├── features-list.md          ← Lista de features para landing/comparativo
+    └── screenshots/              ← Capturas oficiais para divulgação
+```
 
-### 2.1 Banco — RLS e GRANTs
-- Rodar `supabase--linter` e anexar resultado
-- Para cada tabela (`app_settings`, `clients`, `plans`, `profiles`, `proposal_items`, `proposal_signatures`, `proposal_status_history`, `proposal_statuses`, `proposal_views`, `proposals`, `user_plans`, `user_roles`):
-  - Listar políticas via `supabase--read_query`
-  - Verificar: RLS habilitado, GRANT correto por role, sem `anon` desnecessário
-  - Risco especial: `get_proposal_branding` expõe email/telefone? (não — só branding, OK). `proposal_views` permite tracking anônimo? (esperado)
-- SECURITY DEFINER: revisar `handle_new_user`, `accept_proposal`, `sign_proposal`, `get_proposal_branding`, `get_proposal_signature`, `has_role` — confirmar `search_path = public` (já estão) e que não vazam dados
+**Cada release** segue template fixo:
+- Versão, data, codinome
+- Resumo (1 parágrafo)
+- Novidades para usuário final (linguagem de marketing)
+- Mudanças técnicas (changelog)
+- Breaking changes / migrações
+- Métricas/limites afetados
 
-### 2.2 Edge functions
-- `stripe-webhook` (`verify_jwt = false`): confirmar validação de assinatura via `STRIPE_WEBHOOK_SECRET`, CORS, sem retorno de dados sensíveis em erro
-- `stripe-create-checkout`: validar JWT do usuário, validar `price_id` contra tabela `plans` (não confiar no client), CORS
-
-### 2.3 Auth hardening
-- Ativar **HIBP** (senhas vazadas) via `supabase--configure_auth`
-- Confirmar `external_anonymous_users_enabled = false`
-- Confirmar `auto_confirm_email` conforme intenção (hoje provavelmente true para facilitar onboarding — decidir)
-- Documentar política de senha atual
-
-### 2.4 Storage e dados sensíveis
-- Sem buckets hoje → quando subir upload de logo, criar bucket `branding` público com path por user_id e policy de write restrita ao dono
-- Revisar RPCs que retornam dados de outros usuários (só `get_proposal_branding` e `get_proposal_signature` — ambos limitados ao mínimo necessário, OK)
-- Verificar que `clients.email` / `clients.phone` nunca vazam em RPCs públicas
-
-### 2.5 Entregáveis
-- Tabela "Achados" com severidade (crítico / médio / baixo / informativo)
-- Correções aplicadas em migration única para findings críticos
-- Atualização da `security--update_memory` com postura aceita
-- Lista do que ficou em aberto para você decidir
+Também: bump de `version` no `package.json` a cada release.
 
 ---
 
-## Ordem de execução
-1. PDF híbrido (Onda 1.5) — você vê resultado visual rápido
-2. Auditoria Onda 2 — relatório + correções críticas em uma migration
+## Onda 3 — E-mails transacionais  `v0.5.0`
 
-## Fora de escopo nesta rodada
-- Onda 3 (emails transacionais) e Onda 4 (admin de verdade) — próximas iterações
+- Configurar domínio `notify.orca-mento.app` (Lovable Emails nativo)
+- Setup de infra de e-mail (filas, cron, logs)
+- Templates auth (signup, recuperação, magic link, etc.) com branding Orca
+- Templates transacionais:
+  - Proposta enviada (cliente recebe link)
+  - Proposta visualizada (você recebe notificação)
+  - Proposta aceita / assinada
+  - Boas-vindas pós-signup
+  - Aviso de limite do plano Free
+- Editor de templates no Admin (assunto + corpo HTML, com preview)
+- Página de unsubscribe branded
+
+## Onda 4 — Painel Administrativo de verdade  `v0.6.0`
+
+- Layout dedicado `/admin` com sidebar própria (só admins)
+- **Dashboard**: MRR estimado, usuários ativos, propostas/mês, conversão Free→Pago, churn
+- **Usuários**: lista, busca, ver perfil, alterar plano manualmente, suspender, virar admin
+- **Planos**: editar limites/preços (já existe parcial — refinar UI)
+- **Templates de e-mail**: editor (Onda 3)
+- **Settings globais**: branding default, moeda, integrações
+- **Logs**: e-mails enviados, webhooks, erros
+- **Feature flags**: ligar/desligar funcionalidades sem deploy
+
+## Onda 5 — Pagamentos (Stripe)  `v0.7.0`
+
+- Integração Stripe (Lovable Payments nativo)
+- Produtos Pro e Business no Stripe (mensal + anual)
+- Checkout hospedado para upgrade
+- Webhook para sincronizar `user_plans` (assinatura ativa, cancelada, inadimplente)
+- Portal do cliente (cancelar, trocar plano, atualizar cartão)
+- Banner de "trial acabando" / "pagamento falhou"
+- Cupons / códigos promocionais (admin)
+- Suporte a PIX (via Stripe Brasil) se disponível
+
+## Onda 6 — LGPD + Conformidade legal  `v0.8.0`
+
+- Páginas públicas: `/termos`, `/privacidade`, `/cookies`
+- Geração das minutas (PT-BR) — focadas em CRM/SaaS B2B
+- Checkbox de aceite obrigatório no signup, com registro em `user_consents` (timestamp + IP + versão)
+- Banner de cookies (apenas analíticos opcionais)
+- Página `/conta/dados` — exportar todos os dados (LGPD art. 18) e deletar conta
+- Edge function `delete-user-account` (cascade + anonimização)
+
+## Onda 7 — Landing institucional `orca-mento.app`  `v0.9.0`
+
+- Site público em `/` (separado da app que fica em `/app/*` ou subdomínio)
+- Seções: hero, problema/solução, features, pricing, depoimentos (placeholders), FAQ, CTA
+- Comparativo Free vs Pro vs Business
+- Blog estático (markdown) — opcional, ou só estrutura
+- SEO completo: meta tags por rota (react-helmet-async), sitemap.xml dinâmico, robots.txt, JSON-LD Organization + Product
+- OG images geradas (1 por seção principal)
+- Performance: lazy load, imagens otimizadas
+- Multi-idioma (PT-BR + EN) usando i18next já configurado
+
+## Onda 8 — Onboarding + Polish pré-lançamento  `v0.10.0`
+
+- Empty states bonitos em todas as listas (clientes, propostas)
+- Checklist de primeiros passos no dashboard (criar 1º cliente → 1ª proposta → enviar)
+- Tooltips e dicas contextuais
+- Confirmação obrigatória de e-mail no signup (desligar auto-confirm)
+- Testes em mobile real (iOS Safari + Android Chrome)
+- Revisão de copy (todos os textos PT-BR)
+- Acessibilidade básica (contraste, navegação por teclado, alt texts)
+
+## Onda 9 — Observabilidade + Lançamento  `v1.0.0`
+
+- Sentry (frontend + edge functions) — erros + performance
+- Analytics: PostHog ou Plausible (privacy-friendly, LGPD compliant)
+- Eventos chave trackados: signup, criar proposta, enviar, aceitar, upgrade
+- Status page simples (`status.orca-mento.app`)
+- Canal de suporte: e-mail `suporte@orca-mento.app` + widget de feedback no app
+- Material de marketing finalizado (descrições, screenshots, vídeo demo de 60s)
+- **Release v1.0.0** + anúncio
+
+---
+
+## Resposta direta
+
+**Onda 3, 4, 5 + as ondas 6, 7, 8, 9** — esse é o caminho completo até lançamento comercial seguro e profissional. Sem 6-9 dá pra lançar tecnicamente, mas seria amador e arriscado juridicamente.
+
+**Estimativa de execução**: cada onda é entregável em 1-3 interações nossas. Total: ~15-20 ciclos de trabalho.
+
+---
+
+## Ordem de execução proposta
+
+1. **Setup de releases** (docs/ROADMAP.md + template + retroativar v0.1-v0.4 das ondas já feitas)
+2. Onda 3 (e-mails) — desbloqueia recuperação de senha e notificações
+3. Onda 4 (admin) — você precisa pra operar
+4. Onda 5 (pagamentos) — desbloqueia monetização
+5. Onda 6 (LGPD) — obrigatório antes de aceitar pagamento de público
+6. Onda 7 (landing) — pode ser feita em paralelo se quiser
+7. Onda 8 (polish)
+8. Onda 9 (observabilidade + lançamento)
+
+---
+
+## Notas técnicas
+
+- **Releases retroativas**: vou criar v0.1.0 (CRM base), v0.2.0 (i18n + branding), v0.3.0 (planos + watermark), v0.4.0 (PDF híbrido + segurança) baseando-se no histórico do projeto.
+- **Memória**: adicionar `mem://features/releases-process` para que toda futura mudança gere/atualize release.
+- **package.json**: bump de versão a cada onda concluída.
+- **Branding**: tudo PT-BR primeiro, EN como fallback (regra existente).
+
+---
+
+## Próximo passo se aprovar
+
+Começo pelo **Sistema de Releases + retroativar v0.1-v0.4**, depois entro direto na **Onda 3 (e-mails)** na mesma resposta.
