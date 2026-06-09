@@ -4,9 +4,10 @@
   "integrationsCta": "Manage integrations in Admin → Integrations",
   "general": {
     "title": "General Settings", "companyName": "Company Name", "companyPlaceholder": "Your Company",
+    "companyNameHelp": "Appears in the header and footer of proposals sent to your clients.",
     "defaultCurrency": "Default Currency", "language": "Interface language",
     "publicAppUrl": "Public app URL",
-    "publicAppUrlHelp": "Domain used for proposal links shared with clients (e.g. https://yourbrand.com). If empty, falls back to the current browser URL — which won't work from preview links."
+    "publicAppUrlHelp": "Domain used for proposal links shared with clients. Admin-only setting."
   },
   "integrations": {
     "title": "Integrations", "stripe": "Stripe Payments",
@@ -16,7 +17,7 @@
   },
   "branding": {
     "title": "Branding",
-    "subtitle": "These appear on your public proposal pages and PDFs sent to customers.",
+    "subtitle": "These appear on your public proposal pages and PDFs sent to your clients.",
     "logo": "Company logo",
     "primaryColor": "Primary color",
     "primaryHelp": "Used for the proposal header bar, accept button and total.",
@@ -24,7 +25,10 @@
     "secondaryHelp": "Used for text accents and PDF footer.",
     "accentColor": "Accent color",
     "accentHelp": "Used to highlight the total amount and status badges.",
-    "preview": "Preview"
+    "preview": "Preview",
+    "previewFreeNote": "On the free plan, proposals are sent with Orca's branding. Your settings are saved for when you upgrade.",
+    "freeLocked": "Custom branding is a paid feature — free-plan proposals use Orca's branding.",
+    "freeLockedCta": "View plans"
   },
   "messages": { "saved": "Settings saved", "error": "Error saving settings" }
 }

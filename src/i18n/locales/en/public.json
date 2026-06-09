@@ -35,5 +35,10 @@
     "signed": "Proposal signed",
     "signedOn": "Signed on {{date}}"
   },
-  "share": { "whatsappText": "Regarding proposal: {{title}}" }
+  "share": { "whatsappText": "Regarding proposal: {{title}}" },
+  "poweredBy": "Made with Orca",
+  "freeOwner": {
+    "tagline": "Proposal created with Orca",
+    "poweredBy": "Create your proposals free on Orca"
+  }
 }
