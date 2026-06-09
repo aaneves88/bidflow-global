@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import orcaMark from '@/assets/brand/orca-mark.png';
 
 export default function MobileEntry() {
   const { t } = useTranslation('auth');
@@ -73,8 +74,8 @@ export default function MobileEntry() {
     <div className="min-h-[100dvh] flex flex-col bg-background px-6 py-8">
       <div className="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full">
         <div className="text-center mb-10">
-          <div className="mx-auto mb-5 h-16 w-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
-            <span className="text-primary-foreground font-bold text-2xl tracking-tight">CF</span>
+          <div className="mx-auto mb-5 h-16 w-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg p-2">
+            <img src={orcaMark} alt="Orca" className="h-full w-full object-contain" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Orca</h1>
           <p className="text-sm text-muted-foreground mt-1">{t('entry.tagline')}</p>
