@@ -42,6 +42,7 @@ export default function ProposalView() {
   const { data: views } = useProposalViews(id);
   const { getSetting } = useAppSettings('general');
   const branding = useBranding();
+  const canBrand = useCanCustomBrand();
   const updateStatus = useUpdateProposalStatus();
   const publicBase = usePublicAppUrl();
 
