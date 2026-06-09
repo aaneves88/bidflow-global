@@ -198,26 +198,28 @@ export default function ProposalView() {
       <Card>
         <CardHeader><CardTitle>{t('view.items')}</CardTitle></CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('form.itemDescription')}</TableHead>
-                <TableHead className="text-right">{t('form.qty')}</TableHead>
-                <TableHead className="text-right">{t('form.unitPrice')}</TableHead>
-                <TableHead className="text-right">{t('form.itemTotal')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items?.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.description}</TableCell>
-                  <TableCell className="text-right">{item.quantity}</TableCell>
-                  <TableCell className="text-right">{formatCurrency(Number(item.unit_price), proposal.currency)}</TableCell>
-                  <TableCell className="text-right">{formatCurrency(Number(item.total), proposal.currency)}</TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t('form.itemDescription')}</TableHead>
+                  <TableHead className="text-right">{t('form.qty')}</TableHead>
+                  <TableHead className="text-right">{t('form.unitPrice')}</TableHead>
+                  <TableHead className="text-right">{t('form.itemTotal')}</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {items?.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.description}</TableCell>
+                    <TableCell className="text-right">{item.quantity}</TableCell>
+                    <TableCell className="text-right">{formatCurrency(Number(item.unit_price), proposal.currency)}</TableCell>
+                    <TableCell className="text-right">{formatCurrency(Number(item.total), proposal.currency)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           <div className="flex justify-end pt-4 border-t mt-4">
             <div className="text-right">
               <p className="text-sm text-muted-foreground">{t('form.grandTotal')}</p>
