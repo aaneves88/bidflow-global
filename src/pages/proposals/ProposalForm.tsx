@@ -211,27 +211,29 @@ export default function ProposalForm() {
           </CardHeader>
           <CardContent className="space-y-3">
             {items.map((item, idx) => (
-              <div key={idx} className="grid grid-cols-12 gap-2 items-end">
-                <div className="col-span-5">
+              <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
+                <div className="sm:col-span-5">
                   {idx === 0 && <Label className="text-xs">{t('form.itemDescription')}</Label>}
                   <Input placeholder={t('form.itemDescriptionPlaceholder')} value={item.description}
                     onChange={(e) => updateItem(idx, 'description', e.target.value)} />
                 </div>
-                <div className="col-span-2">
-                  {idx === 0 && <Label className="text-xs">{t('form.qty')}</Label>}
-                  <Input type="number" min="0" step="any" value={item.quantity}
-                    onChange={(e) => updateItem(idx, 'quantity', Number(e.target.value))} />
+                <div className="grid grid-cols-3 sm:col-span-6 gap-2">
+                  <div>
+                    {idx === 0 && <Label className="text-xs">{t('form.qty')}</Label>}
+                    <Input type="number" min="0" step="any" value={item.quantity}
+                      onChange={(e) => updateItem(idx, 'quantity', Number(e.target.value))} />
+                  </div>
+                  <div>
+                    {idx === 0 && <Label className="text-xs">{t('form.unitPrice')}</Label>}
+                    <Input type="number" min="0" step="0.01" value={item.unit_price}
+                      onChange={(e) => updateItem(idx, 'unit_price', Number(e.target.value))} />
+                  </div>
+                  <div>
+                    {idx === 0 && <Label className="text-xs">{t('form.itemTotal')}</Label>}
+                    <Input value={formatCurrency(item.total, currency)} readOnly className="bg-muted" />
+                  </div>
                 </div>
-                <div className="col-span-2">
-                  {idx === 0 && <Label className="text-xs">{t('form.unitPrice')}</Label>}
-                  <Input type="number" min="0" step="0.01" value={item.unit_price}
-                    onChange={(e) => updateItem(idx, 'unit_price', Number(e.target.value))} />
-                </div>
-                <div className="col-span-2">
-                  {idx === 0 && <Label className="text-xs">{t('form.itemTotal')}</Label>}
-                  <Input value={formatCurrency(item.total, currency)} readOnly className="bg-muted" />
-                </div>
-                <div className="col-span-1">
+                <div className="sm:col-span-1 flex justify-end sm:justify-start">
                   <Button type="button" variant="ghost" size="icon"
                     onClick={() => removeItem(idx)} disabled={items.length === 1}>
                     <Trash2 className="h-4 w-4 text-destructive" />
