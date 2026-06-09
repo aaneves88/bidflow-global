@@ -55,7 +55,7 @@ export default function Pricing() {
     <div className="min-h-screen bg-background">
       <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold tracking-tight">CloseFlow</Link>
+          <Link to="/" className="text-xl font-bold tracking-tight">Orca</Link>
           <div className="flex items-center gap-3">
             {user ? (
               <Button variant="ghost" asChild>

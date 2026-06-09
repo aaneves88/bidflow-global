@@ -41,7 +41,7 @@ export const CTA: React.FC = () => {
           ⌁
         </div>
         <div style={{ fontFamily: fontDisplay, fontSize: 96, fontWeight: 700, letterSpacing: -3, color: colors.text }}>
-          CloseFlow
+          Orca
         </div>
       </div>
 

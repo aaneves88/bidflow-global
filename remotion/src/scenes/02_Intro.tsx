@@ -47,7 +47,7 @@ export const Intro: React.FC = () => {
             color: colors.text,
           }}
         >
-          CloseFlow
+          Orca
         </div>
       </div>
       <div

@@ -90,7 +90,7 @@ export const Accept: React.FC = () => {
             >
               ⌁
             </div>
-            <div style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 20 }}>CloseFlow</div>
+            <div style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 20 }}>Orca</div>
           </div>
 
           <div>

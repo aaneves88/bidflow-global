@@ -24,7 +24,7 @@ export const Accept: React.FC = () => {
         <div style={{ flex: 1, background: "#FAFAFA", padding: "50px 80px", display: "flex", flexDirection: "column", gap: 24, color: "#0F172A", fontFamily: fontUI }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `linear-gradient(135deg, ${colors.primary}, ${colors.primaryGlow})`, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>⌁</div>
-            <div style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 20 }}>CloseFlow</div>
+            <div style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 20 }}>Orca</div>
           </div>
 
           <div>

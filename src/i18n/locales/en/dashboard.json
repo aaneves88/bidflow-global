@@ -17,7 +17,7 @@
     "statusChange": "{{title}} → {{status}}"
   },
   "quickStart": {
-    "title": "Welcome to CloseFlow!",
+    "title": "Welcome to Orca!",
     "subtitle": "Two steps and you send your first proposal.",
     "step1": "Add a client",
     "step2": "Create and send a proposal",

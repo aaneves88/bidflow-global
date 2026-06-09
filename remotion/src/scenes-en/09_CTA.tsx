@@ -25,7 +25,7 @@ export const CTA: React.FC = () => {
     >
       <div style={{ display: "flex", alignItems: "center", gap: 22, transform: `scale(${scale})`, opacity: op }}>
         <div style={{ width: 90, height: 90, borderRadius: 22, background: `linear-gradient(135deg, ${colors.primary}, ${colors.primaryGlow})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 52, color: "#fff", boxShadow: `0 30px 80px ${colors.primary}66` }}>⌁</div>
-        <div style={{ fontFamily: fontDisplay, fontSize: 96, fontWeight: 700, letterSpacing: -3, color: colors.text }}>CloseFlow</div>
+        <div style={{ fontFamily: fontDisplay, fontSize: 96, fontWeight: 700, letterSpacing: -3, color: colors.text }}>Orca</div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>

@@ -2,12 +2,12 @@
   "tagline": "Proposals & pipeline for small businesses",
   "hero": {
     "title1": "Create proposals.", "title2": "Track conversions.", "title3": "Close more deals.",
-    "subtitle": "CloseFlow helps freelancers and small businesses send professional proposals, follow their sales pipeline, and understand what converts — all in one simple platform.",
+    "subtitle": "Orca helps freelancers and small businesses send professional proposals, follow their sales pipeline, and understand what converts — all in one simple platform.",
     "ctaPrimary": "Start for free", "ctaSecondary": "Sign in"
   },
   "features": {
     "heading": "Everything you need to win more business",
-    "subheading": "From proposal creation to pipeline tracking — CloseFlow keeps your sales organized.",
+    "subheading": "From proposal creation to pipeline tracking — Orca keeps your sales organized.",
     "items": {
       "create": { "title": "Create Proposals", "description": "Build professional proposals in minutes. Share them with a single link." },
       "share": { "title": "Share Instantly", "description": "Send proposals via WhatsApp or a public link. Clients view and accept online." },
@@ -25,7 +25,7 @@
   },
   "cta": {
     "heading": "Ready to close more deals?",
-    "subheading": "Join CloseFlow and start managing your proposals like a pro.",
+    "subheading": "Join Orca and start managing your proposals like a pro.",
     "button": "Get started — it's free"
   },
   "footer": { "rights": "All rights reserved." }

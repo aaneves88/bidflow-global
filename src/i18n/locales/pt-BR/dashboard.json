@@ -32,7 +32,7 @@
     "statusChange": "{{title}} → {{status}}"
   },
   "quickStart": {
-    "title": "Bem-vindo(a) ao CloseFlow!",
+    "title": "Bem-vindo(a) ao Orca!",
     "subtitle": "Em 2 passos você envia sua primeira proposta.",
     "step1": "Cadastrar um cliente",
     "step2": "Criar e enviar uma proposta",

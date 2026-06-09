@@ -34,7 +34,7 @@ export default function Landing() {
     <div className="min-h-screen bg-background">
       <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <span className="text-xl font-bold tracking-tight">CloseFlow</span>
+          <span className="text-xl font-bold tracking-tight">Orca</span>
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild>
               <Link to="/pricing">{t('common:nav.pricing')}</Link>
@@ -143,7 +143,7 @@ export default function Landing() {
       <footer className="border-t py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-3">
           <LegalFooter />
-          <span className="text-sm text-muted-foreground">© {new Date().getFullYear()} CloseFlow. {t('footer.rights')}</span>
+          <span className="text-sm text-muted-foreground">© {new Date().getFullYear()} Orca. {t('footer.rights')}</span>
         </div>
       </footer>
     </div>
