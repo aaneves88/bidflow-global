@@ -36,6 +36,10 @@ interface Options {
   primaryColor?: string;
   secondaryColor?: string;
   accentColor?: string;
+  /** Free-tier proposals get a diagonal "Orca" watermark on every page. */
+  watermark?: boolean;
+  /** Small "Powered by Orca" line in the footer. Default on. */
+  showPoweredBy?: boolean;
   labels?: {
     proposalFor?: string;
     description?: string;
@@ -50,6 +54,8 @@ interface Options {
     status?: string;
     publicLink?: string;
     generatedAt?: string;
+    poweredBy?: string;
+    watermark?: string;
   };
 }
 

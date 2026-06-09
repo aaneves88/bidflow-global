@@ -10,12 +10,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { supabase } from '@/integrations/supabase/client';
 import { usePublicProposal } from '@/hooks/useProposals';
 import { useRecordProposalView } from '@/hooks/useProposalViews';
-import { fetchPublicBranding } from '@/hooks/useBranding';
+import { fetchPublicBranding, ORCA_BRANDING } from '@/hooks/useBranding';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
 import { SignatureDialog } from '@/components/SignatureDialog';
 import { LegalFooter } from '@/components/LegalFooter';
+import orcaMark from '@/assets/brand/orca-mark.png';
 
 export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
@@ -25,8 +26,9 @@ export default function PublicProposal() {
   const [signatureOpen, setSignatureOpen] = useState(false);
 
   const { data: branding } = useQuery({
-    queryKey: ['public-branding'],
-    queryFn: () => fetchPublicBranding(supabase),
+    queryKey: ['public-branding', publicCode],
+    enabled: !!publicCode,
+    queryFn: () => fetchPublicBranding(supabase, publicCode),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -68,9 +70,10 @@ export default function PublicProposal() {
   const isRejected = /reject|rejeit|perdid|lost/i.test(statusName);
   const isFinal = isApproved || isRejected;
 
-  const primary = branding?.primaryColor || '#3B82F6';
-  const secondary = branding?.secondaryColor || '#1F2937';
-  const accent = branding?.accentColor || '#22C55E';
+  const isFreeOwner = !branding?.hasActivePlan;
+  const primary = branding?.primaryColor || ORCA_BRANDING.primaryColor;
+  const secondary = branding?.secondaryColor || ORCA_BRANDING.secondaryColor;
+  const accent = branding?.accentColor || ORCA_BRANDING.accentColor;
 
   const handleSigned = () => {
     refetch();
@@ -90,7 +93,19 @@ export default function PublicProposal() {
       <div className="h-1.5 w-full" style={{ backgroundColor: primary }} />
 
       {/* Brand header */}
-      {(branding?.logoUrl || branding?.companyName) && (
+      {isFreeOwner ? (
+        <div className="bg-background border-b">
+          <div className="max-w-3xl mx-auto px-6 sm:px-10 py-5 flex items-center gap-3">
+            <img src={orcaMark} alt="Orca" className="h-9 w-auto object-contain" />
+            <div className="min-w-0">
+              <p className="text-base font-semibold tracking-tight" style={{ color: secondary }}>
+                Orca
+              </p>
+              <p className="text-xs text-muted-foreground">{t('freeOwner.tagline')}</p>
+            </div>
+          </div>
+        </div>
+      ) : (branding?.logoUrl || branding?.companyName) ? (
         <div className="bg-background border-b">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 py-5 flex items-center gap-4">
             {branding.logoUrl && (
@@ -103,7 +118,7 @@ export default function PublicProposal() {
             )}
           </div>
         </div>
-      )}
+      ) : null}
 
       <div className="max-w-3xl mx-auto px-4 sm:px-10 py-8 sm:py-12 space-y-6">
         {/* Title + status */}
@@ -130,7 +145,6 @@ export default function PublicProposal() {
           )}
         </div>
 
-        {/* Client card */}
         {proposal.clients && (
           <Card>
             <CardContent className="pt-5 pb-5">
@@ -148,7 +162,6 @@ export default function PublicProposal() {
           </Card>
         )}
 
-        {/* Description */}
         {proposal.description && (
           <Card>
             <CardHeader className="pb-3">
@@ -162,7 +175,6 @@ export default function PublicProposal() {
           </Card>
         )}
 
-        {/* Items */}
         <Card>
           <CardHeader><CardTitle>{t('items')}</CardTitle></CardHeader>
           <CardContent>
@@ -189,7 +201,6 @@ export default function PublicProposal() {
               </Table>
             </div>
 
-            {/* Total box */}
             <div className="flex justify-end pt-6">
               <div
                 className="rounded-lg px-6 py-4 text-center"
@@ -209,7 +220,6 @@ export default function PublicProposal() {
           </CardContent>
         </Card>
 
-        {/* Notes */}
         {notes && (
           <Card>
             <CardHeader className="pb-3">
@@ -223,7 +233,6 @@ export default function PublicProposal() {
           </Card>
         )}
 
-        {/* Terms */}
         {terms && (
           <Card>
             <CardHeader className="pb-3">
@@ -237,7 +246,6 @@ export default function PublicProposal() {
           </Card>
         )}
 
-        {/* Actions */}
         <div className="flex gap-3 justify-center pt-2 flex-wrap">
           {!isFinal && (
             <Button
@@ -260,11 +268,13 @@ export default function PublicProposal() {
             variant="outline"
             onClick={() => generateProposalPdf(proposal as any, sortedItems as any[], {
               publicUrlBase: window.location.origin,
-              companyName: branding?.companyName,
-              logoDataUrl: branding?.logoUrl,
+              companyName: isFreeOwner ? 'Orca' : branding?.companyName,
+              logoDataUrl: isFreeOwner ? undefined : branding?.logoUrl,
               primaryColor: primary,
               secondaryColor: secondary,
               accentColor: accent,
+              watermark: isFreeOwner,
+              showPoweredBy: true,
             })}
           >
             <FileDown className="mr-2 h-5 w-5" />
@@ -300,16 +310,24 @@ export default function PublicProposal() {
           </Card>
         )}
 
-        {/* Branded footer */}
-        {branding?.companyName && (
-          <div className="pt-8 mt-8 border-t text-center space-y-3">
+        {/* Footer: branded for paid, watermarked for free */}
+        <div className="pt-8 mt-8 border-t text-center space-y-3">
+          {!isFreeOwner && branding?.companyName && (
             <p className="text-xs text-muted-foreground">
-              {t('preparedFor', { name: '' }).replace('{{name}}', '').trim() || 'Sent by'}{' '}
               <span style={{ color: secondary }} className="font-medium">{branding.companyName}</span>
             </p>
-            <LegalFooter variant="compact" />
-          </div>
-        )}
+          )}
+          <a
+            href="https://orca-mento.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors ${isFreeOwner ? 'text-sm' : 'text-[11px]'}`}
+          >
+            <img src={orcaMark} alt="" className={isFreeOwner ? 'h-4 w-auto' : 'h-3 w-auto'} />
+            <span>{isFreeOwner ? t('freeOwner.poweredBy') : t('poweredBy')}</span>
+          </a>
+          <LegalFooter variant="compact" />
+        </div>
       </div>
 
       <SignatureDialog
