@@ -1,6 +1,6 @@
 {
   "title": "Integrações",
-  "subtitle": "Conecte o Orca com ferramentas externas. Ative, configure e gerencie integrações sem precisar mexer no código.",
+  "subtitle": "Conecte a Orca com ferramentas externas. Ative, configure e gerencie integrações sem precisar mexer no código.",
   "status": {
     "active": "Ativa",
     "inactive": "Inativa",
@@ -46,7 +46,7 @@
       "step4Title": "4. Adicione a Secret key como secret",
       "step4": "Clique em \"Adicionar secret\" e cadastre STRIPE_SECRET_KEY com sua sk_test_ ou sk_live_.",
       "step5Title": "5. Crie produtos e preços no Stripe",
-      "step5": "No Stripe, vá em Products → Add product. Para cada plano que você cobra aqui no Orca, crie um produto com o preço recorrente equivalente. Copie o Price ID (começa com price_) e cole no mapeamento de planos abaixo.",
+      "step5": "No Stripe, vá em Products → Add product. Para cada plano que você cobra aqui na Orca, crie um produto com o preço recorrente equivalente. Copie o Price ID (começa com price_) e cole no mapeamento de planos abaixo.",
       "step6Title": "6. Configure o webhook",
       "step6": "No Stripe, vá em Developers → Webhooks → Add endpoint. Cole a URL do webhook exibida abaixo. Selecione o evento checkout.session.completed. Copie o Signing secret (whsec_...) e cadastre como STRIPE_WEBHOOK_SECRET nos secrets.",
       "step7Title": "7. Teste e vire para produção",
