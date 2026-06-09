@@ -1,62 +1,85 @@
-# Identidade visual Orca — Logo símbolo + lockup
+## Onda 1.5 — PDF híbrido (canvas + texto)
 
-## O que vai ser entregue
+Problemas no PDF atual (confirmados pelo upload):
+- Título "Consultoria (cópia)" sobrepõe "Statematch Global" no topo
+- Cabeçalho da tabela com letras espaçadas ("D escrição", "Q td", "V a l o r u n i t.")
+- "Total geral" sai como texto verde corrido em vez da caixa accent prevista
+- Sem bloco do cliente, sem "Powered by Orca" visível, página vazia abaixo da tabela
 
-Nesta rodada, **só os assets de logo**. Nada de aplicação no app, landing ou emails ainda — isso fica para uma rodada seguinte depois que você aprovar o símbolo.
+### Abordagem escolhida: híbrido
 
-## Direção de marca (fixada)
+**Hero/cabeçalho via html2canvas** (logo grande, nome da empresa, título, status, validade, bloco cliente, total destacado) — fica visualmente idêntico à página pública, com a marca do usuário aplicada.
 
-- **Nome:** Orca
-- **Domínio:** orca-mento.app (URL só, marca falada é "Orca")
-- **Estilo:** Geométrico minimalista (família Stripe / Linear / Vercel)
-- **Personalidade:** Confiante e calma + esperta e ágil + amigável e acessível
-- **Paleta oceano vibrante:**
-  - `#0F172A` — slate quase preto (corpo da orca, texto)
-  - `#0E7490` — teal profundo (sombra/profundidade)
-  - `#06B6D4` — ciano vivo (acento, água, highlights)
-  - `#F0FDFA` — branco com tom mint (barriga da orca, fundo claro)
+**Tabela + descrição + notas + termos em texto nativo jsPDF** — selecionável, copiável, pesquisável, leve.
 
-## Conceito do símbolo
+### Implementação
 
-Orca estilizada em **formas geométricas puras** — silhueta lateral mergulhando, com a mancha branca característica formando uma curva que sugere movimento. Inspiração: ícone do Linear, mas com personalidade animal. Deve funcionar:
+1. Criar `src/components/pdf/PdfHero.tsx` — componente React off-screen renderizado num portal invisível (posição absoluta, -9999px), com:
+   - Faixa superior na cor primária da marca
+   - Logo grande + nome da empresa (ou logo Orca + "Orca" para free)
+   - Título da proposta, status, validade, data
+   - Card do cliente (nome, empresa, email, telefone)
+   - Card "Total" destacado com a cor accent
+   - Para free: faixa "Criada com Orca" no topo em vez do logo do cliente
 
-- Como **glifo** quadrado de 16×16px (favicon) até 512×512px (app icon)
-- Em **preto sólido** sobre branco
-- Em **branco sólido** sobre fundo escuro
-- Em **versão colorida** (preto + ciano)
+2. Reescrever `src/lib/proposalPdf.ts`:
+   - Receber `heroElement: HTMLElement` (renderizado pelo chamador)
+   - `html2canvas(heroElement, { scale: 2, useCORS: true, backgroundColor: '#fff' })`
+   - `addImage` do hero no topo
+   - Continuar com `autoTable` para itens — corrigir kerning forçando `font: 'helvetica'` no `styles` (o espaçamento estranho vem de fallback para fonte sem métricas)
+   - Caixa de total nativa (corrigir o bug de medida) ou pular pois já está no hero
+   - Descrição/Notas/Termos com `splitTextToSize` + paginação que já existe
+   - Watermark "Orca" diagonal no free continua igual
+   - Rodapé "Feito com Orca" pequeno em todas as páginas (não-Business)
 
-## Entregáveis (arquivos gerados)
+3. Atualizar `ProposalView.tsx` e `PublicProposal.tsx`:
+   - Renderizar `<PdfHero ref={...} />` invisível
+   - Passar o ref ao gerador
+   - Aguardar logo carregar antes de capturar (`img.decode()`)
 
-Tudo em `src/assets/brand/`:
+### Por que não jsPDF puro
+A caixa accent e o cabeçalho ficam frágeis em jsPDF (já quebraram). Canvas para o hero garante fidelidade visual à marca; texto nativo na tabela mantém PDF leve e selecionável onde importa.
 
-1. **`orca-mark.svg`** — símbolo isolado, quadrado, versão colorida (preto + ciano)
-2. **`orca-mark-mono.svg`** — símbolo em uma cor só (para reverter/aplicar em qualquer fundo)
-3. **`orca-lockup-horizontal.svg`** — símbolo + palavra "Orca" ao lado (uso em header, emails)
-4. **`orca-lockup-vertical.svg`** — símbolo em cima, palavra "Orca" embaixo (uso em landing hero, splash)
-5. **`favicon.png`** (32×32) e **`favicon-512.png`** (app icon PWA) — exportados do símbolo
+---
 
-Tipografia do lockup: **Geist** ou **Inter** em peso 600, letter-spacing levemente apertado.
+## Onda 2 — Auditoria de Segurança
 
-## Processo de geração
+Entregue como **relatório em chat** + correções aplicadas onde for crítico.
 
-1. Gerar 3 variações do **símbolo** via imagegen (premium quality, transparent background) com prompts diferentes:
-   - V1: orca mergulhando, linhas geométricas duras
-   - V2: orca em curva fluida, mais orgânica dentro da grade
-   - V3: orca vista frontal estilizada (cabeça + barbatana)
-2. Apresentar as 3 lado a lado para você escolher
-3. Refinar a escolhida (ajustes de proporção, peso, cor)
-4. Gerar lockup horizontal e vertical com tipografia
-5. Exportar favicon e app icon
+### 2.1 Banco — RLS e GRANTs
+- Rodar `supabase--linter` e anexar resultado
+- Para cada tabela (`app_settings`, `clients`, `plans`, `profiles`, `proposal_items`, `proposal_signatures`, `proposal_status_history`, `proposal_statuses`, `proposal_views`, `proposals`, `user_plans`, `user_roles`):
+  - Listar políticas via `supabase--read_query`
+  - Verificar: RLS habilitado, GRANT correto por role, sem `anon` desnecessário
+  - Risco especial: `get_proposal_branding` expõe email/telefone? (não — só branding, OK). `proposal_views` permite tracking anônimo? (esperado)
+- SECURITY DEFINER: revisar `handle_new_user`, `accept_proposal`, `sign_proposal`, `get_proposal_branding`, `get_proposal_signature`, `has_role` — confirmar `search_path = public` (já estão) e que não vazam dados
 
-## O que NÃO está incluído (próximas rodadas)
+### 2.2 Edge functions
+- `stripe-webhook` (`verify_jwt = false`): confirmar validação de assinatura via `STRIPE_WEBHOOK_SECRET`, CORS, sem retorno de dados sensíveis em erro
+- `stripe-create-checkout`: validar JWT do usuário, validar `price_id` contra tabela `plans` (não confiar no client), CORS
 
-- Trocar "CloseFlow" por "Orca" no código, i18n, manifest, emails
-- Aplicar paleta oceano nos design tokens do app
-- Mascote ilustrado com expressões
-- Atualizar memory para refletir mudança de nome
+### 2.3 Auth hardening
+- Ativar **HIBP** (senhas vazadas) via `supabase--configure_auth`
+- Confirmar `external_anonymous_users_enabled = false`
+- Confirmar `auto_confirm_email` conforme intenção (hoje provavelmente true para facilitar onboarding — decidir)
+- Documentar política de senha atual
 
-Tudo isso vira um plano separado depois que o símbolo estiver aprovado.
+### 2.4 Storage e dados sensíveis
+- Sem buckets hoje → quando subir upload de logo, criar bucket `branding` público com path por user_id e policy de write restrita ao dono
+- Revisar RPCs que retornam dados de outros usuários (só `get_proposal_branding` e `get_proposal_signature` — ambos limitados ao mínimo necessário, OK)
+- Verificar que `clients.email` / `clients.phone` nunca vazam em RPCs públicas
 
-## Pergunta antes de implementar
+### 2.5 Entregáveis
+- Tabela "Achados" com severidade (crítico / médio / baixo / informativo)
+- Correções aplicadas em migration única para findings críticos
+- Atualização da `security--update_memory` com postura aceita
+- Lista do que ficou em aberto para você decidir
 
-Quer que eu gere as 3 variações de símbolo já agora, ou prefere ajustar algum ponto do conceito acima primeiro?
+---
+
+## Ordem de execução
+1. PDF híbrido (Onda 1.5) — você vê resultado visual rápido
+2. Auditoria Onda 2 — relatório + correções críticas em uma migration
+
+## Fora de escopo nesta rodada
+- Onda 3 (emails transacionais) e Onda 4 (admin de verdade) — próximas iterações
