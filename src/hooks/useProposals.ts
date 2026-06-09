@@ -357,18 +357,16 @@ export function useDuplicateProposal() {
   });
 }
 
-// For public page — uses anon access
+// For public page — uses a SECURITY DEFINER RPC that returns ONLY the proposal
+// matching the public_code (prevents anon enumeration of all proposals).
 export function usePublicProposal(publicCode: string | undefined) {
   return useQuery({
     queryKey: ['public-proposal', publicCode],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('proposals')
-        .select('*, clients(name, email, company, phone), proposal_statuses(name, color), proposal_items(*)')
-        .eq('public_code', publicCode!)
-        .single();
+      const { data, error } = await supabase.rpc('get_public_proposal', { p_code: publicCode! });
       if (error) throw error;
-      return data;
+      if (!data) throw new Error('Proposal not found');
+      return data as any;
     },
     enabled: !!publicCode,
   });
