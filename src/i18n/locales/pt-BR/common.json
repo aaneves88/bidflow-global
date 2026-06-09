@@ -67,15 +67,15 @@
   },
   "upgradeModal": {
     "title": "Limite gratuito atingido",
-    "description": "Você já utilizou sua proposta gratuita. Para continuar criando propostas e acompanhar seus negócios, escolha um plano.",
+    "description": "Você já utilizou suas 3 propostas gratuitas. Para continuar criando propostas e enviar com sua marca, escolha um plano.",
     "viewPlans": "Ver planos",
     "upgrade": "Fazer upgrade"
   },
   "usage": {
-    "freeAvailable": "Você ainda possui 1 proposta gratuita disponível.",
-    "freeAvailableHint": "Crie sua primeira proposta sem precisar de plano.",
-    "freeUsed": "Você já utilizou sua proposta gratuita.",
-    "freeUsedHint": "Escolha um plano para continuar criando propostas.",
+    "freeAvailable": "Você ainda tem {{remaining}} de 3 propostas gratuitas.",
+    "freeAvailableHint": "No plano gratuito as propostas saem com a marca da Orca. Faça upgrade para usar sua identidade visual.",
+    "freeUsed": "Você usou suas 3 propostas gratuitas.",
+    "freeUsedHint": "Escolha um plano para continuar criando propostas com sua marca.",
     "unlimited": "Propostas ilimitadas",
     "unlimitedHint": "Você já criou {{used}} propostas neste plano.",
     "planUsage": "{{used}} de {{max}} propostas usadas",
