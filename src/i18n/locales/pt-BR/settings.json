@@ -9,10 +9,11 @@
     "title": "Configurações gerais",
     "companyName": "Nome da empresa",
     "companyPlaceholder": "Sua empresa",
+    "companyNameHelp": "Aparece no cabeçalho e rodapé das propostas enviadas aos seus clientes.",
     "defaultCurrency": "Moeda padrão",
     "language": "Idioma da interface",
     "publicAppUrl": "URL pública do app",
-    "publicAppUrlHelp": "Domínio usado nos links de propostas enviados aos clientes (ex: https://suamarca.com). Se vazio, usa a URL atual do navegador — o que não funciona em links de pré-visualização."
+    "publicAppUrlHelp": "Domínio usado nos links de propostas enviados aos clientes (ex: https://suamarca.com). Configuração de administrador."
   },
   "integrations": {
     "title": "Integrações",
@@ -25,7 +26,7 @@
   },
   "branding": {
     "title": "Marca",
-    "subtitle": "Estes elementos aparecem nas propostas públicas e PDFs enviados aos clientes.",
+    "subtitle": "Estes elementos aparecem nas propostas públicas e PDFs enviados aos seus clientes.",
     "logo": "Logotipo da empresa",
     "primaryColor": "Cor primária",
     "primaryHelp": "Usada no cabeçalho da proposta, botão de aceitar e total.",
@@ -33,7 +34,10 @@
     "secondaryHelp": "Usada em detalhes de texto e no rodapé do PDF.",
     "accentColor": "Cor de destaque",
     "accentHelp": "Realça o valor total e badges de status.",
-    "preview": "Pré-visualização"
+    "preview": "Pré-visualização",
+    "previewFreeNote": "No plano gratuito, suas propostas saem com a marca da Orca. Os ajustes ficam salvos para quando você fizer upgrade.",
+    "freeLocked": "Personalização de marca é um recurso pago — no plano gratuito suas propostas usam a marca da Orca.",
+    "freeLockedCta": "Ver planos"
   },
   "messages": {
     "saved": "Configurações salvas",

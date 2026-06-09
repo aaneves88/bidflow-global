@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCurrentPlan } from './useCurrentPlan';
 
-const FREE_PROPOSAL_QUOTA = 1;
+const FREE_PROPOSAL_QUOTA = 3;
 
 export function usePlanLimits() {
   const { user, isAdmin } = useAuth();
@@ -87,4 +87,17 @@ export function useFeatureFlag(flag: 'allow_pdf_export' | 'allow_templates' | 'a
   if (isAdmin) return true;
   if (!currentPlan || currentPlan.isExpired) return false;
   return Boolean((currentPlan.plan as any)?.[flag]);
+}
+
+/**
+ * Free users can't customize branding on the proposal — their proposals
+ * always render with Orca branding and a watermark.
+ */
+export function useCanCustomBrand(): boolean {
+  const { isAdmin } = useAuth();
+  const { data: currentPlan } = useCurrentPlan();
+  if (isAdmin) return true;
+  if (!currentPlan) return false;
+  if (currentPlan.isExpired) return false;
+  return true;
 }

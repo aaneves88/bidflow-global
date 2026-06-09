@@ -36,6 +36,10 @@ interface Options {
   primaryColor?: string;
   secondaryColor?: string;
   accentColor?: string;
+  /** Free-tier proposals get a diagonal "Orca" watermark on every page. */
+  watermark?: boolean;
+  /** Small "Powered by Orca" line in the footer. Default on. */
+  showPoweredBy?: boolean;
   labels?: {
     proposalFor?: string;
     description?: string;
@@ -50,6 +54,8 @@ interface Options {
     status?: string;
     publicLink?: string;
     generatedAt?: string;
+    poweredBy?: string;
+    watermark?: string;
   };
 }
 
@@ -78,6 +84,8 @@ export function generateProposalPdf(
     status: 'Status',
     publicLink: 'Link da proposta',
     generatedAt: 'Gerado em',
+    poweredBy: 'Feito com Orca · orca-mento.app',
+    watermark: 'Orca',
     ...(options.labels || {}),
   };
 
@@ -270,10 +278,26 @@ export function generateProposalPdf(
     renderTextSection(labels.terms, proposal.terms);
   }
 
-  // Footer on every page
+  // Footer + watermark on every page
   const pageCount = doc.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
+
+    // Diagonal "Orca" watermark for free-tier proposals
+    if (options.watermark) {
+      doc.saveGraphicsState();
+      // @ts-ignore - jspdf-supports GState via internal API
+      const gs = (doc as any).GState ? new (doc as any).GState({ opacity: 0.08 }) : null;
+      if (gs) (doc as any).setGState(gs);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(110);
+      doc.setTextColor(15, 23, 42); // slate-900
+      doc.text(labels.watermark, pageWidth / 2, pageHeight / 2, {
+        align: 'center',
+        angle: -30,
+      });
+      doc.restoreGraphicsState();
+    }
 
     // Footer bar
     doc.setFillColor(sr, sg, sb);
@@ -286,6 +310,15 @@ export function generateProposalPdf(
       doc.setTextColor(135);
       doc.text(`${labels.publicLink}: ${url}`, margin, pageHeight - 22);
     }
+
+    // "Powered by Orca" — centered, small
+    if (options.showPoweredBy !== false) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(150);
+      doc.text(labels.poweredBy, pageWidth / 2, pageHeight - 22, { align: 'center' });
+    }
+
     doc.setFontSize(8);
     doc.setTextColor(135);
     doc.text(`${i} / ${pageCount}`, pageWidth - margin, pageHeight - 22, { align: 'right' });

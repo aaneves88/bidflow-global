@@ -28,7 +28,7 @@ export function UsageIndicator({ variant = 'card' }: Props) {
   if (limits.isOnFreeTier) {
     if (!limits.freeProposalUsed) {
       icon = <Sparkles className="h-5 w-5 text-primary" />;
-      title = t('usage.freeAvailable');
+      title = t('usage.freeAvailable', { remaining: limits.freeProposalsRemaining });
       subtitle = t('usage.freeAvailableHint');
     } else {
       title = t('usage.freeUsed');

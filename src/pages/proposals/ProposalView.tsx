@@ -17,7 +17,8 @@ import {
 } from '@/hooks/useProposals';
 import { useProposalViews } from '@/hooks/useProposalViews';
 import { useAppSettings } from '@/hooks/useAppSettings';
-import { useBranding } from '@/hooks/useBranding';
+import { useBranding, ORCA_BRANDING } from '@/hooks/useBranding';
+import { useCanCustomBrand } from '@/hooks/usePlanLimits';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
@@ -41,6 +42,7 @@ export default function ProposalView() {
   const { data: views } = useProposalViews(id);
   const { getSetting } = useAppSettings('general');
   const branding = useBranding();
+  const canBrand = useCanCustomBrand();
   const updateStatus = useUpdateProposalStatus();
   const publicBase = usePublicAppUrl();
 
@@ -92,14 +94,18 @@ export default function ProposalView() {
 
   const handlePdf = () => {
     if (!items) return;
-    const companyName = (getSetting('company_name') as string) || branding.companyName || undefined;
+    const companyName = canBrand
+      ? (branding.companyName || (getSetting('company_name') as string) || undefined)
+      : 'Orca';
     generateProposalPdf(proposal as any, items as any[], {
       companyName,
       publicUrlBase: publicBase,
-      logoDataUrl: branding.logoUrl,
-      primaryColor: branding.primaryColor,
-      secondaryColor: branding.secondaryColor,
-      accentColor: branding.accentColor,
+      logoDataUrl: canBrand ? branding.logoUrl : undefined,
+      primaryColor: canBrand ? branding.primaryColor : ORCA_BRANDING.primaryColor,
+      secondaryColor: canBrand ? branding.secondaryColor : ORCA_BRANDING.secondaryColor,
+      accentColor: canBrand ? branding.accentColor : ORCA_BRANDING.accentColor,
+      watermark: !canBrand,
+      showPoweredBy: true,
       labels: {
         proposalFor: t('pdf.proposalFor'),
         description: t('pdf.description'),
@@ -114,6 +120,8 @@ export default function ProposalView() {
         status: t('pdf.status'),
         publicLink: t('pdf.publicLink'),
         generatedAt: t('pdf.generatedAt'),
+        poweredBy: t('pdf.poweredBy'),
+        watermark: t('pdf.watermark'),
       },
     });
   };

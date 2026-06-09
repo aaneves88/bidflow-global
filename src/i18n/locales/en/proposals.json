@@ -56,6 +56,8 @@
     "items": "Items",
     "qty": "Qty", "unitPrice": "Unit Price", "total": "Total", "grandTotal": "Grand Total",
     "validUntil": "Valid until", "status": "Status",
-    "publicLink": "Proposal link", "generatedAt": "Generated on"
+    "publicLink": "Proposal link", "generatedAt": "Generated on",
+    "poweredBy": "Made with Orca · orca-mento.app",
+    "watermark": "Orca"
   }
 }
