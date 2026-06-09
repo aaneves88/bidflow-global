@@ -536,6 +536,7 @@ export type Database = {
           signer_name: string
         }[]
       }
+      get_public_proposal: { Args: { p_code: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
