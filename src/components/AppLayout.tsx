@@ -5,6 +5,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { BrandingStyle } from '@/components/BrandingStyle';
 import { useBranding } from '@/hooks/useBranding';
 import { NotificationsBell } from '@/components/NotificationsBell';
+import orcaMark from '@/assets/brand/orca-mark.png';
 
 export function AppLayout({ children }: { children: ReactNode }) {
   useTranslation();
@@ -17,9 +18,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <div className="flex-1 flex flex-col">
           <header className="h-14 flex items-center border-b px-4 gap-3">
             <SidebarTrigger className="mr-2" />
-            {logoUrl ? (
-              <img src={logoUrl} alt="" className="h-7 w-auto object-contain" />
-            ) : null}
+            <img src={logoUrl || orcaMark} alt="" className="h-7 w-auto object-contain" />
             <span className="font-semibold text-lg truncate flex-1">
               {companyName || 'Orca'}
             </span>

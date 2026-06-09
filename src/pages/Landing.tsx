@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { LegalFooter } from '@/components/LegalFooter';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
+import orcaMark from '@/assets/brand/orca-mark.png';
 
 export default function Landing() {
   const { t } = useTranslation('landing');
@@ -34,7 +35,10 @@ export default function Landing() {
     <div className="min-h-screen bg-background">
       <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <span className="text-xl font-bold tracking-tight">Orca</span>
+          <Link to="/" className="flex items-center gap-2">
+            <img src={orcaMark} alt="Orca" className="h-8 w-8 object-contain" />
+            <span className="text-xl font-bold tracking-tight">Orca</span>
+          </Link>
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild>
               <Link to="/pricing">{t('common:nav.pricing')}</Link>
