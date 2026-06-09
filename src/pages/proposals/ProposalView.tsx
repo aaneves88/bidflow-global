@@ -17,7 +17,8 @@ import {
 } from '@/hooks/useProposals';
 import { useProposalViews } from '@/hooks/useProposalViews';
 import { useAppSettings } from '@/hooks/useAppSettings';
-import { useBranding } from '@/hooks/useBranding';
+import { useBranding, ORCA_BRANDING } from '@/hooks/useBranding';
+import { useCanCustomBrand } from '@/hooks/usePlanLimits';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
