@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import orcaMark from '@/assets/brand/orca-mark.png';
 
 export default function MobileEntry() {
   const { t } = useTranslation('auth');
