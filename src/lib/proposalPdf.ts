@@ -84,6 +84,8 @@ export function generateProposalPdf(
     status: 'Status',
     publicLink: 'Link da proposta',
     generatedAt: 'Gerado em',
+    poweredBy: 'Feito com Orca · orca-mento.app',
+    watermark: 'Orca',
     ...(options.labels || {}),
   };
 
