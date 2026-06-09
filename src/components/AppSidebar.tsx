@@ -37,7 +37,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
-            {!collapsed && <span className="font-bold text-base">CloseFlow</span>}
+            {!collapsed && <span className="font-bold text-base">Orca</span>}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

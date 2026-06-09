@@ -71,7 +71,7 @@ export const AppFrame: React.FC<{
           >
             ⌁
           </div>
-          CloseFlow
+          Orca
         </div>
         {items.map((it) => {
           const isActive = it.label === active;

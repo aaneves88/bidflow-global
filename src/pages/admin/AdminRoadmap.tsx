@@ -8,7 +8,7 @@ import { Save, Pencil, X, Eye } from 'lucide-react';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { toast } from '@/hooks/use-toast';
 
-const DEFAULT_ROADMAP = `# CloseFlow — Roadmap
+const DEFAULT_ROADMAP = `# Orca — Roadmap
 
 ## Fase 1 — Fundação
 - ✅ Autenticação (e-mail/senha)

@@ -31,7 +31,7 @@ export default function LegalPage() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const companyName = settings?.legal_company_name || settings?.company_name || 'CloseFlow';
+  const companyName = settings?.legal_company_name || settings?.company_name || 'Orca';
   const contactEmail = settings?.legal_contact_email || 'contato@closeflow.app';
   const year = new Date().getFullYear();
 
@@ -41,7 +41,7 @@ export default function LegalPage() {
     <div className="min-h-screen bg-background">
       <nav className="border-b">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold tracking-tight">CloseFlow</Link>
+          <Link to="/" className="text-xl font-bold tracking-tight">Orca</Link>
           <Button variant="ghost" size="sm" asChild>
             <Link to="/"><ArrowLeft className="mr-2 h-4 w-4" />{t('back')}</Link>
           </Button>

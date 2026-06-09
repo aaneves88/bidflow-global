@@ -21,7 +21,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               <img src={logoUrl} alt="" className="h-7 w-auto object-contain" />
             ) : null}
             <span className="font-semibold text-lg truncate flex-1">
-              {companyName || 'CloseFlow'}
+              {companyName || 'Orca'}
             </span>
             <NotificationsBell />
           </header>

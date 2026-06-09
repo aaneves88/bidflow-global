@@ -1,6 +1,6 @@
 {
   "title": "Integrations",
-  "subtitle": "Connect CloseFlow with external tools. Enable, configure and manage integrations without touching code.",
+  "subtitle": "Connect Orca with external tools. Enable, configure and manage integrations without touching code.",
   "status": {
     "active": "Active",
     "inactive": "Inactive",
@@ -46,7 +46,7 @@
       "step4Title": "4. Add the Secret key as a secret",
       "step4": "Click \"Add secret\" and register STRIPE_SECRET_KEY with your sk_test_ or sk_live_.",
       "step5Title": "5. Create products and prices in Stripe",
-      "step5": "In Stripe, go to Products → Add product. For each plan you charge for in CloseFlow, create a product with the equivalent recurring price. Copy the Price ID (starts with price_) and paste it in the plan mapping below.",
+      "step5": "In Stripe, go to Products → Add product. For each plan you charge for in Orca, create a product with the equivalent recurring price. Copy the Price ID (starts with price_) and paste it in the plan mapping below.",
       "step6Title": "6. Configure the webhook",
       "step6": "In Stripe, go to Developers → Webhooks → Add endpoint. Paste the webhook URL shown below. Select the checkout.session.completed event. Copy the Signing secret (whsec_...) and register it as STRIPE_WEBHOOK_SECRET in secrets.",
       "step7Title": "7. Test and go live",

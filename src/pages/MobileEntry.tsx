@@ -76,7 +76,7 @@ export default function MobileEntry() {
           <div className="mx-auto mb-5 h-16 w-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
             <span className="text-primary-foreground font-bold text-2xl tracking-tight">CF</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">CloseFlow</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Orca</h1>
           <p className="text-sm text-muted-foreground mt-1">{t('entry.tagline')}</p>
         </div>
 
