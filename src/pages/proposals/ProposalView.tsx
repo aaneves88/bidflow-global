@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown } from 'lucide-react';
+import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown, Mail, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -47,6 +48,9 @@ export default function ProposalView() {
   const publicBase = usePublicAppUrl();
 
   const [closeOpen, setCloseOpen] = useState(false);
+  const [emailOpen, setEmailOpen] = useState(false);
+  const [emailTo, setEmailTo] = useState('');
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [pendingStatusId, setPendingStatusId] = useState<string>('');
   const [closedAmount, setClosedAmount] = useState<string>('');
   const [closedNotes, setClosedNotes] = useState<string>('');
@@ -145,10 +149,20 @@ export default function ProposalView() {
         </Button>
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-3">
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <Button variant="outline" onClick={copyLink}>
           <Copy className="mr-2 h-4 w-4" />
           {t('view.copyLink')}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setEmailTo(proposal.clients?.email || '');
+            setEmailOpen(true);
+          }}
+        >
+          <Mail className="mr-2 h-4 w-4" />
+          {t('view.sendEmail')}
         </Button>
         <Button variant="outline" asChild>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
