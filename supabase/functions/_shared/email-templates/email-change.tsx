@@ -18,7 +18,7 @@ export const EmailChangeEmail = ({
   confirmationUrl,
 }: EmailChangeEmailProps) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>Confirme a alteração de e-mail na Orca</Preview>
     <Body style={main}>
       <Shell>

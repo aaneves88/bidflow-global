@@ -18,7 +18,7 @@ interface Props {
 
 const Email = ({ firstName, appUrl = 'https://orca-mento.app' }: Props) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>Bem-vinda à Orca — vamos criar sua primeira proposta 🐋</Preview>
     <Body style={main}>
       <Shell>

@@ -30,7 +30,7 @@ const Email = ({
   validUntil,
 }: Props) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>
       {senderName ? `${senderName} ` : ''}
       enviou uma proposta para você
