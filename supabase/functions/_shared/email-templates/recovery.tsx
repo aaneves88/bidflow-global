@@ -11,7 +11,7 @@ interface RecoveryEmailProps {
 
 export const RecoveryEmail = ({ confirmationUrl }: RecoveryEmailProps) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>Redefinir sua senha da Orca</Preview>
     <Body style={main}>
       <Shell>

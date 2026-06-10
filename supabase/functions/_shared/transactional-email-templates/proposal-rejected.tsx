@@ -14,7 +14,7 @@ interface Props {
 
 const Email = ({ clientName, proposalTitle, reason, appProposalUrl = 'https://orca-mento.app' }: Props) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>Atualização sobre a proposta {proposalTitle || ''}</Preview>
     <Body style={main}>
       <Shell>

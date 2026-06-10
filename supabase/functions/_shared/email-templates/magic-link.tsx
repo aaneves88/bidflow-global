@@ -11,7 +11,7 @@ interface MagicLinkEmailProps {
 
 export const MagicLinkEmail = ({ confirmationUrl }: MagicLinkEmailProps) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>Seu link de acesso à Orca</Preview>
     <Body style={main}>
       <Shell>

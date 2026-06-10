@@ -13,7 +13,7 @@ interface SignupEmailProps {
 
 export const SignupEmail = ({ recipient, confirmationUrl }: SignupEmailProps) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>Confirme seu e-mail para começar a usar a Orca 🐋</Preview>
     <Body style={main}>
       <Shell>

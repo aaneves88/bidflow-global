@@ -12,7 +12,7 @@ interface InviteEmailProps {
 
 export const InviteEmail = ({ confirmationUrl }: InviteEmailProps) => (
   <Html lang="pt-BR" dir="ltr">
-    <Head />
+    <Head><meta charSet="utf-8" /></Head>
     <Preview>Você foi convidada para a Orca 🐋</Preview>
     <Body style={main}>
       <Shell>
