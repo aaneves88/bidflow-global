@@ -10,6 +10,7 @@ import {
   Heading,
   Html,
   Preview,
+  Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
 
@@ -18,26 +19,22 @@ interface RecoveryEmailProps {
   confirmationUrl: string
 }
 
-export const RecoveryEmail = ({
-  siteName,
-  confirmationUrl,
-}: RecoveryEmailProps) => (
-  <Html lang="en" dir="ltr">
+export const RecoveryEmail = ({ confirmationUrl }: RecoveryEmailProps) => (
+  <Html lang="pt-BR" dir="ltr">
     <Head />
-    <Preview>Reset your password for {siteName}</Preview>
+    <Preview>Redefinir sua senha da Orca</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>Reset your password</Heading>
+        <Section style={header}><Text style={brand}>Orca</Text></Section>
+        <Heading style={h1}>Redefinir sua senha</Heading>
         <Text style={text}>
-          We received a request to reset your password for {siteName}. Click
-          the button below to choose a new password.
+          Recebemos uma solicitação para redefinir a senha da sua conta na Orca.
+          Clique no botão abaixo para criar uma nova senha.
         </Text>
-        <Button style={button} href={confirmationUrl}>
-          Reset Password
-        </Button>
+        <Button style={button} href={confirmationUrl}>Redefinir senha</Button>
         <Text style={footer}>
-          If you didn't request a password reset, you can safely ignore this
-          email. Your password will not be changed.
+          Se você não solicitou essa alteração, pode ignorar este e-mail. Sua
+          senha continuará a mesma.
         </Text>
       </Container>
     </Body>
@@ -46,26 +43,11 @@ export const RecoveryEmail = ({
 
 export default RecoveryEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+const main = { backgroundColor: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }
+const container = { padding: '24px 28px', maxWidth: '560px' }
+const header = { borderBottom: '1px solid #e2e8f0', paddingBottom: '16px', marginBottom: '24px' }
+const brand = { fontSize: '20px', fontWeight: 'bold' as const, color: '#06B6D4', margin: 0, letterSpacing: '-0.02em' }
+const h1 = { fontSize: '24px', fontWeight: 'bold' as const, color: '#0F172A', margin: '0 0 20px' }
+const text = { fontSize: '15px', color: '#475569', lineHeight: '1.6', margin: '0 0 24px' }
+const button = { backgroundColor: '#06B6D4', color: '#ffffff', fontSize: '15px', fontWeight: 'bold' as const, borderRadius: '10px', padding: '14px 24px', textDecoration: 'none', display: 'inline-block' }
+const footer = { fontSize: '12px', color: '#94a3b8', margin: '32px 0 0', lineHeight: '1.5' }
