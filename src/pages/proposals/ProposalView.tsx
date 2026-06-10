@@ -307,6 +307,66 @@ export default function ProposalView() {
           </CardContent>
         </Card>
       )}
+
+      <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('view.sendEmailTitle')}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Label htmlFor="email-to">{t('view.sendEmailField')}</Label>
+            <Input
+              id="email-to"
+              type="email"
+              value={emailTo}
+              onChange={(e) => setEmailTo(e.target.value)}
+              placeholder="cliente@exemplo.com"
+            />
+            <p className="text-xs text-muted-foreground">
+              {t('view.sendEmailHelp')}
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEmailOpen(false)} disabled={sendingEmail}>
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              disabled={sendingEmail || !/^\S+@\S+\.\S+$/.test(emailTo)}
+              onClick={async () => {
+                if (!proposal) return;
+                setSendingEmail(true);
+                try {
+                  const { error } = await supabase.functions.invoke('send-transactional-email', {
+                    body: {
+                      templateName: 'proposal-sent',
+                      recipientEmail: emailTo.trim(),
+                      idempotencyKey: `proposal-sent-${proposal.id}-${emailTo.trim().toLowerCase()}`,
+                      templateData: {
+                        clientName: proposal.clients?.name || null,
+                        senderName: branding?.companyName || null,
+                        proposalTitle: proposal.title,
+                        proposalTotal: formatCurrency(Number(proposal.total_amount), proposal.currency),
+                        publicUrl,
+                        validUntil: proposal.valid_until ? formatDate(proposal.valid_until) : null,
+                      },
+                    },
+                  });
+                  if (error) throw error;
+                  toast({ title: t('view.sendEmailSuccess') });
+                  setEmailOpen(false);
+                } catch (e: any) {
+                  toast({ title: t('view.sendEmailError'), description: e.message, variant: 'destructive' });
+                } finally {
+                  setSendingEmail(false);
+                }
+              }}
+            >
+              {sendingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+              {t('view.sendEmailConfirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
