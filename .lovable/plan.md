@@ -1,150 +1,119 @@
 
-# Roadmap até o lançamento comercial da Orca
+## Objetivo
 
-## Visão geral
-
-Vamos organizar tudo em **ondas numeradas** com versão semântica (v0.x → v1.0 no lançamento). Cada onda gera um **release documentado** em `docs/releases/` com changelog, screenshots e notas para stores/marketing.
-
----
-
-## Sistema de Releases (cria primeiro, usa em todas as ondas)
-
-**Estrutura nova:**
-```
-docs/
-├── ROADMAP.md                    ← Visão geral viva, status de cada onda
-├── releases/
-│   ├── README.md                 ← Índice de releases
-│   ├── v0.3.0-pdf-hibrido.md
-│   ├── v0.4.0-seguranca.md
-│   └── (próximas)
-└── marketing/
-    ├── app-description-pt.md     ← Texto curto + longo para stores/landing
-    ├── app-description-en.md
-    ├── features-list.md          ← Lista de features para landing/comparativo
-    └── screenshots/              ← Capturas oficiais para divulgação
-```
-
-**Cada release** segue template fixo:
-- Versão, data, codinome
-- Resumo (1 parágrafo)
-- Novidades para usuário final (linguagem de marketing)
-- Mudanças técnicas (changelog)
-- Breaking changes / migrações
-- Métricas/limites afetados
-
-Também: bump de `version` no `package.json` a cada release.
+1. Dar aos e-mails de auth a cara da Orca (orquinha + paleta oceânica + tipografia do app), não só uma cor cyan no botão.
+2. Montar a infra de **app emails** (e-mails transacionais do produto: proposta enviada/visualizada/aceita/assinada, boas-vindas pós-confirmação etc.).
 
 ---
 
-## Onda 3 — E-mails transacionais  `v0.5.0`
+## Parte 1 — Identidade visual nos e-mails de auth
 
-- Configurar domínio `notify.orca-mento.app` (Lovable Emails nativo)
-- Setup de infra de e-mail (filas, cron, logs)
-- Templates auth (signup, recuperação, magic link, etc.) com branding Orca
-- Templates transacionais:
-  - Proposta enviada (cliente recebe link)
-  - Proposta visualizada (você recebe notificação)
-  - Proposta aceita / assinada
-  - Boas-vindas pós-signup
-  - Aviso de limite do plano Free
-- Editor de templates no Admin (assunto + corpo HTML, com preview)
-- Página de unsubscribe branded
+### O que muda nos 6 templates (`supabase/functions/_shared/email-templates/*.tsx`)
 
-## Onda 4 — Painel Administrativo de verdade  `v0.6.0`
+**Header com a orquinha + wordmark**
+- Subir o `orca-mark.png` (mascote) para o bucket `email-assets` via `supabase--storage_upload` e usar a URL pública no `<Img>` do topo de cada template.
+- Header: orquinha 56×56 px centralizada + wordmark "Orca" logo abaixo (cyan #06B6D4, tracking apertado), com uma faixa fininha cyan→mint embaixo (gradient via `background-image` inline, compatível com clientes de e-mail).
 
-- Layout dedicado `/admin` com sidebar própria (só admins)
-- **Dashboard**: MRR estimado, usuários ativos, propostas/mês, conversão Free→Pago, churn
-- **Usuários**: lista, busca, ver perfil, alterar plano manualmente, suspender, virar admin
-- **Planos**: editar limites/preços (já existe parcial — refinar UI)
-- **Templates de e-mail**: editor (Onda 3)
-- **Settings globais**: branding default, moeda, integrações
-- **Logs**: e-mails enviados, webhooks, erros
-- **Feature flags**: ligar/desligar funcionalidades sem deploy
+**Paleta oceânica completa** (hoje só o botão usa cyan)
+- `--ocean-deep` #0F172A → headings + footer dark
+- `--ocean-cyan` #06B6D4 → links, botão, wordmark
+- `--ocean-mint` #F0FDFA → fundo de seção destaque (caixa com o CTA)
+- `--slate-text` #475569 → corpo
+- `--slate-muted` #94A3B8 → footer
 
-## Onda 5 — Pagamentos (Stripe)  `v0.7.0`
+**Estrutura nova de cada e-mail**
+1. Header (orquinha + wordmark + faixa gradiente)
+2. Heading (Inter/system-ui bold, #0F172A)
+3. Parágrafo de corpo
+4. **Caixa mint** com o botão CTA dentro (dá respiro e destaque, vira "card de ação")
+5. Texto de fallback ("Se o botão não funcionar, copie este link:") com a URL em monospace
+6. Divider sutil
+7. Footer com mini-orquinha + "Orca · CRM de propostas" + link para `orca-mento.app` + linha legal
 
-- Integração Stripe (Lovable Payments nativo)
-- Produtos Pro e Business no Stripe (mensal + anual)
-- Checkout hospedado para upgrade
-- Webhook para sincronizar `user_plans` (assinatura ativa, cancelada, inadimplente)
-- Portal do cliente (cancelar, trocar plano, atualizar cartão)
-- Banner de "trial acabando" / "pagamento falhou"
-- Cupons / códigos promocionais (admin)
-- Suporte a PIX (via Stripe Brasil) se disponível
+**Tom pt-BR refinado por template** (mantendo o que já existe, só polindo)
+- `signup`: "Bem-vinda à Orca 🐋" → "Sua conta está quase pronta" + microcopy explicando o que vem depois (criar 1ª proposta).
+- `recovery`: tom calmo, "Recebemos um pedido para redefinir sua senha".
+- `magic-link`: "Seu link de acesso à Orca".
+- `invite`: "Você foi convidado para a Orca" + nome de quem convidou se disponível.
+- `email-change`: mostra de/para com destaque visual.
+- `reauthentication`: código em caixa grande monospace centralizada com letter-spacing.
 
-## Onda 6 — LGPD + Conformidade legal  `v0.8.0`
+**Constantes compartilhadas**
+- Extrair os style objects repetidos para um `_shared/email-templates/_styles.ts` (main, container, header, brand, h1, text, link, button, ctaBox, footer, footerLink, divider) para não duplicar em 6 arquivos e garantir consistência.
 
-- Páginas públicas: `/termos`, `/privacidade`, `/cookies`
-- Geração das minutas (PT-BR) — focadas em CRM/SaaS B2B
-- Checkbox de aceite obrigatório no signup, com registro em `user_consents` (timestamp + IP + versão)
-- Banner de cookies (apenas analíticos opcionais)
-- Página `/conta/dados` — exportar todos os dados (LGPD art. 18) e deletar conta
-- Edge function `delete-user-account` (cascade + anonimização)
+### Assets
+- Bucket `email-assets` (público) — criar se não existir
+- Upload de `src/assets/brand/orca-mark.png` como `email-assets/orca-mark.png`
+- Upload de uma versão menor (mini, ~24px) para o footer — mesmo arquivo serve, controla por width
 
-## Onda 7 — Landing institucional `orca-mento.app`  `v0.9.0`
-
-- Site público em `/` (separado da app que fica em `/app/*` ou subdomínio)
-- Seções: hero, problema/solução, features, pricing, depoimentos (placeholders), FAQ, CTA
-- Comparativo Free vs Pro vs Business
-- Blog estático (markdown) — opcional, ou só estrutura
-- SEO completo: meta tags por rota (react-helmet-async), sitemap.xml dinâmico, robots.txt, JSON-LD Organization + Product
-- OG images geradas (1 por seção principal)
-- Performance: lazy load, imagens otimizadas
-- Multi-idioma (PT-BR + EN) usando i18next já configurado
-
-## Onda 8 — Onboarding + Polish pré-lançamento  `v0.10.0`
-
-- Empty states bonitos em todas as listas (clientes, propostas)
-- Checklist de primeiros passos no dashboard (criar 1º cliente → 1ª proposta → enviar)
-- Tooltips e dicas contextuais
-- Confirmação obrigatória de e-mail no signup (desligar auto-confirm)
-- Testes em mobile real (iOS Safari + Android Chrome)
-- Revisão de copy (todos os textos PT-BR)
-- Acessibilidade básica (contraste, navegação por teclado, alt texts)
-
-## Onda 9 — Observabilidade + Lançamento  `v1.0.0`
-
-- Sentry (frontend + edge functions) — erros + performance
-- Analytics: PostHog ou Plausible (privacy-friendly, LGPD compliant)
-- Eventos chave trackados: signup, criar proposta, enviar, aceitar, upgrade
-- Status page simples (`status.orca-mento.app`)
-- Canal de suporte: e-mail `suporte@orca-mento.app` + widget de feedback no app
-- Material de marketing finalizado (descrições, screenshots, vídeo demo de 60s)
-- **Release v1.0.0** + anúncio
+### Deploy
+- `deploy_edge_functions(["auth-email-hook"])` após editar os templates
 
 ---
 
-## Resposta direta
+## Parte 2 — App Emails (transacionais do produto)
 
-**Onda 3, 4, 5 + as ondas 6, 7, 8, 9** — esse é o caminho completo até lançamento comercial seguro e profissional. Sem 6-9 dá pra lançar tecnicamente, mas seria amador e arriscado juridicamente.
+### Setup
+1. `email_domain--scaffold_transactional_email` → cria `send-transactional-email`, `handle-email-unsubscribe`, `handle-email-suppression`, registry e templates de exemplo.
+2. Apagar/substituir os templates de exemplo pelos nossos.
 
-**Estimativa de execução**: cada onda é entregável em 1-3 interações nossas. Total: ~15-20 ciclos de trabalho.
+### Templates a criar em `supabase/functions/_shared/transactional-email-templates/`
+
+Todos usando os mesmos `_styles.ts` dos auth emails (mesma identidade visual orquinha + oceano).
+
+| Template | Quando dispara | Destinatário |
+|---|---|---|
+| `welcome.tsx` | Após `signup` confirmado (trigger via DB on `auth.users` email_confirmed_at) | Novo usuário |
+| `proposal-sent.tsx` | Usuário clica "Enviar proposta" e gera link público | Cliente da proposta |
+| `proposal-viewed.tsx` | 1ª visualização pública registrada em `proposal_views` | Dono da proposta |
+| `proposal-accepted.tsx` | Cliente clica "Aceitar" no link público | Dono da proposta |
+| `proposal-signed.tsx` | Cliente conclui assinatura | Dono + cópia para cliente |
+| `proposal-rejected.tsx` | Cliente recusa | Dono da proposta |
+
+Cada template tem: header orquinha, preview text útil, dados dinâmicos (nome da proposta, valor BRL formatado, nome do cliente, link para abrir no app/público), CTA na caixa mint, footer padrão. Sem upsell/marketing.
+
+### Wiring dos triggers
+- **welcome**: novo edge function `on-user-confirmed` (DB webhook em `auth.users` UPDATE quando `email_confirmed_at` passa de null→valor) → invoca `send-transactional-email`.
+- **proposal-sent**: chamar `supabase.functions.invoke('send-transactional-email', ...)` no `ProposalView.tsx` quando o usuário gerar/copiar o link público (ou novo botão "Enviar por e-mail ao cliente").
+- **proposal-viewed / accepted / signed / rejected**: já temos hooks/RPC nesses pontos (`useProposalViews`, `PublicProposal.tsx`). Adicionar a chamada de envio no servidor (edge function existente ou trigger DB → função) para garantir que dispara mesmo se o cliente fechar o navegador.
+
+Todos usam `idempotencyKey` derivada de `proposal_id + evento` para não duplicar.
+
+### Página pública de unsubscribe
+- Rota `/email/unsubscribe` (path exato vem do scaffold) que lê `?token=`, chama `handle-email-unsubscribe`, mostra estados confirm/sucesso/inválido com a identidade Orca.
 
 ---
 
-## Ordem de execução proposta
+## Versionamento e docs (conforme regra de releases)
 
-1. **Setup de releases** (docs/ROADMAP.md + template + retroativar v0.1-v0.4 das ondas já feitas)
-2. Onda 3 (e-mails) — desbloqueia recuperação de senha e notificações
-3. Onda 4 (admin) — você precisa pra operar
-4. Onda 5 (pagamentos) — desbloqueia monetização
-5. Onda 6 (LGPD) — obrigatório antes de aceitar pagamento de público
-6. Onda 7 (landing) — pode ser feita em paralelo se quiser
-7. Onda 8 (polish)
-8. Onda 9 (observabilidade + lançamento)
+- Bump `package.json` → `0.5.0`
+- `docs/releases/v0.5.0-emails.md` documentando: rebrand auth emails + app emails + lista de eventos transacionais
+- Atualizar `docs/ROADMAP.md` marcando Onda 5 (e-mails) como concluída
+- Atualizar `docs/marketing/features-list.md` adicionando "Notificações automáticas por e-mail"
 
 ---
 
-## Notas técnicas
+## Detalhes técnicos
 
-- **Releases retroativas**: vou criar v0.1.0 (CRM base), v0.2.0 (i18n + branding), v0.3.0 (planos + watermark), v0.4.0 (PDF híbrido + segurança) baseando-se no histórico do projeto.
-- **Memória**: adicionar `mem://features/releases-process` para que toda futura mudança gere/atualize release.
-- **package.json**: bump de versão a cada onda concluída.
-- **Branding**: tudo PT-BR primeiro, EN como fallback (regra existente).
+- React Email components 0.0.22 (compatível com edge runtime)
+- Imagens em e-mail via `<Img>` com `width`/`height` explícitos (Outlook precisa)
+- Cores inline em HSL convertidas para HEX (clientes de e-mail antigos não suportam HSL)
+- `Body` background sempre `#ffffff` (regra do guia)
+- Não adicionar link de unsubscribe nos templates — o sistema acrescenta no app emails; auth emails não levam unsubscribe
+- Valores monetários formatados em pt-BR (`Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`) dentro do template antes de renderizar
 
 ---
 
-## Próximo passo se aprovar
+## Ordem de execução
 
-Começo pelo **Sistema de Releases + retroativar v0.1-v0.4**, depois entro direto na **Onda 3 (e-mails)** na mesma resposta.
+1. Criar `_styles.ts` compartilhado
+2. Reescrever os 6 templates de auth com nova identidade + upload da orquinha pro bucket
+3. Deploy `auth-email-hook`
+4. Rodar `scaffold_transactional_email`
+5. Criar os 6 templates de app emails + registry
+6. Wirar triggers (welcome via DB webhook, proposal-* via edge/server)
+7. Criar página `/email/unsubscribe`
+8. Deploy de tudo
+9. Bump versão + release notes + roadmap
+
+Após aprovado, executo na sequência e te mostro previews antes de fechar.
