@@ -42,9 +42,20 @@ export default function PublicProposal() {
   });
 
   useEffect(() => {
-    if (proposal?.id) recordView.mutate(proposal.id);
+    if (proposal?.id && publicCode) {
+      const viewKey = `cf_view_${proposal.id}`;
+      const alreadyViewed = !!sessionStorage.getItem(viewKey);
+      recordView.mutate(proposal.id);
+      // Only notify owner the first time per session (matches view dedup)
+      if (!alreadyViewed) {
+        supabase.functions.invoke('notify-proposal-event', {
+          body: { publicCode, event: 'viewed' },
+        }).catch((e) => console.warn('notify viewed failed', e));
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposal?.id]);
+
 
   if (isLoading) {
     return (
@@ -75,11 +86,18 @@ export default function PublicProposal() {
   const secondary = branding?.secondaryColor || ORCA_BRANDING.secondaryColor;
   const accent = branding?.accentColor || ORCA_BRANDING.accentColor;
 
-  const handleSigned = () => {
+  const handleSigned = (signerName?: string) => {
     refetch();
     refetchSig();
     toast({ title: t('messages.accepted') });
+    if (publicCode) {
+      // Fire signed + accepted (sign_proposal also moves to approved status)
+      supabase.functions.invoke('notify-proposal-event', {
+        body: { publicCode, event: 'signed', signerName },
+      }).catch((e) => console.warn('notify signed failed', e));
+    }
   };
+
 
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { title: proposal.title }))}`;
   const items = (proposal as any).proposal_items || [];

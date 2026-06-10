@@ -253,6 +253,31 @@ export function useUpdateProposalStatus() {
         .update(update)
         .eq('id', id);
       if (error) throw error;
+
+      // Fire owner notification based on new status (best-effort)
+      try {
+        const { data: target } = await supabase
+          .from('proposal_statuses')
+          .select('name, is_final, is_won')
+          .eq('id', status_id)
+          .maybeSingle();
+        if (target?.is_final) {
+          const isRejected = !target.is_won;
+          const { data: prop } = await supabase
+            .from('proposals')
+            .select('public_code')
+            .eq('id', id)
+            .maybeSingle();
+          if (prop?.public_code) {
+            const event = isRejected ? 'rejected' : 'accepted';
+            const payload: any = { publicCode: prop.public_code, event };
+            if (isRejected && closed_notes) payload.reason = closed_notes;
+            await supabase.functions.invoke('notify-proposal-event', { body: payload });
+          }
+        }
+      } catch (e) {
+        console.warn('notify status change failed', e);
+      }
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
@@ -265,6 +290,7 @@ export function useUpdateProposalStatus() {
     },
   });
 }
+
 
 
 export function useDeleteProposal() {

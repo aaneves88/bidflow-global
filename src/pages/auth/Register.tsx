@@ -31,10 +31,24 @@ export default function Register() {
     if (error) {
       toast({ title: t('register.errorTitle'), description: error.message, variant: 'destructive' });
     } else {
+      // Fire welcome email (best-effort, non-blocking)
+      supabase.functions.invoke('send-transactional-email', {
+        body: {
+          templateName: 'welcome',
+          recipientEmail: email,
+          idempotencyKey: `welcome-${email.toLowerCase()}`,
+          templateData: {
+            firstName: fullName.split(' ')[0] || undefined,
+            appUrl: 'https://orca-mento.app',
+          },
+        },
+      }).catch((e) => console.warn('welcome email failed', e));
+
       toast({ title: t('register.successTitle'), description: t('register.successDescription') });
       navigate('/onboarding');
     }
     setLoading(false);
+
   };
 
   return (

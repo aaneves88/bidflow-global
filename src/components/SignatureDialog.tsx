@@ -16,7 +16,7 @@ interface Props {
   publicCode: string;
   defaultEmail?: string;
   primaryColor?: string;
-  onSigned?: () => void;
+  onSigned?: (signerName?: string) => void;
 }
 
 export function SignatureDialog({ open, onOpenChange, publicCode, defaultEmail, primaryColor = '#3B82F6', onSigned }: Props) {
@@ -53,7 +53,7 @@ export function SignatureDialog({ open, onOpenChange, publicCode, defaultEmail, 
       toast({ title: t('signature.success') });
       reset();
       onOpenChange(false);
-      onSigned?.();
+      onSigned?.(name.trim());
     } catch (e: any) {
       toast({ title: t('signature.error'), description: e.message, variant: 'destructive' });
     } finally {
