@@ -15,4 +15,6 @@ project_id = "mhsyllzvzuorzyacobar"
     verify_jwt = false
   [functions.handle-email-suppression]
     verify_jwt = false
+  [functions.notify-proposal-event]
+    verify_jwt = false
 
