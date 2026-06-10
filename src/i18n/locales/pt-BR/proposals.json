@@ -47,6 +47,13 @@
   },
   "view": {
     "copyLink": "Copiar link público",
+    "sendEmail": "Enviar por e-mail",
+    "sendEmailTitle": "Enviar proposta por e-mail",
+    "sendEmailField": "E-mail do cliente",
+    "sendEmailHelp": "O cliente recebe um e-mail com o link da proposta e o valor. Você é avisada quando ele abrir, aceitar ou assinar.",
+    "sendEmailConfirm": "Enviar agora",
+    "sendEmailSuccess": "E-mail enviado para o cliente",
+    "sendEmailError": "Não foi possível enviar o e-mail",
     "sendWhatsapp": "Enviar pelo WhatsApp",
     "downloadPdf": "Baixar PDF",
     "edit": "Editar",

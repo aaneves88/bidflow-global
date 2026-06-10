@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown } from 'lucide-react';
+import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown, Mail, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -47,6 +48,9 @@ export default function ProposalView() {
   const publicBase = usePublicAppUrl();
 
   const [closeOpen, setCloseOpen] = useState(false);
+  const [emailOpen, setEmailOpen] = useState(false);
+  const [emailTo, setEmailTo] = useState('');
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [pendingStatusId, setPendingStatusId] = useState<string>('');
   const [closedAmount, setClosedAmount] = useState<string>('');
   const [closedNotes, setClosedNotes] = useState<string>('');
@@ -145,10 +149,20 @@ export default function ProposalView() {
         </Button>
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-3">
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <Button variant="outline" onClick={copyLink}>
           <Copy className="mr-2 h-4 w-4" />
           {t('view.copyLink')}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setEmailTo(proposal.clients?.email || '');
+            setEmailOpen(true);
+          }}
+        >
+          <Mail className="mr-2 h-4 w-4" />
+          {t('view.sendEmail')}
         </Button>
         <Button variant="outline" asChild>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
@@ -293,6 +307,66 @@ export default function ProposalView() {
           </CardContent>
         </Card>
       )}
+
+      <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('view.sendEmailTitle')}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Label htmlFor="email-to">{t('view.sendEmailField')}</Label>
+            <Input
+              id="email-to"
+              type="email"
+              value={emailTo}
+              onChange={(e) => setEmailTo(e.target.value)}
+              placeholder="cliente@exemplo.com"
+            />
+            <p className="text-xs text-muted-foreground">
+              {t('view.sendEmailHelp')}
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEmailOpen(false)} disabled={sendingEmail}>
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              disabled={sendingEmail || !/^\S+@\S+\.\S+$/.test(emailTo)}
+              onClick={async () => {
+                if (!proposal) return;
+                setSendingEmail(true);
+                try {
+                  const { error } = await supabase.functions.invoke('send-transactional-email', {
+                    body: {
+                      templateName: 'proposal-sent',
+                      recipientEmail: emailTo.trim(),
+                      idempotencyKey: `proposal-sent-${proposal.id}-${emailTo.trim().toLowerCase()}`,
+                      templateData: {
+                        clientName: proposal.clients?.name || null,
+                        senderName: branding?.companyName || null,
+                        proposalTitle: proposal.title,
+                        proposalTotal: formatCurrency(Number(proposal.total_amount), proposal.currency),
+                        publicUrl,
+                        validUntil: proposal.valid_until ? formatDate(proposal.valid_until) : null,
+                      },
+                    },
+                  });
+                  if (error) throw error;
+                  toast({ title: t('view.sendEmailSuccess') });
+                  setEmailOpen(false);
+                } catch (e: any) {
+                  toast({ title: t('view.sendEmailError'), description: e.message, variant: 'destructive' });
+                } finally {
+                  setSendingEmail(false);
+                }
+              }}
+            >
+              {sendingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+              {t('view.sendEmailConfirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

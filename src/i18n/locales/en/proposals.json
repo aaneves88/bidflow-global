@@ -26,7 +26,7 @@
     "submitNew": "Create Proposal", "submitEdit": "Update Proposal"
   },
   "view": {
-    "copyLink": "Copy link", "sendWhatsapp": "Send via WhatsApp", "downloadPdf": "Download PDF",
+    "copyLink": "Copy link", "sendEmail": "Send by email", "sendEmailTitle": "Send proposal by email", "sendEmailField": "Client email", "sendEmailHelp": "Your client receives an email with the proposal link and total. You'll be notified when they open, accept or sign.", "sendEmailConfirm": "Send now", "sendEmailSuccess": "Email sent to client", "sendEmailError": "Couldn't send email", "sendWhatsapp": "Send via WhatsApp", "downloadPdf": "Download PDF",
     "edit": "Edit", "changeStatus": "Change status",
     "validUntil": "Valid until {{date}}", "items": "Line Items",
     "notes": "Notes", "terms": "Terms and conditions",

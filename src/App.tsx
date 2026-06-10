@@ -22,6 +22,7 @@ import SettingsPage from "@/pages/settings/SettingsPage";
 import NotFound from "@/pages/NotFound";
 import LegalPage from "@/pages/legal/LegalPage";
 import MobileEntry from "@/pages/MobileEntry";
+import Unsubscribe from "@/pages/Unsubscribe";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
             <Route path="/legal/:doc" element={<LegalPage />} />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route
               path="/onboarding"
               element={
