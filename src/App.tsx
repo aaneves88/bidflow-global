@@ -23,6 +23,14 @@ import NotFound from "@/pages/NotFound";
 import LegalPage from "@/pages/legal/LegalPage";
 import MobileEntry from "@/pages/MobileEntry";
 import Unsubscribe from "@/pages/Unsubscribe";
+import MobilePaywall from "@/pages/MobilePaywall";
+import { isNativeMobile } from "@/lib/platform";
+import { useRevenueCatBootstrap } from "@/hooks/useRevenueCat";
+
+function NativeBoot() {
+  useRevenueCatBootstrap();
+  return null;
+}
 
 const queryClient = new QueryClient();
 
@@ -30,13 +38,14 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
+        <NativeBoot />
         <Toaster />
         <Sonner />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/app" element={<MobileEntry />} />
-            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/pricing" element={isNativeMobile() ? <MobilePaywall /> : <Pricing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
