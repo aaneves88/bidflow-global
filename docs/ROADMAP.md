@@ -9,8 +9,10 @@ Status atualizado em cada release. Documento vivo.
 | 3    | v0.3.0 | Planos (Free/Pro/Business), limites, watermark, PDF | ✅ Lançada |
 | 3.5  | v0.3.1 | PDF híbrido (canvas + texto), branding completo no PDF | ✅ Lançada |
 | 4    | v0.4.0 | Hardening de segurança (RLS, RPC público, realtime, HIBP) | ✅ Lançada |
-| 5    | v0.5.0 | E-mails transacionais (auth + notificações de propostas) | 🚧 Em desenvolvimento |
-| 6    | v0.6.0 | Painel administrativo completo (métricas, usuários, settings) | ⏳ Próxima |
+| 5    | v0.5.0 | E-mails transacionais (auth + notificações de propostas) | ✅ Lançada |
+| 6    | v0.6.0 | **Mobile Android (Play Store) + RevenueCat** | 🚧 Em desenvolvimento |
+| 7    | v0.7.0 | iOS / App Store + Apple IAP | ⏳ Planejada |
+| 8    | v0.8.0 | Painel administrativo completo (métricas, usuários, settings) | ⏳ Planejada |
 | 7    | v0.7.0 | Pagamentos Stripe (assinaturas Pro/Business, checkout) | ⏳ Planejada |
 | 8    | v0.8.0 | LGPD + conformidade legal (termos, privacidade, consentimento) | ⏳ Planejada |
 | 9    | v0.9.0 | Landing institucional + SEO completo | ⏳ Planejada |

@@ -1,119 +1,182 @@
 
-## Objetivo
+# Plano: Orca na Google Play Store (v1.0 mobile)
 
-1. Dar aos e-mails de auth a cara da Orca (orquinha + paleta oceânica + tipografia do app), não só uma cor cyan no botão.
-2. Montar a infra de **app emails** (e-mails transacionais do produto: proposta enviada/visualizada/aceita/assinada, boas-vindas pós-confirmação etc.).
+## Decisões confirmadas
+- **Loja**: Android primeiro (Play Store). iOS fica para uma onda posterior.
+- **Pagamentos mobile**: Híbrido com **RevenueCat** (Stripe na web + Google Play Billing no app).
+- **Publisher**: Empresa / MEI (CNPJ).
 
----
+## Visão geral em fases
 
-## Parte 1 — Identidade visual nos e-mails de auth
-
-### O que muda nos 6 templates (`supabase/functions/_shared/email-templates/*.tsx`)
-
-**Header com a orquinha + wordmark**
-- Subir o `orca-mark.png` (mascote) para o bucket `email-assets` via `supabase--storage_upload` e usar a URL pública no `<Img>` do topo de cada template.
-- Header: orquinha 56×56 px centralizada + wordmark "Orca" logo abaixo (cyan #06B6D4, tracking apertado), com uma faixa fininha cyan→mint embaixo (gradient via `background-image` inline, compatível com clientes de e-mail).
-
-**Paleta oceânica completa** (hoje só o botão usa cyan)
-- `--ocean-deep` #0F172A → headings + footer dark
-- `--ocean-cyan` #06B6D4 → links, botão, wordmark
-- `--ocean-mint` #F0FDFA → fundo de seção destaque (caixa com o CTA)
-- `--slate-text` #475569 → corpo
-- `--slate-muted` #94A3B8 → footer
-
-**Estrutura nova de cada e-mail**
-1. Header (orquinha + wordmark + faixa gradiente)
-2. Heading (Inter/system-ui bold, #0F172A)
-3. Parágrafo de corpo
-4. **Caixa mint** com o botão CTA dentro (dá respiro e destaque, vira "card de ação")
-5. Texto de fallback ("Se o botão não funcionar, copie este link:") com a URL em monospace
-6. Divider sutil
-7. Footer com mini-orquinha + "Orca · CRM de propostas" + link para `orca-mento.app` + linha legal
-
-**Tom pt-BR refinado por template** (mantendo o que já existe, só polindo)
-- `signup`: "Bem-vinda à Orca 🐋" → "Sua conta está quase pronta" + microcopy explicando o que vem depois (criar 1ª proposta).
-- `recovery`: tom calmo, "Recebemos um pedido para redefinir sua senha".
-- `magic-link`: "Seu link de acesso à Orca".
-- `invite`: "Você foi convidado para a Orca" + nome de quem convidou se disponível.
-- `email-change`: mostra de/para com destaque visual.
-- `reauthentication`: código em caixa grande monospace centralizada com letter-spacing.
-
-**Constantes compartilhadas**
-- Extrair os style objects repetidos para um `_shared/email-templates/_styles.ts` (main, container, header, brand, h1, text, link, button, ctaBox, footer, footerLink, divider) para não duplicar em 6 arquivos e garantir consistência.
-
-### Assets
-- Bucket `email-assets` (público) — criar se não existir
-- Upload de `src/assets/brand/orca-mark.png` como `email-assets/orca-mark.png`
-- Upload de uma versão menor (mini, ~24px) para o footer — mesmo arquivo serve, controla por width
-
-### Deploy
-- `deploy_edge_functions(["auth-email-hook"])` após editar os templates
+```text
+Fase 0 — Pré-requisitos burocráticos (você)
+Fase 1 — Empacotamento Capacitor + branding nativo
+Fase 2 — Polimento UX mobile (ajustes pré-loja)
+Fase 3 — RevenueCat + Google Play Billing
+Fase 4 — Assets de loja + privacidade + compliance
+Fase 5 — Build assinado + faixa de teste interno
+Fase 6 — Teste fechado (14 dias / 12 testers) → Produção
+```
 
 ---
 
-## Parte 2 — App Emails (transacionais do produto)
+## Fase 0 — O que você precisa providenciar (fora do código)
 
-### Setup
-1. `email_domain--scaffold_transactional_email` → cria `send-transactional-email`, `handle-email-unsubscribe`, `handle-email-suppression`, registry e templates de exemplo.
-2. Apagar/substituir os templates de exemplo pelos nossos.
+Eu não consigo abrir nada disso por você, então essa lista é sua:
 
-### Templates a criar em `supabase/functions/_shared/transactional-email-templates/`
+1. **CNPJ do MEI ativo** com comprovante.
+2. **Conta Google Play Console** (US$ 25, pagamento único) — registrar como **organização** usando o CNPJ.
+   - Google vai pedir verificação D-U-N-S (gratuito via Dun & Bradstreet, 7–14 dias).
+3. **Cartão internacional** habilitado para a taxa de US$ 25 e para receber pagamentos (configurar Merchant Account no Play Console).
+4. **Conta no RevenueCat** (grátis até US$ 2.5k MTR) — https://www.revenuecat.com.
+5. **Mac com Xcode** — **não precisa agora** (é só para iOS, fase futura).
 
-Todos usando os mesmos `_styles.ts` dos auth emails (mesma identidade visual orquinha + oceano).
-
-| Template | Quando dispara | Destinatário |
-|---|---|---|
-| `welcome.tsx` | Após `signup` confirmado (trigger via DB on `auth.users` email_confirmed_at) | Novo usuário |
-| `proposal-sent.tsx` | Usuário clica "Enviar proposta" e gera link público | Cliente da proposta |
-| `proposal-viewed.tsx` | 1ª visualização pública registrada em `proposal_views` | Dono da proposta |
-| `proposal-accepted.tsx` | Cliente clica "Aceitar" no link público | Dono da proposta |
-| `proposal-signed.tsx` | Cliente conclui assinatura | Dono + cópia para cliente |
-| `proposal-rejected.tsx` | Cliente recusa | Dono da proposta |
-
-Cada template tem: header orquinha, preview text útil, dados dinâmicos (nome da proposta, valor BRL formatado, nome do cliente, link para abrir no app/público), CTA na caixa mint, footer padrão. Sem upsell/marketing.
-
-### Wiring dos triggers
-- **welcome**: novo edge function `on-user-confirmed` (DB webhook em `auth.users` UPDATE quando `email_confirmed_at` passa de null→valor) → invoca `send-transactional-email`.
-- **proposal-sent**: chamar `supabase.functions.invoke('send-transactional-email', ...)` no `ProposalView.tsx` quando o usuário gerar/copiar o link público (ou novo botão "Enviar por e-mail ao cliente").
-- **proposal-viewed / accepted / signed / rejected**: já temos hooks/RPC nesses pontos (`useProposalViews`, `PublicProposal.tsx`). Adicionar a chamada de envio no servidor (edge function existente ou trigger DB → função) para garantir que dispara mesmo se o cliente fechar o navegador.
-
-Todos usam `idempotencyKey` derivada de `proposal_id + evento` para não duplicar.
-
-### Página pública de unsubscribe
-- Rota `/email/unsubscribe` (path exato vem do scaffold) que lê `?token=`, chama `handle-email-unsubscribe`, mostra estados confirm/sucesso/inválido com a identidade Orca.
+Posso seguir construindo o app sem nada disso. Você roda em paralelo.
 
 ---
 
-## Versionamento e docs (conforme regra de releases)
+## Fase 1 — Empacotamento Capacitor
 
-- Bump `package.json` → `0.5.0`
-- `docs/releases/v0.5.0-emails.md` documentando: rebrand auth emails + app emails + lista de eventos transacionais
-- Atualizar `docs/ROADMAP.md` marcando Onda 5 (e-mails) como concluída
-- Atualizar `docs/marketing/features-list.md` adicionando "Notificações automáticas por e-mail"
+**Objetivo**: gerar projeto Android nativo a partir do React.
+
+- Adicionar dependências: `@capacitor/core`, `@capacitor/cli` (dev), `@capacitor/android`.
+- Criar `capacitor.config.ts` na raiz com:
+  - `appId`: `app.orca.mento` (precisa decidir — sugiro este, é o que vai aparecer pra sempre na Play Store).
+  - `appName`: `Orca`.
+  - `webDir`: `dist`.
+  - **Não** colocar `server.url` apontando pro sandbox no build final (só pra dev).
+- Configurar splash screen e ícone adaptativo Android com a orquinha.
+- Gerar todos os tamanhos de ícone (mipmap-mdpi até xxxhdpi + ícone adaptativo monocromático Android 13+) a partir de `src/assets/brand/`.
+- Configurar `StatusBar` (cor `#0F172A` — slate da paleta).
+- Configurar deep links: `https://orca-mento.app/*` abre no app (Asset Links).
+
+**Sua ação**: depois que eu criar a config, você roda localmente:
+```bash
+npm install
+npx cap add android
+npx cap sync
+npx cap open android   # abre Android Studio
+```
 
 ---
 
-## Detalhes técnicos
+## Fase 2 — Polimento UX mobile pré-loja
 
-- React Email components 0.0.22 (compatível com edge runtime)
-- Imagens em e-mail via `<Img>` com `width`/`height` explícitos (Outlook precisa)
-- Cores inline em HSL convertidas para HEX (clientes de e-mail antigos não suportam HSL)
-- `Body` background sempre `#ffffff` (regra do guia)
-- Não adicionar link de unsubscribe nos templates — o sistema acrescenta no app emails; auth emails não levam unsubscribe
-- Valores monetários formatados em pt-BR (`Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`) dentro do template antes de renderizar
+Apps web-view simples são reprovados pela Google por "low quality". Ajustes:
+
+- Garantir que **toda navegação principal** funciona offline minimamente (mostrar tela de "sem conexão" educada, não tela branca).
+- Botão de voltar Android nativo respeitado (`App.addListener('backButton', ...)`).
+- Esconder/desabilitar UI de "Stripe checkout" e "Upgrade no site" quando rodando no app Android — substituir por **paywall RevenueCat** (Fase 3).
+- Texto legal "Termos / Privacidade" acessível em até 2 cliques (já temos `/legal/*`).
+- Esconder o link "Editar com Lovable" badge no build de produção.
 
 ---
 
-## Ordem de execução
+## Fase 3 — RevenueCat + Google Play Billing
 
-1. Criar `_styles.ts` compartilhado
-2. Reescrever os 6 templates de auth com nova identidade + upload da orquinha pro bucket
-3. Deploy `auth-email-hook`
-4. Rodar `scaffold_transactional_email`
-5. Criar os 6 templates de app emails + registry
-6. Wirar triggers (welcome via DB webhook, proposal-* via edge/server)
-7. Criar página `/email/unsubscribe`
-8. Deploy de tudo
-9. Bump versão + release notes + roadmap
+**Por que RevenueCat**: unifica Stripe (web) + Google Play Billing (Android) + futuramente Apple IAP (iOS) num único sistema de "entitlements". Webhook entrega para nosso backend Cloud quem é Pro/Business.
 
-Após aprovado, executo na sequência e te mostro previews antes de fechar.
+**Setup**:
+1. Criar produtos no **Google Play Console → Monetize → Subscriptions**:
+   - `orca_pro_monthly`, `orca_pro_yearly`, `orca_business_monthly`, `orca_business_yearly`.
+   - Preços em BRL.
+2. Linkar Play Console ↔ RevenueCat (service account JSON).
+3. No app, instalar `@revenuecat/purchases-capacitor`.
+4. Criar `MobilePaywall.tsx` que substitui `/pricing` quando `Capacitor.isNativePlatform()`.
+5. Edge function `revenuecat-webhook` recebe eventos (compra, renovação, cancelamento) e atualiza `user_plan` no banco — fonte única da verdade.
+6. Stripe webhook (que já existe) também alimenta o mesmo `user_plan` — RevenueCat aceita Stripe como provider externo, mantendo entitlements unificados.
+
+**Importante**: Apple/Google **proíbem** mostrar preço da web ou linkar pro site para pagar dentro do app. Vou esconder esses elementos no build mobile.
+
+---
+
+## Fase 4 — Assets de loja + compliance
+
+Eu gero (você revisa):
+- **Ícone Play Store**: 512x512 PNG (orquinha sobre slate).
+- **Feature graphic**: 1024x500 (orquinha + tagline "Crie propostas em minutos").
+- **Screenshots**: 6 telas mobile da Orca em pt-BR (dashboard, nova proposta, lista, link público, etc.) em 1080x1920.
+- **Descrição curta** (80 char) e **longa** (4000 char) em pt-BR — aproveitar `docs/marketing/app-description-pt.md`.
+- **Política de Privacidade pública**: já existe em `https://orca-mento.app/legal/privacy` ✅.
+- **Termos**: `https://orca-mento.app/legal/terms` ✅.
+- **Email de suporte**: precisamos definir (sugestão: `suporte@orca-mento.app` — você configura no domínio).
+
+Você preenche no Play Console:
+- **Data Safety form**: declarar coleta de email, nome, dados de propostas (criptografados em trânsito + repouso).
+- **Classificação etária**: questionário IARC (vai dar "Livre").
+- **Categoria**: Produtividade ou Negócios.
+- **Público-alvo**: 18+.
+
+---
+
+## Fase 5 — Build assinado + faixa de teste interno
+
+1. Gerar **keystore** no Android Studio (`orca-release.jks`) — **guardar com a vida**, perdeu = nunca mais atualiza o app.
+2. Configurar `android/app/build.gradle` com signing config.
+3. Build `.aab` (Android App Bundle): `./gradlew bundleRelease`.
+4. Upload no Play Console → **Testes internos** (até 100 testers, libera em ~hora).
+5. Convidar 2-3 pessoas (você + 1-2 amigos) pra instalar.
+
+---
+
+## Fase 6 — Teste fechado → Produção
+
+Google exige (contas novas, regra de 2023):
+- **14 dias** mínimo em **teste fechado** com **12+ testers ativos** antes de poder publicar em produção.
+- Recrutar via formulário ou grupo do WhatsApp (sugiro: pedir pra 15 pessoas, esperar 12 instalarem).
+- Após o período, requisitar revisão de produção → review humana de 1-7 dias → **app no ar**.
+
+---
+
+## Roadmap atualizado
+
+Adicionar nova onda no `docs/ROADMAP.md`:
+
+| Onda | Versão | Tema | Status |
+|------|--------|------|--------|
+| 6    | v0.6.0 | **Mobile Android (Play Store) + RevenueCat** | ⏳ Próxima |
+
+Vai bumpar o `package.json` para `0.6.0` no final.
+
+---
+
+## Detalhes técnicos (seção pra dev)
+
+**Arquivos que vou criar/editar (ordem)**:
+- `capacitor.config.ts` (raiz)
+- `package.json` (deps Capacitor + RevenueCat)
+- `src/lib/platform.ts` — helper `isNativeMobile()`
+- `src/pages/MobilePaywall.tsx` — novo
+- `src/pages/Pricing.tsx` — redirect pra MobilePaywall em native
+- `src/hooks/useRevenueCat.ts` — init + login com user.id
+- `src/main.tsx` — bootstrap RevenueCat só em native
+- `supabase/functions/revenuecat-webhook/index.ts` — novo
+- `supabase/config.toml` — registrar webhook (`verify_jwt = false`)
+- `supabase/migrations/<timestamp>_revenuecat_events.sql` — tabela de auditoria
+- `android/` — gerado pelo `npx cap add android` (você roda)
+- `public/.well-known/assetlinks.json` — para deep links
+- `docs/releases/v0.6.0-mobile.md`
+- `docs/ROADMAP.md` + `package.json` (bump 0.6.0)
+
+**Pontos críticos**:
+- `RC_API_KEY` (público Android) vai como `import.meta.env` — é chave pública, ok no bundle.
+- `RC_WEBHOOK_SECRET` via `add_secret` para validar assinatura HMAC do webhook.
+- `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` fica **no RevenueCat**, não no nosso backend.
+- Stripe continua funcionando 100% na web sem alteração.
+
+**Riscos / o que pode dar errado**:
+- D-U-N-S demora — começa hoje.
+- Política de Privacidade tem que mencionar **especificamente** RevenueCat e Google Play Billing — vou atualizar o conteúdo de `legal.json` no namespace `privacy`.
+- Se o appId mudar depois do primeiro publish, é um app novo. Decidir `app.orca.mento` agora e nunca mais mexer.
+
+---
+
+## O que NÃO está neste plano (fica pra depois)
+
+- iOS / App Store (Fase 7, requer Mac + Apple Developer Program US$ 99/ano + Sign in with Apple).
+- Push notifications nativas (Firebase Cloud Messaging) — posso adicionar se quiser, mas não é requisito de loja.
+- Widgets / quick actions Android.
+
+---
+
+**Próximo passo se aprovar**: aceito o plano e começo pela Fase 1 (Capacitor + branding nativo). Em paralelo, você abre conta Google Play Console + RevenueCat.
