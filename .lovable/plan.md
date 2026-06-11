@@ -1,182 +1,126 @@
+# Fase 2 — Polimento UX mobile (pré-loja)
 
-# Plano: Orca na Google Play Store (v1.0 mobile)
+Objetivo: deixar o app pronto pra rodar dentro do wrapper Android Capacitor sem cair em armadilhas comuns de reprovação ("webview pelada", links pra pagamento externo, botão voltar quebrado, tela branca offline).
 
-## Decisões confirmadas
-- **Loja**: Android primeiro (Play Store). iOS fica para uma onda posterior.
-- **Pagamentos mobile**: Híbrido com **RevenueCat** (Stripe na web + Google Play Billing no app).
-- **Publisher**: Empresa / MEI (CNPJ).
-
-## Visão geral em fases
-
-```text
-Fase 0 — Pré-requisitos burocráticos (você)
-Fase 1 — Empacotamento Capacitor + branding nativo
-Fase 2 — Polimento UX mobile (ajustes pré-loja)
-Fase 3 — RevenueCat + Google Play Billing
-Fase 4 — Assets de loja + privacidade + compliance
-Fase 5 — Build assinado + faixa de teste interno
-Fase 6 — Teste fechado (14 dias / 12 testers) → Produção
-```
+Tudo é frontend. Sem mexer em banco, edge functions ou Stripe web.
 
 ---
 
-## Fase 0 — O que você precisa providenciar (fora do código)
+## 1. Helper central de "estou no app nativo?"
 
-Eu não consigo abrir nada disso por você, então essa lista é sua:
+Hoje só temos `isNativeMobile()` em `src/lib/platform.ts`. Vou adicionar um hook fininho:
 
-1. **CNPJ do MEI ativo** com comprovante.
-2. **Conta Google Play Console** (US$ 25, pagamento único) — registrar como **organização** usando o CNPJ.
-   - Google vai pedir verificação D-U-N-S (gratuito via Dun & Bradstreet, 7–14 dias).
-3. **Cartão internacional** habilitado para a taxa de US$ 25 e para receber pagamentos (configurar Merchant Account no Play Console).
-4. **Conta no RevenueCat** (grátis até US$ 2.5k MTR) — https://www.revenuecat.com.
-5. **Mac com Xcode** — **não precisa agora** (é só para iOS, fase futura).
+- `src/hooks/useIsNative.ts` → `useIsNative(): boolean` (estado reativo, fica `true` no Android/iOS).
 
-Posso seguir construindo o app sem nada disso. Você roda em paralelo.
+Assim qualquer componente pode esconder UI condicionalmente sem importar o helper direto e sem riscos de SSR.
 
 ---
 
-## Fase 1 — Empacotamento Capacitor
+## 2. Esconder "Stripe / Upgrade pelo site" no build nativo
 
-**Objetivo**: gerar projeto Android nativo a partir do React.
+Regra de loja: app não pode oferecer pagamento por fora do Google Play Billing.
 
-- Adicionar dependências: `@capacitor/core`, `@capacitor/cli` (dev), `@capacitor/android`.
-- Criar `capacitor.config.ts` na raiz com:
-  - `appId`: `app.orca.mento` (precisa decidir — sugiro este, é o que vai aparecer pra sempre na Play Store).
-  - `appName`: `Orca`.
-  - `webDir`: `dist`.
-  - **Não** colocar `server.url` apontando pro sandbox no build final (só pra dev).
-- Configurar splash screen e ícone adaptativo Android com a orquinha.
-- Gerar todos os tamanhos de ícone (mipmap-mdpi até xxxhdpi + ícone adaptativo monocromático Android 13+) a partir de `src/assets/brand/`.
-- Configurar `StatusBar` (cor `#0F172A` — slate da paleta).
-- Configurar deep links: `https://orca-mento.app/*` abre no app (Asset Links).
+Locais a tratar (sem remover nada da web):
 
-**Sua ação**: depois que eu criar a config, você roda localmente:
-```bash
-npm install
-npx cap add android
-npx cap sync
-npx cap open android   # abre Android Studio
-```
+- `src/components/UpgradeModal.tsx` → no nativo, esconder CTA que abre Stripe Checkout e mostrar botão "Ver planos" que vai pra `/pricing` (que já é trocado por `MobilePaywall` quando nativo).
+- `src/components/UsageIndicator.tsx` → mesma troca de CTA.
+- `src/pages/Landing.tsx` → no nativo, esconder seção de pricing com preços e botão "Assinar" (Landing é improvável de aparecer no app, mas blindamos).
+- `src/pages/admin/integrations/StripeIntegrationCard.tsx` e qualquer link de portal de billing no `SettingsPage` → no nativo, mostrar aviso "Gerencie sua assinatura pelo Google Play" em vez do botão.
+- Footer / sidebar: remover link externo "Site" / "Planos web" no nativo.
+
+Resultado: nenhuma rota visível no app menciona preço externo nem abre `checkout.stripe.com`.
 
 ---
 
-## Fase 2 — Polimento UX mobile pré-loja
+## 3. Botão voltar nativo do Android
 
-Apps web-view simples são reprovados pela Google por "low quality". Ajustes:
+Sem isso, o Android fecha o app ao apertar voltar na home — reprovação comum.
 
-- Garantir que **toda navegação principal** funciona offline minimamente (mostrar tela de "sem conexão" educada, não tela branca).
-- Botão de voltar Android nativo respeitado (`App.addListener('backButton', ...)`).
-- Esconder/desabilitar UI de "Stripe checkout" e "Upgrade no site" quando rodando no app Android — substituir por **paywall RevenueCat** (Fase 3).
-- Texto legal "Termos / Privacidade" acessível em até 2 cliques (já temos `/legal/*`).
-- Esconder o link "Editar com Lovable" badge no build de produção.
+- Em `src/App.tsx` (ou um `NativeBackHandler` ao lado do `NativeBoot`):
+  - Importar `App` do `@capacitor/app` dinamicamente quando `isNativeMobile()`.
+  - Listener `backButton`: se `history.length > 1` → `history.back()`; senão → `App.exitApp()`.
+  - Limpar listener no unmount.
 
----
-
-## Fase 3 — RevenueCat + Google Play Billing
-
-**Por que RevenueCat**: unifica Stripe (web) + Google Play Billing (Android) + futuramente Apple IAP (iOS) num único sistema de "entitlements". Webhook entrega para nosso backend Cloud quem é Pro/Business.
-
-**Setup**:
-1. Criar produtos no **Google Play Console → Monetize → Subscriptions**:
-   - `orca_pro_monthly`, `orca_pro_yearly`, `orca_business_monthly`, `orca_business_yearly`.
-   - Preços em BRL.
-2. Linkar Play Console ↔ RevenueCat (service account JSON).
-3. No app, instalar `@revenuecat/purchases-capacitor`.
-4. Criar `MobilePaywall.tsx` que substitui `/pricing` quando `Capacitor.isNativePlatform()`.
-5. Edge function `revenuecat-webhook` recebe eventos (compra, renovação, cancelamento) e atualiza `user_plan` no banco — fonte única da verdade.
-6. Stripe webhook (que já existe) também alimenta o mesmo `user_plan` — RevenueCat aceita Stripe como provider externo, mantendo entitlements unificados.
-
-**Importante**: Apple/Google **proíbem** mostrar preço da web ou linkar pro site para pagar dentro do app. Vou esconder esses elementos no build mobile.
+Sem dependência nova (`@capacitor/app` já vem com Capacitor core ecosystem; se faltar, adicionar `@capacitor/app`).
 
 ---
 
-## Fase 4 — Assets de loja + compliance
+## 4. Tela "sem conexão" decente (sem service worker)
 
-Eu gero (você revisa):
-- **Ícone Play Store**: 512x512 PNG (orquinha sobre slate).
-- **Feature graphic**: 1024x500 (orquinha + tagline "Crie propostas em minutos").
-- **Screenshots**: 6 telas mobile da Orca em pt-BR (dashboard, nova proposta, lista, link público, etc.) em 1080x1920.
-- **Descrição curta** (80 char) e **longa** (4000 char) em pt-BR — aproveitar `docs/marketing/app-description-pt.md`.
-- **Política de Privacidade pública**: já existe em `https://orca-mento.app/legal/privacy` ✅.
-- **Termos**: `https://orca-mento.app/legal/terms` ✅.
-- **Email de suporte**: precisamos definir (sugestão: `suporte@orca-mento.app` — você configura no domínio).
+Não vamos implementar PWA offline — só evitar tela branca quando o usuário abre o app sem net.
 
-Você preenche no Play Console:
-- **Data Safety form**: declarar coleta de email, nome, dados de propostas (criptografados em trânsito + repouso).
-- **Classificação etária**: questionário IARC (vai dar "Livre").
-- **Categoria**: Produtividade ou Negócios.
-- **Público-alvo**: 18+.
+- `src/components/OfflineBanner.tsx`: escuta `navigator.onLine` + eventos `online`/`offline`. Quando offline, mostra banner fixo no topo "Sem conexão — algumas funções podem não funcionar".
+- Montar dentro de `AppLayout`.
+- ErrorBoundary global em `App.tsx` que, se a primeira renderização falhar por fetch, mostra tela de "Tente novamente" em vez de branco. Reusar `NotFound` como base visual.
 
 ---
 
-## Fase 5 — Build assinado + faixa de teste interno
+## 5. Esconder badge "Editar com Lovable" no build de produção
 
-1. Gerar **keystore** no Android Studio (`orca-release.jks`) — **guardar com a vida**, perdeu = nunca mais atualiza o app.
-2. Configurar `android/app/build.gradle` com signing config.
-3. Build `.aab` (Android App Bundle): `./gradlew bundleRelease`.
-4. Upload no Play Console → **Testes internos** (até 100 testers, libera em ~hora).
-5. Convidar 2-3 pessoas (você + 1-2 amigos) pra instalar.
+Vou chamar `publish_settings--set_badge_visibility({ hide_badge: true })` (requer Pro). Se não puder, registro no plano que o usuário precisa ativar manualmente.
 
 ---
 
-## Fase 6 — Teste fechado → Produção
+## 6. Status bar e safe-area no Android
 
-Google exige (contas novas, regra de 2023):
-- **14 dias** mínimo em **teste fechado** com **12+ testers ativos** antes de poder publicar em produção.
-- Recrutar via formulário ou grupo do WhatsApp (sugiro: pedir pra 15 pessoas, esperar 12 instalarem).
-- Após o período, requisitar revisão de produção → review humana de 1-7 dias → **app no ar**.
+Já temos cor da status bar no `main.tsx`. Falta:
 
----
-
-## Roadmap atualizado
-
-Adicionar nova onda no `docs/ROADMAP.md`:
-
-| Onda | Versão | Tema | Status |
-|------|--------|------|--------|
-| 6    | v0.6.0 | **Mobile Android (Play Store) + RevenueCat** | ⏳ Próxima |
-
-Vai bumpar o `package.json` para `0.6.0` no final.
+- `index.html`: meta `viewport-fit=cover`.
+- `src/index.css`: adicionar utilitários `pt-safe`, `pb-safe` usando `env(safe-area-inset-*)` e aplicar no `AppLayout` (header + bottom nav, se existir).
 
 ---
 
-## Detalhes técnicos (seção pra dev)
+## 7. Links externos viram in-app browser
 
-**Arquivos que vou criar/editar (ordem)**:
-- `capacitor.config.ts` (raiz)
-- `package.json` (deps Capacitor + RevenueCat)
-- `src/lib/platform.ts` — helper `isNativeMobile()`
-- `src/pages/MobilePaywall.tsx` — novo
-- `src/pages/Pricing.tsx` — redirect pra MobilePaywall em native
-- `src/hooks/useRevenueCat.ts` — init + login com user.id
-- `src/main.tsx` — bootstrap RevenueCat só em native
-- `supabase/functions/revenuecat-webhook/index.ts` — novo
-- `supabase/config.toml` — registrar webhook (`verify_jwt = false`)
-- `supabase/migrations/<timestamp>_revenuecat_events.sql` — tabela de auditoria
-- `android/` — gerado pelo `npx cap add android` (você roda)
-- `public/.well-known/assetlinks.json` — para deep links
-- `docs/releases/v0.6.0-mobile.md`
-- `docs/ROADMAP.md` + `package.json` (bump 0.6.0)
+Qualquer `<a target="_blank">` no app nativo precisa abrir no navegador in-app (`@capacitor/browser`) ou bloquear. Vou:
 
-**Pontos críticos**:
-- `RC_API_KEY` (público Android) vai como `import.meta.env` — é chave pública, ok no bundle.
-- `RC_WEBHOOK_SECRET` via `add_secret` para validar assinatura HMAC do webhook.
-- `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` fica **no RevenueCat**, não no nosso backend.
-- Stripe continua funcionando 100% na web sem alteração.
+- Criar `src/lib/openExternal.ts` que, no nativo, usa `Browser.open({ url })`; na web, faz `window.open`.
+- Trocar pontos óbvios: footer legal, links de marketplace/integrações no `SettingsPage`, links de docs.
 
-**Riscos / o que pode dar errado**:
-- D-U-N-S demora — começa hoje.
-- Política de Privacidade tem que mencionar **especificamente** RevenueCat e Google Play Billing — vou atualizar o conteúdo de `legal.json` no namespace `privacy`.
-- Se o appId mudar depois do primeiro publish, é um app novo. Decidir `app.orca.mento` agora e nunca mais mexer.
+Adiciona dep: `@capacitor/browser` (e `@capacitor/app` se faltar).
 
 ---
 
-## O que NÃO está neste plano (fica pra depois)
+## 8. Smoke test no preview web
 
-- iOS / App Store (Fase 7, requer Mac + Apple Developer Program US$ 99/ano + Sign in with Apple).
-- Push notifications nativas (Firebase Cloud Messaging) — posso adicionar se quiser, mas não é requisito de loja.
-- Widgets / quick actions Android.
+Após cada bloco, abrir o preview e conferir que **na web nada mudou** (todos os guards são `if (isNative)`).
 
 ---
 
-**Próximo passo se aprovar**: aceito o plano e começo pela Fase 1 (Capacitor + branding nativo). Em paralelo, você abre conta Google Play Console + RevenueCat.
+## Arquivos que vou criar/editar
+
+Criar:
+- `src/hooks/useIsNative.ts`
+- `src/components/OfflineBanner.tsx`
+- `src/components/NativeBackHandler.tsx`
+- `src/components/ErrorBoundary.tsx`
+- `src/lib/openExternal.ts`
+
+Editar:
+- `src/App.tsx` (montar NativeBackHandler + ErrorBoundary)
+- `src/components/AppLayout.tsx` (OfflineBanner + safe-area)
+- `src/components/UpgradeModal.tsx`
+- `src/components/UsageIndicator.tsx`
+- `src/pages/Landing.tsx`
+- `src/pages/admin/integrations/StripeIntegrationCard.tsx`
+- `src/pages/settings/SettingsPage.tsx`
+- `src/index.css` (safe-area utils)
+- `index.html` (viewport-fit=cover)
+- `package.json` (`@capacitor/app`, `@capacitor/browser`)
+
+Ações fora do código:
+- Esconder badge Lovable via tool (requer Pro).
+
+---
+
+## O que NÃO entra nesta fase
+
+- RevenueCat paywall funcional (Fase 3).
+- Assets de loja, descrição, screenshots (Fase 4).
+- Build assinado `.aab` (Fase 5 — você roda local com Android Studio).
+- Service worker / PWA offline real.
+- Push notifications.
+
+---
+
+**Se aprovar, começo pelo bloco 1 → 4 (helper, esconder Stripe, back button, offline banner) e depois 5 → 7.**

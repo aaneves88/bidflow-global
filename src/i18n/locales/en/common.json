@@ -1,27 +1,57 @@
 {
   "brand": "Orca",
   "actions": {
-    "save": "Save", "cancel": "Cancel", "delete": "Delete", "edit": "Edit",
-    "create": "Create", "update": "Update", "new": "New", "back": "Back",
-    "loading": "Loading...", "search": "Search", "confirm": "Confirm",
-    "skip": "Skip", "next": "Next", "previous": "Previous", "finish": "Finish",
-    "view": "View", "copy": "Copy", "send": "Send", "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "new": "New",
+    "back": "Back",
+    "loading": "Loading...",
+    "search": "Search",
+    "confirm": "Confirm",
+    "skip": "Skip",
+    "next": "Next",
+    "previous": "Previous",
+    "finish": "Finish",
+    "view": "View",
+    "copy": "Copy",
+    "send": "Send",
+    "close": "Close",
     "tryAgain": "Try again"
   },
-  "states": { "loading": "Loading...", "empty": "No records", "error": "Something went wrong" },
+  "states": {
+    "loading": "Loading...",
+    "empty": "No records",
+    "error": "Something went wrong"
+  },
   "messages": {
-    "saved": "Changes saved", "deleted": "Deleted successfully", "linkCopied": "Link copied!",
-    "errorSaving": "Error saving", "errorDeleting": "Error deleting"
+    "saved": "Changes saved",
+    "deleted": "Deleted successfully",
+    "linkCopied": "Link copied!",
+    "errorSaving": "Error saving",
+    "errorDeleting": "Error deleting"
   },
   "validation": {
-    "required": "Required field", "invalidEmail": "Invalid email",
+    "required": "Required field",
+    "invalidEmail": "Invalid email",
     "minLength": "Minimum {{count}} characters"
   },
-  "currency": { "default": "USD" },
+  "currency": {
+    "default": "USD"
+  },
   "nav": {
-    "dashboard": "Dashboard", "clients": "Clients", "proposals": "Proposals",
-    "admin": "Admin", "settings": "Settings", "pricing": "Pricing",
-    "signIn": "Sign in", "signOut": "Sign out", "getStarted": "Get started",
+    "dashboard": "Dashboard",
+    "clients": "Clients",
+    "proposals": "Proposals",
+    "admin": "Admin",
+    "settings": "Settings",
+    "pricing": "Pricing",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "getStarted": "Get started",
     "administration": "Administration"
   },
   "notifications": {
@@ -30,7 +60,11 @@
     "viewed": "Your proposal was viewed",
     "viewedBy": "{{name}} viewed your proposal"
   },
-  "notFound": { "title": "404", "message": "Oops! Page not found", "back": "Return to home" },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "back": "Return to home"
+  },
   "upgradeModal": {
     "title": "Free limit reached",
     "description": "You have used your 3 free proposals. To keep creating proposals and send them with your own branding, choose a plan.",
@@ -52,5 +86,8 @@
     "invalidImage": "Invalid file. Please select an image.",
     "logoTooLarge": "Logo too large",
     "logoTooLargeHint": "{{size}}KB. Try a smaller image."
+  },
+  "offline": {
+    "banner": "Offline — some features may not work"
   }
 }

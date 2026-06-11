@@ -26,6 +26,8 @@ import Unsubscribe from "@/pages/Unsubscribe";
 import MobilePaywall from "@/pages/MobilePaywall";
 import { isNativeMobile } from "@/lib/platform";
 import { useRevenueCatBootstrap } from "@/hooks/useRevenueCat";
+import { NativeBackHandler } from "@/components/NativeBackHandler";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 function NativeBoot() {
   useRevenueCatBootstrap();
@@ -35,14 +37,16 @@ function NativeBoot() {
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <NativeBoot />
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <NativeBoot />
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <NativeBackHandler />
+            <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/app" element={<MobileEntry />} />
             <Route path="/pricing" element={isNativeMobile() ? <MobilePaywall /> : <Pricing />} />
@@ -123,12 +127,13 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
