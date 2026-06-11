@@ -197,6 +197,7 @@ export type Database = {
           is_starter: boolean
           max_clients: number | null
           max_proposals: number | null
+          metadata: Json
           name: string
           price: number | null
           trial_days: number
@@ -215,6 +216,7 @@ export type Database = {
           is_starter?: boolean
           max_clients?: number | null
           max_proposals?: number | null
+          metadata?: Json
           name: string
           price?: number | null
           trial_days?: number
@@ -233,6 +235,7 @@ export type Database = {
           is_starter?: boolean
           max_clients?: number | null
           max_proposals?: number | null
+          metadata?: Json
           name?: string
           price?: number | null
           trial_days?: number
@@ -536,6 +539,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      revenuecat_events: {
+        Row: {
+          app_user_id: string
+          created_at: string
+          environment: string
+          event_id: string
+          event_type: string
+          id: string
+          payload: Json
+          product_id: string | null
+        }
+        Insert: {
+          app_user_id: string
+          created_at?: string
+          environment?: string
+          event_id: string
+          event_type: string
+          id?: string
+          payload: Json
+          product_id?: string | null
+        }
+        Update: {
+          app_user_id?: string
+          created_at?: string
+          environment?: string
+          event_id?: string
+          event_type?: string
+          id?: string
+          payload?: Json
+          product_id?: string | null
+        }
+        Relationships: []
       }
       suppressed_emails: {
         Row: {
