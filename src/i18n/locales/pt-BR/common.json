@@ -86,5 +86,8 @@
     "invalidImage": "Arquivo inválido. Selecione uma imagem.",
     "logoTooLarge": "Logo muito grande",
     "logoTooLargeHint": "{{size}}KB. Tente uma imagem menor."
+  },
+  "offline": {
+    "banner": "Sem conexão — algumas funções podem não funcionar"
   }
 }
