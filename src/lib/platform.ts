@@ -1,46 +1,37 @@
 /**
  * Platform detection helpers.
  *
- * We import Capacitor lazily and defensively so the web bundle keeps working
- * even when @capacitor/core is not installed in a given environment.
+ * Capacitor injects a global `window.Capacitor` object at runtime on native
+ * platforms. We probe that global instead of importing `@capacitor/core`,
+ * which avoids pulling Capacitor's CommonJS interop into the web bundle
+ * (which can cause Vite to duplicate React).
  */
 
-let cachedIsNative: boolean | null = null;
-let cachedPlatform: 'web' | 'android' | 'ios' | null = null;
+type CapacitorGlobal = {
+  isNativePlatform?: () => boolean;
+  getPlatform?: () => string;
+};
 
-function detect(): { isNative: boolean; platform: 'web' | 'android' | 'ios' } {
-  if (cachedIsNative !== null && cachedPlatform !== null) {
-    return { isNative: cachedIsNative, platform: cachedPlatform };
-  }
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { Capacitor } = require('@capacitor/core');
-    const isNative = !!Capacitor?.isNativePlatform?.();
-    const platform = (Capacitor?.getPlatform?.() ?? 'web') as 'web' | 'android' | 'ios';
-    cachedIsNative = isNative;
-    cachedPlatform = platform;
-    return { isNative, platform };
-  } catch {
-    cachedIsNative = false;
-    cachedPlatform = 'web';
-    return { isNative: false, platform: 'web' };
-  }
+function getCapacitor(): CapacitorGlobal | undefined {
+  if (typeof window === 'undefined') return undefined;
+  return (window as unknown as { Capacitor?: CapacitorGlobal }).Capacitor;
 }
 
 export function isNativeMobile(): boolean {
-  return detect().isNative;
-}
-
-export function isAndroidNative(): boolean {
-  const { isNative, platform } = detect();
-  return isNative && platform === 'android';
-}
-
-export function isIosNative(): boolean {
-  const { isNative, platform } = detect();
-  return isNative && platform === 'ios';
+  const cap = getCapacitor();
+  return !!cap?.isNativePlatform?.();
 }
 
 export function getPlatform(): 'web' | 'android' | 'ios' {
-  return detect().platform;
+  const cap = getCapacitor();
+  const platform = cap?.getPlatform?.() ?? 'web';
+  return platform === 'android' || platform === 'ios' ? platform : 'web';
+}
+
+export function isAndroidNative(): boolean {
+  return isNativeMobile() && getPlatform() === 'android';
+}
+
+export function isIosNative(): boolean {
+  return isNativeMobile() && getPlatform() === 'ios';
 }
