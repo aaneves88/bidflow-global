@@ -42,5 +42,21 @@
   "messages": {
     "saved": "Configurações salvas",
     "error": "Erro ao salvar configurações"
+  },
+  "account": {
+    "title": "Minha conta",
+    "profileTitle": "Perfil",
+    "email": "E-mail",
+    "legalTitle": "Documentos legais",
+    "terms": "Termos de uso",
+    "privacy": "Política de privacidade",
+    "dangerTitle": "Zona de risco",
+    "deleteDescription": "Excluir sua conta apaga todos os seus dados de forma permanente: clientes, propostas, configurações e histórico. Esta ação não pode ser desfeita.",
+    "deleteCta": "Excluir minha conta",
+    "deleteConfirmTitle": "Excluir conta permanentemente?",
+    "deleteConfirmBody": "Para confirmar, digite {{word}} no campo abaixo. Todos os seus dados serão removidos.",
+    "deleteConfirmWord": "EXCLUIR",
+    "deleteWrongConfirm": "Confirmação incorreta",
+    "deleteDone": "Conta excluída"
   }
 }
