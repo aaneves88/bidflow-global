@@ -1,126 +1,66 @@
-# Fase 2 — Polimento UX mobile (pré-loja)
+# O que falta desenvolver antes do build Android
 
-Objetivo: deixar o app pronto pra rodar dentro do wrapper Android Capacitor sem cair em armadilhas comuns de reprovação ("webview pelada", links pra pagamento externo, botão voltar quebrado, tela branca offline).
+Hoje **já temos** login social no código — o botão "Continuar com Google" existe em `MobileEntry.tsx` usando `lovable.auth.signInWithOAuth('google', …)`. Isso funciona bem no **web/PWA**, mas dentro do **APK Android** o fluxo precisa de ajustes (deep link de retorno), e há outros pontos pequenos para o app ficar pronto pra Play Store.
 
-Tudo é frontend. Sem mexer em banco, edge functions ou Stripe web.
+## 1. Login social no app nativo (ajuste, não criação)
 
----
+O `signInWithOAuth` abre o navegador para o Google. No APK isso vira "abriu Chrome e nunca volta pro app". Precisamos:
 
-## 1. Helper central de "estou no app nativo?"
+- Configurar **App Links / deep link** `app.orca.mento://auth-callback` no `AndroidManifest.xml`
+- Tratar o retorno com `@capacitor/app` (`appUrlOpen`) e fazer `supabase.auth.exchangeCodeForSession`
+- Passar `redirect_uri` correto quando `isNativeMobile()`
+- O `assetlinks.json` (já existe vazio em `public/.well-known/`) precisa ser preenchido com o SHA-256 do keystore depois do build
 
-Hoje só temos `isNativeMobile()` em `src/lib/platform.ts`. Vou adicionar um hook fininho:
+**Alternativa mais simples:** usar `@capacitor/browser` em modo in-app e capturar o retorno via deep link — é o padrão recomendado pela Supabase para Capacitor.
 
-- `src/hooks/useIsNative.ts` → `useIsNative(): boolean` (estado reativo, fica `true` no Android/iOS).
+## 2. Tela de paywall mobile (`MobilePaywall.tsx`)
 
-Assim qualquer componente pode esconder UI condicionalmente sem importar o helper direto e sem riscos de SSR.
+Existe mas precisa ser finalizada:
+- Buscar `Offerings` do RevenueCat (`Purchases.getOfferings()`)
+- Renderizar pacotes com preço já localizado (RC retorna `priceString`)
+- `Purchases.purchasePackage(pkg)` no clique
+- Tratar estados: loading, erro, "já assinante", restaurar compras
+- Botão **"Restaurar compras"** (obrigatório pela Play Store)
 
----
+## 3. Webhook RevenueCat → Lovable Cloud
 
-## 2. Esconder "Stripe / Upgrade pelo site" no build nativo
+A edge function `revenuecat-webhook` existe. Falta:
+- Confirmar que valida `Authorization: Bearer <RC_WEBHOOK_SECRET>`
+- Mapear eventos (`INITIAL_PURCHASE`, `RENEWAL`, `CANCELLATION`, `EXPIRATION`) para `user_plans.status`
+- Resolver `app_user_id` (= `user.id`) e `product_id` → `plans.metadata.rc_product_id`
+- O secret `RC_WEBHOOK_SECRET` ainda não foi adicionado
 
-Regra de loja: app não pode oferecer pagamento por fora do Google Play Billing.
+## 4. Telas obrigatórias para a Play Store
 
-Locais a tratar (sem remover nada da web):
+- **Excluir conta** dentro do app (Google exige desde 2024 para qualquer app com login): botão em `SettingsPage` → edge function que apaga `auth.users` via service role
+- Links visíveis para **Termos** e **Privacidade** (já existem as páginas, só garantir link no menu mobile)
+- Tela ou modal de **gerenciar assinatura** (link `Purchases.showManageSubscriptions()` no Android)
 
-- `src/components/UpgradeModal.tsx` → no nativo, esconder CTA que abre Stripe Checkout e mostrar botão "Ver planos" que vai pra `/pricing` (que já é trocado por `MobilePaywall` quando nativo).
-- `src/components/UsageIndicator.tsx` → mesma troca de CTA.
-- `src/pages/Landing.tsx` → no nativo, esconder seção de pricing com preços e botão "Assinar" (Landing é improvável de aparecer no app, mas blindamos).
-- `src/pages/admin/integrations/StripeIntegrationCard.tsx` e qualquer link de portal de billing no `SettingsPage` → no nativo, mostrar aviso "Gerencie sua assinatura pelo Google Play" em vez do botão.
-- Footer / sidebar: remover link externo "Site" / "Planos web" no nativo.
+## 5. Ajustes nativos pequenos
 
-Resultado: nenhuma rota visível no app menciona preço externo nem abre `checkout.stripe.com`.
+- `capacitor.config.ts`: confirmar que o bloco `server { url }` está comentado antes do build de produção
+- Ícones adaptativos (foreground + background) — gerados a partir do `orca-mark.png` via `@capacitor/assets`
+- Splash screen 2732x2732 a partir da marca
+- `versionCode` / `versionName` no `build.gradle`
 
----
+## 6. Fase 4 — assets de loja (paralelo, não-código)
 
-## 3. Botão voltar nativo do Android
-
-Sem isso, o Android fecha o app ao apertar voltar na home — reprovação comum.
-
-- Em `src/App.tsx` (ou um `NativeBackHandler` ao lado do `NativeBoot`):
-  - Importar `App` do `@capacitor/app` dinamicamente quando `isNativeMobile()`.
-  - Listener `backButton`: se `history.length > 1` → `history.back()`; senão → `App.exitApp()`.
-  - Limpar listener no unmount.
-
-Sem dependência nova (`@capacitor/app` já vem com Capacitor core ecosystem; se faltar, adicionar `@capacitor/app`).
-
----
-
-## 4. Tela "sem conexão" decente (sem service worker)
-
-Não vamos implementar PWA offline — só evitar tela branca quando o usuário abre o app sem net.
-
-- `src/components/OfflineBanner.tsx`: escuta `navigator.onLine` + eventos `online`/`offline`. Quando offline, mostra banner fixo no topo "Sem conexão — algumas funções podem não funcionar".
-- Montar dentro de `AppLayout`.
-- ErrorBoundary global em `App.tsx` que, se a primeira renderização falhar por fetch, mostra tela de "Tente novamente" em vez de branco. Reusar `NotFound` como base visual.
+- Ícone 512x512
+- Feature graphic 1024x500
+- 6 screenshots 1080x1920 (com molduras)
+- Descrição curta (80 char) e longa (4000 char) em pt-BR — `docs/marketing/app-description-pt.md` já tem rascunho
 
 ---
 
-## 5. Esconder badge "Editar com Lovable" no build de produção
+## Ordem sugerida de implementação
 
-Vou chamar `publish_settings--set_badge_visibility({ hide_badge: true })` (requer Pro). Se não puder, registro no plano que o usuário precisa ativar manualmente.
+1. **Excluir conta** (bloqueia publicação se faltar)
+2. **Deep link + login Google nativo**
+3. **MobilePaywall** completa + botão restaurar
+4. **Webhook RevenueCat** (validar + mapear)
+5. **Ícones/splash adaptativos** via `@capacitor/assets`
+6. **Assets de loja** (Fase 4)
 
----
+Itens 1–5 são código (eu faço). Item 6 é geração de imagens + textos.
 
-## 6. Status bar e safe-area no Android
-
-Já temos cor da status bar no `main.tsx`. Falta:
-
-- `index.html`: meta `viewport-fit=cover`.
-- `src/index.css`: adicionar utilitários `pt-safe`, `pb-safe` usando `env(safe-area-inset-*)` e aplicar no `AppLayout` (header + bottom nav, se existir).
-
----
-
-## 7. Links externos viram in-app browser
-
-Qualquer `<a target="_blank">` no app nativo precisa abrir no navegador in-app (`@capacitor/browser`) ou bloquear. Vou:
-
-- Criar `src/lib/openExternal.ts` que, no nativo, usa `Browser.open({ url })`; na web, faz `window.open`.
-- Trocar pontos óbvios: footer legal, links de marketplace/integrações no `SettingsPage`, links de docs.
-
-Adiciona dep: `@capacitor/browser` (e `@capacitor/app` se faltar).
-
----
-
-## 8. Smoke test no preview web
-
-Após cada bloco, abrir o preview e conferir que **na web nada mudou** (todos os guards são `if (isNative)`).
-
----
-
-## Arquivos que vou criar/editar
-
-Criar:
-- `src/hooks/useIsNative.ts`
-- `src/components/OfflineBanner.tsx`
-- `src/components/NativeBackHandler.tsx`
-- `src/components/ErrorBoundary.tsx`
-- `src/lib/openExternal.ts`
-
-Editar:
-- `src/App.tsx` (montar NativeBackHandler + ErrorBoundary)
-- `src/components/AppLayout.tsx` (OfflineBanner + safe-area)
-- `src/components/UpgradeModal.tsx`
-- `src/components/UsageIndicator.tsx`
-- `src/pages/Landing.tsx`
-- `src/pages/admin/integrations/StripeIntegrationCard.tsx`
-- `src/pages/settings/SettingsPage.tsx`
-- `src/index.css` (safe-area utils)
-- `index.html` (viewport-fit=cover)
-- `package.json` (`@capacitor/app`, `@capacitor/browser`)
-
-Ações fora do código:
-- Esconder badge Lovable via tool (requer Pro).
-
----
-
-## O que NÃO entra nesta fase
-
-- RevenueCat paywall funcional (Fase 3).
-- Assets de loja, descrição, screenshots (Fase 4).
-- Build assinado `.aab` (Fase 5 — você roda local com Android Studio).
-- Service worker / PWA offline real.
-- Push notifications.
-
----
-
-**Se aprovar, começo pelo bloco 1 → 4 (helper, esconder Stripe, back button, offline banner) e depois 5 → 7.**
+**Quer que eu comece pelo item 1 (excluir conta) e 2 (deep link Google nativo)?** São os dois maiores bloqueadores para a Play Store aceitar.
