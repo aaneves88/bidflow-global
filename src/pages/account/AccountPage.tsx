@@ -63,14 +63,14 @@ export default function AccountPage() {
         <CardContent className="space-y-2">
           <button
             type="button"
-            onClick={() => openExternal('/legal/terms')}
+            onClick={() => openExternal('https://orca-mento.app/legal/terms')}
             className="flex items-center gap-2 text-sm text-primary hover:underline"
           >
             {t('account.terms')} <ExternalLink className="h-3.5 w-3.5" />
           </button>
           <button
             type="button"
-            onClick={() => openExternal('/legal/privacy')}
+            onClick={() => openExternal('https://orca-mento.app/legal/privacy')}
             className="flex items-center gap-2 text-sm text-primary hover:underline"
           >
             {t('account.privacy')} <ExternalLink className="h-3.5 w-3.5" />
