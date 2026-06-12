@@ -24,6 +24,7 @@ import LegalPage from "@/pages/legal/LegalPage";
 import MobileEntry from "@/pages/MobileEntry";
 import Unsubscribe from "@/pages/Unsubscribe";
 import MobilePaywall from "@/pages/MobilePaywall";
+import AccountPage from "@/pages/account/AccountPage";
 import { isNativeMobile } from "@/lib/platform";
 import { useRevenueCatBootstrap } from "@/hooks/useRevenueCat";
 import { NativeBackHandler } from "@/components/NativeBackHandler";
@@ -108,6 +109,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <AppLayout><ProposalForm /></AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <AppLayout><AccountPage /></AppLayout>
                 </ProtectedRoute>
               }
             />
