@@ -30,5 +30,21 @@
     "freeLocked": "Custom branding is a paid feature — free-plan proposals use Orca's branding.",
     "freeLockedCta": "View plans"
   },
-  "messages": { "saved": "Settings saved", "error": "Error saving settings" }
+  "messages": { "saved": "Settings saved", "error": "Error saving settings" },
+  "account": {
+    "title": "My account",
+    "profileTitle": "Profile",
+    "email": "Email",
+    "legalTitle": "Legal documents",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "dangerTitle": "Danger zone",
+    "deleteDescription": "Deleting your account permanently removes all your data: clients, proposals, settings and history. This cannot be undone.",
+    "deleteCta": "Delete my account",
+    "deleteConfirmTitle": "Permanently delete account?",
+    "deleteConfirmBody": "To confirm, type {{word}} in the field below. All your data will be removed.",
+    "deleteConfirmWord": "DELETE",
+    "deleteWrongConfirm": "Incorrect confirmation",
+    "deleteDone": "Account deleted"
+  }
 }

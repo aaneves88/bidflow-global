@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { isNativeMobile } from '@/lib/platform';
 import orcaMark from '@/assets/brand/orca-mark.png';
 
 export default function MobileEntry() {
@@ -81,28 +82,32 @@ export default function MobileEntry() {
           <p className="text-sm text-muted-foreground mt-1">{t('entry.tagline')}</p>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full h-12"
-          onClick={handleGoogle}
-          disabled={googleLoading || loading}
-        >
-          {googleLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <>
-              <GoogleIcon />
-              <span className="ml-2">{t('entry.google')}</span>
-            </>
-          )}
-        </Button>
+        {!isNativeMobile() && (
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full h-12"
+              onClick={handleGoogle}
+              disabled={googleLoading || loading}
+            >
+              {googleLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  <GoogleIcon />
+                  <span className="ml-2">{t('entry.google')}</span>
+                </>
+              )}
+            </Button>
 
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-border" />
-          <span className="text-xs uppercase text-muted-foreground">{t('entry.or')}</span>
-          <div className="flex-1 h-px bg-border" />
-        </div>
+            <div className="flex items-center gap-3 my-6">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-xs uppercase text-muted-foreground">{t('entry.or')}</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+          </>
+        )}
 
         <Tabs value={mode} onValueChange={(v) => setMode(v as 'signin' | 'signup')}>
           <TabsList className="grid grid-cols-2 w-full">
