@@ -5,6 +5,17 @@
     "subtitle": "Orca helps freelancers and small businesses send professional proposals, follow their sales pipeline, and understand what converts — all in one simple platform.",
     "ctaPrimary": "Start for free", "ctaSecondary": "Sign in"
   },
+  "mockup": {
+    "title": "Consulting Proposal",
+    "client": "John Smith · ABC Company",
+    "approved": "Approved ✓",
+    "item1": "Diagnosis",
+    "item1Value": "$3,000.00",
+    "item2": "Project execution",
+    "item2Value": "$10,000.00",
+    "total": "Total",
+    "totalValue": "$13,000.00"
+  },
   "features": {
     "heading": "Everything you need to win more business",
     "subheading": "From proposal creation to pipeline tracking — Orca keeps your sales organized.",
@@ -15,6 +26,24 @@
       "close": { "title": "Close More Deals", "description": "Understand your conversion rate, pipeline value, and revenue at a glance." }
     }
   },
+  "brazilian": {
+    "heading": "Built for the way you do business",
+    "subheading": "Orca is built for freelancers and small businesses who want a simple, modern proposal tool.",
+    "items": {
+      "pix": { "title": "Instant payment QR code", "description": "Your client scans and pays right away." },
+      "whatsapp": { "title": "Share via WhatsApp", "description": "One click and the proposal goes straight to your client's chat with a clean link." },
+      "accept": { "title": "Online acceptance", "description": "Your client approves the proposal in one click. No printing, no paper." },
+      "brl": { "title": "Local currency", "description": "Proposals in your currency with the right formatting. No conversions needed." }
+    },
+    "chat": {
+      "name": "John Smith",
+      "status": "online",
+      "message": "Hi John! Here's the consulting proposal:",
+      "link": "orca-mento.app/p/abc123",
+      "value": "💰 $13,000.00",
+      "approved": "Proposal approved! ✅"
+    }
+  },
   "how": {
     "heading": "How it works", "subheading": "Three steps to a better sales process.",
     "steps": {
@@ -23,10 +52,33 @@
       "three": { "title": "Track & close", "description": "Follow up and convert more deals." }
     }
   },
+  "pricing": {
+    "heading": "Start free. Grow when you want.",
+    "subheading": "No surprises. No setup fees. Cancel anytime.",
+    "popular": "Most popular",
+    "perMonth": "/month",
+    "free": {
+      "name": "Free", "description": "Start at no cost.", "price": "$0", "cta": "Create free account",
+      "features": { "f1": "1 proposal", "f2": "5 clients", "f3": "Public link", "f4": "Basic dashboard" }
+    },
+    "starter": {
+      "name": "Starter", "description": "For freelancers ready to grow.", "price": "$9", "priceCents": ".90/month", "cta": "Try 7 days free",
+      "features": { "f1": "10 proposals/month", "f2": "50 clients", "f3": "Sales pipeline", "f4": "WhatsApp button", "f5": "Templates", "f6": "7-day trial" }
+    },
+    "pro": {
+      "name": "Pro", "description": "Unlimited proposals.", "price": "$19", "priceCents": ".90/month", "cta": "Try 7 days free",
+      "features": { "f1": "Unlimited proposals", "f2": "Unlimited clients", "f3": "PDF download", "f4": "Your branding", "f5": "Advanced analytics", "f6": "7-day trial" }
+    }
+  },
+  "stats": {
+    "time": "2 min", "timeLabel": "To create and send your first proposal",
+    "online": "100%", "onlineLabel": "Online — works on mobile and desktop",
+    "price": "$0", "priceLabel": "To start. No credit card required."
+  },
   "cta": {
-    "heading": "Ready to close more deals?",
-    "subheading": "Join Orca and start managing your proposals like a pro.",
-    "button": "Get started — it's free"
+    "heading": "Stop emailing quotes and hoping",
+    "subheading": "Create your proposal, send via WhatsApp and know when the client opened it. Start free in 2 minutes.",
+    "button": "Create my first proposal →"
   },
   "footer": { "rights": "All rights reserved." }
 }

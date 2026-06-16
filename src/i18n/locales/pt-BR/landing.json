@@ -8,6 +8,17 @@
     "ctaPrimary": "Comece grátis",
     "ctaSecondary": "Entrar"
   },
+  "mockup": {
+    "title": "Proposta de Consultoria",
+    "client": "João Silva · Empresa ABC",
+    "approved": "Aprovada ✓",
+    "item1": "Diagnóstico",
+    "item1Value": "R$ 3.000,00",
+    "item2": "Execução do projeto",
+    "item2Value": "R$ 10.000,00",
+    "total": "Total",
+    "totalValue": "R$ 13.000,00"
+  },
   "features": {
     "heading": "Tudo que você precisa para vender mais",
     "subheading": "Da criação da proposta ao acompanhamento do funil — a Orca mantém suas vendas organizadas.",
@@ -30,6 +41,36 @@
       }
     }
   },
+  "brazilian": {
+    "heading": "Feito para o jeito brasileiro de fazer negócio",
+    "subheading": "Nenhuma ferramenta gringa entende PIX, WhatsApp e orçamento em Real. O Orca foi criado para freelancers e pequenas empresas do Brasil.",
+    "items": {
+      "pix": {
+        "title": "QR Code PIX na proposta",
+        "description": "Seu cliente escaneia e paga na hora. Sem boleto, sem espera."
+      },
+      "whatsapp": {
+        "title": "Envio pelo WhatsApp",
+        "description": "Um clique e a proposta vai direto pro WhatsApp do cliente com link profissional."
+      },
+      "accept": {
+        "title": "Aceite online",
+        "description": "Seu cliente aprova a proposta com um clique. Sem imprimir, sem assinar papel."
+      },
+      "brl": {
+        "title": "Valores em Real (R$)",
+        "description": "Propostas e orçamentos em BRL com formatação brasileira. Sem converter nada."
+      }
+    },
+    "chat": {
+      "name": "João Silva",
+      "status": "online",
+      "message": "Oi João! Segue a proposta de consultoria:",
+      "link": "orca-mento.app/p/abc123",
+      "value": "💰 R$ 13.000,00",
+      "approved": "Proposta aprovada! ✅"
+    }
+  },
   "how": {
     "heading": "Como funciona",
     "subheading": "Três passos para um processo de vendas melhor.",
@@ -39,10 +80,66 @@
       "three": { "title": "Acompanhe e feche", "description": "Faça follow-up e converta mais negócios." }
     }
   },
+  "pricing": {
+    "heading": "Comece grátis. Cresça quando quiser.",
+    "subheading": "Sem surpresas. Sem taxa de setup. Cancele quando quiser.",
+    "popular": "Mais popular",
+    "perMonth": "/mês",
+    "free": {
+      "name": "Grátis",
+      "description": "Para começar sem custo.",
+      "price": "R$ 0",
+      "cta": "Criar conta grátis",
+      "features": {
+        "f1": "1 proposta",
+        "f2": "5 clientes",
+        "f3": "Link público",
+        "f4": "Painel básico"
+      }
+    },
+    "starter": {
+      "name": "Starter",
+      "description": "Para freelancers que querem crescer.",
+      "price": "R$ 29",
+      "priceCents": ",90/mês",
+      "cta": "Testar 7 dias grátis",
+      "features": {
+        "f1": "10 propostas/mês",
+        "f2": "50 clientes",
+        "f3": "Pipeline de vendas",
+        "f4": "Botão WhatsApp",
+        "f5": "Templates",
+        "f6": "7 dias grátis"
+      }
+    },
+    "pro": {
+      "name": "Pro",
+      "description": "Propostas ilimitadas.",
+      "price": "R$ 59",
+      "priceCents": ",90/mês",
+      "cta": "Testar 7 dias grátis",
+      "features": {
+        "f1": "Propostas ilimitadas",
+        "f2": "Clientes ilimitados",
+        "f3": "Download PDF",
+        "f4": "Branding próprio",
+        "f5": "Analytics avançado",
+        "f6": "7 dias grátis"
+      }
+    }
+  },
+  "stats": {
+    "time": "2 min",
+    "timeLabel": "Para criar e enviar sua primeira proposta",
+    "online": "100%",
+    "onlineLabel": "Online — funciona no celular e no computador",
+    "price": "R$ 0",
+    "priceLabel": "Para começar. Sem cartão de crédito."
+  },
   "cta": {
-    "heading": "Pronto para fechar mais negócios?",
-    "subheading": "Junte-se à Orca e gerencie suas propostas como um profissional.",
-    "button": "Começar — é grátis"
+    "heading": "Chega de mandar orçamento por e-mail e torcer",
+    "subheading": "Crie sua proposta, mande pelo WhatsApp e saiba quando o cliente abriu. Comece grátis em 2 minutos.",
+    "button": "Criar minha primeira proposta →"
   },
   "footer": {
     "rights": "Todos os direitos reservados."
