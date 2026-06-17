@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import orcaMark from '@/assets/brand/orca-mark.png';
 export default function Landing() {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
+  const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
