@@ -54,20 +54,20 @@
   },
   "pricing": {
     "heading": "Start free. Grow when you want.",
-    "subheading": "No surprises. No setup fees. Cancel anytime.",
-    "popular": "Most popular",
+    "subheading": "One plan with everything you need. No surprises.",
+    "toggleMonthly": "Monthly",
+    "toggleYearly": "Yearly",
+    "recommended": "Recommended",
+    "saveBadge": "Save 2 months",
     "perMonth": "/month",
+    "perYear": "/year",
     "free": {
-      "name": "Free", "description": "Start at no cost.", "price": "$0", "cta": "Create free account",
+      "name": "Free", "description": "Try Orca for free", "price": "$0", "cta": "Create free account",
       "features": { "f1": "1 proposal", "f2": "5 clients", "f3": "Public link", "f4": "Basic dashboard" }
     },
-    "starter": {
-      "name": "Starter", "description": "For freelancers ready to grow.", "price": "$9", "priceCents": ".90/month", "cta": "Try 7 days free",
-      "features": { "f1": "10 proposals/month", "f2": "50 clients", "f3": "Sales pipeline", "f4": "WhatsApp button", "f5": "Templates", "f6": "7-day trial" }
-    },
-    "pro": {
-      "name": "Pro", "description": "Unlimited proposals.", "price": "$19", "priceCents": ".90/month", "cta": "Try 7 days free",
-      "features": { "f1": "Unlimited proposals", "f2": "Unlimited clients", "f3": "PDF download", "f4": "Your branding", "f5": "Advanced analytics", "f6": "7-day trial" }
+    "premium": {
+      "name": "Premium", "description": "Unlimited everything to close more deals", "priceMonthly": "$9.90", "priceYearly": "$79.90", "cta": "Try 7 days free",
+      "features": { "f1": "Unlimited proposals", "f2": "Unlimited clients", "f3": "Sales pipeline", "f4": "WhatsApp button", "f5": "PDF download", "f6": "Templates", "f7": "Custom branding", "f8": "Advanced analytics" }
     }
   },
   "stats": {

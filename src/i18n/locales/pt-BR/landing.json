@@ -82,12 +82,16 @@
   },
   "pricing": {
     "heading": "Comece grátis. Cresça quando quiser.",
-    "subheading": "Sem surpresas. Sem taxa de setup. Cancele quando quiser.",
-    "popular": "Mais popular",
+    "subheading": "Um único plano com tudo que você precisa. Sem surpresas.",
+    "toggleMonthly": "Mensal",
+    "toggleYearly": "Anual",
+    "recommended": "Recomendado",
+    "saveBadge": "Economize 2 meses",
     "perMonth": "/mês",
+    "perYear": "/ano",
     "free": {
       "name": "Grátis",
-      "description": "Para começar sem custo.",
+      "description": "Para testar o Orca",
       "price": "R$ 0",
       "cta": "Criar conta grátis",
       "features": {
@@ -97,34 +101,21 @@
         "f4": "Painel básico"
       }
     },
-    "starter": {
-      "name": "Starter",
-      "description": "Para freelancers que querem crescer.",
-      "price": "R$ 29",
-      "priceCents": ",90/mês",
-      "cta": "Testar 7 dias grátis",
-      "features": {
-        "f1": "10 propostas/mês",
-        "f2": "50 clientes",
-        "f3": "Pipeline de vendas",
-        "f4": "Botão WhatsApp",
-        "f5": "Templates",
-        "f6": "7 dias grátis"
-      }
-    },
-    "pro": {
-      "name": "Pro",
-      "description": "Propostas ilimitadas.",
-      "price": "R$ 59",
-      "priceCents": ",90/mês",
+    "premium": {
+      "name": "Premium",
+      "description": "Tudo ilimitado para fechar mais negócios",
+      "priceMonthly": "R$ 29,90",
+      "priceYearly": "R$ 239,90",
       "cta": "Testar 7 dias grátis",
       "features": {
         "f1": "Propostas ilimitadas",
         "f2": "Clientes ilimitados",
-        "f3": "Download PDF",
-        "f4": "Branding próprio",
-        "f5": "Analytics avançado",
-        "f6": "7 dias grátis"
+        "f3": "Pipeline de vendas",
+        "f4": "Botão WhatsApp",
+        "f5": "Download PDF",
+        "f6": "Templates",
+        "f7": "Branding próprio",
+        "f8": "Analytics avançado"
       }
     }
   },
