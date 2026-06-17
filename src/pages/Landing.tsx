@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import orcaMark from '@/assets/brand/orca-mark.png';
 export default function Landing() {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
+  const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -215,7 +216,34 @@ export default function Landing() {
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('pricing.heading')}</h2>
             <p className="mt-4 text-muted-foreground text-lg">{t('pricing.subheading')}</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+
+          {/* Toggle */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex items-center rounded-full border bg-card p-1">
+              <button
+                onClick={() => setBilling('monthly')}
+                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
+                  billing === 'monthly'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {t('pricing.toggleMonthly')}
+              </button>
+              <button
+                onClick={() => setBilling('yearly')}
+                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
+                  billing === 'yearly'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {t('pricing.toggleYearly')}
+              </button>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Free */}
             <div className="rounded-xl border bg-card p-6 space-y-4">
               <h3 className="font-bold text-xl">{t('pricing.free.name')}</h3>
@@ -237,48 +265,36 @@ export default function Landing() {
               </Button>
             </div>
 
-            {/* Starter */}
+            {/* Premium */}
             <div className="rounded-xl border-2 border-primary bg-card p-6 space-y-4 relative">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-medium">
-                {t('pricing.popular')}
+                {t('pricing.recommended')}
               </span>
-              <h3 className="font-bold text-xl">{t('pricing.starter.name')}</h3>
-              <p className="text-muted-foreground text-sm">{t('pricing.starter.description')}</p>
-              <p className="text-3xl font-bold">
-                {t('pricing.starter.price')}
-                <span className="text-base font-normal text-muted-foreground">{t('pricing.starter.priceCents')}</span>
-              </p>
+              <h3 className="font-bold text-xl">{t('pricing.premium.name')}</h3>
+              <p className="text-muted-foreground text-sm">{t('pricing.premium.description')}</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-3xl font-bold">
+                  {billing === 'monthly' ? t('pricing.premium.priceMonthly') : t('pricing.premium.priceYearly')}
+                  <span className="text-base font-normal text-muted-foreground">
+                    {billing === 'monthly' ? t('pricing.perMonth') : t('pricing.perYear')}
+                  </span>
+                </p>
+                {billing === 'yearly' && (
+                  <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                    {t('pricing.saveBadge')}
+                  </span>
+                )}
+              </div>
               <ul className="space-y-2 text-sm">
-                {(['f1', 'f2', 'f3', 'f4', 'f5', 'f6'] as const).map((k) => (
+                {(['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'] as const).map((k) => (
                   <li key={k} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    {t(`pricing.starter.features.${k}`)}
+                    {t(`pricing.premium.features.${k}`)}
                   </li>
                 ))}
               </ul>
               <Button className="w-full" asChild>
-                <Link to="/register">{t('pricing.starter.cta')}</Link>
-              </Button>
-            </div>
-
-            {/* Pro */}
-            <div className="rounded-xl border bg-card p-6 space-y-4">
-              <h3 className="font-bold text-xl">{t('pricing.pro.name')}</h3>
-              <p className="text-muted-foreground text-sm">{t('pricing.pro.description')}</p>
-              <p className="text-3xl font-bold">
-                {t('pricing.pro.price')}
-                <span className="text-base font-normal text-muted-foreground">{t('pricing.pro.priceCents')}</span>
-              </p>
-              <ul className="space-y-2 text-sm">
-                {(['f1', 'f2', 'f3', 'f4', 'f5', 'f6'] as const).map((k) => (
-                  <li key={k} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    {t(`pricing.pro.features.${k}`)}
-                  </li>
-                ))}
-              </ul>
-              <Button variant="outline" className="w-full" asChild>
-                <Link to="/register">{t('pricing.pro.cta')}</Link>
+                <Link to="/register">{t('pricing.premium.cta')}</Link>
               </Button>
             </div>
           </div>
