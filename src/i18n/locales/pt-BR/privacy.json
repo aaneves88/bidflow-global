@@ -1,0 +1,46 @@
+{
+  "title": "Política de Privacidade",
+  "subtitle": "Como o Orca coleta, usa e protege seus dados",
+  "lastUpdated": "Última atualização: junho de 2026",
+  "back": "Voltar",
+  "intro": "Esta Política de Privacidade descreve como o Orca (orca-mento.app) coleta, usa, armazena e protege seus dados pessoais ao usar nossa plataforma de propostas comerciais. Ao usar o Orca, você concorda com as práticas descritas abaixo.",
+  "sections": [
+    {
+      "heading": "1. Dados que coletamos",
+      "body": "Coletamos as seguintes informações:\n\n• Dados de cadastro: nome, e-mail e senha (criptografada).\n• Dados de uso do serviço: clientes, propostas, orçamentos, anexos e demais informações de negócio que você cadastra na plataforma.\n• Dados de cobrança: quando aplicável, processados pelo Stripe (nunca armazenamos números de cartão).\n• Dados técnicos: endereço IP, tipo de navegador, sistema operacional e páginas visitadas, para fins de segurança e melhoria do serviço."
+    },
+    {
+      "heading": "2. Como usamos seus dados",
+      "body": "Utilizamos seus dados para:\n\n• Fornecer e operar o serviço (criar, enviar e acompanhar propostas).\n• Autenticar sua conta e proteger contra fraudes.\n• Enviar comunicações essenciais sobre sua conta (alterações, cobranças, notificações de eventos).\n• Melhorar a experiência e desenvolver novas funcionalidades.\n• Cumprir obrigações legais."
+    },
+    {
+      "heading": "3. Armazenamento e segurança",
+      "body": "Seus dados são armazenados em servidores seguros operados pelo Supabase, com criptografia em trânsito (TLS) e em repouso. Aplicamos controles de acesso, autenticação forte e backups regulares. Apesar dos esforços, nenhum sistema é 100% imune; recomendamos que você utilize senhas fortes e únicas."
+    },
+    {
+      "heading": "4. Compartilhamento com terceiros",
+      "body": "Nós não vendemos seus dados pessoais. Compartilhamos informações apenas com provedores essenciais à operação do serviço, sob contratos de confidencialidade:\n\n• Supabase — infraestrutura de banco de dados, autenticação e armazenamento.\n• Stripe — processamento de pagamentos.\n• Provedores de e-mail transacional — envio de notificações da plataforma.\n\nPodemos também divulgar dados quando exigido por lei ou ordem judicial."
+    },
+    {
+      "heading": "5. Cookies e tecnologias de rastreamento",
+      "body": "Utilizamos localStorage e cookies essenciais para manter sua sessão autenticada e lembrar preferências (como idioma). Não utilizamos cookies de terceiros para publicidade nem rastreamento entre sites."
+    },
+    {
+      "heading": "6. Seus direitos (LGPD)",
+      "body": "Em conformidade com a Lei Geral de Proteção de Dados (LGPD), você pode a qualquer momento:\n\n• Acessar os dados que mantemos sobre você.\n• Corrigir dados incompletos ou desatualizados.\n• Solicitar a exclusão da sua conta e dos dados associados.\n• Solicitar a portabilidade dos seus dados.\n• Revogar consentimentos previamente concedidos.\n\nPara exercer qualquer um desses direitos, escreva para suporte@orca-mento.app."
+    },
+    {
+      "heading": "7. Dados de menores",
+      "body": "O Orca não é destinado a menores de 18 anos e não coletamos intencionalmente dados de menores. Caso identifiquemos dados de um menor, eles serão removidos."
+    },
+    {
+      "heading": "8. Alterações nesta política",
+      "body": "Podemos atualizar esta Política de Privacidade periodicamente. Mudanças relevantes serão comunicadas por e-mail ou por aviso dentro da plataforma. A data de última atualização está sempre indicada no topo desta página."
+    },
+    {
+      "heading": "9. Contato",
+      "body": "Em caso de dúvidas, solicitações ou denúncias relacionadas a privacidade e proteção de dados, entre em contato pelo e-mail suporte@orca-mento.app."
+    }
+  ],
+  "footerRights": "Todos os direitos reservados."
+}
