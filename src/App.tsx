@@ -21,6 +21,7 @@ import Admin from "@/pages/admin/Admin";
 import SettingsPage from "@/pages/settings/SettingsPage";
 import NotFound from "@/pages/NotFound";
 import LegalPage from "@/pages/legal/LegalPage";
+import Privacy from "@/pages/Privacy";
 import MobileEntry from "@/pages/MobileEntry";
 import Unsubscribe from "@/pages/Unsubscribe";
 import MobilePaywall from "@/pages/MobilePaywall";
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
             <Route path="/legal/:doc" element={<LegalPage />} />
+            <Route path="/privacidade" element={<Privacy />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route
               path="/onboarding"
