@@ -81,14 +81,10 @@
     }
   },
   "pricing": {
-    "heading": "Comece grátis. Cresça quando quiser.",
-    "subheading": "Um único plano com tudo que você precisa. Sem surpresas.",
-    "toggleMonthly": "Mensal",
-    "toggleYearly": "Anual",
+    "heading": "Simples assim.",
+    "subheading": "Um plano grátis pra testar. Um plano pago pra crescer.",
     "recommended": "Recomendado",
-    "saveBadge": "Economize 2 meses",
     "perMonth": "/mês",
-    "perYear": "/ano",
     "free": {
       "name": "Grátis",
       "description": "Para testar o Orca",
