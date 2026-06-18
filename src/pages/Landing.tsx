@@ -216,32 +216,6 @@ export default function Landing() {
             <p className="mt-4 text-muted-foreground text-lg">{t('pricing.subheading')}</p>
           </div>
 
-          {/* Toggle */}
-          <div className="flex justify-center mb-10">
-            <div className="inline-flex items-center rounded-full border bg-card p-1">
-              <button
-                onClick={() => setBilling('monthly')}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
-                  billing === 'monthly'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {t('pricing.toggleMonthly')}
-              </button>
-              <button
-                onClick={() => setBilling('yearly')}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
-                  billing === 'yearly'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {t('pricing.toggleYearly')}
-              </button>
-            </div>
-          </div>
-
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Free */}
             <div className="rounded-xl border bg-card p-6 space-y-4">
@@ -271,19 +245,10 @@ export default function Landing() {
               </span>
               <h3 className="font-bold text-xl">{t('pricing.premium.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.premium.description')}</p>
-              <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-3xl font-bold">
-                  {billing === 'monthly' ? t('pricing.premium.priceMonthly') : t('pricing.premium.priceYearly')}
-                  <span className="text-base font-normal text-muted-foreground">
-                    {billing === 'monthly' ? t('pricing.perMonth') : t('pricing.perYear')}
-                  </span>
-                </p>
-                {billing === 'yearly' && (
-                  <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-                    {t('pricing.saveBadge')}
-                  </span>
-                )}
-              </div>
+              <p className="text-3xl font-bold">
+                {t('pricing.premium.priceMonthly')}
+                <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
+              </p>
               <ul className="space-y-2 text-sm">
                 {(['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'] as const).map((k) => (
                   <li key={k} className="flex items-center gap-2">
