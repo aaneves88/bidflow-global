@@ -53,14 +53,10 @@
     }
   },
   "pricing": {
-    "heading": "Start free. Grow when you want.",
-    "subheading": "One plan with everything you need. No surprises.",
-    "toggleMonthly": "Monthly",
-    "toggleYearly": "Yearly",
+    "heading": "That simple.",
+    "subheading": "One free plan to try. One paid plan to grow.",
     "recommended": "Recommended",
-    "saveBadge": "Save 2 months",
     "perMonth": "/month",
-    "perYear": "/year",
     "free": {
       "name": "Free", "description": "Try Orca for free", "price": "$0", "cta": "Create free account",
       "features": { "f1": "1 proposal", "f2": "5 clients", "f3": "Public link", "f4": "Basic dashboard" }

@@ -83,7 +83,7 @@ export default function Pricing() {
           ) : plans.length === 0 ? (
             <p className="text-center text-muted-foreground">{t('noPlans')}</p>
           ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
               {plans.map((p: any) => {
                 const isCurrent = currentPlan?.plan_id === p.id;
                 const features = Array.isArray(p.features) ? p.features : [];
