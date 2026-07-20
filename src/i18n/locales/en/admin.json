@@ -1,122 +1,360 @@
 {
   "title": "Admin",
-  "tabs": { "overview": "Overview", "users": "Users", "plans": "Plans", "statuses": "Statuses", "integrations": "Integrations", "qa": "QA", "roadmap": "Roadmap" },
+  "tabs": {
+    "overview": "Overview",
+    "users": "Users",
+    "plans": "Plans",
+    "statuses": "Statuses",
+    "integrations": "Integrations",
+    "qa": "QA",
+    "roadmap": "Roadmap"
+  },
   "roadmap": {
     "title": "Product roadmap",
     "subtitle": "What is shipped and what is planned. Editable.",
     "loading": "Loading roadmap...",
-    "edit": "Edit", "cancel": "Cancel", "save": "Save",
-    "saved": "Roadmap updated", "error": "Error saving roadmap",
-    "editorTitle": "Markdown", "previewTitle": "Preview",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saved": "Roadmap updated",
+    "error": "Error saving roadmap",
+    "editorTitle": "Markdown",
+    "previewTitle": "Preview",
     "hint": "Use ## for phases and - ✅ / - 🔄 / - 📋 for items (done, in progress, planned).",
-    "status": { "done": "Done", "progress": "In progress", "planned": "Planned" }
+    "status": {
+      "done": "Done",
+      "progress": "In progress",
+      "planned": "Planned"
+    }
   },
   "qa": {
     "title": "Launch validation checklist",
     "subtitle": "Check each item after testing. Progress is saved locally in this browser.",
     "reset": "Reset",
     "sections": {
-      "auth": { "title": "Authentication", "items": {
-        "signup": { "title": "Signup works", "desc": "Create a new account with email and password." },
-        "login": { "title": "Login works", "desc": "Log in with the created account." },
-        "logout": { "title": "Logout works", "desc": "Logging out clears the session." },
-        "firstAdmin": { "title": "First user becomes admin", "desc": "The first signup automatically receives the admin role." }
-      }},
-      "trial": { "title": "Trial / Starter access", "items": {
-        "trialGranted": { "title": "New user gets trial", "desc": "New signups receive the Starter plan for 7 days." },
-        "trialBlocks": { "title": "Expired trial blocks actions", "desc": "After expiry, the user cannot create proposals/clients." },
-        "adminExtend": { "title": "Admin can extend access", "desc": "Admin can grant/renew a plan from /admin > Users." }
-      }},
-      "plans": { "title": "Plans", "items": {
-        "starterExists": { "title": "Starter plan exists", "desc": "The Starter plan is visible in /admin > Plans." },
-        "editPlan": { "title": "Admin can edit plan", "desc": "Price, limits and active state can be changed." },
-        "pricingShows": { "title": "/pricing shows the plans", "desc": "Active plans appear correctly on the public page." }
-      }},
-      "stripe": { "title": "Stripe", "items": {
-        "integrationSaves": { "title": "Settings save", "desc": "Stripe integration fields persist after saving." },
-        "priceMapped": { "title": "Price ID mapped", "desc": "Every paid plan has its Stripe price_id configured." },
-        "webhookConfigured": { "title": "Webhook configured in Stripe", "desc": "Webhook URL was added to the Stripe dashboard and is active." },
-        "testCheckout": { "title": "Test checkout opens", "desc": "Clicking Subscribe opens the Stripe checkout without errors." },
-        "planActivates": { "title": "Plan activates after payment", "desc": "After paying in test mode, the user plan becomes active." }
-      }},
-      "clients": { "title": "Clients", "items": {
-        "createClient": { "title": "Create client", "desc": "Adding a new client works." },
-        "editClient": { "title": "Edit client", "desc": "Updating client data works." },
-        "searchClient": { "title": "Search client", "desc": "Search filters the list correctly." }
-      }},
-      "proposals": { "title": "Proposals", "items": {
-        "createProposal": { "title": "Create proposal with items", "desc": "Adding items, totals match, saving works." },
-        "editProposal": { "title": "Edit proposal", "desc": "Editing data and items persists correctly." },
-        "statusHistory": { "title": "Status history recorded", "desc": "Each status change appears in history." },
-        "validUntil": { "title": "Valid until is shown", "desc": "Validity appears on internal and public proposal." }
-      }},
-      "sharing": { "title": "Sharing", "items": {
-        "copyLink": { "title": "Copy link works", "desc": "Button copies the public URL to clipboard." },
-        "whatsappOpens": { "title": "WhatsApp opens with message", "desc": "Opens wa.me with client phone (if any) and default message." },
-        "publicLoads": { "title": "Public page loads", "desc": "The /p/{code} link shows the proposal without login." },
-        "viewCounted": { "title": "View is counted", "desc": "Opening the public page increments view count." },
-        "acceptFlow": { "title": "Accept changes status", "desc": "Accept button updates the proposal status." }
-      }},
-      "pdf": { "title": "PDF", "items": {
-        "pdfOwner": { "title": "PDF downloads from owner view", "desc": "Download PDF button generates the file on the internal page." },
-        "pdfPublic": { "title": "PDF downloads from public page", "desc": "Client can download the PDF from the public link." }
-      }},
-      "i18n": { "title": "Languages", "items": {
-        "switchLang": { "title": "Language switching works", "desc": "Switching pt-BR ↔ en applies across the UI." },
-        "noMissing": { "title": "No missing keys", "desc": "No raw key text appears (e.g. 'view.copyLink')." }
-      }},
-      "mobile": { "title": "Mobile", "items": {
-        "mobileLayouts": { "title": "Main screens usable at 375px", "desc": "Login, dashboard, proposals, clients and admin look fine." }
-      }},
-      "monetization": { "title": "Monetization", "items": {
-        "freeFirstProposal": { "title": "New user creates 1st proposal free", "desc": "A user without a plan can create one proposal." },
-        "secondTriggersModal": { "title": "2nd proposal triggers upgrade modal", "desc": "Trying to create the second proposal opens the 'Free limit reached' modal." },
-        "planUnblocks": { "title": "Active plan unlocks creation", "desc": "After subscribing/activating a plan, the user can create again." },
-        "adminUnlimited": { "title": "Admin has no limits", "desc": "Admin accounts never see the upgrade modal." },
-        "manualGrant": { "title": "Manually granted plan unlocks", "desc": "Granting a plan via Admin > Users removes the block." },
-        "usageDashboard": { "title": "Usage indicator on Dashboard", "desc": "Usage card appears on Dashboard with the right message." },
-        "usageProposals": { "title": "Usage indicator on Proposals", "desc": "Usage banner appears on Proposals with the right message." }
-      }}
+      "auth": {
+        "title": "Authentication",
+        "items": {
+          "signup": {
+            "title": "Signup works",
+            "desc": "Create a new account with email and password."
+          },
+          "login": {
+            "title": "Login works",
+            "desc": "Log in with the created account."
+          },
+          "logout": {
+            "title": "Logout works",
+            "desc": "Logging out clears the session."
+          },
+          "firstAdmin": {
+            "title": "First user becomes admin",
+            "desc": "The first signup automatically receives the admin role."
+          }
+        }
+      },
+      "trial": {
+        "title": "Trial / Starter access",
+        "items": {
+          "trialGranted": {
+            "title": "New user gets trial",
+            "desc": "New signups receive the Starter plan for 7 days."
+          },
+          "trialBlocks": {
+            "title": "Expired trial blocks actions",
+            "desc": "After expiry, the user cannot create proposals/clients."
+          },
+          "adminExtend": {
+            "title": "Admin can extend access",
+            "desc": "Admin can grant/renew a plan from /admin > Users."
+          }
+        }
+      },
+      "plans": {
+        "title": "Plans",
+        "items": {
+          "starterExists": {
+            "title": "Starter plan exists",
+            "desc": "The Starter plan is visible in /admin > Plans."
+          },
+          "editPlan": {
+            "title": "Admin can edit plan",
+            "desc": "Price, limits and active state can be changed."
+          },
+          "pricingShows": {
+            "title": "/pricing shows the plans",
+            "desc": "Active plans appear correctly on the public page."
+          }
+        }
+      },
+      "stripe": {
+        "title": "Stripe",
+        "items": {
+          "integrationSaves": {
+            "title": "Settings save",
+            "desc": "Stripe integration fields persist after saving."
+          },
+          "priceMapped": {
+            "title": "Price ID mapped",
+            "desc": "Every paid plan has its Stripe price_id configured."
+          },
+          "webhookConfigured": {
+            "title": "Webhook configured in Stripe",
+            "desc": "Webhook URL was added to the Stripe dashboard and is active."
+          },
+          "testCheckout": {
+            "title": "Test checkout opens",
+            "desc": "Clicking Subscribe opens the Stripe checkout without errors."
+          },
+          "planActivates": {
+            "title": "Plan activates after payment",
+            "desc": "After paying in test mode, the user plan becomes active."
+          }
+        }
+      },
+      "clients": {
+        "title": "Clients",
+        "items": {
+          "createClient": {
+            "title": "Create client",
+            "desc": "Adding a new client works."
+          },
+          "editClient": {
+            "title": "Edit client",
+            "desc": "Updating client data works."
+          },
+          "searchClient": {
+            "title": "Search client",
+            "desc": "Search filters the list correctly."
+          }
+        }
+      },
+      "proposals": {
+        "title": "Proposals",
+        "items": {
+          "createProposal": {
+            "title": "Create proposal with items",
+            "desc": "Adding items, totals match, saving works."
+          },
+          "editProposal": {
+            "title": "Edit proposal",
+            "desc": "Editing data and items persists correctly."
+          },
+          "statusHistory": {
+            "title": "Status history recorded",
+            "desc": "Each status change appears in history."
+          },
+          "validUntil": {
+            "title": "Valid until is shown",
+            "desc": "Validity appears on internal and public proposal."
+          }
+        }
+      },
+      "sharing": {
+        "title": "Sharing",
+        "items": {
+          "copyLink": {
+            "title": "Copy link works",
+            "desc": "Button copies the public URL to clipboard."
+          },
+          "whatsappOpens": {
+            "title": "WhatsApp opens with message",
+            "desc": "Opens wa.me with client phone (if any) and default message."
+          },
+          "publicLoads": {
+            "title": "Public page loads",
+            "desc": "The /p/{code} link shows the proposal without login."
+          },
+          "viewCounted": {
+            "title": "View is counted",
+            "desc": "Opening the public page increments view count."
+          },
+          "acceptFlow": {
+            "title": "Accept changes status",
+            "desc": "Accept button updates the proposal status."
+          }
+        }
+      },
+      "pdf": {
+        "title": "PDF",
+        "items": {
+          "pdfOwner": {
+            "title": "PDF downloads from owner view",
+            "desc": "Download PDF button generates the file on the internal page."
+          },
+          "pdfPublic": {
+            "title": "PDF downloads from public page",
+            "desc": "Client can download the PDF from the public link."
+          }
+        }
+      },
+      "i18n": {
+        "title": "Languages",
+        "items": {
+          "switchLang": {
+            "title": "Language switching works",
+            "desc": "Switching pt-BR ↔ en applies across the UI."
+          },
+          "noMissing": {
+            "title": "No missing keys",
+            "desc": "No raw key text appears (e.g. 'view.copyLink')."
+          }
+        }
+      },
+      "mobile": {
+        "title": "Mobile",
+        "items": {
+          "mobileLayouts": {
+            "title": "Main screens usable at 375px",
+            "desc": "Login, dashboard, proposals, clients and admin look fine."
+          }
+        }
+      },
+      "monetization": {
+        "title": "Monetization",
+        "items": {
+          "freeFirstProposal": {
+            "title": "New user creates 1st proposal free",
+            "desc": "A user without a plan can create one proposal."
+          },
+          "secondTriggersModal": {
+            "title": "2nd proposal triggers upgrade modal",
+            "desc": "Trying to create the second proposal opens the 'Free limit reached' modal."
+          },
+          "planUnblocks": {
+            "title": "Active plan unlocks creation",
+            "desc": "After subscribing/activating a plan, the user can create again."
+          },
+          "adminUnlimited": {
+            "title": "Admin has no limits",
+            "desc": "Admin accounts never see the upgrade modal."
+          },
+          "manualGrant": {
+            "title": "Manually granted plan unlocks",
+            "desc": "Granting a plan via Admin > Users removes the block."
+          },
+          "usageDashboard": {
+            "title": "Usage indicator on Dashboard",
+            "desc": "Usage card appears on Dashboard with the right message."
+          },
+          "usageProposals": {
+            "title": "Usage indicator on Proposals",
+            "desc": "Usage banner appears on Proposals with the right message."
+          }
+        }
+      }
     }
   },
   "overview": {
-    "totalUsers": "Total Users", "totalProposals": "Total Proposals",
-    "approvedRevenue": "Approved Revenue", "recentUsers": "Recent Users", "noName": "No name"
+    "totalUsers": "Total Users",
+    "totalProposals": "Total Proposals",
+    "approvedRevenue": "Approved Revenue",
+    "recentUsers": "Recent Users",
+    "noName": "No name"
   },
   "users": {
     "loading": "Loading users...",
-    "table": { "name": "Name", "email": "Email", "roles": "Roles", "plan": "Plan", "joined": "Joined", "actions": "Actions" },
-    "makeAdmin": "Make Admin", "removeAdmin": "Remove Admin", "grantPlan": "Grant Plan",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "roles": "Roles",
+      "plan": "Plan",
+      "joined": "Joined",
+      "actions": "Actions"
+    },
+    "makeAdmin": "Make Admin",
+    "removeAdmin": "Remove Admin",
+    "grantPlan": "Grant Plan",
     "cantRemoveSelf": "Can't remove your own admin",
     "messages": {
-      "adminGranted": "Admin role granted", "adminRemoved": "Admin role removed",
-      "errorRole": "Error updating role", "planGranted": "Plan granted successfully", "errorPlan": "Error granting plan"
+      "adminGranted": "Admin role granted",
+      "adminRemoved": "Admin role removed",
+      "errorRole": "Error updating role",
+      "planGranted": "Plan granted successfully",
+      "errorPlan": "Error granting plan",
+      "premiumGranted": "Premium granted to {{name}}"
     },
     "grantDialog": {
-      "title": "Grant Plan to {{name}}", "plan": "Plan", "selectPlan": "Select a plan",
-      "expires": "Expires at (optional)", "submit": "Grant Plan"
+      "title": "Grant free Premium",
+      "forUser": "For: {{name}}",
+      "duration": "Duration",
+      "durations": {
+        "1m": "1 month",
+        "3m": "3 months",
+        "6m": "6 months",
+        "1y": "1 year",
+        "unlimited": "Unlimited"
+      },
+      "reason": "Reason (optional)",
+      "reasonPlaceholder": "Partner, tester, influencer...",
+      "submit": "Grant"
+    },
+    "grantPremium": "Grant Premium",
+    "badges": {
+      "premium": "Premium",
+      "premiumCourtesy": "Premium (courtesy)"
     }
   },
   "plans": {
-    "loading": "Loading plans...", "newButton": "New Plan",
-    "table": { "name": "Name", "price": "Price", "interval": "Interval", "status": "Status", "actions": "Actions" },
-    "active": "Active", "inactive": "Inactive",
+    "loading": "Loading plans...",
+    "newButton": "New Plan",
+    "table": {
+      "name": "Name",
+      "price": "Price",
+      "interval": "Interval",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "active": "Active",
+    "inactive": "Inactive",
     "dialog": {
-      "newTitle": "New Plan", "editTitle": "Edit Plan",
-      "name": "Name", "description": "Description", "price": "Price", "currency": "Currency",
-      "interval": "Interval", "features": "Features (JSON array)", "isActive": "Active",
+      "newTitle": "New Plan",
+      "editTitle": "Edit Plan",
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "currency": "Currency",
+      "interval": "Interval",
+      "features": "Features (JSON array)",
+      "isActive": "Active",
       "isStarter": "Starter plan (granted to new users)",
       "trialDays": "Trial days (0 = no trial)",
       "maxProposals": "Max proposals (empty = unlimited)",
       "maxClients": "Max clients (empty = unlimited)"
     },
-    "messages": { "created": "Plan created", "updated": "Plan updated", "error": "Error saving plan" }
+    "messages": {
+      "created": "Plan created",
+      "updated": "Plan updated",
+      "error": "Error saving plan"
+    }
   },
   "statuses": {
-    "loading": "Loading statuses...", "newButton": "New Status",
-    "table": { "position": "Position", "color": "Color", "name": "Name", "default": "Default", "final": "Final", "actions": "Actions" },
-    "dialog": { "newTitle": "New Status", "editTitle": "Edit Status", "name": "Name", "color": "Color", "position": "Position", "default": "Default", "final": "Final" },
+    "loading": "Loading statuses...",
+    "newButton": "New Status",
+    "table": {
+      "position": "Position",
+      "color": "Color",
+      "name": "Name",
+      "default": "Default",
+      "final": "Final",
+      "actions": "Actions"
+    },
+    "dialog": {
+      "newTitle": "New Status",
+      "editTitle": "Edit Status",
+      "name": "Name",
+      "color": "Color",
+      "position": "Position",
+      "default": "Default",
+      "final": "Final"
+    },
     "deleteConfirm": "Delete this status? Proposals using it will lose their status.",
-    "messages": { "created": "Status created", "updated": "Status updated", "deleted": "Status deleted", "errorSaving": "Error saving status", "errorDeleting": "Error deleting status" }
+    "messages": {
+      "created": "Status created",
+      "updated": "Status updated",
+      "deleted": "Status deleted",
+      "errorSaving": "Error saving status",
+      "errorDeleting": "Error deleting status"
+    }
   }
 }

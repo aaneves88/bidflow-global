@@ -8,6 +8,9 @@ export interface AdminUser {
   created_at: string;
   roles: string[];
   current_plan: string | null;
+  is_premium: boolean;
+  is_courtesy: boolean;
+  plan_expires_at: string | null;
 }
 
 export function useAdminUsers() {
@@ -25,17 +28,30 @@ export function useAdminUsers() {
       const { data: userPlans, error: upErr } = await supabase
         .from('user_plans')
         .select('*, plans(name)')
-        .eq('status', 'active');
+        .eq('status', 'active')
+        .order('starts_at', { ascending: false });
       if (upErr) throw upErr;
 
-      return (profiles ?? []).map((p) => ({
-        id: p.id,
-        full_name: p.full_name,
-        email: p.email,
-        created_at: p.created_at,
-        roles: (roles ?? []).filter((r) => r.user_id === p.id).map((r) => r.role),
-        current_plan: (userPlans ?? []).find((up) => up.user_id === p.id)?.plans?.name ?? null,
-      })) as AdminUser[];
+      const now = Date.now();
+      return (profiles ?? []).map((p) => {
+        const active = (userPlans ?? []).find(
+          (up) =>
+            up.user_id === p.id &&
+            (!up.expires_at || new Date(up.expires_at).getTime() > now),
+        );
+        const planName = active?.plans?.name ?? null;
+        return {
+          id: p.id,
+          full_name: p.full_name,
+          email: p.email,
+          created_at: p.created_at,
+          roles: (roles ?? []).filter((r) => r.user_id === p.id).map((r) => r.role),
+          current_plan: planName,
+          is_premium: !!planName && /premium/i.test(planName),
+          is_courtesy: !!active?.granted_by,
+          plan_expires_at: active?.expires_at ?? null,
+        };
+      }) as AdminUser[];
     },
   });
 
@@ -53,13 +69,30 @@ export function useAdminUsers() {
   });
 
   const grantPlan = useMutation({
-    mutationFn: async ({ userId, planId, grantedBy, expiresAt }: { userId: string; planId: string; grantedBy: string; expiresAt?: string }) => {
+    mutationFn: async ({
+      userId,
+      planId,
+      grantedBy,
+      expiresAt,
+    }: {
+      userId: string;
+      planId: string;
+      grantedBy: string;
+      expiresAt?: string | null;
+    }) => {
+      // Cancel any existing active plan first so the courtesy plan takes over
+      await supabase
+        .from('user_plans')
+        .update({ status: 'cancelled' })
+        .eq('user_id', userId)
+        .eq('status', 'active');
+
       const { error } = await supabase.from('user_plans').insert({
         user_id: userId,
         plan_id: planId,
         granted_by: grantedBy,
         status: 'active',
-        expires_at: expiresAt || null,
+        expires_at: expiresAt ?? null,
       });
       if (error) throw error;
     },
