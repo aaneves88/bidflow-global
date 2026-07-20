@@ -8,10 +8,22 @@ import { Label } from '@/components/ui/label';
 import { useAdminUsers } from '@/hooks/useAdminUsers';
 import { usePlans } from '@/hooks/usePlans';
 import { useAuth } from '@/contexts/AuthContext';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from '@/hooks/use-toast';
-import { Shield, Gift } from 'lucide-react';
+import { Shield, Gift, Sparkles } from 'lucide-react';
+
+type Duration = '1m' | '3m' | '6m' | '1y' | 'unlimited';
+
+function computeExpiry(duration: Duration): string | null {
+  if (duration === 'unlimited') return null;
+  const d = new Date();
+  if (duration === '1m') d.setMonth(d.getMonth() + 1);
+  if (duration === '3m') d.setMonth(d.getMonth() + 3);
+  if (duration === '6m') d.setMonth(d.getMonth() + 6);
+  if (duration === '1y') d.setFullYear(d.getFullYear() + 1);
+  return d.toISOString();
+}
 
 export default function AdminUsers() {
   const { t } = useTranslation('admin');
@@ -19,8 +31,13 @@ export default function AdminUsers() {
   const { plans } = usePlans();
   const { user } = useAuth();
   const [grantDialog, setGrantDialog] = useState<string | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState('');
-  const [expiresAt, setExpiresAt] = useState('');
+  const [duration, setDuration] = useState<Duration>('1m');
+  const [reason, setReason] = useState('');
+
+  const premiumPlan = useMemo(
+    () => plans.find((p) => /premium/i.test(p.name)),
+    [plans],
+  );
 
   const handleToggleAdmin = async (userId: string, isCurrentlyAdmin: boolean) => {
     try {
@@ -31,19 +48,26 @@ export default function AdminUsers() {
     }
   };
 
-  const handleGrantPlan = async () => {
-    if (!grantDialog || !selectedPlan || !user) return;
+  const handleGrantPremium = async (targetUser: { id: string; full_name: string | null; email: string | null }) => {
+    if (!premiumPlan || !user) {
+      toast({ title: t('users.messages.errorPlan'), variant: 'destructive' });
+      return;
+    }
     try {
       await grantPlan.mutateAsync({
-        userId: grantDialog,
-        planId: selectedPlan,
+        userId: targetUser.id,
+        planId: premiumPlan.id,
         grantedBy: user.id,
-        expiresAt: expiresAt || undefined,
+        expiresAt: computeExpiry(duration),
       });
-      toast({ title: t('users.messages.planGranted') });
+      toast({
+        title: t('users.messages.premiumGranted', {
+          name: targetUser.full_name || targetUser.email || '',
+        }),
+      });
       setGrantDialog(null);
-      setSelectedPlan('');
-      setExpiresAt('');
+      setDuration('1m');
+      setReason('');
     } catch {
       toast({ title: t('users.messages.errorPlan'), variant: 'destructive' });
     }
@@ -67,7 +91,17 @@ export default function AdminUsers() {
         <TableBody>
           {users.map((u) => (
             <TableRow key={u.id}>
-              <TableCell className="font-medium">{u.full_name || '—'}</TableCell>
+              <TableCell className="font-medium">
+                <div className="flex items-center gap-2">
+                  <span>{u.full_name || '—'}</span>
+                  {u.is_premium && (
+                    <Badge variant={u.is_courtesy ? 'outline' : 'default'} className="gap-1">
+                      <Sparkles className="h-3 w-3" />
+                      {u.is_courtesy ? t('users.badges.premiumCourtesy') : t('users.badges.premium')}
+                    </Badge>
+                  )}
+                </div>
+              </TableCell>
               <TableCell>{u.email}</TableCell>
               <TableCell>
                 <div className="flex gap-1">
@@ -90,33 +124,55 @@ export default function AdminUsers() {
                     <Shield className="h-3 w-3 mr-1" />
                     {u.roles.includes('admin') ? t('users.removeAdmin') : t('users.makeAdmin')}
                   </Button>
-                  <Dialog open={grantDialog === u.id} onOpenChange={(open) => setGrantDialog(open ? u.id : null)}>
+                  <Dialog
+                    open={grantDialog === u.id}
+                    onOpenChange={(open) => {
+                      setGrantDialog(open ? u.id : null);
+                      if (!open) {
+                        setDuration('1m');
+                        setReason('');
+                      }
+                    }}
+                  >
                     <DialogTrigger asChild>
                       <Button size="sm" variant="outline">
-                        <Gift className="h-3 w-3 mr-1" /> {t('users.grantPlan')}
+                        <Gift className="h-3 w-3 mr-1" /> {t('users.grantPremium')}
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>{t('users.grantDialog.title', { name: u.full_name || u.email })}</DialogTitle>
+                        <DialogTitle>{t('users.grantDialog.title')}</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
+                        <p className="text-sm text-muted-foreground">
+                          {t('users.grantDialog.forUser', { name: u.full_name || u.email })}
+                        </p>
                         <div>
-                          <Label>{t('users.grantDialog.plan')}</Label>
-                          <Select value={selectedPlan} onValueChange={setSelectedPlan}>
-                            <SelectTrigger><SelectValue placeholder={t('users.grantDialog.selectPlan')} /></SelectTrigger>
+                          <Label>{t('users.grantDialog.duration')}</Label>
+                          <Select value={duration} onValueChange={(v) => setDuration(v as Duration)}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
                             <SelectContent>
-                              {plans.map((p) => (
-                                <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-                              ))}
+                              <SelectItem value="1m">{t('users.grantDialog.durations.1m')}</SelectItem>
+                              <SelectItem value="3m">{t('users.grantDialog.durations.3m')}</SelectItem>
+                              <SelectItem value="6m">{t('users.grantDialog.durations.6m')}</SelectItem>
+                              <SelectItem value="1y">{t('users.grantDialog.durations.1y')}</SelectItem>
+                              <SelectItem value="unlimited">{t('users.grantDialog.durations.unlimited')}</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div>
-                          <Label>{t('users.grantDialog.expires')}</Label>
-                          <Input type="date" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
+                          <Label>{t('users.grantDialog.reason')}</Label>
+                          <Input
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                            placeholder={t('users.grantDialog.reasonPlaceholder')}
+                          />
                         </div>
-                        <Button onClick={handleGrantPlan} disabled={!selectedPlan} className="w-full">
+                        <Button
+                          onClick={() => handleGrantPremium(u)}
+                          disabled={!premiumPlan || grantPlan.isPending}
+                          className="w-full"
+                        >
                           {t('users.grantDialog.submit')}
                         </Button>
                       </div>
