@@ -67,10 +67,10 @@
     "back": "Voltar ao início"
   },
   "upgradeModal": {
-    "title": "Limite gratuito atingido",
-    "description": "Você já utilizou suas 3 propostas gratuitas. Para continuar criando propostas e enviar com sua marca, escolha um plano.",
-    "viewPlans": "Ver planos",
-    "upgrade": "Fazer upgrade"
+    "title": "Você usou seu orçamento grátis",
+    "description": "Para criar orçamentos ilimitados, enviar pelo WhatsApp e acompanhar seus clientes, assine o Premium por apenas R$29/mês.",
+    "viewPlans": "Agora não",
+    "upgrade": "Assinar Premium — R$29/mês"
   },
   "usage": {
     "freeAvailable": "Você ainda tem {{remaining}} de 3 propostas gratuitas.",
