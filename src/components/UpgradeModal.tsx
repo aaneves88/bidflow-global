@@ -17,9 +17,14 @@ export function UpgradeModal({ open, onOpenChange, title, description }: Upgrade
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 
-  const go = (path: string) => {
+  const handleUpgrade = () => {
+    const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK as string | undefined;
     onOpenChange(false);
-    navigate(path);
+    if (paymentLink) {
+      window.open(paymentLink, '_blank', 'noopener,noreferrer');
+    } else {
+      navigate('/pricing');
+    }
   };
 
   return (
@@ -37,10 +42,10 @@ export function UpgradeModal({ open, onOpenChange, title, description }: Upgrade
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex-col-reverse gap-2 sm:flex-row sm:justify-center">
-          <Button variant="outline" onClick={() => go('/pricing')}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             {t('upgradeModal.viewPlans')}
           </Button>
-          <Button onClick={() => go('/pricing#plans')}>
+          <Button onClick={handleUpgrade}>
             {t('upgradeModal.upgrade')}
           </Button>
         </DialogFooter>
