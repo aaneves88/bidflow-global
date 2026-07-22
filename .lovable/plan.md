@@ -1,66 +1,124 @@
-# O que falta desenvolver antes do build Android
+# Avaliação de lançamento — Orca
 
-Hoje **já temos** login social no código — o botão "Continuar com Google" existe em `MobileEntry.tsx` usando `lovable.auth.signInWithOAuth('google', …)`. Isso funciona bem no **web/PWA**, mas dentro do **APK Android** o fluxo precisa de ajustes (deep link de retorno), e há outros pontos pequenos para o app ficar pronto pra Play Store.
-
-## 1. Login social no app nativo (ajuste, não criação)
-
-O `signInWithOAuth` abre o navegador para o Google. No APK isso vira "abriu Chrome e nunca volta pro app". Precisamos:
-
-- Configurar **App Links / deep link** `app.orca.mento://auth-callback` no `AndroidManifest.xml`
-- Tratar o retorno com `@capacitor/app` (`appUrlOpen`) e fazer `supabase.auth.exchangeCodeForSession`
-- Passar `redirect_uri` correto quando `isNativeMobile()`
-- O `assetlinks.json` (já existe vazio em `public/.well-known/`) precisa ser preenchido com o SHA-256 do keystore depois do build
-
-**Alternativa mais simples:** usar `@capacitor/browser` em modo in-app e capturar o retorno via deep link — é o padrão recomendado pela Supabase para Capacitor.
-
-## 2. Tela de paywall mobile (`MobilePaywall.tsx`)
-
-Existe mas precisa ser finalizada:
-- Buscar `Offerings` do RevenueCat (`Purchases.getOfferings()`)
-- Renderizar pacotes com preço já localizado (RC retorna `priceString`)
-- `Purchases.purchasePackage(pkg)` no clique
-- Tratar estados: loading, erro, "já assinante", restaurar compras
-- Botão **"Restaurar compras"** (obrigatório pela Play Store)
-
-## 3. Webhook RevenueCat → Lovable Cloud
-
-A edge function `revenuecat-webhook` existe. Falta:
-- Confirmar que valida `Authorization: Bearer <RC_WEBHOOK_SECRET>`
-- Mapear eventos (`INITIAL_PURCHASE`, `RENEWAL`, `CANCELLATION`, `EXPIRATION`) para `user_plans.status`
-- Resolver `app_user_id` (= `user.id`) e `product_id` → `plans.metadata.rc_product_id`
-- O secret `RC_WEBHOOK_SECRET` ainda não foi adicionado
-
-## 4. Telas obrigatórias para a Play Store
-
-- **Excluir conta** dentro do app (Google exige desde 2024 para qualquer app com login): botão em `SettingsPage` → edge function que apaga `auth.users` via service role
-- Links visíveis para **Termos** e **Privacidade** (já existem as páginas, só garantir link no menu mobile)
-- Tela ou modal de **gerenciar assinatura** (link `Purchases.showManageSubscriptions()` no Android)
-
-## 5. Ajustes nativos pequenos
-
-- `capacitor.config.ts`: confirmar que o bloco `server { url }` está comentado antes do build de produção
-- Ícones adaptativos (foreground + background) — gerados a partir do `orca-mark.png` via `@capacitor/assets`
-- Splash screen 2732x2732 a partir da marca
-- `versionCode` / `versionName` no `build.gradle`
-
-## 6. Fase 4 — assets de loja (paralelo, não-código)
-
-- Ícone 512x512
-- Feature graphic 1024x500
-- 6 screenshots 1080x1920 (com molduras)
-- Descrição curta (80 char) e longa (4000 char) em pt-BR — `docs/marketing/app-description-pt.md` já tem rascunho
+Análise como product lead do que falta para o **lançamento comercial oficial** (v1.0.0), com base no roadmap atual, no estado do código e nas ondas já entregues (v0.1 → v0.6).
 
 ---
 
-## Ordem sugerida de implementação
+## 1. Status atual (o que já está pronto)
 
-1. **Excluir conta** (bloqueia publicação se faltar)
-2. **Deep link + login Google nativo**
-3. **MobilePaywall** completa + botão restaurar
-4. **Webhook RevenueCat** (validar + mapear)
-5. **Ícones/splash adaptativos** via `@capacitor/assets`
-6. **Assets de loja** (Fase 4)
+- ✅ CRM base: clientes, propostas, status, link público, assinatura digital
+- ✅ Identidade Orca + i18n pt-BR/en
+- ✅ Planos (Free/Premium), limites, watermark, PDF híbrido
+- ✅ Segurança: RLS em todas as tabelas, RPC público, HIBP, hardening
+- ✅ E-mails transacionais brandados (auth + 6 eventos de proposta) via notify.orca-mento.app
+- ✅ Base mobile Android: Capacitor + RevenueCat + webhook + paywall nativo
+- ✅ Landing page com conversão + pricing simplificado (Free / Premium R$29)
+- ✅ Stripe payment link em produção + upgrade modal
+- ✅ Página de Privacidade + `/account` com Danger Zone (delete-account)
+- ✅ Admin: usuários, planos, status, integrações, roadmap, QA checklist, conceder Premium cortesia
+- ✅ PWA manifest + service worker
 
-Itens 1–5 são código (eu faço). Item 6 é geração de imagens + textos.
+---
 
-**Quer que eu comece pelo item 1 (excluir conta) e 2 (deep link Google nativo)?** São os dois maiores bloqueadores para a Play Store aceitar.
+## 2. Bloqueios críticos para lançar (P0 — precisa antes de anunciar)
+
+### 2.1 Legal & Compliance (LGPD)
+- **Termos de Uso** — só há Privacidade; sem Termos, não pode cobrar legalmente no Brasil
+- **Consentimento de cookies** (banner LGPD) — obrigatório com Analytics/tracking
+- Revisar Privacidade contra requisitos da Play Store (Data Safety) e do Stripe
+- Link "Cancelar assinatura" claro no `/account` (exigência Stripe + LGPD)
+
+### 2.2 Pagamentos web em produção
+- Stripe hoje é **Payment Link** simples — falta:
+  - Webhook Stripe reconciliando `user_plans` no evento `checkout.session.completed` e `customer.subscription.deleted`
+  - Fluxo de cancelamento (portal do cliente Stripe) dentro do app
+  - Plano Anual (R$ 239,90) ainda não existe como produto Stripe conectado
+  - Recuperação de pagamento falho (dunning)
+- **Sem isso**: usuário paga, mas plano não ativa automaticamente hoje sem intervenção manual.
+
+### 2.3 Auth hardening
+- **Login social (Google)** ainda desligado na web também? Confirmar. Sem Google login, conversão do onboarding sofre ~30-40%
+- **Recuperação de senha** — templates existem, mas testar ponta-a-ponta em produção
+- **Confirmação de e-mail obrigatória** — decidir se será enforced
+
+### 2.4 Observabilidade mínima
+- **Analytics de produto** (PostHog ou Plausible) — hoje voando cego pós-lançamento
+- **Error monitoring** (Sentry) — ErrorBoundary existe mas não reporta
+- **Canal de suporte** — e-mail `suporte@orca-mento.app` ou widget de chat (Crisp/Intercom)
+
+---
+
+## 3. Alto valor pré-lançamento (P1 — muito recomendado)
+
+### 3.1 Onboarding
+- Fluxo guiado pós-signup: preencher branding → criar primeiro cliente → criar primeira proposta (existe `useOnboardingGate` mas confirmar completude)
+- Empty states com CTA em Dashboard/Clientes/Propostas
+- E-mail de welcome com "3 primeiros passos"
+
+### 3.2 Landing & SEO
+- Landing tem seções, mas falta:
+  - **Prova social**: 3-5 depoimentos reais (mesmo que beta testers)
+  - **FAQ** (objeções: "posso cancelar?", "meus dados são seguros?", "funciona sem internet?")
+  - **Blog / SEO** — pelo menos 3 posts âncora (ex: "como fazer proposta comercial", "modelo de orçamento freelancer")
+  - Open Graph image customizada
+  - Sitemap.xml + robots.txt revisados
+
+### 3.3 Retenção
+- **Notificações in-app** (`NotificationsBell` existe — validar se está ligada aos eventos certos)
+- **Digest semanal** por e-mail: "Você tem X propostas visualizadas mas não respondidas"
+- Reengajamento de usuários inativos (D+7, D+30)
+
+---
+
+## 4. Mobile Android — para submeter na Play (P0 se for lançar mobile junto)
+
+Se o lançamento inclui Play Store:
+- Testes com 12+ testers por 14 dias (exigência Google para contas novas) — **iniciar já**
+- Assets de loja: ícone 512x512, feature graphic 1024x500, 6 screenshots pt-BR
+- Descrição longa + short description em pt-BR
+- Data Safety form preenchido
+- Content Rating
+- Verificação D-U-N-S concluída (~14 dias)
+- `assetlinks.json` com SHA-256 real do keystore de produção
+- Produtos Play Console criados + `plans.metadata.rc_product_id` preenchido
+
+**Recomendação**: lançar **web primeiro** (2-3 semanas), Android como onda seguinte (4-6 semanas depois).
+
+---
+
+## 5. Nice-to-have pós-lançamento (P2 — pode esperar)
+
+- iOS / App Store (Onda 7)
+- Painel admin com métricas avançadas (MRR, churn, funil) — Onda 8
+- Integração WhatsApp Business (aparece em "Em breve" na tela de integrações)
+- Templates de proposta reutilizáveis
+- Duplicar proposta
+- Multi-usuário / equipes
+- Modo escuro
+- Exportação de dados (LGPD dá direito, mas admin pode fazer manual no início)
+
+---
+
+## 6. Roadmap sugerido até v1.0.0
+
+```text
+Onda 7  → v0.7.0  Stripe completo (webhook + portal + anual)     [1 semana]
+Onda 8  → v0.8.0  LGPD (Termos + cookies + revisão privacidade)  [3-4 dias]
+Onda 9  → v0.9.0  Observabilidade (Sentry + PostHog + suporte)   [2-3 dias]
+Onda 10 → v0.10.0 Onboarding polido + SEO/FAQ/depoimentos        [1 semana]
+Onda 11 → v1.0.0  🚀 Lançamento comercial web
+Onda 12 → v1.1.0  Android na Play Store (após 14 dias closed test)
+```
+
+**Total estimado até v1.0.0 web: 3-4 semanas de trabalho focado.**
+
+---
+
+## 7. Perguntas para você decidir antes do próximo passo
+
+1. **Escopo do lançamento**: web-only primeiro, ou web + Android simultâneos?
+2. **Data-alvo**: existe uma data comprometida (evento, campanha)?
+3. **Prioridade entre P0**: se tiver que escolher só um bloco para atacar primeiro — Pagamento (Stripe webhook)? Legal (Termos + cookies)? Observabilidade? Mobile?
+4. **Budget de terceiros**: pode contratar Sentry ($26/mês), PostHog (free até 1M events), Crisp (free tier)? Ou quer usar só o que é gratuito?
+
+Assim que responder, eu monto o plano detalhado da próxima onda em código.
