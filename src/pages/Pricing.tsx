@@ -158,7 +158,7 @@ export default function Pricing() {
                         <Button className="w-full" variant="outline" asChild>
                           <Link to="/dashboard">{t('common:nav.dashboard')}</Link>
                         </Button>
-                      ) : stripeEnabled ? (
+                      ) : canSubscribe ? (
                         <Button className="w-full" onClick={() => handleSubscribe(p.id)}>{t('subscribe')}</Button>
                       ) : (
                         <Button className="w-full" variant="outline" disabled title={t('comingSoonDescription')}>
