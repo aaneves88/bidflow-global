@@ -5,6 +5,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { getStripePaymentLink } from '@/lib/stripeCheckout';
 
 interface UpgradeModalProps {
   open: boolean;
@@ -16,9 +18,10 @@ interface UpgradeModalProps {
 export function UpgradeModal({ open, onOpenChange, title, description }: UpgradeModalProps) {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleUpgrade = () => {
-    const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK as string | undefined;
+    const paymentLink = getStripePaymentLink(user);
     onOpenChange(false);
     if (paymentLink) {
       window.open(paymentLink, '_blank', 'noopener,noreferrer');
@@ -26,6 +29,7 @@ export function UpgradeModal({ open, onOpenChange, title, description }: Upgrade
       navigate('/pricing');
     }
   };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
