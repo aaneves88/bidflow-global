@@ -102,7 +102,7 @@ export default function Pricing() {
                           <span className="text-3xl font-bold">{t('free')}</span>
                         ) : (
                           <>
-                            <span className="text-3xl font-bold">{formatCurrency(Number(p.price), p.currency)}</span>
+                            <span className="text-3xl font-bold">{formatCurrency(Number(p.price), p.currency).replace(/[.,]00$/, '')}</span>
                             <span className="text-muted-foreground">{intervalSuffix(p.interval)}</span>
                           </>
                         )}
