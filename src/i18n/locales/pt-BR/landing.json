@@ -100,9 +100,9 @@
     "premium": {
       "name": "Premium",
       "description": "Tudo ilimitado para fechar mais negócios",
-      "priceMonthly": "R$ 29,90",
+      "priceMonthly": "R$ 29",
       "priceYearly": "R$ 239,90",
-      "cta": "Testar 7 dias grátis",
+      "cta": "Assinar Premium",
       "features": {
         "f1": "Propostas ilimitadas",
         "f2": "Clientes ilimitados",
