@@ -62,7 +62,7 @@
       "features": { "f1": "1 proposal", "f2": "5 clients", "f3": "Public link", "f4": "Basic dashboard" }
     },
     "premium": {
-      "name": "Premium", "description": "Unlimited everything to close more deals", "priceMonthly": "$9.90", "priceYearly": "$79.90", "cta": "Try 7 days free",
+      "name": "Premium", "description": "Unlimited everything to close more deals", "priceMonthly": "$9", "priceYearly": "$79.90", "cta": "Subscribe to Premium",
       "features": { "f1": "Unlimited proposals", "f2": "Unlimited clients", "f3": "Sales pipeline", "f4": "WhatsApp button", "f5": "PDF download", "f6": "Templates", "f7": "Custom branding", "f8": "Advanced analytics" }
     }
   },
