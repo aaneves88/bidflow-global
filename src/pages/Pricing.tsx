@@ -4,6 +4,7 @@ import { usePlans } from '@/hooks/usePlans';
 import { useCurrentPlan } from '@/hooks/useCurrentPlan';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useAuth } from '@/contexts/AuthContext';
+import { getStripePaymentLink } from '@/lib/stripeCheckout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
