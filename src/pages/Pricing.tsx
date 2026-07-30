@@ -20,6 +20,8 @@ export default function Pricing() {
   const navigate = useNavigate();
 
   const stripeEnabled = getSetting('stripe_enabled') === true;
+  const hasPaymentLink = Boolean(import.meta.env.VITE_STRIPE_PAYMENT_LINK);
+  const canSubscribe = stripeEnabled || hasPaymentLink;
 
   const intervalSuffix = (interval: string) => {
     const map: Record<string, string> = { month: t('interval.month'), year: t('interval.year'), week: t('interval.week'), day: t('interval.day') };
@@ -31,6 +33,14 @@ export default function Pricing() {
       navigate(`/register?plan=${planId}`);
       return;
     }
+
+    // Payment Link (com client_reference_id + prefilled_email) tem prioridade
+    const paymentLink = getStripePaymentLink(user);
+    if (paymentLink) {
+      window.open(paymentLink, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     if (!stripeEnabled) {
       toast({ title: t('comingSoon'), description: t('comingSoonDescription') });
       return;
@@ -50,6 +60,7 @@ export default function Pricing() {
       toast({ title: 'Erro', description: e.message, variant: 'destructive' });
     }
   };
+
 
   return (
     <div className="min-h-screen bg-background">
