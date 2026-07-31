@@ -365,6 +365,8 @@ export function useDuplicateProposal() {
           terms: src.terms,
           currency: src.currency,
           total_amount: src.total_amount,
+          discount_amount: (src as any).discount_amount ?? 0,
+          discount_type: (src as any).discount_type ?? 'fixed',
           status_id: initial?.id ?? null,
           valid_until: src.valid_until,
         })
