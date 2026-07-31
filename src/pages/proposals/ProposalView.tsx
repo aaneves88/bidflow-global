@@ -120,6 +120,8 @@ export default function ProposalView() {
         unitPrice: t('pdf.unitPrice'),
         total: t('pdf.total'),
         grandTotal: t('pdf.grandTotal'),
+        subtotal: t('pdf.subtotal'),
+        discount: t('pdf.discount'),
         validUntil: t('pdf.validUntil'),
         status: t('pdf.status'),
         publicLink: t('pdf.publicLink'),
