@@ -113,6 +113,8 @@
     "publicLink": "Link da proposta",
     "generatedAt": "Gerado em",
     "poweredBy": "Feito com Orca · orca-mento.app",
-    "watermark": "Orca"
+    "watermark": "Orca",
+    "subtotal": "Subtotal",
+    "discount": "Desconto"
   }
 }
