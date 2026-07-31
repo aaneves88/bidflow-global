@@ -7,35 +7,51 @@
   "preparedFor": "Prepared for {{name}}",
   "validUntil": "Valid until {{date}}",
   "items": "Items",
-  "table": { "description": "Description", "qty": "Qty", "unitPrice": "Unit Price", "total": "Total" },
+  "table": {
+    "description": "Description",
+    "qty": "Qty",
+    "unitPrice": "Unit Price",
+    "total": "Total"
+  },
   "totalLabel": "Total",
   "client": "Client",
   "description": "Description",
   "notes": "Notes",
   "terms": "Terms and conditions",
-  "actions": { "accept": "Accept Proposal", "signAndAccept": "Sign and accept", "whatsapp": "Contact via WhatsApp", "downloadPdf": "Download PDF" },
+  "actions": {
+    "accept": "Accept Proposal",
+    "signAndAccept": "Sign and accept",
+    "whatsapp": "Contact via WhatsApp",
+    "downloadPdf": "Download PDF"
+  },
   "accepted": "Proposal Accepted",
   "messages": {
-    "accepted": "Proposal accepted!", "errorAccepting": "Error accepting proposal",
+    "accepted": "Proposal accepted!",
+    "errorAccepting": "Error accepting proposal",
     "acceptedNote": "Accepted by client via public link"
   },
   "signature": {
     "title": "Sign and accept proposal",
     "description": "Confirm your name to record acceptance of this proposal.",
-    "name": "Full name", "namePlaceholder": "Your full name",
+    "name": "Full name",
+    "namePlaceholder": "Your full name",
     "email": "Email (optional)",
     "preview": "Signature preview",
     "timestamp": "Signed on {{date}}",
     "agree": "I have read and agree to the",
     "terms": "terms",
-    "confirm": "Sign now", "signing": "Signing...",
-    "success": "Proposal signed successfully!", "error": "Error signing",
+    "confirm": "Sign now",
+    "signing": "Signing...",
+    "success": "Proposal signed successfully!",
+    "error": "Error signing",
     "nameTooShort": "Please provide your full name",
     "mustAgree": "You must accept the terms to continue",
     "signed": "Proposal signed",
     "signedOn": "Signed on {{date}}"
   },
-  "share": { "whatsappText": "Regarding proposal: {{title}}" },
+  "share": {
+    "whatsappText": "Regarding proposal: {{title}}"
+  },
   "pix": {
     "title": "Pay with PIX",
     "instructions": "Open your banking app, choose PIX and scan the QR code — or use the copy and paste code below.",
@@ -51,5 +67,7 @@
   "freeOwner": {
     "tagline": "Proposal created with Orca",
     "poweredBy": "Create your proposals free on Orca"
-  }
+  },
+  "subtotalLabel": "Subtotal",
+  "discountLabel": "Discount"
 }
