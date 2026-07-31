@@ -18,6 +18,7 @@ import { UpgradeModal } from '@/components/UpgradeModal';
 import { ProductPicker } from '@/components/ProductPicker';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
+import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
 
 const emptyItem = (): ProposalItem => ({
   description: '', quantity: 1, unit_price: 0, total: 0, position: 0,
