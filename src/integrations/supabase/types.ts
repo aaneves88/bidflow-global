@@ -516,6 +516,8 @@ export type Database = {
           created_at: string
           currency: string
           description: string | null
+          discount_amount: number
+          discount_type: string
           id: string
           notes: string | null
           public_code: string
@@ -535,6 +537,8 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          discount_amount?: number
+          discount_type?: string
           id?: string
           notes?: string | null
           public_code?: string
@@ -554,6 +558,8 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          discount_amount?: number
+          discount_type?: string
           id?: string
           notes?: string | null
           public_code?: string
