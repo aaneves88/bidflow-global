@@ -80,6 +80,8 @@ const DEFAULT_LABELS = {
   unitPrice: 'Valor unit.',
   total: 'Total',
   grandTotal: 'Total geral',
+  subtotal: 'Subtotal',
+  discount: 'Desconto',
   validUntil: 'Válida até',
   status: 'Status',
   publicLink: 'Link da proposta',
