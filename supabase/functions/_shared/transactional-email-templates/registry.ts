@@ -28,4 +28,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'proposal-accepted': proposalAccepted,
   'proposal-signed': proposalSigned,
   'proposal-rejected': proposalRejected,
+  'proposal-client-copy': proposalClientCopy,
 }
