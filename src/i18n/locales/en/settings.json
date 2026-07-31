@@ -59,6 +59,27 @@
     "deleteWrongConfirm": "Incorrect confirmation",
     "deleteDone": "Account deleted"
   },
+  "pix": {
+    "title": "PIX key",
+    "description": "Your PIX key will show as a QR code on proposals so your clients can pay you directly. Orca does not process this payment.",
+    "keyType": "Key type",
+    "key": "PIX key",
+    "keyPlaceholder": "Enter your PIX key",
+    "types": {
+      "cpf": "CPF",
+      "cnpj": "CNPJ",
+      "email": "Email",
+      "phone": "Phone",
+      "random": "Random"
+    },
+    "city": "Receiver city (optional)",
+    "cityPlaceholder": "e.g. Sao Paulo",
+    "save": "Save PIX key",
+    "saved": "PIX key saved",
+    "remove": "Remove key",
+    "removed": "PIX key removed",
+    "invalid": "Invalid PIX key for the selected type"
+  },
   "subscription": {
     "title": "Subscription",
     "currentPlan": "Current plan",
