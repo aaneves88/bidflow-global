@@ -67,5 +67,7 @@
   "freeOwner": {
     "tagline": "Proposta criada com Orca",
     "poweredBy": "Crie suas propostas grátis em Orca"
-  }
+  },
+  "subtotalLabel": "Subtotal",
+  "discountLabel": "Desconto"
 }

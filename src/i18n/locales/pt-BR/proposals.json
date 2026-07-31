@@ -44,7 +44,13 @@
     "grandTotal": "Total geral",
     "submitNew": "Criar proposta",
     "submitEdit": "Atualizar proposta",
-    "validUntilHint": "Depois desta data a proposta aparece como expirada para o cliente."
+    "validUntilHint": "Depois desta data a proposta aparece como expirada para o cliente.",
+    "subtotal": "Subtotal",
+    "discount": "Desconto",
+    "discountValue": "Valor do desconto",
+    "discountFixed": "R$ (valor)",
+    "discountPercent": "% (porcentagem)",
+    "discountHint": "Opcional. Deixe 0 para não aplicar desconto."
   },
   "view": {
     "copyLink": "Copiar link público",
@@ -107,6 +113,8 @@
     "publicLink": "Link da proposta",
     "generatedAt": "Gerado em",
     "poweredBy": "Feito com Orca · orca-mento.app",
-    "watermark": "Orca"
+    "watermark": "Orca",
+    "subtotal": "Subtotal",
+    "discount": "Desconto"
   }
 }

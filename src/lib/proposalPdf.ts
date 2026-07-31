@@ -3,6 +3,7 @@ import autoTable from 'jspdf-autotable';
 import html2canvas from 'html2canvas';
 import QRCode from 'qrcode';
 import { formatCurrency, formatDate } from './format';
+import { discountValue } from './discount';
 
 interface ProposalLike {
   id: string;
@@ -12,6 +13,8 @@ interface ProposalLike {
   terms?: string | null;
   currency: string;
   total_amount: number | string;
+  discount_amount?: number | string | null;
+  discount_type?: string | null;
   valid_until?: string | null;
   public_code: string;
   clients?: {
@@ -59,6 +62,8 @@ interface Options {
     unitPrice?: string;
     total?: string;
     grandTotal?: string;
+    subtotal?: string;
+    discount?: string;
     validUntil?: string;
     status?: string;
     publicLink?: string;
@@ -78,6 +83,8 @@ const DEFAULT_LABELS = {
   unitPrice: 'Valor unit.',
   total: 'Total',
   grandTotal: 'Total geral',
+  subtotal: 'Subtotal',
+  discount: 'Desconto',
   validUntil: 'Válida até',
   status: 'Status',
   publicLink: 'Link da proposta',
@@ -332,6 +339,32 @@ export async function generateProposalPdf(
 
   // @ts-ignore
   y = doc.lastAutoTable.finalY + 12;
+
+  // Subtotal / discount lines (only when a discount was applied)
+  const pdfSubtotal = items.reduce((s, i) => s + Number(i.total || 0), 0);
+  const pdfDiscount = discountValue(pdfSubtotal, proposal.discount_amount, proposal.discount_type);
+  if (pdfDiscount > 0) {
+    ensureSpace(34);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(80, 80, 80);
+    const subText = formatCurrency(pdfSubtotal, proposal.currency);
+    doc.text(`${labels.subtotal}:`, pageWidth - margin - doc.getTextWidth(subText) - 12, y, { align: 'right' });
+    doc.setTextColor(15, 23, 42);
+    doc.text(subText, pageWidth - margin, y, { align: 'right' });
+    y += 14;
+
+    const discLabel =
+      proposal.discount_type === 'percent'
+        ? `${labels.discount} (${Number(proposal.discount_amount)}%):`
+        : `${labels.discount}:`;
+    const discText = `- ${formatCurrency(pdfDiscount, proposal.currency)}`;
+    doc.setTextColor(80, 80, 80);
+    doc.text(discLabel, pageWidth - margin - doc.getTextWidth(discText) - 12, y, { align: 'right' });
+    doc.setTextColor(15, 23, 42);
+    doc.text(discText, pageWidth - margin, y, { align: 'right' });
+    y += 16;
+  }
 
   // Total line below table (mirrors hero card but native text, right-aligned)
   ensureSpace(28);

@@ -18,6 +18,7 @@ import { UpgradeModal } from '@/components/UpgradeModal';
 import { ProductPicker } from '@/components/ProductPicker';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
+import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
 
 const emptyItem = (): ProposalItem => ({
   description: '', quantity: 1, unit_price: 0, total: 0, position: 0,
@@ -53,6 +54,8 @@ export default function ProposalForm() {
   const [currency, setCurrency] = useState('BRL');
   const [statusId, setStatusId] = useState<string>('');
   const [validUntil, setValidUntil] = useState('');
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  const [discountType, setDiscountType] = useState<DiscountType>('fixed');
   const [items, setItems] = useState<ProposalItem[]>([emptyItem()]);
 
   useEffect(() => {
@@ -65,6 +68,8 @@ export default function ProposalForm() {
       setCurrency(proposal.currency);
       setStatusId(proposal.status_id || '');
       setValidUntil(proposal.valid_until ? proposal.valid_until.split('T')[0] : '');
+      setDiscountAmount(Number((proposal as any).discount_amount) || 0);
+      setDiscountType(((proposal as any).discount_type === 'percent' ? 'percent' : 'fixed') as DiscountType);
     }
   }, [proposal, isEditing]);
 
@@ -117,7 +122,9 @@ export default function ProposalForm() {
   const addItem = () => setItems((p) => [...p, emptyItem()]);
   const removeItem = (idx: number) => setItems((p) => p.filter((_, i) => i !== idx));
 
-  const grandTotal = items.reduce((s, i) => s + i.total, 0);
+  const subtotal = items.reduce((s, i) => s + i.total, 0);
+  const discountValueApplied = discountValue(subtotal, discountAmount, discountType);
+  const grandTotal = applyDiscount(subtotal, discountAmount, discountType);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,6 +133,8 @@ export default function ProposalForm() {
       client_id: clientId === 'none' ? null : clientId,
       currency, status_id: statusId || null,
       valid_until: validUntil || null,
+      discount_amount: discountAmount,
+      discount_type: discountType,
       items,
     };
     if (isEditing) {
@@ -265,10 +274,55 @@ export default function ProposalForm() {
               </div>
             ))}
 
-            <div className="flex justify-end pt-4 border-t">
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">{t('form.grandTotal')}</p>
-                <p className="text-2xl font-bold">{formatCurrency(grandTotal, currency)}</p>
+            <div className="pt-4 border-t space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-end">
+                <div className="sm:col-span-1">
+                  <Label>{t('form.discount')}</Label>
+                  <Select value={discountType} onValueChange={(v) => setDiscountType(v as DiscountType)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fixed">{t('form.discountFixed')}</SelectItem>
+                      <SelectItem value="percent">{t('form.discountPercent')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="sm:col-span-1">
+                  <Label htmlFor="discount_amount">{t('form.discountValue')}</Label>
+                  <Input
+                    id="discount_amount"
+                    type="number"
+                    min="0"
+                    step={discountType === 'percent' ? '0.1' : '0.01'}
+                    max={discountType === 'percent' ? 100 : undefined}
+                    value={discountAmount}
+                    onChange={(e) => setDiscountAmount(Math.max(Number(e.target.value) || 0, 0))}
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">{t('form.discountHint')}</p>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <div className="text-right space-y-1 min-w-[200px]">
+                  <div className="flex justify-between gap-8 text-sm">
+                    <span className="text-muted-foreground">{t('form.subtotal')}</span>
+                    <span className="tabular-nums">{formatCurrency(subtotal, currency)}</span>
+                  </div>
+                  {discountValueApplied > 0 && (
+                    <div className="flex justify-between gap-8 text-sm">
+                      <span className="text-muted-foreground">
+                        {t('form.discount')}
+                        {discountType === 'percent' ? ` (${discountAmount}%)` : ''}
+                      </span>
+                      <span className="tabular-nums text-destructive">
+                        −{formatCurrency(discountValueApplied, currency)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-8 pt-1 border-t">
+                    <span className="text-sm text-muted-foreground">{t('form.grandTotal')}</span>
+                    <span className="text-2xl font-bold tabular-nums">{formatCurrency(grandTotal, currency)}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>

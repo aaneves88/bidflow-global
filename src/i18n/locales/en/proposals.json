@@ -44,7 +44,13 @@
     "grandTotal": "Grand Total",
     "submitNew": "Create Proposal",
     "submitEdit": "Update Proposal",
-    "validUntilHint": "After this date the proposal shows as expired to the client."
+    "validUntilHint": "After this date the proposal shows as expired to the client.",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "discountValue": "Discount value",
+    "discountFixed": "Fixed amount",
+    "discountPercent": "% (percentage)",
+    "discountHint": "Optional. Leave 0 for no discount."
   },
   "view": {
     "copyLink": "Copy link",
@@ -106,6 +112,8 @@
     "publicLink": "Proposal link",
     "generatedAt": "Generated on",
     "poweredBy": "Made with Orca · orca-mento.app",
-    "watermark": "Orca"
+    "watermark": "Orca",
+    "subtotal": "Subtotal",
+    "discount": "Discount"
   }
 }

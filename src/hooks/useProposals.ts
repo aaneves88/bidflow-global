@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import i18n from '@/i18n';
+import { applyDiscount, type DiscountType } from '@/lib/discount';
 
 const tr = (key: string) => i18n.t(key, { ns: 'proposals' });
 const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
@@ -28,6 +29,8 @@ export type Proposal = {
   terms: string | null;
   currency: string;
   total_amount: number;
+  discount_amount?: number | null;
+  discount_type?: string | null;
   status_id: string | null;
   valid_until: string | null;
   created_at: string;
@@ -45,6 +48,8 @@ export type ProposalFormData = {
   currency: string;
   valid_until?: string | null;
   status_id?: string | null;
+  discount_amount?: number;
+  discount_type?: DiscountType;
   items: ProposalItem[];
 };
 
@@ -132,7 +137,10 @@ export function useCreateProposal() {
 
   return useMutation({
     mutationFn: async (data: ProposalFormData) => {
-      const totalAmount = data.items.reduce((s, i) => s + i.total, 0);
+      const subtotal = data.items.reduce((s, i) => s + i.total, 0);
+      const discountAmount = Number(data.discount_amount) || 0;
+      const discountType: DiscountType = data.discount_type === 'percent' ? 'percent' : 'fixed';
+      const totalAmount = applyDiscount(subtotal, discountAmount, discountType);
 
       const public_code = Math.random().toString(36).substring(2, 12);
       const { data: proposal, error } = await supabase
@@ -146,6 +154,8 @@ export function useCreateProposal() {
           terms: data.terms || null,
           currency: data.currency,
           total_amount: totalAmount,
+          discount_amount: discountAmount,
+          discount_type: discountType,
           status_id: data.status_id || null,
           valid_until: data.valid_until || null,
           public_code,
@@ -194,7 +204,10 @@ export function useUpdateProposal() {
 
   return useMutation({
     mutationFn: async ({ id, ...data }: ProposalFormData & { id: string }) => {
-      const totalAmount = data.items.reduce((s, i) => s + i.total, 0);
+      const subtotal = data.items.reduce((s, i) => s + i.total, 0);
+      const discountAmount = Number(data.discount_amount) || 0;
+      const discountType: DiscountType = data.discount_type === 'percent' ? 'percent' : 'fixed';
+      const totalAmount = applyDiscount(subtotal, discountAmount, discountType);
 
       const { error } = await supabase
         .from('proposals')
@@ -206,6 +219,8 @@ export function useUpdateProposal() {
           terms: data.terms || null,
           currency: data.currency,
           total_amount: totalAmount,
+          discount_amount: discountAmount,
+          discount_type: discountType,
           status_id: data.status_id || null,
           valid_until: data.valid_until || null,
         })
@@ -350,6 +365,8 @@ export function useDuplicateProposal() {
           terms: src.terms,
           currency: src.currency,
           total_amount: src.total_amount,
+          discount_amount: (src as any).discount_amount ?? 0,
+          discount_type: (src as any).discount_type ?? 'fixed',
           status_id: initial?.id ?? null,
           valid_until: src.valid_until,
         })
