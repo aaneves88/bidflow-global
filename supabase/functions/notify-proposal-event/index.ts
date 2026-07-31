@@ -129,7 +129,30 @@ Deno.serve(async (req) => {
     })
   }
 
-  return new Response(JSON.stringify({ ok: true, event }), {
+  // On signature, also send a copy to the client (best-effort, never blocks).
+  let clientCopy = false
+  const clientEmail = (proposal as any).clients?.email as string | undefined
+  if (event === 'signed' && clientEmail) {
+    const { error: copyErr } = await supabase.functions.invoke('send-transactional-email', {
+      body: {
+        templateName: 'proposal-client-copy',
+        recipientEmail: clientEmail,
+        idempotencyKey: `client-copy-${proposal.id}-${Date.now().toString(36)}`,
+        templateData: {
+          clientName: body.signerName || clientName,
+          proposalTitle: proposal.title,
+          proposalTotal,
+          vendorName: owner.full_name || null,
+          signedAt: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+          publicUrl: `${APP_URL}/p/${proposal.public_code}`,
+        },
+      },
+    })
+    if (copyErr) console.error('client copy failed', { copyErr })
+    else clientCopy = true
+  }
+
+  return new Response(JSON.stringify({ ok: true, event, clientCopy }), {
     status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   })
 })

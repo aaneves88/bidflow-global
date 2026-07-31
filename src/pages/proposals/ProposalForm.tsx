@@ -195,6 +195,7 @@ export default function ProposalForm() {
               <div>
                 <Label htmlFor="valid_until">{t('form.validUntil')}</Label>
                 <Input id="valid_until" type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} />
+                <p className="mt-1 text-xs text-muted-foreground">{t('form.validUntilHint')}</p>
               </div>
             </div>
           </CardContent>

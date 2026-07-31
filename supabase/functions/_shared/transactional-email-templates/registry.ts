@@ -9,6 +9,7 @@ import { template as proposalViewed } from './proposal-viewed.tsx'
 import { template as proposalAccepted } from './proposal-accepted.tsx'
 import { template as proposalSigned } from './proposal-signed.tsx'
 import { template as proposalRejected } from './proposal-rejected.tsx'
+import { template as proposalClientCopy } from './proposal-client-copy.tsx'
 import { template as welcome } from './welcome.tsx'
 
 export interface TemplateEntry {
@@ -27,4 +28,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'proposal-accepted': proposalAccepted,
   'proposal-signed': proposalSigned,
   'proposal-rejected': proposalRejected,
+  'proposal-client-copy': proposalClientCopy,
 }
