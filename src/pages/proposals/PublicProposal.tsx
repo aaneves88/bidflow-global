@@ -330,6 +330,14 @@ export default function PublicProposal() {
               accentColor: accent,
               watermark: isFreeOwner,
               showPoweredBy: true,
+              pix: pixPayload
+                ? {
+                    payload: pixPayload,
+                    merchantName: pix?.merchant_name || '',
+                    title: t('pix.title'),
+                    instructions: t('pix.instructions'),
+                  }
+                : undefined,
             })}
           >
             <FileDown className="mr-2 h-5 w-5" />
