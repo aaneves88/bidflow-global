@@ -41,6 +41,13 @@ interface Options {
   watermark?: boolean;
   /** Small "Powered by Orca" line in the footer. Default on. */
   showPoweredBy?: boolean;
+  /** Owner's PIX BR Code — rendered as a QR block at the end of the document. */
+  pix?: {
+    payload: string;
+    merchantName?: string;
+    title?: string;
+    instructions?: string;
+  };
   labels?: {
     proposalFor?: string;
     description?: string;
