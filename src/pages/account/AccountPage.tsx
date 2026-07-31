@@ -129,6 +129,10 @@ export default function AccountPage() {
         </CardContent>
       </Card>
 
+      <PixKeyCard />
+
+
+
 
 
       <Card>
