@@ -115,6 +115,12 @@ export default function PublicProposal() {
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('share.whatsappText', { title: proposal.title }))}`;
   const items = (proposal as any).proposal_items || [];
   const sortedItems = [...items].sort((a: any, b: any) => a.position - b.position);
+  const publicSubtotal = sortedItems.reduce((s: number, i: any) => s + Number(i.total || 0), 0);
+  const publicDiscount = discountValue(
+    publicSubtotal,
+    proposal.discount_amount,
+    proposal.discount_type,
+  );
   const notes = (proposal as any).notes as string | null;
   const terms = (proposal as any).terms as string | null;
 
