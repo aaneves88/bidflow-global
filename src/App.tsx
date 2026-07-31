@@ -26,6 +26,8 @@ import MobileEntry from "@/pages/MobileEntry";
 import Unsubscribe from "@/pages/Unsubscribe";
 import MobilePaywall from "@/pages/MobilePaywall";
 import AccountPage from "@/pages/account/AccountPage";
+import OAuthConsent from "@/pages/auth/OAuthConsent";
+
 import { isNativeMobile } from "@/lib/platform";
 import { useRevenueCatBootstrap } from "@/hooks/useRevenueCat";
 import { NativeBackHandler } from "@/components/NativeBackHandler";
@@ -54,7 +56,9 @@ const App = () => (
             <Route path="/pricing" element={isNativeMobile() ? <MobilePaywall /> : <Pricing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
+
             <Route path="/legal/:doc" element={<LegalPage />} />
             <Route path="/privacidade" element={<Privacy />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
