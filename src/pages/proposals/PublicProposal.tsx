@@ -16,6 +16,8 @@ import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
 import { SignatureDialog } from '@/components/SignatureDialog';
 import { LegalFooter } from '@/components/LegalFooter';
+import { PixPayment } from '@/components/PixPayment';
+import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark.png';
 
 export default function PublicProposal() {
@@ -40,6 +42,17 @@ export default function PublicProposal() {
       return Array.isArray(data) && data.length > 0 ? data[0] : null;
     },
   });
+
+  const { data: pix } = useQuery({
+    queryKey: ['public-pix', publicCode],
+    enabled: !!publicCode,
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await (supabase as any).rpc('get_proposal_pix', { p_code: publicCode! });
+      return Array.isArray(data) && data.length > 0 ? data[0] : null;
+    },
+  });
+
 
   useEffect(() => {
     if (proposal?.id && publicCode) {
@@ -104,6 +117,19 @@ export default function PublicProposal() {
   const sortedItems = [...items].sort((a: any, b: any) => a.position - b.position);
   const notes = (proposal as any).notes as string | null;
   const terms = (proposal as any).terms as string | null;
+
+  const pixAmount = Number(proposal.total_amount);
+  const pixPayload =
+    pix?.pix_key && proposal.currency === 'BRL'
+      ? buildPixPayload({
+          key: pix.pix_key,
+          keyType: pix.pix_key_type,
+          merchantName: pix.merchant_name || branding?.companyName || 'RECEBEDOR',
+          amount: pixAmount,
+          txid: proposal.public_code,
+        })
+      : null;
+
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -264,6 +290,17 @@ export default function PublicProposal() {
           </Card>
         )}
 
+        {pixPayload && (
+          <PixPayment
+            payload={pixPayload}
+            merchantName={pix?.merchant_name || ''}
+            amountLabel={formatCurrency(pixAmount, proposal.currency)}
+            accentColor={accent}
+          />
+        )}
+
+
+
         <div className="flex gap-3 justify-center pt-2 flex-wrap">
           {!isFinal && (
             <Button
@@ -293,6 +330,14 @@ export default function PublicProposal() {
               accentColor: accent,
               watermark: isFreeOwner,
               showPoweredBy: true,
+              pix: pixPayload
+                ? {
+                    payload: pixPayload,
+                    merchantName: pix?.merchant_name || '',
+                    title: t('pix.title'),
+                    instructions: t('pix.instructions'),
+                  }
+                : undefined,
             })}
           >
             <FileDown className="mr-2 h-5 w-5" />

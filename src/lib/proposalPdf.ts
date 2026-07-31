@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import html2canvas from 'html2canvas';
+import QRCode from 'qrcode';
 import { formatCurrency, formatDate } from './format';
 
 interface ProposalLike {
@@ -41,6 +42,13 @@ interface Options {
   watermark?: boolean;
   /** Small "Powered by Orca" line in the footer. Default on. */
   showPoweredBy?: boolean;
+  /** Owner's PIX BR Code — rendered as a QR block at the end of the document. */
+  pix?: {
+    payload: string;
+    merchantName?: string;
+    title?: string;
+    instructions?: string;
+  };
   labels?: {
     proposalFor?: string;
     description?: string;
@@ -342,6 +350,63 @@ export async function generateProposalPdf(
 
   if (proposal.notes) renderTextSection(labels.notes, proposal.notes);
   if (proposal.terms) renderTextSection(labels.terms, proposal.terms);
+
+  // === PIX QR code (owner's key — Orca does not process the payment) ===
+  if (options.pix?.payload) {
+    try {
+      const qrDataUrl = await QRCode.toDataURL(options.pix.payload, { width: 512, margin: 1 });
+      const qrSize = 110;
+      ensureSpace(qrSize + 40);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(sr, sg, sb);
+      doc.text(options.pix.title || 'Pagar com PIX', margin, y);
+      y += 14;
+
+      doc.addImage(qrDataUrl, 'PNG', margin, y, qrSize, qrSize, undefined, 'FAST');
+
+      const textX = margin + qrSize + 16;
+      const textWidth = contentWidth - qrSize - 16;
+      let ty = y + 14;
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(80, 80, 80);
+      const intro = doc.splitTextToSize(
+        options.pix.instructions ||
+          'Escaneie o QR code no app do seu banco ou use o código PIX copia e cola abaixo.',
+        textWidth,
+      );
+      for (const line of intro) {
+        doc.text(line, textX, ty);
+        ty += 12;
+      }
+
+      if (options.pix.merchantName) {
+        ty += 4;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(30, 41, 59);
+        doc.text(options.pix.merchantName, textX, ty);
+        ty += 14;
+      }
+
+      doc.setFont('courier', 'normal');
+      doc.setFontSize(6.5);
+      doc.setTextColor(120, 120, 120);
+      const payloadLines = doc.splitTextToSize(options.pix.payload, textWidth);
+      for (const line of payloadLines) {
+        doc.text(line, textX, ty);
+        ty += 8;
+      }
+
+      y = Math.max(y + qrSize, ty) + 18;
+    } catch {
+      /* QR generation failure must not break the PDF */
+    }
+  }
+
 
   // === Footer + watermark on every page ===
   const pageCount = doc.getNumberOfPages();

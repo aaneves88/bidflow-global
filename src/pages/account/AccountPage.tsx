@@ -19,6 +19,7 @@ import { openExternal } from '@/lib/openExternal';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useStripePortal } from '@/hooks/useStripePortal';
 import { formatDate } from '@/lib/format';
+import { PixKeyCard } from '@/components/PixKeyCard';
 
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -128,6 +129,10 @@ export default function AccountPage() {
           )}
         </CardContent>
       </Card>
+
+      <PixKeyCard />
+
+
 
 
 

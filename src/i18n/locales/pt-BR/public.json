@@ -52,6 +52,17 @@
   "share": {
     "whatsappText": "Sobre a proposta: {{title}}"
   },
+  "pix": {
+    "title": "Pagar com PIX",
+    "instructions": "Abra o app do seu banco, escolha pagar com PIX e escaneie o QR code — ou use o código copia e cola abaixo.",
+    "receiver": "Recebedor",
+    "amount": "Valor",
+    "copyPaste": "PIX copia e cola",
+    "copied": "Código PIX copiado",
+    "copyError": "Não foi possível copiar o código",
+    "qrAlt": "QR code PIX para pagamento",
+    "disclaimer": "O pagamento é feito diretamente ao recebedor pelo seu banco. O Orca não processa nem intermedeia esta transação."
+  },
   "poweredBy": "Feito com Orca",
   "freeOwner": {
     "tagline": "Proposta criada com Orca",
