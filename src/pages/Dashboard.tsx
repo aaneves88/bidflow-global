@@ -87,8 +87,31 @@ export default function Dashboard() {
   const { data: currentPlan } = useCurrentPlan();
   const navigate = useNavigate();
   const [period, setPeriod] = useState<Period>('thisMonth');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryClient = useQueryClient();
+  const checkoutHandled = useRef(false);
+
+  // Retorno do Stripe: ?checkout=success
+  useEffect(() => {
+    if (checkoutHandled.current) return;
+    if (searchParams.get('checkout') !== 'success') return;
+    checkoutHandled.current = true;
+
+    toast({
+      title: t('checkoutSuccess.title'),
+      description: t('checkoutSuccess.description'),
+    });
+    queryClient.invalidateQueries({ queryKey: ['current-plan'] });
+    queryClient.invalidateQueries({ queryKey: ['subscription'] });
+
+    const next = new URLSearchParams(searchParams);
+    next.delete('checkout');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams, queryClient, t]);
 
   const { start, end, prevStart, prevEnd } = useMemo(() => getRange(period), [period]);
+
+
 
   const filtered = useMemo(() => {
     if (!proposals) return [];
