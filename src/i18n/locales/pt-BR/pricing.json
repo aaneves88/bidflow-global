@@ -27,5 +27,6 @@
     "clientsLimit_other": "{{count}} clientes"
   },
   "loading": "Carregando planos...",
-  "empty": "Nenhum plano disponível"
+  "empty": "Nenhum plano disponível",
+  "manageSubscription": "Gerenciar assinatura"
 }

@@ -1,16 +1,31 @@
 {
-  "title": "Dashboard", "welcome": "Welcome", "welcomeBack": "Welcome back",
+  "title": "Dashboard",
+  "welcome": "Welcome",
+  "welcomeBack": "Welcome back",
   "kpis": {
-    "thisMonth": "Proposals (this month)", "openPipeline": "Open Pipeline",
-    "approvedRevenue": "Approved Revenue", "conversionRate": "Conversion Rate",
-    "avgTicket": "Average Ticket", "vsPrev": "vs. previous period"
+    "thisMonth": "Proposals (this month)",
+    "openPipeline": "Open Pipeline",
+    "approvedRevenue": "Approved Revenue",
+    "conversionRate": "Conversion Rate",
+    "avgTicket": "Average Ticket",
+    "vsPrev": "vs. previous period"
   },
   "period": {
-    "label": "Period", "thisMonth": "This month", "last30Days": "Last 30 days",
-    "thisYear": "This year", "allTime": "All time"
+    "label": "Period",
+    "thisMonth": "This month",
+    "last30Days": "Last 30 days",
+    "thisYear": "This year",
+    "allTime": "All time"
   },
-  "pipeline": { "title": "Pipeline", "empty": "No data yet" },
-  "recent": { "title": "Recent Proposals", "empty": "No proposals yet", "noClient": "No client" },
+  "pipeline": {
+    "title": "Pipeline",
+    "empty": "No data yet"
+  },
+  "recent": {
+    "title": "Recent Proposals",
+    "empty": "No proposals yet",
+    "noClient": "No client"
+  },
   "activity": {
     "title": "Recent activity",
     "empty": "No activity yet",
@@ -33,5 +48,9 @@
     "proposalsReached": "Your plan's proposal limit has been reached",
     "clientsReached": "Your plan's client limit has been reached",
     "upgrade": "Upgrade"
+  },
+  "checkoutSuccess": {
+    "title": "Premium activated! 🎉",
+    "description": "Enjoy unlimited features."
   }
 }

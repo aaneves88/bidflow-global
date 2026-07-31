@@ -1,19 +1,28 @@
 {
   "title": "Settings",
-  "tabs": { "general": "General", "branding": "Branding" },
+  "tabs": {
+    "general": "General",
+    "branding": "Branding"
+  },
   "integrationsCta": "Manage integrations in Admin → Integrations",
   "general": {
-    "title": "General Settings", "companyName": "Company Name", "companyPlaceholder": "Your Company",
+    "title": "General Settings",
+    "companyName": "Company Name",
+    "companyPlaceholder": "Your Company",
     "companyNameHelp": "Appears in the header and footer of proposals sent to your clients.",
-    "defaultCurrency": "Default Currency", "language": "Interface language",
+    "defaultCurrency": "Default Currency",
+    "language": "Interface language",
     "publicAppUrl": "Public app URL",
     "publicAppUrlHelp": "Domain used for proposal links shared with clients. Admin-only setting."
   },
   "integrations": {
-    "title": "Integrations", "stripe": "Stripe Payments",
+    "title": "Integrations",
+    "stripe": "Stripe Payments",
     "stripeDescription": "Enable to allow customers to subscribe to plans.",
-    "whatsapp": "WhatsApp", "whatsappDescription": "Add a default phone number for sharing proposals.",
-    "whatsappPhone": "WhatsApp Phone Number", "whatsappPlaceholder": "+1234567890"
+    "whatsapp": "WhatsApp",
+    "whatsappDescription": "Add a default phone number for sharing proposals.",
+    "whatsappPhone": "WhatsApp Phone Number",
+    "whatsappPlaceholder": "+1234567890"
   },
   "branding": {
     "title": "Branding",
@@ -30,7 +39,10 @@
     "freeLocked": "Custom branding is a paid feature — free-plan proposals use Orca's branding.",
     "freeLockedCta": "View plans"
   },
-  "messages": { "saved": "Settings saved", "error": "Error saving settings" },
+  "messages": {
+    "saved": "Settings saved",
+    "error": "Error saving settings"
+  },
   "account": {
     "title": "My account",
     "profileTitle": "Profile",
@@ -46,5 +58,22 @@
     "deleteConfirmWord": "DELETE",
     "deleteWrongConfirm": "Incorrect confirmation",
     "deleteDone": "Account deleted"
+  },
+  "subscription": {
+    "title": "Subscription",
+    "currentPlan": "Current plan",
+    "freePlan": "Free",
+    "status": {
+      "active": "Active",
+      "past_due": "Payment pending",
+      "cancelled": "Cancelled"
+    },
+    "renewsAt": "Renews on {{date}}",
+    "endedAt": "Ends on {{date}}",
+    "pastDueHint": "We couldn't process your last payment. Update your card to keep Premium.",
+    "manage": "Manage subscription",
+    "upgrade": "Upgrade",
+    "portalError": "Couldn't open the billing portal",
+    "portalErrorHint": "Please try again shortly. If it persists, contact support."
   }
 }

@@ -1,4 +1,4 @@
-// Stripe webhook: ativa/cancela o plano Premium automaticamente em user_plans.
+// Stripe webhook: ativa/renova/cancela o plano Premium automaticamente em user_plans.
 // Suporta Payment Links (sem metadata) casando o usuário pelo e-mail do checkout.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
@@ -41,7 +41,23 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
+  // ---- idempotência ---------------------------------------------------------
+  // Insere o event.id primeiro: se já existe (conflito de PK), o evento já foi
+  // processado e devolvemos 200 sem reprocessar.
+  {
+    const { error } = await admin.from("stripe_events").insert({ id: event.id });
+    if (error) {
+      if ((error as { code?: string }).code === "23505") {
+        console.log("stripe-webhook: evento duplicado ignorado", { id: event.id, type: event.type });
+        return json({ received: true, duplicate: true });
+      }
+      console.error("stripe-webhook: falha ao registrar evento", error);
+    }
+  }
+
   // ---- helpers -------------------------------------------------------------
+
+  const ACTIVE_LIKE = ["active", "past_due"];
 
   const findUserIdByEmail = async (email?: string | null) => {
     if (!email) return null;
@@ -99,6 +115,16 @@ Deno.serve(async (req) => {
     return null;
   };
 
+  /** Atualiza a assinatura vigente do usuário (active ou past_due). */
+  const patchCurrentPlan = async (userId: string, patch: Record<string, unknown>) => {
+    const { error } = await admin
+      .from("user_plans")
+      .update(patch)
+      .eq("user_id", userId)
+      .in("status", ACTIVE_LIKE);
+    if (error) console.error("stripe-webhook: falha ao atualizar user_plans", error);
+  };
+
   const activatePlan = async (opts: {
     userId: string;
     planId: string;
@@ -112,7 +138,7 @@ Deno.serve(async (req) => {
       .from("user_plans")
       .update({ status: "replaced" })
       .eq("user_id", opts.userId)
-      .eq("status", "active");
+      .in("status", ACTIVE_LIKE);
 
     await admin.from("user_plans").insert({
       user_id: opts.userId,
@@ -125,6 +151,9 @@ Deno.serve(async (req) => {
       stripe_email: opts.email ?? null,
     });
   };
+
+  const toIso = (seconds?: number | null) =>
+    typeof seconds === "number" ? new Date(seconds * 1000).toISOString() : null;
 
   // ---- handlers ------------------------------------------------------------
 
@@ -167,6 +196,90 @@ Deno.serve(async (req) => {
         break;
       }
 
+      case "customer.subscription.updated": {
+        const sub = event.data.object as Stripe.Subscription;
+        const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer?.id ?? null;
+        const userId =
+          (sub.metadata?.user_id as string | undefined) ??
+          (await findUserIdBySubscription(sub.id, customerId));
+        if (!userId) {
+          console.warn("stripe-webhook: subscription.updated sem usuário", { sub: sub.id });
+          break;
+        }
+
+        const periodEnd = toIso((sub as unknown as { current_period_end?: number }).current_period_end);
+        const patch: Record<string, unknown> = {
+          stripe_customer_id: customerId,
+          stripe_subscription_id: sub.id,
+        };
+
+        switch (sub.status) {
+          case "active":
+          case "trialing":
+            // reativa após inadimplência e confirma o período vigente
+            patch.status = "active";
+            // cancel_at_period_end: segue ativo até o fim do período pago
+            patch.expires_at = sub.cancel_at_period_end ? periodEnd : null;
+            break;
+          case "past_due":
+          case "unpaid":
+            patch.status = "past_due";
+            break;
+          case "canceled":
+          case "incomplete_expired":
+            patch.status = "cancelled";
+            patch.expires_at = periodEnd ?? new Date().toISOString();
+            break;
+          default:
+            break;
+        }
+
+        await patchCurrentPlan(userId, patch);
+        console.log("stripe-webhook: subscription atualizada", {
+          userId,
+          stripeStatus: sub.status,
+          cancelAtPeriodEnd: sub.cancel_at_period_end,
+        });
+        break;
+      }
+
+      case "invoice.paid": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id ?? null;
+        const subscriptionId =
+          typeof invoice.subscription === "string" ? invoice.subscription : invoice.subscription?.id ?? null;
+        const userId =
+          (await findUserIdBySubscription(subscriptionId, customerId)) ??
+          (await findUserIdByEmail(invoice.customer_email));
+        if (!userId) {
+          console.warn("stripe-webhook: invoice.paid sem usuário", { subscriptionId, customerId });
+          break;
+        }
+
+        // Renovação paga => volta a ficar ativo (mesmo se estava past_due)
+        const patch: Record<string, unknown> = { status: "active", expires_at: null };
+        if (customerId) patch.stripe_customer_id = customerId;
+        if (subscriptionId) patch.stripe_subscription_id = subscriptionId;
+
+        if (subscriptionId) {
+          try {
+            const sub = await stripe.subscriptions.retrieve(subscriptionId);
+            if (sub.cancel_at_period_end) {
+              patch.expires_at = toIso((sub as unknown as { current_period_end?: number }).current_period_end);
+            }
+          } catch (e) {
+            console.warn("stripe-webhook: não foi possível ler a subscription", (e as Error).message);
+          }
+        } else {
+          const periodEnd = toIso(invoice.lines?.data?.[0]?.period?.end);
+          if (periodEnd) patch.expires_at = periodEnd;
+        }
+
+        await patchCurrentPlan(userId, patch);
+        console.log("stripe-webhook: renovação confirmada", { userId, subscriptionId });
+        break;
+      }
+
       case "customer.subscription.deleted": {
         const sub = event.data.object as Stripe.Subscription;
         const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer?.id ?? null;
@@ -175,11 +288,10 @@ Deno.serve(async (req) => {
           (await findUserIdBySubscription(sub.id, customerId));
         if (!userId) break;
 
-        await admin
-          .from("user_plans")
-          .update({ status: "cancelled", expires_at: new Date().toISOString() })
-          .eq("user_id", userId)
-          .eq("status", "active");
+        await patchCurrentPlan(userId, {
+          status: "cancelled",
+          expires_at: new Date().toISOString(),
+        });
         console.log("stripe-webhook: premium cancelado", { userId });
         break;
       }

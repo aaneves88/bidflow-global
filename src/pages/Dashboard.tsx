@@ -1,13 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProposals, useProposalStatuses } from '@/hooks/useProposals';
 import { useCurrentPlan } from '@/hooks/useCurrentPlan';
 import { useClients } from '@/hooks/useClients';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -85,8 +87,31 @@ export default function Dashboard() {
   const { data: currentPlan } = useCurrentPlan();
   const navigate = useNavigate();
   const [period, setPeriod] = useState<Period>('thisMonth');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryClient = useQueryClient();
+  const checkoutHandled = useRef(false);
+
+  // Retorno do Stripe: ?checkout=success
+  useEffect(() => {
+    if (checkoutHandled.current) return;
+    if (searchParams.get('checkout') !== 'success') return;
+    checkoutHandled.current = true;
+
+    toast({
+      title: t('checkoutSuccess.title'),
+      description: t('checkoutSuccess.description'),
+    });
+    queryClient.invalidateQueries({ queryKey: ['current-plan'] });
+    queryClient.invalidateQueries({ queryKey: ['subscription'] });
+
+    const next = new URLSearchParams(searchParams);
+    next.delete('checkout');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams, queryClient, t]);
 
   const { start, end, prevStart, prevEnd } = useMemo(() => getRange(period), [period]);
+
+
 
   const filtered = useMemo(() => {
     if (!proposals) return [];

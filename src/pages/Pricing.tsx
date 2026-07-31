@@ -5,6 +5,7 @@ import { useCurrentPlan } from '@/hooks/useCurrentPlan';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useAuth } from '@/contexts/AuthContext';
 import { getStripePaymentLink } from '@/lib/stripeCheckout';
+import { useStripePortal } from '@/hooks/useStripePortal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +20,7 @@ export default function Pricing() {
   const { data: currentPlan } = useCurrentPlan();
   const { getSetting } = useAppSettings('integrations');
   const navigate = useNavigate();
+  const { openPortal, loading: portalLoading } = useStripePortal();
 
   const stripeEnabled = getSetting('stripe_enabled') === true;
   const hasPaymentLink = Boolean(import.meta.env.VITE_STRIPE_PAYMENT_LINK);
@@ -148,7 +150,19 @@ export default function Pricing() {
                         ))}
                       </ul>
 
-                      {isCurrent ? (
+                      {isCurrent && Number(p.price) > 0 ? (
+                        <div className="space-y-2">
+                          <Button className="w-full" disabled>{t('current')}</Button>
+                          <Button
+                            className="w-full"
+                            variant="outline"
+                            onClick={openPortal}
+                            disabled={portalLoading}
+                          >
+                            {t('manageSubscription')}
+                          </Button>
+                        </div>
+                      ) : isCurrent ? (
                         <Button className="w-full" disabled>{t('current')}</Button>
                       ) : !user ? (
                         <Button className="w-full" asChild>

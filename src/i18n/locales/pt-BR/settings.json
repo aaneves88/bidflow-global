@@ -58,5 +58,22 @@
     "deleteConfirmWord": "EXCLUIR",
     "deleteWrongConfirm": "Confirmação incorreta",
     "deleteDone": "Conta excluída"
+  },
+  "subscription": {
+    "title": "Assinatura",
+    "currentPlan": "Plano atual",
+    "freePlan": "Gratuito",
+    "status": {
+      "active": "Ativa",
+      "past_due": "Pagamento pendente",
+      "cancelled": "Cancelada"
+    },
+    "renewsAt": "Renova em {{date}}",
+    "endedAt": "Encerra em {{date}}",
+    "pastDueHint": "Não conseguimos processar o último pagamento. Atualize seu cartão para não perder o Premium.",
+    "manage": "Gerenciar assinatura",
+    "upgrade": "Fazer upgrade",
+    "portalError": "Não foi possível abrir o portal de assinatura",
+    "portalErrorHint": "Tente novamente em instantes. Se persistir, fale com o suporte."
   }
 }

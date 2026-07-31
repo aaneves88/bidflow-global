@@ -90,5 +90,13 @@
   },
   "offline": {
     "banner": "Sem conexão — algumas funções podem não funcionar"
+  },
+  "installApp": {
+    "title": "Instale o Orca no seu celular",
+    "subtitle": "Acesso rápido pela tela de início, sem abrir o navegador.",
+    "cta": "Instalar",
+    "dismiss": "Dispensar",
+    "iosHintPrefix": "Toque em Compartilhar",
+    "iosHintSuffix": "→ Adicionar à Tela de Início."
   }
 }

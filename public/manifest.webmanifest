@@ -8,8 +8,26 @@
   "orientation": "portrait",
   "background_color": "#0F172A",
   "theme_color": "#0F172A",
+  "lang": "pt-BR",
+  "categories": ["business", "productivity", "finance"],
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Orca — propostas e orçamentos"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Orca — propostas e orçamentos"
+    }
   ]
 }

@@ -5,6 +5,8 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { BrandingStyle } from '@/components/BrandingStyle';
 import { NotificationsBell } from '@/components/NotificationsBell';
 import { OfflineBanner } from '@/components/OfflineBanner';
+import { InstallAppBanner } from '@/components/InstallAppBanner';
+
 import orcaMark from '@/assets/brand/orca-mark.png';
 
 export function AppLayout({ children }: { children: ReactNode }) {
@@ -16,6 +18,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <AppSidebar />
         <div className="flex-1 flex flex-col">
           <OfflineBanner />
+          <InstallAppBanner />
+
           {/* The logged-in shell always shows the Orca brand. Users see their
               own brand on proposal previews / public links / PDFs. */}
           <header className="h-14 flex items-center border-b px-4 gap-3 pt-safe">

@@ -48,5 +48,9 @@
     "proposalsReached": "Limite de propostas do seu plano atingido",
     "clientsReached": "Limite de clientes do seu plano atingido",
     "upgrade": "Fazer upgrade"
+  },
+  "checkoutSuccess": {
+    "title": "Premium ativado! 🎉",
+    "description": "Aproveite recursos ilimitados."
   }
 }

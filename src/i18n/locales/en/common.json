@@ -90,5 +90,13 @@
   },
   "offline": {
     "banner": "Offline — some features may not work"
+  },
+  "installApp": {
+    "title": "Install Orca on your phone",
+    "subtitle": "Quick access from your home screen, no browser needed.",
+    "cta": "Install",
+    "dismiss": "Dismiss",
+    "iosHintPrefix": "Tap Share",
+    "iosHintSuffix": "→ Add to Home Screen."
   }
 }
