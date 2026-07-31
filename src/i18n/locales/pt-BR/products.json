@@ -1,0 +1,51 @@
+{
+  "title": "Produtos e serviços",
+  "subtitle": "Cadastre itens reutilizáveis para montar propostas mais rápido.",
+  "newButton": "Novo item",
+  "searchPlaceholder": "Buscar por nome ou descrição...",
+  "empty": {
+    "none": "Você ainda não cadastrou produtos ou serviços.",
+    "noResults": "Nenhum item encontrado.",
+    "addFirst": "Cadastrar primeiro item"
+  },
+  "table": {
+    "name": "Nome",
+    "description": "Descrição",
+    "price": "Preço padrão",
+    "unit": "Unidade",
+    "status": "Situação",
+    "actions": "Ações"
+  },
+  "status": {
+    "active": "Ativo",
+    "inactive": "Inativo"
+  },
+  "form": {
+    "newTitle": "Novo produto ou serviço",
+    "editTitle": "Editar produto ou serviço",
+    "name": "Nome",
+    "namePlaceholder": "Ex.: Criação de logotipo",
+    "nameRequired": "Informe o nome",
+    "description": "Descrição",
+    "descriptionPlaceholder": "Detalhes que aparecem no item da proposta",
+    "price": "Preço padrão",
+    "unit": "Unidade",
+    "unitPlaceholder": "un, hora, mês...",
+    "isActive": "Ativo (aparece no catálogo ao criar propostas)"
+  },
+  "delete": {
+    "title": "Remover item?",
+    "description": "Esta ação não pode ser desfeita. As propostas já criadas não são alteradas."
+  },
+  "messages": {
+    "created": "Item cadastrado",
+    "updated": "Item atualizado",
+    "deleted": "Item removido"
+  },
+  "picker": {
+    "trigger": "Catálogo",
+    "placeholder": "Buscar produto ou serviço...",
+    "empty": "Nenhum item no catálogo.",
+    "manage": "Gerenciar catálogo"
+  }
+}
