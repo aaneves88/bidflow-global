@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://mhsyllzvzuorzyacobar.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "orca",
+      "version": "0.1.0",
+      "title": "Orca"
+    },
+    "tools": [
+      {
+        "name": "list_clients",
+        "title": "List clients",
+        "description": "List the signed-in user's clients in Orca, optionally filtered by a name search.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "search": {
+              "description": "Optional text to match against the client name.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Maximum number of clients to return (default 25).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_client",
+        "title": "Create client",
+        "description": "Create a new client for the signed-in user in Orca.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Client name (required)."
+            },
+            "company": {
+              "description": "Company name.",
+              "type": "string"
+            },
+            "email": {
+              "description": "Contact email.",
+              "type": "string"
+            },
+            "phone": {
+              "description": "Contact phone.",
+              "type": "string"
+            },
+            "notes": {
+              "description": "Free-form notes about the client.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_proposals",
+        "title": "List proposals",
+        "description": "List the signed-in user's proposals in Orca, newest first, optionally filtered by client.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "description": "Only return proposals for this client id.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Maximum number of proposals to return (default 25).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_proposal",
+        "title": "Get proposal",
+        "description": "Get one proposal of the signed-in user by id, including its line items.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "proposal_id": {
+              "type": "string",
+              "description": "The proposal id."
+            }
+          },
+          "required": [
+            "proposal_id"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

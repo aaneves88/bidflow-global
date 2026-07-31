@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -8,12 +8,20 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
+function safeNext(value: string | null): string | null {
+  if (!value) return null;
+  if (!value.startsWith('/') || value.startsWith('//')) return null;
+  return value;
+}
+
 export default function Login() {
   const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const next = safeNext(params.get('next'));
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,11 +30,14 @@ export default function Login() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       toast({ title: t('login.errorTitle'), description: error.message, variant: 'destructive' });
+    } else if (next) {
+      window.location.href = next;
     } else {
       navigate('/dashboard');
     }
     setLoading(false);
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
