@@ -116,6 +116,19 @@ export default function PublicProposal() {
   const notes = (proposal as any).notes as string | null;
   const terms = (proposal as any).terms as string | null;
 
+  const pixAmount = Number(proposal.total_amount);
+  const pixPayload =
+    pix?.pix_key && proposal.currency === 'BRL'
+      ? buildPixPayload({
+          key: pix.pix_key,
+          keyType: pix.pix_key_type,
+          merchantName: pix.merchant_name || branding?.companyName || 'RECEBEDOR',
+          amount: pixAmount,
+          txid: proposal.public_code,
+        })
+      : null;
+
+
   return (
     <div className="min-h-screen bg-muted/30">
       {/* Brand top bar */}
