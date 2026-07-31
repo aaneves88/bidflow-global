@@ -12,6 +12,8 @@ interface ProposalLike {
   terms?: string | null;
   currency: string;
   total_amount: number | string;
+  discount_amount?: number | string | null;
+  discount_type?: string | null;
   valid_until?: string | null;
   public_code: string;
   clients?: {
