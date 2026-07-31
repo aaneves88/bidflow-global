@@ -50,7 +50,22 @@
     "discountValue": "Discount value",
     "discountFixed": "Fixed amount",
     "discountPercent": "% (percentage)",
-    "discountHint": "Optional. Leave 0 for no discount."
+    "discountHint": "Optional. Leave 0 for no discount.",
+    "pix": {
+      "title": "PIX key for this proposal",
+      "hint": "Optional. If filled in, this key is used instead of your profile's default PIX key. Useful for random keys with a specific value.",
+      "keyType": "Key type",
+      "key": "PIX key",
+      "keyPlaceholder": "Enter the PIX key",
+      "invalid": "Invalid PIX key for the selected type",
+      "types": {
+        "cpf": "CPF",
+        "cnpj": "CNPJ",
+        "email": "Email",
+        "phone": "Phone",
+        "random": "Random"
+      }
+    }
   },
   "view": {
     "copyLink": "Copy link",
