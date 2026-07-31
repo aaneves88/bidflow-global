@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import i18n from '@/i18n';
+import { applyDiscount, type DiscountType } from '@/lib/discount';
 
 const tr = (key: string) => i18n.t(key, { ns: 'proposals' });
 const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
