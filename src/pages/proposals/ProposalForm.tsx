@@ -15,6 +15,8 @@ import {
 } from '@/hooks/useProposals';
 import { usePlanLimits } from '@/hooks/usePlanLimits';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { ProductPicker } from '@/components/ProductPicker';
+import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
 
 const emptyItem = (): ProposalItem => ({
