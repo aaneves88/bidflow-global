@@ -290,6 +290,17 @@ export default function PublicProposal() {
           </Card>
         )}
 
+        {pixPayload && (
+          <PixPayment
+            payload={pixPayload}
+            merchantName={pix?.merchant_name || ''}
+            amountLabel={formatCurrency(pixAmount, proposal.currency)}
+            accentColor={accent}
+          />
+        )}
+
+
+
         <div className="flex gap-3 justify-center pt-2 flex-wrap">
           {!isFinal && (
             <Button
