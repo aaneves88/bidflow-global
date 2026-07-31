@@ -339,6 +339,32 @@ export async function generateProposalPdf(
   // @ts-ignore
   y = doc.lastAutoTable.finalY + 12;
 
+  // Subtotal / discount lines (only when a discount was applied)
+  const pdfSubtotal = items.reduce((s, i) => s + Number(i.total || 0), 0);
+  const pdfDiscount = discountValue(pdfSubtotal, proposal.discount_amount, proposal.discount_type);
+  if (pdfDiscount > 0) {
+    ensureSpace(34);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(80, 80, 80);
+    const subText = formatCurrency(pdfSubtotal, proposal.currency);
+    doc.text(`${labels.subtotal}:`, pageWidth - margin - doc.getTextWidth(subText) - 12, y, { align: 'right' });
+    doc.setTextColor(15, 23, 42);
+    doc.text(subText, pageWidth - margin, y, { align: 'right' });
+    y += 14;
+
+    const discLabel =
+      proposal.discount_type === 'percent'
+        ? `${labels.discount} (${Number(proposal.discount_amount)}%):`
+        : `${labels.discount}:`;
+    const discText = `- ${formatCurrency(pdfDiscount, proposal.currency)}`;
+    doc.setTextColor(80, 80, 80);
+    doc.text(discLabel, pageWidth - margin - doc.getTextWidth(discText) - 12, y, { align: 'right' });
+    doc.setTextColor(15, 23, 42);
+    doc.text(discText, pageWidth - margin, y, { align: 'right' });
+    y += 16;
+  }
+
   // Total line below table (mirrors hero card but native text, right-aligned)
   ensureSpace(28);
   const totalText = formatCurrency(Number(proposal.total_amount), proposal.currency);
