@@ -43,7 +43,8 @@
     "itemTotal": "Total",
     "grandTotal": "Total geral",
     "submitNew": "Criar proposta",
-    "submitEdit": "Atualizar proposta"
+    "submitEdit": "Atualizar proposta",
+    "validUntilHint": "Depois desta data a proposta aparece como expirada para o cliente."
   },
   "view": {
     "copyLink": "Copiar link público",
