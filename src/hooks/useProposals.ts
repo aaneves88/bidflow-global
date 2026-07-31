@@ -31,6 +31,8 @@ export type Proposal = {
   total_amount: number;
   discount_amount?: number | null;
   discount_type?: string | null;
+  pix_key?: string | null;
+  pix_key_type?: string | null;
   status_id: string | null;
   valid_until: string | null;
   created_at: string;
@@ -50,6 +52,8 @@ export type ProposalFormData = {
   status_id?: string | null;
   discount_amount?: number;
   discount_type?: DiscountType;
+  pix_key?: string | null;
+  pix_key_type?: string | null;
   items: ProposalItem[];
 };
 
@@ -158,6 +162,8 @@ export function useCreateProposal() {
           discount_type: discountType,
           status_id: data.status_id || null,
           valid_until: data.valid_until || null,
+          pix_key: data.pix_key?.trim() || null,
+          pix_key_type: data.pix_key?.trim() ? data.pix_key_type || null : null,
           public_code,
         })
         .select()
@@ -223,6 +229,8 @@ export function useUpdateProposal() {
           discount_type: discountType,
           status_id: data.status_id || null,
           valid_until: data.valid_until || null,
+          pix_key: data.pix_key?.trim() || null,
+          pix_key_type: data.pix_key?.trim() ? data.pix_key_type || null : null,
         })
         .eq('id', id);
       if (error) throw error;
@@ -369,6 +377,8 @@ export function useDuplicateProposal() {
           discount_type: (src as any).discount_type ?? 'fixed',
           status_id: initial?.id ?? null,
           valid_until: src.valid_until,
+          pix_key: (src as any).pix_key ?? null,
+          pix_key_type: (src as any).pix_key_type ?? null,
         })
         .select()
         .single();

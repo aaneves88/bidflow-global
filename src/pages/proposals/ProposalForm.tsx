@@ -19,6 +19,9 @@ import { ProductPicker } from '@/components/ProductPicker';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
 import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
+import { PIX_KEY_TYPES, isValidPixKey, type PixKeyType } from '@/lib/pix';
+import { toast } from '@/hooks/use-toast';
+
 
 const emptyItem = (): ProposalItem => ({
   description: '', quantity: 1, unit_price: 0, total: 0, position: 0,
@@ -57,6 +60,8 @@ export default function ProposalForm() {
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [discountType, setDiscountType] = useState<DiscountType>('fixed');
   const [items, setItems] = useState<ProposalItem[]>([emptyItem()]);
+  const [pixKey, setPixKey] = useState('');
+  const [pixKeyType, setPixKeyType] = useState<PixKeyType>('cpf');
 
   useEffect(() => {
     if (proposal && isEditing) {
@@ -70,6 +75,8 @@ export default function ProposalForm() {
       setValidUntil(proposal.valid_until ? proposal.valid_until.split('T')[0] : '');
       setDiscountAmount(Number((proposal as any).discount_amount) || 0);
       setDiscountType(((proposal as any).discount_type === 'percent' ? 'percent' : 'fixed') as DiscountType);
+      setPixKey((proposal as any).pix_key || '');
+      setPixKeyType((((proposal as any).pix_key_type as PixKeyType) || 'cpf'));
     }
   }, [proposal, isEditing]);
 
@@ -128,6 +135,11 @@ export default function ProposalForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedPix = pixKey.trim();
+    if (trimmedPix && !isValidPixKey(trimmedPix, pixKeyType)) {
+      toast({ title: t('form.pix.invalid'), variant: 'destructive' });
+      return;
+    }
     const data = {
       title, description, notes, terms,
       client_id: clientId === 'none' ? null : clientId,
@@ -135,6 +147,8 @@ export default function ProposalForm() {
       valid_until: validUntil || null,
       discount_amount: discountAmount,
       discount_type: discountType,
+      pix_key: trimmedPix || null,
+      pix_key_type: trimmedPix ? pixKeyType : null,
       items,
     };
     if (isEditing) {
@@ -354,6 +368,35 @@ export default function ProposalForm() {
           </CardContent>
         </Card>
 
+
+        <Card>
+          <CardHeader><CardTitle>{t('form.pix.title')}</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">{t('form.pix.hint')}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <Label>{t('form.pix.keyType')}</Label>
+                <Select value={pixKeyType} onValueChange={(v) => setPixKeyType(v as PixKeyType)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {PIX_KEY_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>{t(`form.pix.types.${type}`)}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="sm:col-span-2">
+                <Label htmlFor="pix_key">{t('form.pix.key')}</Label>
+                <Input
+                  id="pix_key"
+                  value={pixKey}
+                  onChange={(e) => setPixKey(e.target.value)}
+                  placeholder={t('form.pix.keyPlaceholder')}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => navigate('/proposals')}>{t('common:actions.cancel')}</Button>

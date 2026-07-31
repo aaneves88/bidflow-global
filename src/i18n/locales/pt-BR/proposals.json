@@ -50,7 +50,22 @@
     "discountValue": "Valor do desconto",
     "discountFixed": "R$ (valor)",
     "discountPercent": "% (porcentagem)",
-    "discountHint": "Opcional. Deixe 0 para não aplicar desconto."
+    "discountHint": "Opcional. Deixe 0 para não aplicar desconto.",
+    "pix": {
+      "title": "Chave PIX desta proposta",
+      "hint": "Opcional. Se preencher, usa esta chave em vez da chave PIX padrão do seu perfil. Útil para chaves aleatórias com valor específico.",
+      "keyType": "Tipo de chave",
+      "key": "Chave PIX",
+      "keyPlaceholder": "Informe a chave PIX",
+      "invalid": "Chave PIX inválida para o tipo selecionado",
+      "types": {
+        "cpf": "CPF",
+        "cnpj": "CNPJ",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "random": "Aleatória"
+      }
+    }
   },
   "view": {
     "copyLink": "Copiar link público",
