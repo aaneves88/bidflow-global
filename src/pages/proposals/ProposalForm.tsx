@@ -122,7 +122,9 @@ export default function ProposalForm() {
   const addItem = () => setItems((p) => [...p, emptyItem()]);
   const removeItem = (idx: number) => setItems((p) => p.filter((_, i) => i !== idx));
 
-  const grandTotal = items.reduce((s, i) => s + i.total, 0);
+  const subtotal = items.reduce((s, i) => s + i.total, 0);
+  const discountValueApplied = discountValue(subtotal, discountAmount, discountType);
+  const grandTotal = applyDiscount(subtotal, discountAmount, discountType);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +133,8 @@ export default function ProposalForm() {
       client_id: clientId === 'none' ? null : clientId,
       currency, status_id: statusId || null,
       valid_until: validUntil || null,
+      discount_amount: discountAmount,
+      discount_type: discountType,
       items,
     };
     if (isEditing) {
