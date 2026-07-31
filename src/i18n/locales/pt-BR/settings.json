@@ -59,6 +59,27 @@
     "deleteWrongConfirm": "Confirmação incorreta",
     "deleteDone": "Conta excluída"
   },
+  "pix": {
+    "title": "Chave PIX",
+    "description": "Sua chave PIX aparecerá como QR code nas propostas para seus clientes pagarem você diretamente. O Orca não processa esse pagamento.",
+    "keyType": "Tipo da chave",
+    "key": "Chave PIX",
+    "keyPlaceholder": "Informe sua chave PIX",
+    "types": {
+      "cpf": "CPF",
+      "cnpj": "CNPJ",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "random": "Aleatória"
+    },
+    "city": "Cidade do recebedor (opcional)",
+    "cityPlaceholder": "Ex.: São Paulo",
+    "save": "Salvar chave PIX",
+    "saved": "Chave PIX salva",
+    "remove": "Remover chave",
+    "removed": "Chave PIX removida",
+    "invalid": "Chave PIX inválida para o tipo selecionado"
+  },
   "subscription": {
     "title": "Assinatura",
     "currentPlan": "Plano atual",
