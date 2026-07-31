@@ -13,6 +13,7 @@ import { useRecordProposalView } from '@/hooks/useProposalViews';
 import { fetchPublicBranding, ORCA_BRANDING } from '@/hooks/useBranding';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
+import { discountValue } from '@/lib/discount';
 import { toast } from '@/hooks/use-toast';
 import { SignatureDialog } from '@/components/SignatureDialog';
 import { LegalFooter } from '@/components/LegalFooter';
