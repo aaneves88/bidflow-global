@@ -68,6 +68,8 @@ export default function ProposalForm() {
       setCurrency(proposal.currency);
       setStatusId(proposal.status_id || '');
       setValidUntil(proposal.valid_until ? proposal.valid_until.split('T')[0] : '');
+      setDiscountAmount(Number((proposal as any).discount_amount) || 0);
+      setDiscountType(((proposal as any).discount_type === 'percent' ? 'percent' : 'fixed') as DiscountType);
     }
   }, [proposal, isEditing]);
 
