@@ -36,6 +36,17 @@
     "signedOn": "Signed on {{date}}"
   },
   "share": { "whatsappText": "Regarding proposal: {{title}}" },
+  "pix": {
+    "title": "Pay with PIX",
+    "instructions": "Open your banking app, choose PIX and scan the QR code — or use the copy and paste code below.",
+    "receiver": "Receiver",
+    "amount": "Amount",
+    "copyPaste": "PIX copy and paste",
+    "copied": "PIX code copied",
+    "copyError": "Could not copy the code",
+    "qrAlt": "PIX payment QR code",
+    "disclaimer": "The payment goes directly to the receiver through your bank. Orca does not process or intermediate this transaction."
+  },
   "poweredBy": "Made with Orca",
   "freeOwner": {
     "tagline": "Proposal created with Orca",
