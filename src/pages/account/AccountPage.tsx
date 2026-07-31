@@ -21,14 +21,23 @@ import { useStripePortal } from '@/hooks/useStripePortal';
 import { formatDate } from '@/lib/format';
 
 
+const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+  active: 'default',
+  past_due: 'destructive',
+  cancelled: 'secondary',
+};
+
 export default function AccountPage() {
   const { t } = useTranslation(['settings', 'common']);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const { data: subscription, isLoading: loadingSubscription } = useSubscription();
+  const { openPortal, loading: portalLoading } = useStripePortal();
 
   const CONFIRM_WORD = t('account.deleteConfirmWord');
+
 
   const handleDelete = async () => {
     if (confirm.trim().toUpperCase() !== CONFIRM_WORD.toUpperCase()) {
