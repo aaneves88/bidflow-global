@@ -520,6 +520,8 @@ export type Database = {
           discount_type: string
           id: string
           notes: string | null
+          pix_key: string | null
+          pix_key_type: string | null
           public_code: string
           status_id: string | null
           terms: string | null
@@ -541,6 +543,8 @@ export type Database = {
           discount_type?: string
           id?: string
           notes?: string | null
+          pix_key?: string | null
+          pix_key_type?: string | null
           public_code?: string
           status_id?: string | null
           terms?: string | null
@@ -562,6 +566,8 @@ export type Database = {
           discount_type?: string
           id?: string
           notes?: string | null
+          pix_key?: string | null
+          pix_key_type?: string | null
           public_code?: string
           status_id?: string | null
           terms?: string | null
