@@ -246,19 +246,42 @@ export default function PublicProposal() {
             </div>
 
             <div className="flex justify-end pt-6">
-              <div
-                className="rounded-lg px-6 py-4 text-center"
-                style={{ backgroundColor: `${accent}15`, border: `1px solid ${accent}40` }}
-              >
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-wider mb-1"
-                  style={{ color: accent }}
+              <div className="w-full sm:w-auto sm:min-w-[260px] space-y-2">
+                {publicDiscount > 0 && (
+                  <>
+                    <div className="flex justify-between gap-8 text-sm">
+                      <span className="text-muted-foreground">{t('subtotalLabel')}</span>
+                      <span className="tabular-nums">
+                        {formatCurrency(publicSubtotal, proposal.currency)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between gap-8 text-sm">
+                      <span className="text-muted-foreground">
+                        {t('discountLabel')}
+                        {proposal.discount_type === 'percent'
+                          ? ` (${Number(proposal.discount_amount)}%)`
+                          : ''}
+                      </span>
+                      <span className="tabular-nums text-destructive">
+                        −{formatCurrency(publicDiscount, proposal.currency)}
+                      </span>
+                    </div>
+                  </>
+                )}
+                <div
+                  className="rounded-lg px-6 py-4 text-center"
+                  style={{ backgroundColor: `${accent}15`, border: `1px solid ${accent}40` }}
                 >
-                  {t('totalLabel')}
-                </p>
-                <p className="text-3xl font-bold tabular-nums" style={{ color: accent }}>
-                  {formatCurrency(Number(proposal.total_amount), proposal.currency)}
-                </p>
+                  <p
+                    className="text-[11px] font-semibold uppercase tracking-wider mb-1"
+                    style={{ color: accent }}
+                  >
+                    {t('totalLabel')}
+                  </p>
+                  <p className="text-3xl font-bold tabular-nums" style={{ color: accent }}>
+                    {formatCurrency(Number(proposal.total_amount), proposal.currency)}
+                  </p>
+                </div>
               </div>
             </div>
           </CardContent>
