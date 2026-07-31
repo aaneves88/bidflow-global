@@ -73,6 +73,65 @@ export default function AccountPage() {
       </Card>
 
       <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <CreditCard className="h-4 w-4" /> {t('subscription.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {loadingSubscription ? (
+            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+          ) : (
+            <>
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t('subscription.currentPlan')}</p>
+                  <p className="text-lg font-semibold">
+                    {subscription?.plan?.name ?? t('subscription.freePlan')}
+                  </p>
+                </div>
+                {subscription && (
+                  <Badge variant={STATUS_VARIANT[subscription.status] ?? 'outline'}>
+                    {t(`subscription.status.${subscription.status}`, {
+                      defaultValue: subscription.status,
+                    })}
+                  </Badge>
+                )}
+              </div>
+
+              {subscription?.expires_at && (
+                <p className="text-sm text-muted-foreground">
+                  {subscription.status === 'cancelled'
+                    ? t('subscription.endedAt', { date: formatDate(subscription.expires_at) })
+                    : t('subscription.renewsAt', { date: formatDate(subscription.expires_at) })}
+                </p>
+              )}
+
+              {subscription?.status === 'past_due' && (
+                <p className="text-sm text-destructive">{t('subscription.pastDueHint')}</p>
+              )}
+
+              {subscription?.isPaid ? (
+                <Button onClick={openPortal} disabled={portalLoading} variant="outline">
+                  {portalLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {t('subscription.manage')}
+                </Button>
+              ) : (
+                <Button asChild>
+                  <Link to="/pricing">
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    {t('subscription.upgrade')}
+                  </Link>
+                </Button>
+              )}
+            </>
+          )}
+        </CardContent>
+      </Card>
+
+
+
+      <Card>
         <CardHeader><CardTitle className="text-base">{t('account.legalTitle')}</CardTitle></CardHeader>
         <CardContent className="space-y-2">
           <button
