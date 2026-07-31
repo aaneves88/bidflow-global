@@ -204,7 +204,10 @@ export function useUpdateProposal() {
 
   return useMutation({
     mutationFn: async ({ id, ...data }: ProposalFormData & { id: string }) => {
-      const totalAmount = data.items.reduce((s, i) => s + i.total, 0);
+      const subtotal = data.items.reduce((s, i) => s + i.total, 0);
+      const discountAmount = Number(data.discount_amount) || 0;
+      const discountType: DiscountType = data.discount_type === 'percent' ? 'percent' : 'fixed';
+      const totalAmount = applyDiscount(subtotal, discountAmount, discountType);
 
       const { error } = await supabase
         .from('proposals')
@@ -216,6 +219,8 @@ export function useUpdateProposal() {
           terms: data.terms || null,
           currency: data.currency,
           total_amount: totalAmount,
+          discount_amount: discountAmount,
+          discount_type: discountType,
           status_id: data.status_id || null,
           valid_until: data.valid_until || null,
         })
