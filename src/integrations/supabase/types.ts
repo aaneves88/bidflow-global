@@ -253,6 +253,8 @@ export type Database = {
           id: string
           logo_url: string | null
           onboarding_complete: boolean
+          pix_key: string | null
+          pix_key_type: string | null
           primary_color: string | null
           secondary_color: string | null
         }
@@ -266,6 +268,8 @@ export type Database = {
           id: string
           logo_url?: string | null
           onboarding_complete?: boolean
+          pix_key?: string | null
+          pix_key_type?: string | null
           primary_color?: string | null
           secondary_color?: string | null
         }
@@ -279,6 +283,8 @@ export type Database = {
           id?: string
           logo_url?: string | null
           onboarding_complete?: boolean
+          pix_key?: string | null
+          pix_key_type?: string | null
           primary_color?: string | null
           secondary_color?: string | null
         }
@@ -707,6 +713,14 @@ export type Database = {
           logo_url: string
           primary_color: string
           secondary_color: string
+        }[]
+      }
+      get_proposal_pix: {
+        Args: { p_code: string }
+        Returns: {
+          merchant_name: string
+          pix_key: string
+          pix_key_type: string
         }[]
       }
       get_proposal_signature: {
