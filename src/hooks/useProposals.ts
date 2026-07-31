@@ -28,6 +28,8 @@ export type Proposal = {
   terms: string | null;
   currency: string;
   total_amount: number;
+  discount_amount?: number | null;
+  discount_type?: string | null;
   status_id: string | null;
   valid_until: string | null;
   created_at: string;
@@ -45,6 +47,8 @@ export type ProposalFormData = {
   currency: string;
   valid_until?: string | null;
   status_id?: string | null;
+  discount_amount?: number;
+  discount_type?: DiscountType;
   items: ProposalItem[];
 };
 
