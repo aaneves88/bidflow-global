@@ -41,6 +41,17 @@ export default function PublicProposal() {
     },
   });
 
+  const { data: pix } = useQuery({
+    queryKey: ['public-pix', publicCode],
+    enabled: !!publicCode,
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await (supabase as any).rpc('get_proposal_pix', { p_code: publicCode! });
+      return Array.isArray(data) && data.length > 0 ? data[0] : null;
+    },
+  });
+
+
   useEffect(() => {
     if (proposal?.id && publicCode) {
       const viewKey = `cf_view_${proposal.id}`;
