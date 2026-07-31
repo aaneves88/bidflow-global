@@ -16,6 +16,8 @@ import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
 import { SignatureDialog } from '@/components/SignatureDialog';
 import { LegalFooter } from '@/components/LegalFooter';
+import { PixPayment } from '@/components/PixPayment';
+import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark.png';
 
 export default function PublicProposal() {
