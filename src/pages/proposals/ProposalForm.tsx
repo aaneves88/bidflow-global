@@ -53,6 +53,8 @@ export default function ProposalForm() {
   const [currency, setCurrency] = useState('BRL');
   const [statusId, setStatusId] = useState<string>('');
   const [validUntil, setValidUntil] = useState('');
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  const [discountType, setDiscountType] = useState<DiscountType>('fixed');
   const [items, setItems] = useState<ProposalItem[]>([emptyItem()]);
 
   useEffect(() => {
