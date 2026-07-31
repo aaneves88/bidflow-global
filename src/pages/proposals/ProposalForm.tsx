@@ -215,9 +215,13 @@ export default function ProposalForm() {
               <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
                 <div className="sm:col-span-5">
                   {idx === 0 && <Label className="text-xs">{t('form.itemDescription')}</Label>}
-                  <Input placeholder={t('form.itemDescriptionPlaceholder')} value={item.description}
-                    onChange={(e) => updateItem(idx, 'description', e.target.value)} />
+                  <div className="flex gap-2">
+                    <ProductPicker currency={currency} onSelect={(p) => applyProduct(idx, p)} />
+                    <Input placeholder={t('form.itemDescriptionPlaceholder')} value={item.description}
+                      onChange={(e) => updateItem(idx, 'description', e.target.value)} />
+                  </div>
                 </div>
+
                 <div className="grid grid-cols-3 sm:col-span-6 gap-2">
                   <div>
                     {idx === 0 && <Label className="text-xs">{t('form.qty')}</Label>}
