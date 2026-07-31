@@ -1,0 +1,51 @@
+{
+  "title": "Products & services",
+  "subtitle": "Save reusable items to build proposals faster.",
+  "newButton": "New item",
+  "searchPlaceholder": "Search by name or description...",
+  "empty": {
+    "none": "You haven't added any products or services yet.",
+    "noResults": "No items found.",
+    "addFirst": "Add first item"
+  },
+  "table": {
+    "name": "Name",
+    "description": "Description",
+    "price": "Default price",
+    "unit": "Unit",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "form": {
+    "newTitle": "New product or service",
+    "editTitle": "Edit product or service",
+    "name": "Name",
+    "namePlaceholder": "e.g. Logo design",
+    "nameRequired": "Name is required",
+    "description": "Description",
+    "descriptionPlaceholder": "Details shown on the proposal item",
+    "price": "Default price",
+    "unit": "Unit",
+    "unitPlaceholder": "unit, hour, month...",
+    "isActive": "Active (shows in the catalog when creating proposals)"
+  },
+  "delete": {
+    "title": "Remove item?",
+    "description": "This can't be undone. Existing proposals are not affected."
+  },
+  "messages": {
+    "created": "Item created",
+    "updated": "Item updated",
+    "deleted": "Item removed"
+  },
+  "picker": {
+    "trigger": "Catalog",
+    "placeholder": "Search product or service...",
+    "empty": "No items in the catalog.",
+    "manage": "Manage catalog"
+  }
+}

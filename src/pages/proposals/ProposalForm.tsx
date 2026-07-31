@@ -15,6 +15,8 @@ import {
 } from '@/hooks/useProposals';
 import { usePlanLimits } from '@/hooks/usePlanLimits';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { ProductPicker } from '@/components/ProductPicker';
+import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
 
 const emptyItem = (): ProposalItem => ({
@@ -92,6 +94,22 @@ export default function ProposalForm() {
       if (field === 'quantity' || field === 'unit_price') {
         updated[idx].total = Number(updated[idx].quantity) * Number(updated[idx].unit_price);
       }
+      return updated;
+    });
+  };
+
+  const applyProduct = (idx: number, product: Product) => {
+    setItems((prev) => {
+      const updated = [...prev];
+      const price = Number(product.default_price) || 0;
+      const qty = Number(updated[idx].quantity) || 1;
+      updated[idx] = {
+        ...updated[idx],
+        description: [product.name, product.description].filter(Boolean).join(' — '),
+        quantity: qty,
+        unit_price: price,
+        total: qty * price,
+      };
       return updated;
     });
   };
@@ -215,9 +233,13 @@ export default function ProposalForm() {
               <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
                 <div className="sm:col-span-5">
                   {idx === 0 && <Label className="text-xs">{t('form.itemDescription')}</Label>}
-                  <Input placeholder={t('form.itemDescriptionPlaceholder')} value={item.description}
-                    onChange={(e) => updateItem(idx, 'description', e.target.value)} />
+                  <div className="flex gap-2">
+                    <ProductPicker currency={currency} onSelect={(p) => applyProduct(idx, p)} />
+                    <Input placeholder={t('form.itemDescriptionPlaceholder')} value={item.description}
+                      onChange={(e) => updateItem(idx, 'description', e.target.value)} />
+                  </div>
                 </div>
+
                 <div className="grid grid-cols-3 sm:col-span-6 gap-2">
                   <div>
                     {idx === 0 && <Label className="text-xs">{t('form.qty')}</Label>}
