@@ -53,7 +53,8 @@
     "signIn": "Sign in",
     "signOut": "Sign out",
     "getStarted": "Get started",
-    "administration": "Administration"
+    "administration": "Administration",
+    "products": "Products"
   },
   "notifications": {
     "title": "Notifications",
