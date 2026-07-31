@@ -59,6 +59,8 @@ interface Options {
     unitPrice?: string;
     total?: string;
     grandTotal?: string;
+    subtotal?: string;
+    discount?: string;
     validUntil?: string;
     status?: string;
     publicLink?: string;
