@@ -98,6 +98,22 @@ export default function ProposalForm() {
     });
   };
 
+  const applyProduct = (idx: number, product: Product) => {
+    setItems((prev) => {
+      const updated = [...prev];
+      const price = Number(product.default_price) || 0;
+      const qty = Number(updated[idx].quantity) || 1;
+      updated[idx] = {
+        ...updated[idx],
+        description: [product.name, product.description].filter(Boolean).join(' — '),
+        quantity: qty,
+        unit_price: price,
+        total: qty * price,
+      };
+      return updated;
+    });
+  };
+
   const addItem = () => setItems((p) => [...p, emptyItem()]);
   const removeItem = (idx: number) => setItems((p) => p.filter((_, i) => i !== idx));
 
