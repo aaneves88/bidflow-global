@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -10,11 +11,15 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { ExternalLink, ShieldAlert, Loader2 } from 'lucide-react';
+import { ExternalLink, ShieldAlert, Loader2, CreditCard, Sparkles } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { openExternal } from '@/lib/openExternal';
+import { useSubscription } from '@/hooks/useSubscription';
+import { useStripePortal } from '@/hooks/useStripePortal';
+import { formatDate } from '@/lib/format';
+
 
 export default function AccountPage() {
   const { t } = useTranslation(['settings', 'common']);
