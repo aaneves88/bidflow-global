@@ -5,6 +5,8 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { BrandingStyle } from '@/components/BrandingStyle';
 import { NotificationsBell } from '@/components/NotificationsBell';
 import { OfflineBanner } from '@/components/OfflineBanner';
+import { InstallAppBanner } from '@/components/InstallAppBanner';
+
 import orcaMark from '@/assets/brand/orca-mark.png';
 
 export function AppLayout({ children }: { children: ReactNode }) {
