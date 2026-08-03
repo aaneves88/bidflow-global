@@ -3,7 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Loader2, CheckCircle2, XCircle, MailX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import orcaMark from '@/assets/brand/orca-mark.png';
+import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 type State =
   | { kind: 'loading' }

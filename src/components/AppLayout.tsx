@@ -7,7 +7,7 @@ import { NotificationsBell } from '@/components/NotificationsBell';
 import { OfflineBanner } from '@/components/OfflineBanner';
 import { InstallAppBanner } from '@/components/InstallAppBanner';
 
-import orcaMark from '@/assets/brand/orca-mark.png';
+import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 export function AppLayout({ children }: { children: ReactNode }) {
   useTranslation();
@@ -24,7 +24,16 @@ export function AppLayout({ children }: { children: ReactNode }) {
               own brand on proposal previews / public links / PDFs. */}
           <header className="h-14 flex items-center border-b px-4 gap-3 pt-safe">
             <SidebarTrigger className="mr-2" />
-            <img src={orcaMark} alt="Orca" className="h-7 w-auto object-contain" />
+            <img
+              src={orcaMark}
+              alt="Orca"
+              width={28}
+              height={28}
+              loading="eager"
+              decoding="async"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              className="h-7 w-7 object-contain"
+            />
             <span className="font-semibold text-lg truncate flex-1">Orca</span>
             <NotificationsBell />
           </header>

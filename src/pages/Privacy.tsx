@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import orcaMark from '@/assets/brand/orca-mark.png';
+import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 export default function Privacy() {
   const { t } = useTranslation('privacy');

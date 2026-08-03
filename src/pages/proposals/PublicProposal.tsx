@@ -19,7 +19,7 @@ import { SignatureDialog } from '@/components/SignatureDialog';
 import { LegalFooter } from '@/components/LegalFooter';
 import { PixPayment } from '@/components/PixPayment';
 import { buildPixPayload } from '@/lib/pix';
-import orcaMark from '@/assets/brand/orca-mark.png';
+import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
@@ -147,7 +147,16 @@ export default function PublicProposal() {
       {isFreeOwner ? (
         <div className="bg-background border-b">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 py-5 flex items-center gap-3">
-            <img src={orcaMark} alt="Orca" className="h-9 w-auto object-contain" />
+            <img
+              src={orcaMark}
+              alt="Orca"
+              width={36}
+              height={36}
+              loading="eager"
+              decoding="async"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              className="h-9 w-9 object-contain"
+            />
             <div className="min-w-0">
               <p className="text-base font-semibold tracking-tight" style={{ color: secondary }}>
                 Orca
