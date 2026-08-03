@@ -1,41 +1,28 @@
-# Stripe pronto para produção + lançamento PWA
+# Correções: logo quebrada e PIX no link público
 
-## Situação atual (verificada)
+## Diagnóstico (verificado agora)
 
-- `STRIPE_SECRET_KEY` e `STRIPE_WEBHOOK_SECRET` já estão salvos nos secrets do backend.
-- A função `stripe-webhook` existe e trata `checkout.session.completed`, `customer.subscription.deleted` e `invoice.payment_failed`.
-- **Ela nunca recebeu nenhuma chamada** — não há registro de log algum, ou seja, o webhook ainda não foi testado de ponta a ponta.
-- A tabela `user_plans` já tem `stripe_customer_id`, `stripe_subscription_id`, `stripe_email`, e hoje está **sem nenhuma assinatura registrada**.
-- Planos no banco: Gratuito (R$ 0) e Premium (R$ 29/mês). Nenhum registro em `app_settings` de integrações, então o fluxo em uso é o **Payment Link** (`VITE_STRIPE_PAYMENT_LINK`) com `client_reference_id` + `prefilled_email`.
-- PWA: `manifest.webmanifest`, `sw.js`, ícones 192/512 e apple-touch-icon já existem e o registro do SW está protegido contra o preview.
+**PIX** — não é bug de código nem de banco:
+- A chave PIX do perfil existe (CPF cadastrado) e a função do banco `get_proposal_pix('35ef0ffac419')` retorna corretamente a chave, o tipo e o nome do recebedor.
+- Baixei o JavaScript publicado em orca-mento.app: ele **não contém** a chamada de PIX. Ou seja, o site publicado ainda é uma build antiga, anterior à funcionalidade de PIX.
+- Conclusão: falta **publicar** o app. Nada a corrigir no código do PIX.
 
-## O que falta para o Stripe ficar "certinho"
+**Logo da Orca** — a imagem publicada carrega (HTTP 200), e no ambiente de desenvolvimento também é servida normalmente. O arquivo `orca-mark.png` tem **624 KB**, tamanho muito alto para um ícone de 28 px de altura: em conexões lentas ou no primeiro carregamento ele frequentemente falha/demora, o que explica o ícone quebrado da captura de tela.
 
-1. **Cobertura de eventos incompleta.** Hoje falta tratar renovação e mudanças de estado da assinatura. Adicionar ao `stripe-webhook`:
-   - `customer.subscription.updated` — refletir `past_due`, `canceled`, `active` e `cancel_at_period_end`.
-   - `invoice.paid` — atualizar `expires_at` a cada renovação (hoje a renovação não atualiza nada).
-   - Idempotência: ignorar eventos já processados (guardar `event.id`).
-2. **Reativação após inadimplência.** Se o pagamento falhar e depois for pago, o plano precisa voltar a `active` — hoje fica preso em `past_due`.
-3. **Portal do cliente (cancelamento/troca de cartão).** Nova função `stripe-portal` que cria uma sessão do Billing Portal para o usuário logado, usando o `stripe_customer_id` salvo. Botão "Gerenciar assinatura" na página `/account` e em `/pricing` para quem já é Premium. Isso também é exigência prática para lojas e para o Código de Defesa do Consumidor (cancelamento fácil).
-4. **Retorno pós-pagamento.** Configurar a página de confirmação do Payment Link para voltar a `/dashboard?checkout=success` e exibir um toast "Premium ativado" com refetch do plano (hoje o usuário paga e volta sem feedback).
-5. **Estado do plano na UI.** Mostrar em `/account` o plano atual, status (`active`, `past_due`, `cancelled`) e data de renovação/expiração.
-6. **Teste ponta a ponta.** Rodar um pagamento em modo teste e conferir os logs da função + a linha criada em `user_plans`.
+## O que fazer
 
-## Passos manuais seus (Stripe Dashboard)
-
-- Webhook apontando para `https://mhsyllzvzuorzyacobar.supabase.co/functions/v1/stripe-webhook` com os eventos: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`.
-- Confirmar que o `STRIPE_WEBHOOK_SECRET` salvo é o desse endpoint (modo live e teste têm secrets diferentes).
-- No Payment Link: ativar "Confirmation page → Redirect" para `https://orca-mento.app/dashboard?checkout=success`.
-- Ativar o Customer Portal em Settings → Billing → Customer portal (permitir cancelar e atualizar cartão).
-
-## Para lançar como PWA
-
-- Página `/dashboard` e afins funcionam offline básico; nada a mudar no service worker.
-- Adicionar um convite discreto de "Instalar app" (banner/botão) usando o evento `beforeinstallprompt` no Android/Chrome, com instruções para iOS (Compartilhar → Adicionar à Tela de Início).
-- Revisar `manifest.webmanifest`: incluir `screenshots` e `categories` (melhora o prompt de instalação e futura publicação via PWABuilder).
+1. **Publicar o app** para que o link público e o PDF passem a mostrar o QR Code PIX (e também as demais entregas recentes: desconto, catálogo de produtos, PIX por proposta).
+2. **Otimizar a logo**: gerar uma versão reduzida da marca (aprox. 128 px, poucos KB) e usá-la nos pontos onde ela aparece pequena — cabeçalho do app, proposta pública, rodapés, página de privacidade, unsubscribe e entrada mobile. A arte original continua disponível para usos maiores.
+3. **Fallback visual**: caso a imagem não carregue, exibir a marca em texto em vez do ícone quebrado.
 
 ## Detalhes técnicos
 
-- Arquivos tocados: `supabase/functions/stripe-webhook/index.ts` (eventos + idempotência), nova `supabase/functions/stripe-portal/index.ts` (JWT validado em código), `src/pages/account/AccountPage.tsx` (card de assinatura), `src/pages/Pricing.tsx` (botão gerenciar), `src/pages/Dashboard.tsx` (toast de sucesso), i18n pt-BR/en, `public/manifest.webmanifest`, novo componente de instalação PWA.
-- Migração: tabela `stripe_events (id text primary key, received_at timestamptz)` com GRANT apenas para `service_role`, usada para idempotência.
-- Sem mudança no modelo de planos nem no fluxo de Payment Link atual.
+- Nova variante `src/assets/brand/orca-mark-sm.png` (redimensionada da atual, sem alterar a arte).
+- Trocar o import em `AppLayout.tsx`, `PublicProposal.tsx`, `Privacy.tsx`, `Unsubscribe.tsx`, `MobileEntry.tsx` e `Landing.tsx` para a variante pequena.
+- Adicionar `loading="eager"`, `width`/`height` explícitos e `onError` que oculta o `img` e mantém o texto "Orca".
+- Nenhuma mudança de banco de dados é necessária.
+
+## Verificação
+
+- Conferir na proposta pública `/p/35ef0ffac419` (após publicar) que o bloco PIX e o QR aparecem, e que o PDF baixado traz o QR.
+- Conferir que a logo aparece no cabeçalho do app e no topo da proposta pública.
