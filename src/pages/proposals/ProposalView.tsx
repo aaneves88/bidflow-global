@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import {
   useProposal, useProposalItems, useProposalStatuses,
@@ -48,6 +49,9 @@ export default function ProposalView() {
   const publicBase = usePublicAppUrl();
 
   const [closeOpen, setCloseOpen] = useState(false);
+  const [phoneOpen, setPhoneOpen] = useState(false);
+  const [phoneInput, setPhoneInput] = useState('');
+  const [savePhone, setSavePhone] = useState(true);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailTo, setEmailTo] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -72,7 +76,36 @@ export default function ProposalView() {
     total: totalFmt,
     url: publicUrl,
   });
-  const whatsappUrl = buildWhatsAppUrl(proposal.clients?.phone, whatsappMessage);
+  const clientPhone = proposal.clients?.phone || '';
+  const hasPhone = clientPhone.replace(/\D/g, '').length >= 10;
+
+  const openWhatsapp = (phone: string) => {
+    window.open(buildWhatsAppUrl(phone, whatsappMessage), '_blank', 'noopener,noreferrer');
+  };
+
+  const handleWhatsappClick = () => {
+    if (hasPhone) {
+      openWhatsapp(clientPhone);
+      return;
+    }
+    setPhoneInput('');
+    setSavePhone(true);
+    setPhoneOpen(true);
+  };
+
+  const confirmWhatsappPhone = async () => {
+    const digits = phoneInput.replace(/\D/g, '');
+    if (digits.length < 10) return;
+    if (savePhone && proposal.client_id) {
+      const { error } = await supabase
+        .from('clients')
+        .update({ phone: phoneInput.trim() })
+        .eq('id', proposal.client_id);
+      if (!error) toast({ title: t('view.whatsappPhoneSaved') });
+    }
+    setPhoneOpen(false);
+    openWhatsapp(digits);
+  };
 
   const handleStatusChange = (newStatusId: string) => {
     const target = statuses?.find((s: any) => s.id === newStatusId);
@@ -166,11 +199,9 @@ export default function ProposalView() {
           <Mail className="mr-2 h-4 w-4" />
           {t('view.sendEmail')}
         </Button>
-        <Button variant="outline" asChild>
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="mr-2 h-4 w-4" />
-            {t('view.sendWhatsapp')}
-          </a>
+        <Button variant="outline" onClick={handleWhatsappClick}>
+          <MessageCircle className="mr-2 h-4 w-4" />
+          {t('view.sendWhatsapp')}
         </Button>
         <Button variant="outline" onClick={handlePdf} disabled={!items}>
           <FileDown className="mr-2 h-4 w-4" />
@@ -309,6 +340,44 @@ export default function ProposalView() {
           </CardContent>
         </Card>
       )}
+
+      <Dialog open={phoneOpen} onOpenChange={setPhoneOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('view.whatsappPhoneTitle')}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Label htmlFor="wa-phone">{t('view.whatsappPhoneField')}</Label>
+            <Input
+              id="wa-phone"
+              type="tel"
+              inputMode="tel"
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value)}
+              placeholder={t('view.whatsappPhonePlaceholder')}
+            />
+            <p className="text-xs text-muted-foreground">{t('view.whatsappPhoneHelp')}</p>
+            {proposal.client_id && (
+              <label className="flex items-center gap-2 text-sm">
+                <Checkbox checked={savePhone} onCheckedChange={(v) => setSavePhone(v === true)} />
+                {t('view.whatsappPhoneSave')}
+              </label>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPhoneOpen(false)}>
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              disabled={phoneInput.replace(/\D/g, '').length < 10}
+              onClick={confirmWhatsappPhone}
+            >
+              <MessageCircle className="mr-2 h-4 w-4" />
+              {t('view.whatsappPhoneConfirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
         <DialogContent>

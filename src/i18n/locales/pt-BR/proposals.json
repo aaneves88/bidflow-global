@@ -91,7 +91,14 @@
     "neverViewed": "Ainda não visualizada",
     "firstView": "Primeira visualização: {{date}}",
     "lastView": "Última visualização: {{date}}",
-    "notFound": "Proposta não encontrada"
+    "notFound": "Proposta não encontrada",
+    "whatsappPhoneTitle": "Digite o número do WhatsApp do cliente",
+    "whatsappPhoneField": "Número do WhatsApp",
+    "whatsappPhonePlaceholder": "(11) 99999-9999",
+    "whatsappPhoneHelp": "Este cliente ainda não tem telefone cadastrado. Informe o número com DDD para abrir a conversa já com a mensagem pronta.",
+    "whatsappPhoneSave": "Salvar este número no cadastro do cliente",
+    "whatsappPhoneSaved": "Número salvo no cadastro do cliente",
+    "whatsappPhoneConfirm": "Enviar"
   },
   "delete": {
     "title": "Excluir proposta?",
