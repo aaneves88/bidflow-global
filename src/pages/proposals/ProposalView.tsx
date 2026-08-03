@@ -75,7 +75,36 @@ export default function ProposalView() {
     total: totalFmt,
     url: publicUrl,
   });
-  const whatsappUrl = buildWhatsAppUrl(proposal.clients?.phone, whatsappMessage);
+  const clientPhone = proposal.clients?.phone || '';
+  const hasPhone = clientPhone.replace(/\D/g, '').length >= 10;
+
+  const openWhatsapp = (phone: string) => {
+    window.open(buildWhatsAppUrl(phone, whatsappMessage), '_blank', 'noopener,noreferrer');
+  };
+
+  const handleWhatsappClick = () => {
+    if (hasPhone) {
+      openWhatsapp(clientPhone);
+      return;
+    }
+    setPhoneInput('');
+    setSavePhone(true);
+    setPhoneOpen(true);
+  };
+
+  const confirmWhatsappPhone = async () => {
+    const digits = phoneInput.replace(/\D/g, '');
+    if (digits.length < 10) return;
+    if (savePhone && proposal.client_id) {
+      const { error } = await supabase
+        .from('clients')
+        .update({ phone: phoneInput.trim() })
+        .eq('id', proposal.client_id);
+      if (!error) toast({ title: t('view.whatsappPhoneSaved') });
+    }
+    setPhoneOpen(false);
+    openWhatsapp(digits);
+  };
 
   const handleStatusChange = (newStatusId: string) => {
     const target = statuses?.find((s: any) => s.id === newStatusId);
