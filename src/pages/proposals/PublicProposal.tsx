@@ -59,7 +59,7 @@ export default function PublicProposal() {
     if (proposal?.id && publicCode) {
       const viewKey = `cf_view_${proposal.id}`;
       const alreadyViewed = !!sessionStorage.getItem(viewKey);
-      recordView.mutate(proposal.id);
+      recordView.mutate({ proposalId: proposal.id, publicCode });
       // Only notify owner the first time per session (matches view dedup)
       if (!alreadyViewed) {
         supabase.functions.invoke('notify-proposal-event', {
