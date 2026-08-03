@@ -91,7 +91,14 @@
     "neverViewed": "Not viewed yet",
     "firstView": "First view: {{date}}",
     "lastView": "Last view: {{date}}",
-    "notFound": "Proposal not found"
+    "notFound": "Proposal not found",
+    "whatsappPhoneTitle": "Enter the client's WhatsApp number",
+    "whatsappPhoneField": "WhatsApp number",
+    "whatsappPhonePlaceholder": "+1 555 123 4567",
+    "whatsappPhoneHelp": "This client has no phone on file. Enter the number with area code to open the chat with the message ready.",
+    "whatsappPhoneSave": "Save this number to the client record",
+    "whatsappPhoneSaved": "Number saved to the client record",
+    "whatsappPhoneConfirm": "Send"
   },
   "delete": {
     "title": "Delete proposal?",
