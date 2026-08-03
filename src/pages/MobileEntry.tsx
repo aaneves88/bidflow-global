@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { isNativeMobile } from '@/lib/platform';
-import orcaMark from '@/assets/brand/orca-mark.png';
+import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 export default function MobileEntry() {
   const { t } = useTranslation('auth');

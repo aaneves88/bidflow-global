@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { LegalFooter } from '@/components/LegalFooter';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
-import orcaMark from '@/assets/brand/orca-mark.png';
+import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 export default function Landing() {
   const { t } = useTranslation('landing');
