@@ -198,11 +198,9 @@ export default function ProposalView() {
           <Mail className="mr-2 h-4 w-4" />
           {t('view.sendEmail')}
         </Button>
-        <Button variant="outline" asChild>
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="mr-2 h-4 w-4" />
-            {t('view.sendWhatsapp')}
-          </a>
+        <Button variant="outline" onClick={handleWhatsappClick}>
+          <MessageCircle className="mr-2 h-4 w-4" />
+          {t('view.sendWhatsapp')}
         </Button>
         <Button variant="outline" onClick={handlePdf} disabled={!items}>
           <FileDown className="mr-2 h-4 w-4" />
