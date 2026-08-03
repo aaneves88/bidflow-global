@@ -340,6 +340,44 @@ export default function ProposalView() {
         </Card>
       )}
 
+      <Dialog open={phoneOpen} onOpenChange={setPhoneOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('view.whatsappPhoneTitle')}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Label htmlFor="wa-phone">{t('view.whatsappPhoneField')}</Label>
+            <Input
+              id="wa-phone"
+              type="tel"
+              inputMode="tel"
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value)}
+              placeholder={t('view.whatsappPhonePlaceholder')}
+            />
+            <p className="text-xs text-muted-foreground">{t('view.whatsappPhoneHelp')}</p>
+            {proposal.client_id && (
+              <label className="flex items-center gap-2 text-sm">
+                <Checkbox checked={savePhone} onCheckedChange={(v) => setSavePhone(v === true)} />
+                {t('view.whatsappPhoneSave')}
+              </label>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPhoneOpen(false)}>
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              disabled={phoneInput.replace(/\D/g, '').length < 10}
+              onClick={confirmWhatsappPhone}
+            >
+              <MessageCircle className="mr-2 h-4 w-4" />
+              {t('view.whatsappPhoneConfirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
         <DialogContent>
           <DialogHeader>
