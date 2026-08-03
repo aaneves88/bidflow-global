@@ -48,6 +48,9 @@ export default function ProposalView() {
   const publicBase = usePublicAppUrl();
 
   const [closeOpen, setCloseOpen] = useState(false);
+  const [phoneOpen, setPhoneOpen] = useState(false);
+  const [phoneInput, setPhoneInput] = useState('');
+  const [savePhone, setSavePhone] = useState(true);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailTo, setEmailTo] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
