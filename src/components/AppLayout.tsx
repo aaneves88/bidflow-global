@@ -26,7 +26,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <SidebarTrigger className="mr-2" />
             <img
               src={orcaMark}
-              alt="Orca"
+              alt="Orca — propostas e orçamentos"
               width={28}
               height={28}
               loading="eager"

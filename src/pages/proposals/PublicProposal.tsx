@@ -149,7 +149,7 @@ export default function PublicProposal() {
           <div className="max-w-3xl mx-auto px-6 sm:px-10 py-5 flex items-center gap-3">
             <img
               src={orcaMark}
-              alt="Orca"
+              alt="Orca — propostas e orçamentos"
               width={36}
               height={36}
               loading="eager"
