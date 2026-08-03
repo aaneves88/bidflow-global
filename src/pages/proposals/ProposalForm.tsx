@@ -288,35 +288,35 @@ export default function ProposalForm() {
               </div>
             ))}
 
-            <div className="pt-4 border-t space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-end">
-                <div className="sm:col-span-1">
-                  <Label>{t('form.discount')}</Label>
+            <div className="pt-4 border-t space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-end gap-3 sm:gap-2">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm whitespace-nowrap">{t('form.discount')}:</Label>
                   <Select value={discountType} onValueChange={(v) => setDiscountType(v as DiscountType)}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="w-[110px] h-9"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="fixed">{t('form.discountFixed')}</SelectItem>
                       <SelectItem value="percent">{t('form.discountPercent')}</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
-                <div className="sm:col-span-1">
-                  <Label htmlFor="discount_amount">{t('form.discountValue')}</Label>
                   <Input
-                    id="discount_amount"
                     type="number"
                     min="0"
                     step={discountType === 'percent' ? '0.1' : '0.01'}
                     max={discountType === 'percent' ? 100 : undefined}
-                    value={discountAmount}
-                    onChange={(e) => setDiscountAmount(Math.max(Number(e.target.value) || 0, 0))}
+                    value={discountAmount || ''}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setDiscountAmount(v === '' ? 0 : Math.max(Number(v) || 0, 0));
+                    }}
+                    placeholder="0"
+                    className="w-[100px] h-9"
                   />
-                  <p className="mt-1 text-xs text-muted-foreground">{t('form.discountHint')}</p>
                 </div>
               </div>
 
               <div className="flex justify-end">
-                <div className="text-right space-y-1 min-w-[200px]">
+                <div className="text-right space-y-1 min-w-[220px]">
                   <div className="flex justify-between gap-8 text-sm">
                     <span className="text-muted-foreground">{t('form.subtotal')}</span>
                     <span className="tabular-nums">{formatCurrency(subtotal, currency)}</span>
