@@ -30,15 +30,16 @@ export function useProposalViews(proposalId: string | undefined) {
 
 export function useRecordProposalView() {
   return useMutation({
-    mutationFn: async (proposalId: string) => {
+    mutationFn: async ({ proposalId, publicCode }: { proposalId: string; publicCode: string }) => {
       // De-dupe per session
       const key = `cf_view_${proposalId}`;
       if (sessionStorage.getItem(key)) return;
       sessionStorage.setItem(key, '1');
 
-      await supabase.from('proposal_views').insert({
-        proposal_id: proposalId,
-        user_agent: navigator.userAgent.slice(0, 200),
+      // Recording requires knowing the proposal's public code (link holder only).
+      await supabase.rpc('record_proposal_view', {
+        p_code: publicCode,
+        p_user_agent: navigator.userAgent.slice(0, 200),
       });
     },
   });

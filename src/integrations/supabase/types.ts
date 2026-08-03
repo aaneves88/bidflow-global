@@ -803,6 +803,10 @@ export type Database = {
           read_ct: number
         }[]
       }
+      record_proposal_view: {
+        Args: { p_code: string; p_user_agent?: string }
+        Returns: undefined
+      }
       sign_proposal: {
         Args: {
           p_code: string
