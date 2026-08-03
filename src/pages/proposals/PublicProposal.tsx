@@ -147,7 +147,16 @@ export default function PublicProposal() {
       {isFreeOwner ? (
         <div className="bg-background border-b">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 py-5 flex items-center gap-3">
-            <img src={orcaMark} alt="Orca" className="h-9 w-auto object-contain" />
+            <img
+              src={orcaMark}
+              alt="Orca"
+              width={36}
+              height={36}
+              loading="eager"
+              decoding="async"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              className="h-9 w-9 object-contain"
+            />
             <div className="min-w-0">
               <p className="text-base font-semibold tracking-tight" style={{ color: secondary }}>
                 Orca
