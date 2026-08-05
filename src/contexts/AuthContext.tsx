@@ -53,15 +53,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         // Ignora eventos que o Supabase dispara ao reganhar foco da aba —
-        // eles não mudam o usuário e reiniciariam estados de tela (wizards).
-        if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
+        // não mudam o usuário e re-renderizariam a árvore, reiniciando wizards.
+        if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+          return;
+        }
+        if (event === 'INITIAL_SESSION') {
           setSession(session);
           return;
         }
 
         const nextId = session?.user?.id ?? null;
         if (nextId === currentUserId) {
-          setSession(session);
+          // Mesmo usuário: nada de re-set de auth.
           return;
         }
         currentUserId = nextId;
