@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useClientsWithProposalCount, useDeleteClient } from '@/hooks/useClients';
-import { usePlanLimits } from '@/hooks/usePlanLimits';
+import { useSubscription } from '@/hooks/useSubscription';
 import { ClientDialog } from '@/pages/clients/ClientDialog';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -19,7 +19,7 @@ export default function Clients() {
   const { t } = useTranslation(['clients', 'common', 'dashboard']);
   const { data: clients, isLoading } = useClientsWithProposalCount();
   const deleteClient = useDeleteClient();
-  const limits = usePlanLimits();
+  const limits = useSubscription();
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<any>(null);

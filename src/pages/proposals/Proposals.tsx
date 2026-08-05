@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { useProposals, useDeleteProposal, useDuplicateProposal } from '@/hooks/useProposals';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
-import { usePlanLimits } from '@/hooks/usePlanLimits';
+import { useSubscription } from '@/hooks/useSubscription';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
 import { UsageIndicator } from '@/components/UsageIndicator';
@@ -23,7 +23,7 @@ export default function Proposals() {
   const { data: proposals, isLoading } = useProposals();
   const deleteProposal = useDeleteProposal();
   const duplicate = useDuplicateProposal();
-  const limits = usePlanLimits();
+  const limits = useSubscription();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);

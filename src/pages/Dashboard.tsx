@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProposals, useProposalStatuses } from '@/hooks/useProposals';
-import { useCurrentPlan } from '@/hooks/useCurrentPlan';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useClients } from '@/hooks/useClients';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -84,7 +84,7 @@ export default function Dashboard() {
   const { data: proposals } = useProposals();
   const { data: statuses } = useProposalStatuses();
   const { data: clients } = useClients();
-  const { data: currentPlan } = useCurrentPlan();
+  const currentPlan = useSubscription();
   const navigate = useNavigate();
   const [period, setPeriod] = useState<Period>('thisMonth');
   const [searchParams, setSearchParams] = useSearchParams();
@@ -239,7 +239,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {currentPlan?.isExpired && (
+      {currentPlan.isExpired && (
         <Card className="border-destructive">
           <CardContent className="pt-6 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -251,7 +251,7 @@ export default function Dashboard() {
         </Card>
       )}
 
-      {currentPlan && !currentPlan.isExpired && currentPlan.daysLeft !== null && currentPlan.daysLeft <= 7 && (
+      {currentPlan.hasActivePlan && !currentPlan.isExpired && currentPlan.daysLeft !== null && currentPlan.daysLeft <= 7 && (
         <Card>
           <CardContent className="pt-6 flex items-center justify-between gap-4">
             <p className="text-sm">{t('trial.active', { days: currentPlan.daysLeft })}</p>

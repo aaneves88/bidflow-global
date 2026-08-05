@@ -30,6 +30,7 @@ export interface SubscriptionState {
   stripe_subscription_id: string | null;
   isExpired: boolean;
   hasActivePlan: boolean;
+  daysLeft: number | null;
   // uso
   proposalsUsed: number;
   clientsUsed: number;
@@ -87,6 +88,9 @@ export function useSubscription() {
       const rowPlan = row?.plans as SubscriptionPlan | undefined;
       const expires = row?.expires_at ? new Date(row.expires_at) : null;
       const isExpired = expires ? expires < new Date() : false;
+      const daysLeft = expires
+        ? Math.max(0, Math.ceil((expires.getTime() - Date.now()) / 86400000))
+        : null;
       const hasActivePlan = !!row && row.status === 'active' && !isExpired && Number(rowPlan?.price) > 0;
 
       // Sem assinatura paga ativa => plano gratuito. Nunca "premium por omissão".
@@ -112,6 +116,7 @@ export function useSubscription() {
         stripe_subscription_id: row?.stripe_subscription_id ?? null,
         isExpired,
         hasActivePlan,
+        daysLeft,
         proposalsUsed,
         clientsUsed,
         maxProposals,
@@ -138,6 +143,7 @@ export function useSubscription() {
     stripe_subscription_id: null,
     isExpired: false,
     hasActivePlan: false,
+    daysLeft: null,
     proposalsUsed: 0,
     clientsUsed: 0,
     maxProposals: FALLBACK_FREE.max_proposals,

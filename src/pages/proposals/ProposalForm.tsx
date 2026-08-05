@@ -13,7 +13,7 @@ import {
   useProposal, useProposalItems, useProposalStatuses,
   useCreateProposal, useUpdateProposal, type ProposalItem,
 } from '@/hooks/useProposals';
-import { usePlanLimits } from '@/hooks/usePlanLimits';
+import { useSubscription } from '@/hooks/useSubscription';
 import { UpgradeModal } from '@/components/UpgradeModal';
 import { ProductPicker } from '@/components/ProductPicker';
 import type { Product } from '@/hooks/useProducts';
@@ -39,14 +39,14 @@ export default function ProposalForm() {
   const { data: statuses } = useProposalStatuses();
   const create = useCreateProposal();
   const update = useUpdateProposal();
-  const limits = usePlanLimits();
+  const limits = useSubscription();
   const [blocked, setBlocked] = useState(false);
 
   useEffect(() => {
-    if (!isEditing && !limits.canCreateProposal) {
+    if (!isEditing && limits.isReady && limits.proposalLimitReached) {
       setBlocked(true);
     }
-  }, [isEditing, limits.canCreateProposal]);
+  }, [isEditing, limits.isReady, limits.proposalLimitReached]);
 
 
   const [title, setTitle] = useState('');

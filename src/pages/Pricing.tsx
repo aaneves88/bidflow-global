@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { usePlans } from '@/hooks/usePlans';
-import { useCurrentPlan } from '@/hooks/useCurrentPlan';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useAuth } from '@/contexts/AuthContext';
 import { getStripePaymentLink } from '@/lib/stripeCheckout';
@@ -17,7 +17,7 @@ export default function Pricing() {
   const { t } = useTranslation(['pricing', 'common']);
   const { user } = useAuth();
   const { plans, isLoading } = usePlans();
-  const { data: currentPlan } = useCurrentPlan();
+  const subscription = useSubscription();
   const { getSetting } = useAppSettings('integrations');
   const navigate = useNavigate();
   const { openPortal, loading: portalLoading } = useStripePortal();
@@ -99,7 +99,7 @@ export default function Pricing() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
               {plans.map((p: any) => {
-                const isCurrent = currentPlan?.plan_id === p.id;
+                const isCurrent = subscription.plan?.id === p.id;
                 const features = Array.isArray(p.features) ? p.features : [];
                 return (
                   <Card key={p.id} className={p.is_starter ? 'border-primary' : ''}>
