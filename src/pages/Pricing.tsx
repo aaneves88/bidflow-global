@@ -101,7 +101,10 @@ export default function Pricing() {
             <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
               {plans.map((p: any) => {
                 const isCurrent = subscription.plan?.id === p.id;
-                const features = Array.isArray(p.features) ? p.features : [];
+                // Dedupe defensivo: evita item repetido caso o plano tenha features duplicadas.
+                const features: string[] = Array.from(
+                  new Set((Array.isArray(p.features) ? p.features : []).map((f: string) => String(f).trim()))
+                );
                 return (
                   <Card key={p.id} className={p.is_starter ? 'border-primary' : ''}>
                     <CardHeader>
