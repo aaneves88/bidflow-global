@@ -137,7 +137,7 @@ export default function Proposals() {
                         size="icon"
                         title={t('actions.duplicate')}
                         onClick={() => {
-                          if (!limits.canCreateProposal) { setShowUpgrade(true); return; }
+                          if (proposalsBlocked) { setShowUpgrade(true); return; }
                           duplicate.mutate(p.id);
                         }}
                       >
