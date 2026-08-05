@@ -35,8 +35,11 @@ export default function Clients() {
     );
   });
 
+  // Bloqueio de CLIENTES: só com dados prontos e limite finito atingido (nunca ilimitado).
+  const clientsBlocked = limits.isReady && limits.clientLimitReached;
+
   const newButton = (
-    <Button onClick={() => { setEditingClient(null); setDialogOpen(true); }} disabled={!limits.canCreateClient}>
+    <Button onClick={() => { setEditingClient(null); setDialogOpen(true); }} disabled={clientsBlocked}>
       <Plus className="mr-2 h-4 w-4" /> {t('newButton')}
     </Button>
   );
@@ -45,7 +48,7 @@ export default function Clients() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
-        {!limits.canCreateClient ? (
+        {clientsBlocked ? (
           <Tooltip>
             <TooltipTrigger asChild><span>{newButton}</span></TooltipTrigger>
             <TooltipContent>
@@ -75,7 +78,7 @@ export default function Clients() {
           <p className="text-muted-foreground mb-4">
             {search ? t('empty.noResults') : t('empty.none')}
           </p>
-          {!search && limits.canCreateClient && (
+          {!search && !clientsBlocked && (
             <Button variant="outline" onClick={() => { setEditingClient(null); setDialogOpen(true); }}>
               <Plus className="mr-2 h-4 w-4" /> {t('empty.addFirst')}
             </Button>
