@@ -45,8 +45,11 @@ export default function Proposals() {
     toast({ title: t('messages.linkCopied'), description: url });
   };
 
+  // Só bloqueia com dados de plano já resolvidos e limite FINITO de PROPOSTAS atingido.
+  const proposalsBlocked = limits.isReady && limits.proposalLimitReached;
+
   const handleNew = () => {
-    if (!limits.canCreateProposal) {
+    if (proposalsBlocked) {
       setShowUpgrade(true);
       return;
     }
@@ -134,7 +137,7 @@ export default function Proposals() {
                         size="icon"
                         title={t('actions.duplicate')}
                         onClick={() => {
-                          if (!limits.canCreateProposal) { setShowUpgrade(true); return; }
+                          if (proposalsBlocked) { setShowUpgrade(true); return; }
                           duplicate.mutate(p.id);
                         }}
                       >
