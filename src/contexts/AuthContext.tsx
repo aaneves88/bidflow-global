@@ -48,8 +48,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    let currentUserId: string | null = null;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
+        // Ignora eventos que o Supabase dispara ao reganhar foco da aba —
+        // eles não mudam o usuário e reiniciariam estados de tela (wizards).
+        if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
+          setSession(session);
+          return;
+        }
+
+        const nextId = session?.user?.id ?? null;
+        if (nextId === currentUserId) {
+          setSession(session);
+          return;
+        }
+        currentUserId = nextId;
+
         setSession(session);
         setUser(session?.user ?? null);
 
@@ -82,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
     );
+
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
