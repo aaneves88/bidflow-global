@@ -45,8 +45,11 @@ export default function Proposals() {
     toast({ title: t('messages.linkCopied'), description: url });
   };
 
+  // Só bloqueia com dados de plano já resolvidos e limite FINITO de PROPOSTAS atingido.
+  const proposalsBlocked = limits.isReady && limits.proposalLimitReached;
+
   const handleNew = () => {
-    if (!limits.canCreateProposal) {
+    if (proposalsBlocked) {
       setShowUpgrade(true);
       return;
     }
