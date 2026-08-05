@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, ArrowLeft } from 'lucide-react';
 import { formatCurrency } from '@/lib/format';
+import { isUnlimited } from '@/lib/planLimits';
 import { toast } from '@/hooks/use-toast';
 
 export default function Pricing() {
@@ -126,22 +127,26 @@ export default function Pricing() {
                       </div>
 
                       <ul className="space-y-2 text-sm">
-                        <li className="flex items-start gap-2">
-                          <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                          <span>
-                            {p.max_proposals === null
-                              ? t('features.unlimited') + ' — ' + t('common:nav.proposals').toLowerCase()
-                              : t('features.proposalsLimit', { count: p.max_proposals })}
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                          <span>
-                            {p.max_clients === null
-                              ? t('features.unlimitedClients')
-                              : t('features.clientsLimit', { count: p.max_clients })}
-                          </span>
-                        </li>
+                        {features.length === 0 && (
+                          <>
+                            <li className="flex items-start gap-2">
+                              <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                              <span>
+                                {isUnlimited(p.max_proposals)
+                                  ? t('features.unlimited') + ' — ' + t('common:nav.proposals').toLowerCase()
+                                  : t('features.proposalsLimit', { count: p.max_proposals })}
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                              <span>
+                                {isUnlimited(p.max_clients)
+                                  ? t('features.unlimitedClients')
+                                  : t('features.clientsLimit', { count: p.max_clients })}
+                              </span>
+                            </li>
+                          </>
+                        )}
                         {features.map((f: string, i: number) => (
                           <li key={i} className="flex items-start gap-2">
                             <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
