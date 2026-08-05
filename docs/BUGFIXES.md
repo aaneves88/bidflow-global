@@ -1,139 +1,95 @@
-# Correções de plano, limites e cadastro — 2026-08-05
+# Relatório de Correções de Bugs — Plano, Assinatura, Popup de Upgrade e Cadastro
 
-Documento de rastreio dos 6 bugs corrigidos, do reset da conta de teste e do roteiro de QA.
-
----
-
-## BUG 1 — Usuário novo virava Premium sem assinar (crítico, vazamento de receita)
-
-**Sintoma:** toda conta recém-criada aparecia como Premium.
-
-**Causa-raiz:** o trigger `handle_new_user()` concede automaticamente o plano marcado como
-`is_starter = true`. No banco, **o plano marcado como starter era o Premium** (`plans.is_starter`),
-então todo signup ganhava Premium de cortesia. Além disso, o front resolvia "sem plano" de forma
-inconsistente.
-
-**Correção aplicada:**
-- Dados: `plans.is_starter = false` no Premium e `true` no Gratuito — novo usuário agora recebe Gratuito.
-- Código: `useSubscription()` só considera plano pago quando existe `user_plans` com
-  `status = 'active'`, não expirado **e** `price > 0`. Qualquer outro caso (nulo, vazio, expirado,
-  cancelado) resolve como **Gratuito**. Nenhuma cortesia automática.
-
-**Arquivos:** `src/hooks/useSubscription.ts` + update de dados na tabela `plans`.
+**Data:** Agosto de 2026
+**Versão:** v0.6.x
+**Conta de teste:** shannasloboda@gmail.com
 
 ---
 
-## BUG 2 — Fonte única da verdade do plano
+## Contexto
 
-**Sintoma:** "Minha conta" mostrava Premium enquanto "Propostas" aplicava limite de Gratuito.
-
-**Causa-raiz:** havia três resoluções paralelas de plano — `useCurrentPlan()` (só `status=active`),
-`useSubscription()` (active/past_due/cancelled) e `usePlanLimits()` (com quota livre hardcoded de
-3 propostas, sem relação com o banco).
-
-**Correção aplicada:** `useSubscription()` virou a **única** fonte: resolve o plano uma vez, calcula
-uso (propostas/clientes), limites, flags de recurso e travas. `useCurrentPlan.ts` e `usePlanLimits.ts`
-foram **removidos**; todas as telas passaram a consumir o hook único.
-
-**Arquivos:**
-- criado/reescrito: `src/hooks/useSubscription.ts`
-- removidos: `src/hooks/useCurrentPlan.ts`, `src/hooks/usePlanLimits.ts`
-- consumidores atualizados: `src/pages/account/AccountPage.tsx`, `src/pages/Pricing.tsx`,
-  `src/pages/Dashboard.tsx`, `src/pages/MobilePaywall.tsx`, `src/pages/proposals/Proposals.tsx`,
-  `src/pages/proposals/ProposalForm.tsx`, `src/pages/proposals/ProposalView.tsx`,
-  `src/pages/clients/Clients.tsx`, `src/pages/settings/SettingsPage.tsx`,
-  `src/components/UsageIndicator.tsx`
+Rodada de correção de bugs de plano/assinatura, popup de upgrade e cadastro, reportados por teste real (conta shannasloboda@gmail.com). Os sintomas incluíam: usuários novos aparecendo como Premium sem assinar, divergência de plano entre telas, sentinel `-1` (ilimitado) vazando para a UI e para a lógica, popup de upgrade disparando no momento errado (ao cadastrar cliente, antes de criar proposta), formulário de cadastro resetando ao trocar de aba do navegador, e features duplicadas no card do plano Gratuito.
 
 ---
 
-## BUG 3 — Sentinel `-1` (ilimitado) vazando para tela e lógica
+## Descoberta importante
 
-**Sintoma:** "0 de -1 propostas usadas", cards com "-1 proposta" / "-1 cliente" e trava disparando
-cedo porque `0 >= -1` é verdadeiro.
-
-**Causa-raiz:** o código só tratava `null` como ilimitado; o Premium usa `-1` nas colunas
-`max_proposals` / `max_clients`.
-
-**Correção aplicada:** helper `isUnlimited(limit) => limit === -1 || limit == null`, mais
-`reachedLimit(used, limit) = !isUnlimited(limit) && used >= limit` e `usagePercent()`.
-- Exibição: ilimitado mostra "Ilimitado"/"Ilimitadas", nunca `-1`; barra de progresso é ocultada.
-- Lógica: ilimitado nunca atinge limite e nunca abre o popup de upgrade.
-
-**Arquivos:** `src/lib/planLimits.ts` (novo), `src/hooks/useSubscription.ts`,
-`src/components/UsageIndicator.tsx`, `src/pages/Pricing.tsx`.
+A produção (orca-mento.app) estava desatualizada — várias correções existiam no código/preview mas não tinham sido publicadas. Vários bugs "-1" e "Premium sem assinar" vistos ao vivo eram versão antiga publicada. **É obrigatório publicar após esta rodada.**
 
 ---
 
-## BUG 4 — Popup de upgrade disparando na hora errada
+## Estado da conta de teste
 
-**Sintoma:** "Você usou seu orçamento grátis" aparecia logo após cadastrar o primeiro cliente,
-antes de qualquer proposta.
-
-**Causa-raiz:** a trava usava a quota hardcoded de `usePlanLimits` e comparava contra o sentinel;
-além disso o efeito em `ProposalForm` rodava antes dos dados carregarem, com valores default.
-
-**Correção aplicada:** o disparo agora usa exclusivamente `proposalLimitReached` (BUG 3) e só depois
-que os dados carregaram (`isReady`). Enquanto carrega, `canCreateProposal = true` — nada bloqueia
-nem abre popup. Cadastro de cliente usa `clientLimitReached` e nunca aciona o popup de propostas.
-
-**Arquivos:** `src/pages/proposals/ProposalForm.tsx`, `src/pages/proposals/Proposals.tsx`,
-`src/pages/clients/Clients.tsx`, `src/hooks/useSubscription.ts`.
+`shannasloboda@gmail.com` está no plano **Gratuito** no banco (`price 0.00`, `status active`). O "Premium" que aparecia na tela era resolução de plano no frontend (corrigida) + versão publicada antiga. Nenhum reset de dados foi necessário.
 
 ---
 
-## BUG 5 — Formulário reseta ao trocar de aba
+## Bugs corrigidos
 
-**Sintoma:** ao sair e voltar para a aba durante o cadastro em etapas, o formulário voltava ao passo
-anterior e perdia dados.
+### 1. Usuário novo virava Premium sem assinar
 
-**Causa-raiz:** ao reganhar foco, o Supabase dispara `TOKEN_REFRESHED` / `USER_UPDATED`;
-o listener em `AuthContext` reexecutava `setUser`/`setLoading`, remontando a árvore e reiniciando o
-estado local dos formulários.
+- **Sintoma:** Ao criar uma conta nova, o usuário já aparecia como Premium, sem nunca ter assinado um plano pago.
+- **Causa-raiz:** A lógica de resolução de plano tratava valores nulos/vazios como Premium e/ou a coluna `is_starter` estava invertida, fazendo o plano padrão resolver como Premium.
+- **Correção:** Plano padrão garantido como Gratuito (`is_starter = true` para Gratuito). O trigger `handle_new_user` cria o profile no plano correto. `useSubscription()` só considera o plano como pago quando existe um `user_plans` ativo com `price > 0`.
+- **Estado:** Já correto — `is_starter` = Gratuito, `handle_new_user` e `useSubscription` validados.
 
-**Correção aplicada:** o listener ignora `TOKEN_REFRESHED`, `USER_UPDATED` e `INITIAL_SESSION`
-(apenas atualiza a sessão silenciosamente) e só reprocessa quando o **id do usuário realmente muda**
-(login/logout). O passo do wizard continua em `useState` local, agora sem remontagem espúria.
+### 2. Telas divergiam no plano (Minha conta Premium × Propostas com limite free)
 
-**Arquivos:** `src/contexts/AuthContext.tsx`.
+- **Sintoma:** A tela "Minha conta" mostrava Premium enquanto a tela "Propostas" aplicava limite de plano gratuito — cada tela resolvia o plano de um jeito diferente.
+- **Causa-raiz:** Existiam múltiplos pontos de resolução de plano (`useCurrentPlan`, `usePlanLimits`, lógica inline), cada um com sua própria interpretação.
+- **Correção:** Criada fonte única `useSubscription()` (`src/hooks/useSubscription.ts`) que lê a coluna `plan` em `profiles` e retorna o plano atual + limites. Minha conta, Propostas, Planos e a trava de limite passaram a consumir esse mesmo hook. `useCurrentPlan`/`usePlanLimits` foram removidos.
+- **Arquivos:** `src/hooks/useSubscription.ts`, `src/lib/planLimits.ts`, `src/pages/account/AccountPage.tsx`, `src/pages/proposals/Proposals.tsx`, `src/pages/proposals/ProposalForm.tsx`, `src/pages/proposals/ProposalView.tsx`, `src/pages/Pricing.tsx`, `src/pages/Dashboard.tsx`, `src/pages/MobilePaywall.tsx`, `src/pages/clients/Clients.tsx`, `src/pages/settings/SettingsPage.tsx`, `src/components/UsageIndicator.tsx`.
+
+### 3. Sentinel `-1`/`null` = ilimitado vazando para tela e lógica
+
+- **Sintoma:** A tela mostrava "0 de -1 propostas usadas" e cards exibindo "-1 proposta"/"-1 cliente". A lógica de trava comparava `-1` literalmente.
+- **Causa-raiz:** O valor `-1` (e `null`) significa "ilimitado", mas estava sendo exibido e comparado de forma literal, sem interpretação semântica.
+- **Correção:**
+  1. Helper `isUnlimited(limit)` => `limit === -1 || limit == null`.
+  2. Exibição: quando `isUnlimited`, mostra "Ilimitado" (nunca "-1"); a barra de progresso de uso fica oculta quando ilimitado.
+  3. Lógica da trava: `atingiuLimite = !isUnlimited(limite) && usadas >= limite`. Quando ilimitado, nunca considera limite atingido.
+- **Arquivos:** `src/lib/planLimits.ts`, `src/hooks/useSubscription.ts`, `src/components/UsageIndicator.tsx`.
+
+### 4. Popup "orçamento grátis" disparava ao cadastrar cliente (antes de criar proposta)
+
+- **Sintoma:** O popup "Você usou seu orçamento grátis" aparecia logo após cadastrar o primeiro **cliente**, antes de criar qualquer orçamento/proposta.
+- **Causa-raiz:** As travas usavam `canCreate*` sem esperar os dados da assinatura carregarem (`isReady`), fazendo o popup disparar prematuramente com estado incompleto.
+- **Correção:** Travas agora usam `isReady && proposalLimitReached` (nunca dispara enquanto carrega nem em plano ilimitado), aplicado ao botão "Novo" e ao "Duplicar". Cadastro de cliente foi isolado do popup de propostas — cadastrar cliente nunca abre o modal de propostas; usa sua própria trava de clientes (`isReady && clientLimitReached`).
+- **Arquivos:** `src/pages/proposals/Proposals.tsx`, `src/pages/clients/Clients.tsx`.
+
+### 5. Formulário do wizard resetava ao trocar de aba
+
+- **Sintoma:** No cadastro multi-step de cliente (onboarding), ao trocar de aba do navegador e voltar, o formulário voltava para o passo anterior e perdia o progresso.
+- **Causa-raiz:** O Supabase dispara `onAuthStateChange` com `TOKEN_REFRESHED`/`USER_UPDATED` ao reganhar foco da aba, e algum efeito reiniciava o passo do wizard ou refazia fetch que remontava o form.
+- **Correção:**
+  1. No listener `onAuthStateChange` (AuthContext), `TOKEN_REFRESHED` e `USER_UPDATED` são ignorados por completo (sem `setState`). Só `SIGNED_IN` com `user.id` diferente e `SIGNED_OUT` alteram o estado de auth. Quando o `user.id` não muda, nada é re-setado.
+  2. O passo atual e os campos do wizard de onboarding ficam em estado local persistido em `sessionStorage` — nenhum efeito depende do objeto de sessão. O rascunho é limpo ao concluir. Trocar de aba e voltar mantém passo e dados mesmo se houver remount.
+- **Arquivos:** `src/contexts/AuthContext.tsx`, `src/pages/Onboarding.tsx`.
+
+### 6. Card do plano Gratuito com features duplicadas
+
+- **Sintoma:** No card do plano Gratutivo da tela de Planos, "1 proposta" e "5 clientes" apareciam duplicados.
+- **Causa-raiz:** A duplicação podia vir da coluna `features` (jsonb) do plano no banco ou de renderização repetida no frontend.
+- **Correção:** Adicionado dedupe defensivo baseado em `Set` em `Pricing.tsx` ao renderizar o array de `features`. A coluna `features` do plano Gratutivo no banco já estava correta (`1 proposta, 5 clientes, Link público, Painel básico`) — não foi necessário alterar o banco.
+- **Arquivos:** `src/pages/Pricing.tsx`.
+- **Banco:** sem alteração.
 
 ---
 
-## BUG 6 — Card do Gratuito com features duplicadas
+## Roteiro de QA (rodar em produção após publicar)
 
-**Sintoma:** "1 proposta" e "5 clientes" apareciam duas vezes no card do plano Gratuito.
-
-**Causa-raiz:** a tela renderizava as linhas derivadas de `max_proposals`/`max_clients` **e** a lista
-`plans.features`, que já continha os mesmos itens.
-
-**Correção aplicada:** as linhas derivadas só são renderizadas quando `features` está vazio.
-Lista do Gratuito (vinda do banco): **1 proposta, 5 clientes, Link público, Painel básico**.
-
-**Arquivos:** `src/pages/Pricing.tsx`.
+1. **Criar conta nova** → cai em Gratuito, mostra "0 de 1 proposta" (nunca "-1"), sem popup.
+2. **Cadastrar 1º cliente** → **NÃO** dispara popup de propostas.
+3. **Durante cadastro de cliente, trocar de aba e voltar** → mantém passo e dados.
+4. **Criar 1ª proposta** → ok.
+5. **Tentar criar 2ª proposta** → aí sim aparece o upgrade.
+6. **Minha conta** → mostra Gratuito (não Premium) para quem não assinou.
+7. **Tela de Planos** → Gratuito lista exatamente: *1 proposta, 5 clientes, Link público, Painel básico*; Premium mostra "Ilimitado" (não "-1").
 
 ---
 
-## Reset da conta de teste
+## Observações finais
 
-Não existe conta com o email `ssloboda@gmail.com`. A única conta Sloboda no banco é
-**`shannasloboda@gmail.com`** — essa foi a resetada:
-
-- assinatura Premium (concedida sem pagamento) removida de `user_plans`;
-- vínculo criado com o plano **Gratuito**, `status = 'active'`, sem `expires_at` e sem qualquer
-  identificador de assinatura Stripe.
-
-Verificado: `shannasloboda@gmail.com → Gratuito / active / sem expiração`.
-
----
-
-## Roteiro de QA
-
-1. **Conta nova cai em Gratuito** — cadastrar um email novo; "Minha conta" deve mostrar *Gratuito* e o
-   indicador de uso "0 de 1 propostas usadas". Nenhum popup de upgrade.
-2. **Cadastrar cliente não dispara popup** — criar 1 cliente; nenhum popup de proposta deve aparecer.
-3. **1ª proposta funciona** — criar uma proposta normalmente até salvar.
-4. **2ª proposta dispara upgrade** — clicar em "Nova proposta"; o modal de upgrade deve abrir e o
-   indicador mostrar "Você atingiu o limite do seu plano".
-5. **Troca de aba preserva o formulário** — no cadastro em etapas de cliente, preencher, ir para outra
-   aba por ~1 min e voltar: o passo e os dados permanecem.
-6. **Premium não mostra `-1`** — com conta Premium, os textos exibem "Ilimitado"/"Ilimitadas",
-   sem barra de progresso e sem popup de upgrade.
+- **Publicação é obrigatória** após esta rodada — vários bugs vistos em produção eram versão antiga publicada.
+- **Nenhum reset de dados** foi necessário; a conta de teste já estava correta no banco.
+- **Banco de dados:** sem alterações nesta rodada (correções foram todas no frontend/resolução de plano).
