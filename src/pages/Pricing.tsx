@@ -133,7 +133,7 @@ export default function Pricing() {
                               <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                               <span>
                                 {isUnlimited(p.max_proposals)
-                                  ? t('features.unlimited') + ' — ' + t('common:nav.proposals').toLowerCase()
+                                  ? t('features.unlimitedProposals')
                                   : t('features.proposalsLimit', { count: p.max_proposals })}
                               </span>
                             </li>
