@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Check, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { useCurrentPlan } from '@/hooks/useCurrentPlan';
+import { useSubscription } from '@/hooks/useSubscription';
 
 type RCPackage = {
   identifier: string;
@@ -29,7 +29,7 @@ type RCPackage = {
 export default function MobilePaywall() {
   const { t } = useTranslation(['pricing', 'common']);
   const { user } = useAuth();
-  const { data: currentPlan } = useCurrentPlan();
+  const currentPlan = useSubscription();
   const [packages, setPackages] = useState<RCPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [purchasing, setPurchasing] = useState<string | null>(null);
@@ -158,7 +158,7 @@ export default function MobilePaywall() {
                 {t('common:actions.refresh', { defaultValue: 'Restaurar compras' })}
               </Button>
 
-              {currentPlan && (
+              {currentPlan.hasActivePlan && (
                 <p className="text-xs text-center text-muted-foreground pt-2">
                   {t('current')}
                 </p>

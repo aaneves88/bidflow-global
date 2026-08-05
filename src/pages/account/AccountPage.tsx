@@ -34,7 +34,8 @@ export default function AccountPage() {
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState('');
   const [deleting, setDeleting] = useState(false);
-  const { data: subscription, isLoading: loadingSubscription } = useSubscription();
+  const subscription = useSubscription();
+  const loadingSubscription = subscription.isLoading;
   const { openPortal, loading: portalLoading } = useStripePortal();
 
   const CONFIRM_WORD = t('account.deleteConfirmWord');
@@ -88,10 +89,10 @@ export default function AccountPage() {
                 <div>
                   <p className="text-sm text-muted-foreground">{t('subscription.currentPlan')}</p>
                   <p className="text-lg font-semibold">
-                    {subscription?.plan?.name ?? t('subscription.freePlan')}
+                    {subscription.hasActivePlan ? subscription.planName : t('subscription.freePlan')}
                   </p>
                 </div>
-                {subscription && (
+                {subscription.hasActivePlan && (
                   <Badge variant={STATUS_VARIANT[subscription.status] ?? 'outline'}>
                     {t(`subscription.status.${subscription.status}`, {
                       defaultValue: subscription.status,
@@ -100,7 +101,7 @@ export default function AccountPage() {
                 )}
               </div>
 
-              {subscription?.expires_at && (
+              {subscription.hasActivePlan && subscription.expires_at && (
                 <p className="text-sm text-muted-foreground">
                   {subscription.status === 'cancelled'
                     ? t('subscription.endedAt', { date: formatDate(subscription.expires_at) })
@@ -108,11 +109,11 @@ export default function AccountPage() {
                 </p>
               )}
 
-              {subscription?.status === 'past_due' && (
+              {subscription.status === 'past_due' && (
                 <p className="text-sm text-destructive">{t('subscription.pastDueHint')}</p>
               )}
 
-              {subscription?.isPaid ? (
+              {subscription.isPaid ? (
                 <Button onClick={openPortal} disabled={portalLoading} variant="outline">
                   {portalLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {t('subscription.manage')}

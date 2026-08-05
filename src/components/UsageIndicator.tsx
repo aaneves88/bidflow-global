@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Gauge, Infinity as InfinityIcon } from 'lucide-react';
+import { Gauge, Infinity as InfinityIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { usePlanLimits } from '@/hooks/usePlanLimits';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useAuth } from '@/contexts/AuthContext';
+import { usagePercent } from '@/lib/planLimits';
 
 interface Props {
   variant?: 'card' | 'banner';
@@ -14,40 +15,31 @@ interface Props {
 export function UsageIndicator({ variant = 'card' }: Props) {
   const { t } = useTranslation('common');
   const { isAdmin } = useAuth();
-  const limits = usePlanLimits();
+  const limits = useSubscription();
 
-  if (isAdmin) return null;
+  if (isAdmin || limits.isLoading) return null;
 
-  let icon = <Gauge className="h-5 w-5 text-primary" />;
-  let title = '';
-  let subtitle = '';
-  let showProgress = false;
-  let progress = 0;
-  let showCta = false;
+  const used = limits.proposalsUsed;
+  const unlimited = limits.proposalsUnlimited;
 
-  if (limits.isOnFreeTier) {
-    if (!limits.freeProposalUsed) {
-      icon = <Sparkles className="h-5 w-5 text-primary" />;
-      title = t('usage.freeAvailable', { remaining: limits.freeProposalsRemaining });
-      subtitle = t('usage.freeAvailableHint');
-    } else {
-      title = t('usage.freeUsed');
-      subtitle = t('usage.freeUsedHint');
-      showCta = true;
-    }
-  } else if (limits.maxProposals === null) {
-    icon = <InfinityIcon className="h-5 w-5 text-primary" />;
-    title = t('usage.unlimited');
-    subtitle = t('usage.unlimitedHint', { used: limits.proposalsUsed });
-  } else {
-    const used = limits.proposalsUsed;
-    const max = limits.maxProposals;
-    progress = Math.min(100, (used / max) * 100);
-    showProgress = true;
-    title = t('usage.planUsage', { used, max });
-    subtitle = used >= max ? t('usage.planLimitReached') : t('usage.planRemaining', { remaining: max - used });
-    showCta = used >= max;
-  }
+  const icon = unlimited
+    ? <InfinityIcon className="h-5 w-5 text-primary" />
+    : <Gauge className="h-5 w-5 text-primary" />;
+
+  const max = limits.maxProposals as number;
+  const title = unlimited
+    ? t('usage.unlimited')
+    : t('usage.planUsage', { used, max });
+  const subtitle = unlimited
+    ? t('usage.unlimitedHint', { used })
+    : limits.proposalLimitReached
+      ? t('usage.planLimitReached')
+      : t('usage.planRemaining', { remaining: max - used });
+
+  // Barra só existe para limite finito — nunca renderizar progresso de "-1".
+  const showProgress = !unlimited;
+  const progress = usagePercent(used, limits.maxProposals);
+  const showCta = !unlimited && limits.proposalLimitReached;
 
   const content = (
     <div className="flex items-center gap-3 flex-wrap">
@@ -68,11 +60,7 @@ export function UsageIndicator({ variant = 'card' }: Props) {
   );
 
   if (variant === 'banner') {
-    return (
-      <div className="rounded-lg border bg-card p-3">
-        {content}
-      </div>
-    );
+    return <div className="rounded-lg border bg-card p-3">{content}</div>;
   }
 
   return (

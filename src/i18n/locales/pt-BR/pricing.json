@@ -24,7 +24,8 @@
     "proposalsLimit_one": "{{count}} proposta",
     "proposalsLimit_other": "{{count}} propostas",
     "clientsLimit_one": "{{count}} cliente",
-    "clientsLimit_other": "{{count}} clientes"
+    "clientsLimit_other": "{{count}} clientes",
+    "unlimitedProposals": "Propostas ilimitadas"
   },
   "loading": "Carregando planos...",
   "empty": "Nenhum plano disponível",

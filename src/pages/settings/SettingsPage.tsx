@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useBranding, useUpdateBranding, ORCA_BRANDING } from '@/hooks/useBranding';
-import { useCanCustomBrand } from '@/hooks/usePlanLimits';
+import { useCanCustomBrand } from '@/hooks/useSubscription';
 import { LogoUpload } from '@/components/LogoUpload';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

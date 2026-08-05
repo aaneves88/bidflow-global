@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { usePlans } from '@/hooks/usePlans';
-import { useCurrentPlan } from '@/hooks/useCurrentPlan';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useAuth } from '@/contexts/AuthContext';
 import { getStripePaymentLink } from '@/lib/stripeCheckout';
@@ -11,13 +11,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, ArrowLeft } from 'lucide-react';
 import { formatCurrency } from '@/lib/format';
+import { isUnlimited } from '@/lib/planLimits';
 import { toast } from '@/hooks/use-toast';
 
 export default function Pricing() {
   const { t } = useTranslation(['pricing', 'common']);
   const { user } = useAuth();
   const { plans, isLoading } = usePlans();
-  const { data: currentPlan } = useCurrentPlan();
+  const subscription = useSubscription();
   const { getSetting } = useAppSettings('integrations');
   const navigate = useNavigate();
   const { openPortal, loading: portalLoading } = useStripePortal();
@@ -99,7 +100,7 @@ export default function Pricing() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
               {plans.map((p: any) => {
-                const isCurrent = currentPlan?.plan_id === p.id;
+                const isCurrent = subscription.plan?.id === p.id;
                 const features = Array.isArray(p.features) ? p.features : [];
                 return (
                   <Card key={p.id} className={p.is_starter ? 'border-primary' : ''}>
@@ -126,22 +127,26 @@ export default function Pricing() {
                       </div>
 
                       <ul className="space-y-2 text-sm">
-                        <li className="flex items-start gap-2">
-                          <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                          <span>
-                            {p.max_proposals === null
-                              ? t('features.unlimited') + ' — ' + t('common:nav.proposals').toLowerCase()
-                              : t('features.proposalsLimit', { count: p.max_proposals })}
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                          <span>
-                            {p.max_clients === null
-                              ? t('features.unlimitedClients')
-                              : t('features.clientsLimit', { count: p.max_clients })}
-                          </span>
-                        </li>
+                        {features.length === 0 && (
+                          <>
+                            <li className="flex items-start gap-2">
+                              <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                              <span>
+                                {isUnlimited(p.max_proposals)
+                                  ? t('features.unlimitedProposals')
+                                  : t('features.proposalsLimit', { count: p.max_proposals })}
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                              <span>
+                                {isUnlimited(p.max_clients)
+                                  ? t('features.unlimitedClients')
+                                  : t('features.clientsLimit', { count: p.max_clients })}
+                              </span>
+                            </li>
+                          </>
+                        )}
                         {features.map((f: string, i: number) => (
                           <li key={i} className="flex items-start gap-2">
                             <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
