@@ -13,6 +13,24 @@ import { toast } from '@/hooks/use-toast';
 import { ArrowRight } from 'lucide-react';
 
 const TOTAL_STEPS = 3;
+const DRAFT_KEY = 'orca:onboarding:draft';
+
+type Draft = {
+  step: number;
+  businessName: string;
+  clientName: string;
+  clientEmail: string;
+  clientCompany: string;
+};
+
+/** Rascunho local do wizard: sobrevive a re-render/remount vindo de refresh de sessão. */
+function loadDraft(): Partial<Draft> {
+  try {
+    return JSON.parse(sessionStorage.getItem(DRAFT_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
 
 export default function Onboarding() {
   const { t } = useTranslation(['onboarding', 'common']);
@@ -20,12 +38,20 @@ export default function Onboarding() {
   const { upsert } = useAppSettings('general');
   const createClient = useCreateClient();
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<number>(() => loadDraft().step ?? 1);
 
-  const [businessName, setBusinessName] = useState('');
-  const [clientName, setClientName] = useState('');
-  const [clientEmail, setClientEmail] = useState('');
-  const [clientCompany, setClientCompany] = useState('');
+  const [businessName, setBusinessName] = useState(() => loadDraft().businessName ?? '');
+  const [clientName, setClientName] = useState(() => loadDraft().clientName ?? '');
+  const [clientEmail, setClientEmail] = useState(() => loadDraft().clientEmail ?? '');
+  const [clientCompany, setClientCompany] = useState(() => loadDraft().clientCompany ?? '');
+
+  // Salva o progresso a cada mudança (nunca depende de session/user).
+  useEffect(() => {
+    sessionStorage.setItem(
+      DRAFT_KEY,
+      JSON.stringify({ step, businessName, clientName, clientEmail, clientCompany })
+    );
+  }, [step, businessName, clientName, clientEmail, clientCompany]);
 
   useEffect(() => {
     if (user?.user_metadata?.full_name && !businessName) {
@@ -40,6 +66,7 @@ export default function Onboarding() {
       await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
       await refreshOnboarding();
     }
+    sessionStorage.removeItem(DRAFT_KEY);
     navigate('/dashboard', { replace: true });
   };
 
@@ -50,6 +77,7 @@ export default function Onboarding() {
       await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
       await refreshOnboarding();
     }
+    sessionStorage.removeItem(DRAFT_KEY);
     navigate(path, { replace: true });
   };
 
