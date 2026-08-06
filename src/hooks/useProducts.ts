@@ -31,9 +31,9 @@ export function useProducts(activeOnly = false) {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['products', activeOnly],
+    queryKey: ['products', activeOnly, user?.id],
     queryFn: async () => {
-      let query = supabase.from('products').select('*').order('name');
+      let query = supabase.from('products').select('*').eq('user_id', user!.id).order('name');
       if (activeOnly) query = query.eq('is_active', true);
       const { data, error } = await query;
       if (error) throw error;

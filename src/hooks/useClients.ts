@@ -46,11 +46,13 @@ export function useClients() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['clients'],
+    queryKey: ['clients', user?.id],
     queryFn: async () => {
+      // Personal screens are always scoped to the logged-in user, even for admins.
       const { data, error } = await supabase
         .from('clients')
         .select('*')
+        .eq('user_id', user!.id)
         .order('name');
       if (error) throw error;
       return data as unknown as Client[];
@@ -63,17 +65,19 @@ export function useClientsWithProposalCount() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['clients', 'with-counts'],
+    queryKey: ['clients', 'with-counts', user?.id],
     queryFn: async () => {
       const { data: clients, error } = await supabase
         .from('clients')
         .select('*')
+        .eq('user_id', user!.id)
         .order('name');
       if (error) throw error;
 
       const { data: proposals, error: pErr } = await supabase
         .from('proposals')
-        .select('client_id');
+        .select('client_id')
+        .eq('user_id', user!.id);
       if (pErr) throw pErr;
 
       const countMap: Record<string, number> = {};
