@@ -16,18 +16,46 @@
   ],
   "screenshots": [
     {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
+      "src": "/marketing/mobile-01-dashboard.png",
+      "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Orca — propostas e orçamentos"
+      "label": "Painel com indicadores de propostas e receita"
     },
     {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
+      "src": "/marketing/mobile-02-lista-propostas.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Lista de propostas com status de cada negociação"
+    },
+    {
+      "src": "/marketing/mobile-03-editar-proposta.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Criação e edição de proposta comercial"
+    },
+    {
+      "src": "/marketing/mobile-04-proposta-publica-pix.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Proposta pública com pagamento via PIX"
+    },
+    {
+      "src": "/marketing/desktop-01-dashboard.png",
+      "sizes": "1920x1200",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Orca — propostas e orçamentos"
+      "label": "Painel do Orca no computador"
+    },
+    {
+      "src": "/marketing/desktop-02-lista-propostas.png",
+      "sizes": "1920x1200",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Lista de propostas no computador"
     }
   ]
 }
