@@ -10,6 +10,7 @@ import AdminIntegrations from './AdminIntegrations';
 import AdminQAChecklist from './AdminQAChecklist';
 import AdminRoadmap from './AdminRoadmap';
 import AdminSupport from './AdminSupport';
+import AdminMarketing from './AdminMarketing';
 
 export default function Admin() {
   const { t } = useTranslation('admin');
