@@ -125,6 +125,20 @@ Deno.serve(async (req) => {
     if (error) console.error("stripe-webhook: falha ao atualizar user_plans", error);
   };
 
+  /** Encerra planos gratuitos ativos do usuário (evita duas linhas ativas). */
+  const expireFreePlans = async (userId: string) => {
+    const { data: freePlans } = await admin.from("plans").select("id").eq("price", 0);
+    const freeIds = (freePlans ?? []).map((p) => p.id as string);
+    if (!freeIds.length) return;
+    const { error } = await admin
+      .from("user_plans")
+      .update({ status: "expired", expires_at: new Date().toISOString() })
+      .eq("user_id", userId)
+      .in("plan_id", freeIds)
+      .in("status", ACTIVE_LIKE);
+    if (error) console.error("stripe-webhook: falha ao expirar plano gratuito", error);
+  };
+
   const activatePlan = async (opts: {
     userId: string;
     planId: string;
@@ -133,7 +147,10 @@ Deno.serve(async (req) => {
     email?: string | null;
     expiresAt?: string | null;
   }) => {
-    // encerra planos ativos anteriores (ex.: gratuito) para useCurrentPlan pegar o novo
+    // 1) planos gratuitos anteriores viram "expired" (fonte do bug de duas linhas ativas)
+    await expireFreePlans(opts.userId);
+
+    // 2) demais planos ativos (pagos) viram "replaced"
     await admin
       .from("user_plans")
       .update({ status: "replaced" })
@@ -151,6 +168,7 @@ Deno.serve(async (req) => {
       stripe_email: opts.email ?? null,
     });
   };
+
 
   const toIso = (seconds?: number | null) =>
     typeof seconds === "number" ? new Date(seconds * 1000).toISOString() : null;
