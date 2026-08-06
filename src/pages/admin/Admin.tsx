@@ -56,6 +56,7 @@ export default function Admin() {
         <TabsContent value="qa"><AdminQAChecklist /></TabsContent>
         <TabsContent value="roadmap"><AdminRoadmap /></TabsContent>
         <TabsContent value="support"><AdminSupport /></TabsContent>
+        <TabsContent value="marketing"><AdminMarketing /></TabsContent>
 
       </Tabs>
     </div>
