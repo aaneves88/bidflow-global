@@ -60,11 +60,14 @@ export type ProposalFormData = {
 export function useProposals() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['proposals'],
+    queryKey: ['proposals', user?.id],
     queryFn: async () => {
+      // Always scope personal screens to the logged-in user, even for admins
+      // (admin-wide visibility belongs to /admin only).
       const { data, error } = await supabase
         .from('proposals')
         .select('*, clients(name, email, company), proposal_statuses(name, color)')
+        .eq('user_id', user!.id)
         .order('created_at', { ascending: false });
       if (error) throw error;
       return data as Proposal[];
@@ -74,18 +77,20 @@ export function useProposals() {
 }
 
 export function useProposal(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['proposals', id],
+    queryKey: ['proposals', user?.id, id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('proposals')
         .select('*, clients(name, email, company, phone), proposal_statuses(name, color)')
         .eq('id', id!)
+        .eq('user_id', user!.id)
         .single();
       if (error) throw error;
       return data as Proposal & { clients: { name: string; email: string | null; company: string | null; phone: string | null } | null };
     },
-    enabled: !!id,
+    enabled: !!id && !!user,
   });
 }
 
