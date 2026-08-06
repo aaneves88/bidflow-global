@@ -1,6 +1,7 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsListRef, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useRef } from 'react';
 import AdminOverview from './AdminOverview';
 import AdminUsers from './AdminUsers';
 import AdminPlans from './AdminPlans';
@@ -10,19 +11,32 @@ import AdminQAChecklist from './AdminQAChecklist';
 import AdminRoadmap from './AdminRoadmap';
 import AdminSupport from './AdminSupport';
 
-
 export default function Admin() {
   const { t } = useTranslation('admin');
   const { t: tSupport } = useTranslation('support');
+  const tabsListRef = useRef<TabsListRef>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get('tab') || 'overview';
+
+  useEffect(() => {
+    const container = tabsListRef.current?.container;
+    if (!container) return;
+
+    const active = container.querySelector('[role="tab"][data-state="active"]') as HTMLElement | null;
+    if (!active) return;
+
+    active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, [tab]);
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
       <Tabs value={tab} onValueChange={(v) => setSearchParams({ tab: v })}>
-        <TabsList>
+        <TabsList
+          ref={tabsListRef}
+          className="w-full justify-start overflow-x-auto whitespace-nowrap rounded-md bg-muted p-1 scrollbar-hide scroll-smooth"
+        >
           <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
           <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
           <TabsTrigger value="plans">{t('tabs.plans')}</TabsTrigger>
@@ -45,3 +59,4 @@ export default function Admin() {
     </div>
   );
 }
+
