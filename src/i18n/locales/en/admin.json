@@ -7,7 +7,8 @@
     "statuses": "Statuses",
     "integrations": "Integrations",
     "qa": "QA",
-    "roadmap": "Roadmap"
+    "roadmap": "Roadmap",
+    "marketing": "Assets"
   },
   "roadmap": {
     "title": "Product roadmap",
@@ -356,5 +357,15 @@
       "errorSaving": "Error saving status",
       "errorDeleting": "Error deleting status"
     }
+  },
+  "marketing": {
+    "title": "Marketing assets",
+    "subtitle": "Screenshots and artwork ready for social media. The list updates automatically from the assets folder.",
+    "download": "Download",
+    "downloadAll": "Download all (zip)",
+    "zipError": "Error generating the zip",
+    "empty": "No assets found.",
+    "mobile": "Mobile (portrait)",
+    "desktop": "Desktop (landscape)"
   }
 }
