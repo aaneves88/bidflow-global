@@ -1,0 +1,41 @@
+{
+  "trigger": "Reportar problema",
+  "title": "Reportar problema",
+  "subtitle": "Conte o que aconteceu — a equipe Orca responde por e-mail.",
+  "category": "Categoria",
+  "categories": {
+    "bug": "Bug",
+    "question": "Dúvida",
+    "suggestion": "Sugestão"
+  },
+  "description": "Descrição",
+  "descriptionPlaceholder": "Descreva o problema, dúvida ou sugestão com o máximo de detalhes.",
+  "attachment": "Anexar print (opcional)",
+  "context": "Enviaremos também sua página atual, navegador e e-mail para agilizar o atendimento.",
+  "submit": "Enviar report",
+  "sending": "Enviando...",
+  "success": "Report enviado! Vamos responder por e-mail.",
+  "error": "Não foi possível enviar seu report. Tente novamente.",
+  "needAuth": "Entre na sua conta para enviar um report.",
+  "admin": {
+    "title": "Suporte",
+    "empty": "Nenhum report por enquanto.",
+    "status": "Status",
+    "statuses": {
+      "open": "Aberto",
+      "answered": "Respondido",
+      "closed": "Fechado"
+    },
+    "from": "De",
+    "page": "Página",
+    "history": "Histórico",
+    "replyPlaceholder": "Escreva a resposta que será enviada por e-mail...",
+    "send": "Enviar resposta",
+    "sending": "Enviando...",
+    "sent": "Resposta enviada por e-mail.",
+    "error": "Falha ao enviar a resposta.",
+    "attachment": "Ver print anexado",
+    "you": "Equipe Orca",
+    "user": "Usuário"
+  }
+}

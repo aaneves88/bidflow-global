@@ -112,7 +112,21 @@ Deno.serve(async (req) => {
         const expiresAt = evt.expiration_at_ms
           ? new Date(evt.expiration_at_ms).toISOString()
           : null;
+
+        // Planos gratuitos anteriores viram "expired" (nunca duas linhas ativas)
+        const { data: freePlans } = await supabase.from('plans').select('id').eq('price', 0);
+        const freeIds = (freePlans ?? []).map((p: { id: string }) => p.id);
+        if (freeIds.length) {
+          await supabase
+            .from('user_plans')
+            .update({ status: 'expired', expires_at: new Date().toISOString() })
+            .eq('user_id', userId)
+            .in('plan_id', freeIds)
+            .in('status', ['active', 'past_due']);
+        }
+
         await supabase.from('user_plans').upsert(
+
           {
             user_id: userId,
             plan_id: planId,

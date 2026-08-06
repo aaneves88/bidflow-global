@@ -1,0 +1,41 @@
+{
+  "trigger": "Report a problem",
+  "title": "Report a problem",
+  "subtitle": "Tell us what happened — the Orca team replies by email.",
+  "category": "Category",
+  "categories": {
+    "bug": "Bug",
+    "question": "Question",
+    "suggestion": "Suggestion"
+  },
+  "description": "Description",
+  "descriptionPlaceholder": "Describe the problem, question or suggestion in detail.",
+  "attachment": "Attach a screenshot (optional)",
+  "context": "We also send your current page, browser and email to speed up support.",
+  "submit": "Send report",
+  "sending": "Sending...",
+  "success": "Report sent! We'll reply by email.",
+  "error": "Could not send your report. Please try again.",
+  "needAuth": "Sign in to send a report.",
+  "admin": {
+    "title": "Support",
+    "empty": "No reports yet.",
+    "status": "Status",
+    "statuses": {
+      "open": "Open",
+      "answered": "Answered",
+      "closed": "Closed"
+    },
+    "from": "From",
+    "page": "Page",
+    "history": "History",
+    "replyPlaceholder": "Write the reply that will be emailed to the user...",
+    "send": "Send reply",
+    "sending": "Sending...",
+    "sent": "Reply sent by email.",
+    "error": "Failed to send the reply.",
+    "attachment": "View attached screenshot",
+    "you": "Orca team",
+    "user": "User"
+  }
+}

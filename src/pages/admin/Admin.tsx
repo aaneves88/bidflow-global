@@ -8,9 +8,13 @@ import AdminStatuses from './AdminStatuses';
 import AdminIntegrations from './AdminIntegrations';
 import AdminQAChecklist from './AdminQAChecklist';
 import AdminRoadmap from './AdminRoadmap';
+import AdminSupport from './AdminSupport';
+
 
 export default function Admin() {
   const { t } = useTranslation('admin');
+  const { t: tSupport } = useTranslation('support');
+
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get('tab') || 'overview';
 
@@ -26,6 +30,7 @@ export default function Admin() {
           <TabsTrigger value="integrations">{t('tabs.integrations')}</TabsTrigger>
           <TabsTrigger value="qa">{t('tabs.qa')}</TabsTrigger>
           <TabsTrigger value="roadmap">{t('tabs.roadmap')}</TabsTrigger>
+          <TabsTrigger value="support">{tSupport('admin.title')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
@@ -34,6 +39,8 @@ export default function Admin() {
         <TabsContent value="integrations"><AdminIntegrations /></TabsContent>
         <TabsContent value="qa"><AdminQAChecklist /></TabsContent>
         <TabsContent value="roadmap"><AdminRoadmap /></TabsContent>
+        <TabsContent value="support"><AdminSupport /></TabsContent>
+
       </Tabs>
     </div>
   );

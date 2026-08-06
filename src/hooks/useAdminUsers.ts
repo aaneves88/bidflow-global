@@ -80,12 +80,25 @@ export function useAdminUsers() {
       grantedBy: string;
       expiresAt?: string | null;
     }) => {
+      // Planos gratuitos ativos viram "expired" (nunca deixar duas linhas ativas)
+      const { data: freePlans } = await supabase.from('plans').select('id').eq('price', 0);
+      const freeIds = (freePlans ?? []).map((p) => p.id);
+      if (freeIds.length) {
+        await supabase
+          .from('user_plans')
+          .update({ status: 'expired', expires_at: new Date().toISOString() })
+          .eq('user_id', userId)
+          .in('plan_id', freeIds)
+          .in('status', ['active', 'past_due']);
+      }
+
       // Cancel any existing active plan first so the courtesy plan takes over
       await supabase
         .from('user_plans')
         .update({ status: 'cancelled' })
         .eq('user_id', userId)
         .eq('status', 'active');
+
 
       const { error } = await supabase.from('user_plans').insert({
         user_id: userId,
