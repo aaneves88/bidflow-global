@@ -79,7 +79,7 @@ export function useProposals() {
 export function useProposal(id: string | undefined) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['proposals', user?.id, id],
+    queryKey: ['proposals', id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('proposals')
