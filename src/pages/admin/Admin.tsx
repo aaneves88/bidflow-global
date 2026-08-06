@@ -46,6 +46,7 @@ export default function Admin() {
           <TabsTrigger value="qa">{t('tabs.qa')}</TabsTrigger>
           <TabsTrigger value="roadmap">{t('tabs.roadmap')}</TabsTrigger>
           <TabsTrigger value="support">{tSupport('admin.title')}</TabsTrigger>
+          <TabsTrigger value="marketing">{t('tabs.marketing')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
