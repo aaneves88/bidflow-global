@@ -10,6 +10,7 @@ import AdminIntegrations from './AdminIntegrations';
 import AdminQAChecklist from './AdminQAChecklist';
 import AdminRoadmap from './AdminRoadmap';
 import AdminSupport from './AdminSupport';
+import AdminMarketing from './AdminMarketing';
 
 export default function Admin() {
   const { t } = useTranslation('admin');
@@ -45,6 +46,7 @@ export default function Admin() {
           <TabsTrigger value="qa">{t('tabs.qa')}</TabsTrigger>
           <TabsTrigger value="roadmap">{t('tabs.roadmap')}</TabsTrigger>
           <TabsTrigger value="support">{tSupport('admin.title')}</TabsTrigger>
+          <TabsTrigger value="marketing">{t('tabs.marketing')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
@@ -54,6 +56,7 @@ export default function Admin() {
         <TabsContent value="qa"><AdminQAChecklist /></TabsContent>
         <TabsContent value="roadmap"><AdminRoadmap /></TabsContent>
         <TabsContent value="support"><AdminSupport /></TabsContent>
+        <TabsContent value="marketing"><AdminMarketing /></TabsContent>
 
       </Tabs>
     </div>

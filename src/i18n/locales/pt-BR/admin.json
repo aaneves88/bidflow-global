@@ -7,7 +7,8 @@
     "statuses": "Status",
     "integrations": "Integrações",
     "qa": "QA",
-    "roadmap": "Roadmap"
+    "roadmap": "Roadmap",
+    "marketing": "Materiais"
   },
   "roadmap": {
     "title": "Roadmap do produto",
@@ -356,5 +357,15 @@
       "errorSaving": "Erro ao salvar status",
       "errorDeleting": "Erro ao excluir status"
     }
+  },
+  "marketing": {
+    "title": "Materiais de divulgação",
+    "subtitle": "Capturas e artes prontas para redes sociais. Lista atualizada automaticamente com o conteúdo da pasta de materiais.",
+    "download": "Baixar",
+    "downloadAll": "Baixar todas (zip)",
+    "zipError": "Erro ao gerar o zip",
+    "empty": "Nenhum material encontrado.",
+    "mobile": "Celular (retrato)",
+    "desktop": "Computador (paisagem)"
   }
 }
