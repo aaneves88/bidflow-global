@@ -17,6 +17,7 @@ import ptIntegrations from './locales/pt-BR/integrations.json';
 import ptLegal from './locales/pt-BR/legal.json';
 import ptPrivacy from './locales/pt-BR/privacy.json';
 import ptProducts from './locales/pt-BR/products.json';
+import ptSupport from './locales/pt-BR/support.json';
 
 import enCommon from './locales/en/common.json';
 import enLanding from './locales/en/landing.json';
@@ -33,6 +34,7 @@ import enIntegrations from './locales/en/integrations.json';
 import enLegal from './locales/en/legal.json';
 import enPrivacy from './locales/en/privacy.json';
 import enProducts from './locales/en/products.json';
+import enSupport from './locales/en/support.json';
 
 export const defaultNS = 'common';
 
@@ -66,6 +68,7 @@ i18n
         legal: ptLegal,
         privacy: ptPrivacy,
         products: ptProducts,
+        support: ptSupport,
       },
       en: {
         common: enCommon,
@@ -83,6 +86,7 @@ i18n
         legal: enLegal,
         privacy: enPrivacy,
         products: enProducts,
+        support: enSupport,
       },
     },
   });

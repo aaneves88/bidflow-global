@@ -11,6 +11,8 @@ import { template as proposalSigned } from './proposal-signed.tsx'
 import { template as proposalRejected } from './proposal-rejected.tsx'
 import { template as proposalClientCopy } from './proposal-client-copy.tsx'
 import { template as welcome } from './welcome.tsx'
+import { template as supportReport } from './support-report.tsx'
+import { template as supportReply } from './support-reply.tsx'
 
 export interface TemplateEntry {
   // deno-lint-ignore no-explicit-any
@@ -29,4 +31,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'proposal-signed': proposalSigned,
   'proposal-rejected': proposalRejected,
   'proposal-client-copy': proposalClientCopy,
+  'support-report': supportReport,
+  'support-reply': supportReply,
 }
