@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsListRef, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
@@ -14,13 +14,13 @@ import AdminSupport from './AdminSupport';
 export default function Admin() {
   const { t } = useTranslation('admin');
   const { t: tSupport } = useTranslation('support');
-  const tabsListRef = useRef<TabsListRef>(null);
+  const tabsListRef = useRef<HTMLDivElement>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get('tab') || 'overview';
 
   useEffect(() => {
-    const container = tabsListRef.current?.container;
+    const container = tabsListRef.current;
     if (!container) return;
 
     const active = container.querySelector('[role="tab"][data-state="active"]') as HTMLElement | null;
@@ -35,7 +35,7 @@ export default function Admin() {
       <Tabs value={tab} onValueChange={(v) => setSearchParams({ tab: v })}>
         <TabsList
           ref={tabsListRef}
-          className="w-full justify-start overflow-x-auto whitespace-nowrap rounded-md bg-muted p-1 scrollbar-hide scroll-smooth"
+          className="relative flex w-full justify-start overflow-x-auto rounded-md bg-muted p-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
           <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
@@ -59,4 +59,5 @@ export default function Admin() {
     </div>
   );
 }
+
 
