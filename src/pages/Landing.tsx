@@ -315,6 +315,27 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Dúvidas frequentes */}
+      <section className="py-20 border-t">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('faq.heading')}</h2>
+            <p className="mt-4 text-muted-foreground text-lg">{t('faq.subheading')}</p>
+          </div>
+          <Accordion type="single" collapsible className="w-full">
+            {faqItems.map((key) => (
+              <AccordionItem key={key} value={key}>
+                <AccordionTrigger className="text-left">{t(`faq.items.${key}.q`)}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  {t(`faq.items.${key}.a`)}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
+
+
       <section className="py-20 border-t bg-muted/30">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
