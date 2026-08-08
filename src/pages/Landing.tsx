@@ -33,6 +33,23 @@ export default function Landing() {
 
   const brazilianItems = ['pix', 'whatsapp', 'accept', 'brl'] as const;
 
+  const screenshots = [
+    { key: 'dashboard', src: '/marketing/mobile-01-dashboard.png' },
+    { key: 'list', src: '/marketing/mobile-02-lista-propostas.png' },
+    { key: 'edit', src: '/marketing/mobile-03-editar-proposta.png' },
+    { key: 'public', src: '/marketing/mobile-04-proposta-publica-pix.png' },
+  ] as const;
+
+  const faqItems = ['card', 'clientAccount', 'mobile', 'limit', 'pix'] as const;
+
+  // Preços vêm do banco (mesma fonte da página /pricing) para nunca divergirem.
+  const { plans } = usePlans();
+  const freePlan = plans.find((p) => p.is_starter);
+  const premiumPlan = plans.find((p) => !p.is_starter);
+  const priceOf = (price?: number | null, currency?: string | null, fallback?: string) =>
+    typeof price === 'number' ? formatCurrency(price, currency || undefined) : fallback ?? '';
+
+
   return (
     <div className="min-h-screen bg-background">
       <nav className="border-b">
