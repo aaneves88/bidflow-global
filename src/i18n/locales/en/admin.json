@@ -8,7 +8,8 @@
     "integrations": "Integrations",
     "qa": "QA",
     "roadmap": "Roadmap",
-    "marketing": "Assets"
+    "marketing": "Assets",
+    "brand": "Brand"
   },
   "roadmap": {
     "title": "Product roadmap",
@@ -367,5 +368,46 @@
     "empty": "No assets found.",
     "mobile": "Mobile (portrait)",
     "desktop": "Desktop (landscape)"
+  },
+  "brand": {
+    "title": "Brand guide",
+    "subtitle": "Official logo versions, color palette and usage rules for Orca.",
+    "logos": "Logo versions",
+    "palette": "Color palette",
+    "rules": "Usage rules",
+    "doTitle": "Do",
+    "dontTitle": "Don't",
+    "versions": {
+      "principal": {
+        "name": "Primary (light background)",
+        "usage": "Default use: app icon, favicon, social avatar."
+      },
+      "escura": {
+        "name": "Dark transparent",
+        "usage": "On light backgrounds and print materials."
+      },
+      "clara": {
+        "name": "Light transparent",
+        "usage": "On dark backgrounds, photos and video."
+      }
+    },
+    "colors": {
+      "slate": "Slate (dark background)",
+      "ink": "Orca body",
+      "cyan": "Cyan (accent)",
+      "mint": "Mint (belly)",
+      "surface": "Light surface",
+      "green": "Green (success)"
+    },
+    "do": {
+      "d1": "Use the primary version for icons and avatars — highest contrast.",
+      "d2": "Use the light version on dark backgrounds and the dark one on light backgrounds.",
+      "d3": "Minimum size 32px; below that use the mark alone, without wordmark."
+    },
+    "dont": {
+      "n1": "Don't use the dark version on a dark background (it disappears).",
+      "n2": "Don't distort, rotate or crop the mark — keep the 1:1 ratio.",
+      "n3": "Don't change the colors or add gradients, shadows or outlines."
+    }
   }
 }
