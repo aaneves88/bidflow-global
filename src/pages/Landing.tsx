@@ -252,7 +252,7 @@ export default function Landing() {
               <h3 className="font-bold text-xl">{t('pricing.free.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.free.description')}</p>
               <p className="text-3xl font-bold">
-                {t('pricing.free.price')}
+                {priceOf(freePlan?.price ?? 0, freePlan?.currency, t('pricing.free.price'))}
                 <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
               </p>
               <ul className="space-y-2 text-sm">
