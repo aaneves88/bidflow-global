@@ -97,6 +97,36 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Capturas reais do produto */}
+      <section className="py-20 border-t">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('screenshots.heading')}</h2>
+            <p className="mt-4 text-muted-foreground text-lg">{t('screenshots.subheading')}</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {screenshots.map((s) => (
+              <figure key={s.src} className="space-y-3">
+                <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
+                  <img
+                    src={s.src}
+                    alt={t(`screenshots.items.${s.key}`)}
+                    loading="lazy"
+                    width={1080}
+                    height={1920}
+                    className="w-full h-auto"
+                  />
+                </div>
+                <figcaption className="text-sm text-muted-foreground text-center">
+                  {t(`screenshots.items.${s.key}`)}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       <section className="py-20 border-t bg-muted/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
