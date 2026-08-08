@@ -5,6 +5,10 @@ import { Button } from '@/components/ui/button';
 import { LegalFooter } from '@/components/LegalFooter';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import { usePlans } from '@/hooks/usePlans';
+import { formatCurrency } from '@/lib/format';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 
 export default function Landing() {
   const { t } = useTranslation('landing');
@@ -32,6 +36,23 @@ export default function Landing() {
   const steps = ['one', 'two', 'three'] as const;
 
   const brazilianItems = ['pix', 'whatsapp', 'accept', 'brl'] as const;
+
+  const screenshots = [
+    { key: 'dashboard', src: '/marketing/mobile-01-dashboard.png' },
+    { key: 'list', src: '/marketing/mobile-02-lista-propostas.png' },
+    { key: 'edit', src: '/marketing/mobile-03-editar-proposta.png' },
+    { key: 'public', src: '/marketing/mobile-04-proposta-publica-pix.png' },
+  ] as const;
+
+  const faqItems = ['card', 'clientAccount', 'mobile', 'limit', 'pix'] as const;
+
+  // Preços vêm do banco (mesma fonte da página /pricing) para nunca divergirem.
+  const { plans } = usePlans();
+  const freePlan = plans.find((p) => p.is_starter);
+  const premiumPlan = plans.find((p) => !p.is_starter);
+  const priceOf = (price?: number | null, currency?: string | null, fallback?: string) =>
+    typeof price === 'number' ? formatCurrency(price, currency || undefined) : fallback ?? '';
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,42 +102,51 @@ export default function Landing() {
             </Button>
           </div>
 
-          {/* Mockup do app */}
-          <div className="mt-16 max-w-lg mx-auto">
-            <div className="rounded-2xl border-2 border-primary/20 shadow-2xl overflow-hidden bg-card">
-              <div className="bg-primary/5 px-4 py-3 border-b flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-red-400" />
-                <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                <div className="h-3 w-3 rounded-full bg-green-400" />
-                <span className="ml-2 text-xs text-muted-foreground">orca-mento.app</span>
-              </div>
-              <div className="p-6 space-y-4 text-left">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-bold">{t('mockup.title')}</h4>
-                    <p className="text-sm text-muted-foreground">{t('mockup.client')}</p>
-                  </div>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">{t('mockup.approved')}</span>
-                </div>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between py-2 border-b">
-                    <span>{t('mockup.item1')}</span>
-                    <span className="font-medium">{t('mockup.item1Value')}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b">
-                    <span>{t('mockup.item2')}</span>
-                    <span className="font-medium">{t('mockup.item2Value')}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between pt-2">
-                  <span className="font-bold">{t('mockup.total')}</span>
-                  <span className="font-bold text-green-600 text-lg">{t('mockup.totalValue')}</span>
-                </div>
-              </div>
+          {/* Captura real do produto */}
+          <div className="mt-16 max-w-xs sm:max-w-sm mx-auto">
+            <div className="rounded-[2rem] border-8 border-foreground/90 bg-foreground/90 shadow-2xl overflow-hidden">
+              <img
+                src="/marketing/mobile-01-dashboard.png"
+                alt={t('screenshots.items.dashboard')}
+                width={1080}
+                height={1920}
+                className="w-full h-auto rounded-[1.4rem] bg-background"
+              />
             </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Capturas reais do produto */}
+      <section className="py-20 border-t">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('screenshots.heading')}</h2>
+            <p className="mt-4 text-muted-foreground text-lg">{t('screenshots.subheading')}</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {screenshots.map((s) => (
+              <figure key={s.src} className="space-y-3">
+                <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
+                  <img
+                    src={s.src}
+                    alt={t(`screenshots.items.${s.key}`)}
+                    loading="lazy"
+                    width={1080}
+                    height={1920}
+                    className="w-full h-auto"
+                  />
+                </div>
+                <figcaption className="text-sm text-muted-foreground text-center">
+                  {t(`screenshots.items.${s.key}`)}
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
+
 
       <section className="py-20 border-t bg-muted/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -222,7 +252,7 @@ export default function Landing() {
               <h3 className="font-bold text-xl">{t('pricing.free.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.free.description')}</p>
               <p className="text-3xl font-bold">
-                {t('pricing.free.price')}
+                {priceOf(freePlan?.price ?? 0, freePlan?.currency, t('pricing.free.price'))}
                 <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
               </p>
               <ul className="space-y-2 text-sm">
@@ -246,7 +276,7 @@ export default function Landing() {
               <h3 className="font-bold text-xl">{t('pricing.premium.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.premium.description')}</p>
               <p className="text-3xl font-bold">
-                {t('pricing.premium.priceMonthly')}
+                {priceOf(premiumPlan?.price, premiumPlan?.currency, t('pricing.premium.priceMonthly'))}
                 <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
               </p>
               <ul className="space-y-2 text-sm">
@@ -284,6 +314,27 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Dúvidas frequentes */}
+      <section className="py-20 border-t">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('faq.heading')}</h2>
+            <p className="mt-4 text-muted-foreground text-lg">{t('faq.subheading')}</p>
+          </div>
+          <Accordion type="single" collapsible className="w-full">
+            {faqItems.map((key) => (
+              <AccordionItem key={key} value={key}>
+                <AccordionTrigger className="text-left">{t(`faq.items.${key}.q`)}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  {t(`faq.items.${key}.a`)}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
+
 
       <section className="py-20 border-t bg-muted/30">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

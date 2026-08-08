@@ -8,7 +8,8 @@
     "integrations": "Integrações",
     "qa": "QA",
     "roadmap": "Roadmap",
-    "marketing": "Materiais"
+    "marketing": "Materiais",
+    "brand": "Marca"
   },
   "roadmap": {
     "title": "Roadmap do produto",
@@ -367,5 +368,46 @@
     "empty": "Nenhum material encontrado.",
     "mobile": "Celular (retrato)",
     "desktop": "Computador (paisagem)"
+  },
+  "brand": {
+    "title": "Guia de marca",
+    "subtitle": "Versões oficiais da logo, paleta de cores e regras de uso da Orca.",
+    "logos": "Versões da logo",
+    "palette": "Paleta de cores",
+    "rules": "Regras de uso",
+    "doTitle": "Faça",
+    "dontTitle": "Não faça",
+    "versions": {
+      "principal": {
+        "name": "Principal (fundo claro)",
+        "usage": "Uso padrão: ícone do app, favicon, avatar em redes sociais."
+      },
+      "escura": {
+        "name": "Escura transparente",
+        "usage": "Sobre fundos claros e materiais impressos."
+      },
+      "clara": {
+        "name": "Clara transparente",
+        "usage": "Sobre fundos escuros, fotos e vídeos."
+      }
+    },
+    "colors": {
+      "slate": "Slate (fundo escuro)",
+      "ink": "Corpo da orca",
+      "cyan": "Cyan (destaque)",
+      "mint": "Mint (barriga)",
+      "surface": "Superfície clara",
+      "green": "Verde (sucesso)"
+    },
+    "do": {
+      "d1": "Use a versão principal para ícones e avatares — é a de maior contraste.",
+      "d2": "Use a versão clara sobre fundo escuro e a escura sobre fundo claro.",
+      "d3": "Tamanho mínimo de 32px; abaixo disso, prefira só a marca, sem texto."
+    },
+    "dont": {
+      "n1": "Não use a versão escura sobre fundo escuro (ela desaparece).",
+      "n2": "Não distorça, gire ou corte a marca — mantenha a proporção 1:1.",
+      "n3": "Não troque as cores nem aplique gradientes, sombras ou contornos."
+    }
   }
 }
