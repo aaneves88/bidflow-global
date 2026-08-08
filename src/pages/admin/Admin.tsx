@@ -11,6 +11,8 @@ import AdminQAChecklist from './AdminQAChecklist';
 import AdminRoadmap from './AdminRoadmap';
 import AdminSupport from './AdminSupport';
 import AdminMarketing from './AdminMarketing';
+import AdminBrand from './AdminBrand';
+
 
 export default function Admin() {
   const { t } = useTranslation('admin');
