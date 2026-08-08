@@ -81,40 +81,19 @@ export default function Landing() {
             </Button>
           </div>
 
-          {/* Mockup do app */}
-          <div className="mt-16 max-w-lg mx-auto">
-            <div className="rounded-2xl border-2 border-primary/20 shadow-2xl overflow-hidden bg-card">
-              <div className="bg-primary/5 px-4 py-3 border-b flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-red-400" />
-                <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                <div className="h-3 w-3 rounded-full bg-green-400" />
-                <span className="ml-2 text-xs text-muted-foreground">orca-mento.app</span>
-              </div>
-              <div className="p-6 space-y-4 text-left">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-bold">{t('mockup.title')}</h4>
-                    <p className="text-sm text-muted-foreground">{t('mockup.client')}</p>
-                  </div>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">{t('mockup.approved')}</span>
-                </div>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between py-2 border-b">
-                    <span>{t('mockup.item1')}</span>
-                    <span className="font-medium">{t('mockup.item1Value')}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b">
-                    <span>{t('mockup.item2')}</span>
-                    <span className="font-medium">{t('mockup.item2Value')}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between pt-2">
-                  <span className="font-bold">{t('mockup.total')}</span>
-                  <span className="font-bold text-green-600 text-lg">{t('mockup.totalValue')}</span>
-                </div>
-              </div>
+          {/* Captura real do produto */}
+          <div className="mt-16 max-w-xs sm:max-w-sm mx-auto">
+            <div className="rounded-[2rem] border-8 border-foreground/90 bg-foreground/90 shadow-2xl overflow-hidden">
+              <img
+                src="/marketing/mobile-01-dashboard.png"
+                alt={t('screenshots.items.dashboard')}
+                width={1080}
+                height={1920}
+                className="w-full h-auto rounded-[1.4rem] bg-background"
+              />
             </div>
           </div>
+
         </div>
       </section>
 
