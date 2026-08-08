@@ -75,9 +75,18 @@
     "heading": "Como funciona",
     "subheading": "Três passos para um processo de vendas melhor.",
     "steps": {
-      "one": { "title": "Crie uma proposta", "description": "Adicione cliente, serviços e valores." },
-      "two": { "title": "Compartilhe", "description": "Envie por link ou WhatsApp em um clique." },
-      "three": { "title": "Acompanhe e feche", "description": "Faça follow-up e converta mais negócios." }
+      "one": {
+        "title": "Crie uma proposta",
+        "description": "Adicione cliente, serviços e valores."
+      },
+      "two": {
+        "title": "Compartilhe",
+        "description": "Envie por link ou WhatsApp em um clique."
+      },
+      "three": {
+        "title": "Acompanhe e feche",
+        "description": "Faça follow-up e converta mais negócios."
+      }
     }
   },
   "pricing": {
@@ -101,7 +110,6 @@
       "name": "Premium",
       "description": "Tudo ilimitado para fechar mais negócios",
       "priceMonthly": "R$ 29",
-      "priceYearly": "R$ 239,90",
       "cta": "Assinar Premium",
       "features": {
         "f1": "Propostas ilimitadas",
@@ -130,5 +138,41 @@
   },
   "footer": {
     "rights": "Todos os direitos reservados."
+  },
+  "screenshots": {
+    "heading": "Veja o produto de verdade",
+    "subheading": "Capturas reais do app (com dados fictícios para demonstração).",
+    "items": {
+      "dashboard": "Painel com seus indicadores",
+      "list": "Lista de propostas por status",
+      "edit": "Criação da proposta",
+      "public": "Página pública com QR Code PIX"
+    }
+  },
+  "faq": {
+    "heading": "Dúvidas frequentes",
+    "subheading": "O que as pessoas costumam perguntar antes de começar.",
+    "items": {
+      "card": {
+        "q": "Preciso de cartão de crédito para testar?",
+        "a": "Não. O plano gratuito é criado na hora, sem cartão e sem período de teste que expira sozinho."
+      },
+      "clientAccount": {
+        "q": "Meu cliente precisa criar conta para ver a proposta?",
+        "a": "Não. Você envia um link público e ele abre a proposta direto no navegador, no celular ou no computador, e pode aprovar com um clique."
+      },
+      "mobile": {
+        "q": "Funciona no celular?",
+        "a": "Sim. A Orca funciona no navegador do celular e pode ser instalada como aplicativo (PWA), com ícone na tela inicial."
+      },
+      "limit": {
+        "q": "O que acontece quando eu atingir o limite do plano gratuito?",
+        "a": "Nada é apagado. Suas propostas e clientes continuam acessíveis; você só não consegue criar novos itens até liberar espaço ou assinar o Premium."
+      },
+      "pix": {
+        "q": "Como recebo o pagamento?",
+        "a": "Você cadastra sua chave PIX e a proposta mostra o QR Code para o cliente pagar direto para você. A Orca não fica com o dinheiro nem cobra comissão."
+      }
+    }
   }
 }
