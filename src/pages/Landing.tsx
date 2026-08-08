@@ -5,6 +5,10 @@ import { Button } from '@/components/ui/button';
 import { LegalFooter } from '@/components/LegalFooter';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import { usePlans } from '@/hooks/usePlans';
+import { formatCurrency } from '@/lib/format';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 
 export default function Landing() {
   const { t } = useTranslation('landing');
