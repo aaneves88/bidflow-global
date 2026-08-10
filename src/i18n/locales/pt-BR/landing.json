@@ -98,29 +98,24 @@
       "name": "Grátis",
       "description": "Para testar o Orca",
       "price": "R$ 0",
-      "cta": "Criar conta grátis",
-      "features": {
-        "f1": "1 proposta",
-        "f2": "5 clientes",
-        "f3": "Link público",
-        "f4": "Painel básico"
-      }
+      "cta": "Criar conta grátis"
     },
     "premium": {
       "name": "Premium",
       "description": "Tudo ilimitado para fechar mais negócios",
       "priceMonthly": "R$ 29",
-      "cta": "Assinar Premium",
-      "features": {
-        "f1": "Propostas ilimitadas",
-        "f2": "Clientes ilimitados",
-        "f3": "Pipeline de vendas",
-        "f4": "Botão WhatsApp",
-        "f5": "Download PDF",
-        "f6": "Templates",
-        "f7": "Branding próprio",
-        "f8": "Analytics avançado"
-      }
+      "cta": "Assinar Premium"
+    },
+    "limits": {
+      "proposals": "{{count}} propostas",
+      "proposalsUnlimited": "Propostas ilimitadas",
+      "clients": "{{count}} clientes",
+      "clientsUnlimited": "Clientes ilimitados",
+      "publicLink": "Link público para o cliente",
+      "pix": "QR Code PIX na proposta",
+      "pdf": "Download em PDF",
+      "templates": "Templates de proposta",
+      "branding": "Branding próprio"
     }
   },
   "stats": {
