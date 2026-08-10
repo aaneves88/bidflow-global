@@ -409,5 +409,36 @@
       "n2": "Não distorça, gire ou corte a marca — mantenha a proporção 1:1.",
       "n3": "Não troque as cores nem aplique gradientes, sombras ou contornos."
     }
+  },
+  "activation": {
+    "loading": "Carregando estatísticas...",
+    "internalNote": "Contas internas (administradores e a conta de demonstração) não entram nestes cálculos.",
+    "funnelTitle": "Funil de ativação",
+    "steps": {
+      "accounts": "Contas criadas",
+      "withClient": "Cadastraram ao menos 1 cliente",
+      "withProposal": "Criaram ao menos 1 proposta",
+      "withView": "Tiveram proposta visualizada pelo cliente",
+      "withApproved": "Tiveram proposta aprovada",
+      "paid": "Assinaram o plano pago"
+    },
+    "fromPrevious": "{{pct}}% da etapa anterior",
+    "medianFirstProposal": "Tempo até a 1ª proposta (mediana)",
+    "hours": "{{count}} h",
+    "days": "{{count}} dias",
+    "active7": "Ativos (7 dias)",
+    "active30": "Ativos (30 dias)",
+    "approvalRate": "Taxa de aprovação",
+    "approvalRateDetail": "{{won}} de {{total}} propostas",
+    "activeSubscriptions": "Assinaturas ativas",
+    "mrr": "MRR",
+    "freeToPaid": "Conversão gratuito → pago",
+    "statusDistribution": "Distribuição de status das propostas",
+    "empty": "Sem dados ainda.",
+    "signups": "Cadastros por dia (últimos 30 dias)",
+    "stalledTitle": "Contas paradas ({{count}})",
+    "stalledSubtitle": "Criadas há mais de 7 dias e ainda sem nenhuma proposta. Principal vazamento do funil — vale um contato manual.",
+    "stalledEmpty": "Nenhuma conta parada. 🎉",
+    "contact": "Enviar e-mail"
   }
 }
