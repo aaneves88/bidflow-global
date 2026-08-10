@@ -37,21 +37,53 @@ export default function Landing() {
 
   const brazilianItems = ['pix', 'whatsapp', 'accept', 'brl'] as const;
 
-  const screenshots = [
-    { key: 'dashboard', src: '/marketing/mobile-01-dashboard.png' },
-    { key: 'list', src: '/marketing/mobile-02-lista-propostas.png' },
-    { key: 'edit', src: '/marketing/mobile-03-editar-proposta.png' },
-    { key: 'public', src: '/marketing/mobile-04-proposta-publica-pix.png' },
-  ] as const;
+  // Galeria dinâmica: novas capturas em public/marketing/ aparecem sem alterar código.
+  const captionKeys: Record<string, string> = {
+    dashboard: 'dashboard',
+    lista: 'list',
+    editar: 'edit',
+    publica: 'public',
+  };
+  const screenshots = Object.keys(
+    import.meta.glob('/public/marketing/mobile-*.{png,jpg,jpeg,webp}')
+  )
+    .sort()
+    .map((path) => {
+      const file = path.split('/').pop() ?? path;
+      const matchKey = Object.keys(captionKeys).find((k) => file.includes(k));
+      return {
+        src: path.replace(/^\/public/, ''),
+        caption: matchKey ? t(`screenshots.items.${captionKeys[matchKey]}`) : file.replace(/\.\w+$/, ''),
+      };
+    });
 
   const faqItems = ['card', 'clientAccount', 'mobile', 'limit', 'pix'] as const;
 
-  // Preços vêm do banco (mesma fonte da página /pricing) para nunca divergirem.
+  // Preços e limites vêm do banco (mesma fonte da página /pricing) para nunca divergirem.
   const { plans } = usePlans();
   const freePlan = plans.find((p) => p.is_starter);
   const premiumPlan = plans.find((p) => !p.is_starter);
   const priceOf = (price?: number | null, currency?: string | null, fallback?: string) =>
     typeof price === 'number' ? formatCurrency(price, currency || undefined) : fallback ?? '';
+
+  const planFeatures = (plan?: typeof plans[number]) => {
+    if (!plan) return [] as string[];
+    const list = [
+      isUnlimited(plan.max_proposals)
+        ? t('pricing.limits.proposalsUnlimited')
+        : t('pricing.limits.proposals', { count: plan.max_proposals as number }),
+      isUnlimited(plan.max_clients)
+        ? t('pricing.limits.clientsUnlimited')
+        : t('pricing.limits.clients', { count: plan.max_clients as number }),
+      t('pricing.limits.publicLink'),
+      t('pricing.limits.pix'),
+    ];
+    if (plan.allow_pdf_export) list.push(t('pricing.limits.pdf'));
+    if (plan.allow_templates) list.push(t('pricing.limits.templates'));
+    if (plan.allow_custom_branding) list.push(t('pricing.limits.branding'));
+    return list;
+  };
+
 
 
   return (
