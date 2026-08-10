@@ -7,6 +7,7 @@ import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
+import { isUnlimited } from '@/lib/planLimits';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 
