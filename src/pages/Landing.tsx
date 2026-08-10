@@ -282,17 +282,17 @@ export default function Landing() {
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Free */}
             <div className="rounded-xl border bg-card p-6 space-y-4">
-              <h3 className="font-bold text-xl">{t('pricing.free.name')}</h3>
+              <h3 className="font-bold text-xl">{freePlan?.name ?? t('pricing.free.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.free.description')}</p>
               <p className="text-3xl font-bold">
                 {priceOf(freePlan?.price ?? 0, freePlan?.currency, t('pricing.free.price'))}
                 <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
               </p>
               <ul className="space-y-2 text-sm">
-                {(['f1', 'f2', 'f3', 'f4'] as const).map((k) => (
-                  <li key={k} className="flex items-center gap-2">
+                {planFeatures(freePlan).map((label) => (
+                  <li key={label} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    {t(`pricing.free.features.${k}`)}
+                    {label}
                   </li>
                 ))}
               </ul>
@@ -306,17 +306,17 @@ export default function Landing() {
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-medium">
                 {t('pricing.recommended')}
               </span>
-              <h3 className="font-bold text-xl">{t('pricing.premium.name')}</h3>
+              <h3 className="font-bold text-xl">{premiumPlan?.name ?? t('pricing.premium.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.premium.description')}</p>
               <p className="text-3xl font-bold">
                 {priceOf(premiumPlan?.price, premiumPlan?.currency, t('pricing.premium.priceMonthly'))}
                 <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
               </p>
               <ul className="space-y-2 text-sm">
-                {(['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'] as const).map((k) => (
-                  <li key={k} className="flex items-center gap-2">
+                {planFeatures(premiumPlan).map((label) => (
+                  <li key={label} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    {t(`pricing.premium.features.${k}`)}
+                    {label}
                   </li>
                 ))}
               </ul>
