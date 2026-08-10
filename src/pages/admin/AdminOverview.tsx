@@ -58,6 +58,8 @@ export default function AdminOverview() {
         ))}
       </div>
 
+      <AdminActivation />
+
       <Card>
         <CardHeader><CardTitle>{t('overview.recentUsers')}</CardTitle></CardHeader>
         <CardContent>
