@@ -829,6 +829,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      get_admin_activation_stats: { Args: never; Returns: Json }
       get_proposal_branding: {
         Args: { p_code: string }
         Returns: {
