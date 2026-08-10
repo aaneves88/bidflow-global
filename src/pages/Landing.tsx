@@ -163,7 +163,7 @@ export default function Landing() {
                 <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
                   <img
                     src={s.src}
-                    alt={t(`screenshots.items.${s.key}`)}
+                    alt={s.caption}
                     loading="lazy"
                     width={1080}
                     height={1920}
@@ -171,7 +171,7 @@ export default function Landing() {
                   />
                 </div>
                 <figcaption className="text-sm text-muted-foreground text-center">
-                  {t(`screenshots.items.${s.key}`)}
+                  {s.caption}
                 </figcaption>
               </figure>
             ))}
