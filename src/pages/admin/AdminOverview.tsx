@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Users, FileText, DollarSign } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '@/lib/format';
+import AdminActivation from './AdminActivation';
 
 export default function AdminOverview() {
   const { t } = useTranslation('admin');
@@ -56,6 +57,8 @@ export default function AdminOverview() {
           </Card>
         ))}
       </div>
+
+      <AdminActivation />
 
       <Card>
         <CardHeader><CardTitle>{t('overview.recentUsers')}</CardTitle></CardHeader>

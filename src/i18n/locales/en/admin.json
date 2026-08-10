@@ -409,5 +409,36 @@
       "n2": "Don't distort, rotate or crop the mark — keep the 1:1 ratio.",
       "n3": "Don't change the colors or add gradients, shadows or outlines."
     }
+  },
+  "activation": {
+    "loading": "Loading stats...",
+    "internalNote": "Internal accounts (admins and the demo account) are excluded from these numbers.",
+    "funnelTitle": "Activation funnel",
+    "steps": {
+      "accounts": "Accounts created",
+      "withClient": "Added at least 1 client",
+      "withProposal": "Created at least 1 proposal",
+      "withView": "Had a proposal viewed by a client",
+      "withApproved": "Had a proposal approved",
+      "paid": "Subscribed to the paid plan"
+    },
+    "fromPrevious": "{{pct}}% of previous step",
+    "medianFirstProposal": "Time to first proposal (median)",
+    "hours": "{{count}} h",
+    "days": "{{count}} days",
+    "active7": "Active (7 days)",
+    "active30": "Active (30 days)",
+    "approvalRate": "Approval rate",
+    "approvalRateDetail": "{{won}} of {{total}} proposals",
+    "activeSubscriptions": "Active subscriptions",
+    "mrr": "MRR",
+    "freeToPaid": "Free → paid conversion",
+    "statusDistribution": "Proposal status distribution",
+    "empty": "No data yet.",
+    "signups": "Signups per day (last 30 days)",
+    "stalledTitle": "Stalled accounts ({{count}})",
+    "stalledSubtitle": "Created more than 7 days ago with no proposal yet. The main funnel leak — worth a manual reach-out.",
+    "stalledEmpty": "No stalled accounts. 🎉",
+    "contact": "Send email"
   }
 }

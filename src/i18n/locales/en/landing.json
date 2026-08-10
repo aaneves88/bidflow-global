@@ -98,29 +98,24 @@
       "name": "Free",
       "description": "Try Orca for free",
       "price": "$0",
-      "cta": "Create free account",
-      "features": {
-        "f1": "1 proposal",
-        "f2": "5 clients",
-        "f3": "Public link",
-        "f4": "Basic dashboard"
-      }
+      "cta": "Create free account"
     },
     "premium": {
       "name": "Premium",
       "description": "Unlimited everything to close more deals",
       "priceMonthly": "$9",
-      "cta": "Subscribe to Premium",
-      "features": {
-        "f1": "Unlimited proposals",
-        "f2": "Unlimited clients",
-        "f3": "Sales pipeline",
-        "f4": "WhatsApp button",
-        "f5": "PDF download",
-        "f6": "Templates",
-        "f7": "Custom branding",
-        "f8": "Advanced analytics"
-      }
+      "cta": "Subscribe to Premium"
+    },
+    "limits": {
+      "proposals": "{{count}} proposals",
+      "proposalsUnlimited": "Unlimited proposals",
+      "clients": "{{count}} clients",
+      "clientsUnlimited": "Unlimited clients",
+      "publicLink": "Public link for your client",
+      "pix": "Payment QR code on the proposal",
+      "pdf": "PDF download",
+      "templates": "Proposal templates",
+      "branding": "Custom branding"
     }
   },
   "stats": {

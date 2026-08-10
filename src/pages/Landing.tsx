@@ -7,6 +7,7 @@ import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
+import { isUnlimited } from '@/lib/planLimits';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 
@@ -37,21 +38,53 @@ export default function Landing() {
 
   const brazilianItems = ['pix', 'whatsapp', 'accept', 'brl'] as const;
 
-  const screenshots = [
-    { key: 'dashboard', src: '/marketing/mobile-01-dashboard.png' },
-    { key: 'list', src: '/marketing/mobile-02-lista-propostas.png' },
-    { key: 'edit', src: '/marketing/mobile-03-editar-proposta.png' },
-    { key: 'public', src: '/marketing/mobile-04-proposta-publica-pix.png' },
-  ] as const;
+  // Galeria dinâmica: novas capturas em public/marketing/ aparecem sem alterar código.
+  const captionKeys: Record<string, string> = {
+    dashboard: 'dashboard',
+    lista: 'list',
+    editar: 'edit',
+    publica: 'public',
+  };
+  const screenshots = Object.keys(
+    import.meta.glob('/public/marketing/mobile-*.{png,jpg,jpeg,webp}')
+  )
+    .sort()
+    .map((path) => {
+      const file = path.split('/').pop() ?? path;
+      const matchKey = Object.keys(captionKeys).find((k) => file.includes(k));
+      return {
+        src: path.replace(/^\/public/, ''),
+        caption: matchKey ? t(`screenshots.items.${captionKeys[matchKey]}`) : file.replace(/\.\w+$/, ''),
+      };
+    });
 
   const faqItems = ['card', 'clientAccount', 'mobile', 'limit', 'pix'] as const;
 
-  // Preços vêm do banco (mesma fonte da página /pricing) para nunca divergirem.
+  // Preços e limites vêm do banco (mesma fonte da página /pricing) para nunca divergirem.
   const { plans } = usePlans();
   const freePlan = plans.find((p) => p.is_starter);
   const premiumPlan = plans.find((p) => !p.is_starter);
   const priceOf = (price?: number | null, currency?: string | null, fallback?: string) =>
     typeof price === 'number' ? formatCurrency(price, currency || undefined) : fallback ?? '';
+
+  const planFeatures = (plan?: typeof plans[number]) => {
+    if (!plan) return [] as string[];
+    const list = [
+      isUnlimited(plan.max_proposals)
+        ? t('pricing.limits.proposalsUnlimited')
+        : t('pricing.limits.proposals', { count: plan.max_proposals as number }),
+      isUnlimited(plan.max_clients)
+        ? t('pricing.limits.clientsUnlimited')
+        : t('pricing.limits.clients', { count: plan.max_clients as number }),
+      t('pricing.limits.publicLink'),
+      t('pricing.limits.pix'),
+    ];
+    if (plan.allow_pdf_export) list.push(t('pricing.limits.pdf'));
+    if (plan.allow_templates) list.push(t('pricing.limits.templates'));
+    if (plan.allow_custom_branding) list.push(t('pricing.limits.branding'));
+    return list;
+  };
+
 
 
   return (
@@ -117,36 +150,6 @@ export default function Landing() {
 
         </div>
       </section>
-
-      {/* Capturas reais do produto */}
-      <section className="py-20 border-t">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('screenshots.heading')}</h2>
-            <p className="mt-4 text-muted-foreground text-lg">{t('screenshots.subheading')}</p>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {screenshots.map((s) => (
-              <figure key={s.src} className="space-y-3">
-                <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
-                  <img
-                    src={s.src}
-                    alt={t(`screenshots.items.${s.key}`)}
-                    loading="lazy"
-                    width={1080}
-                    height={1920}
-                    className="w-full h-auto"
-                  />
-                </div>
-                <figcaption className="text-sm text-muted-foreground text-center">
-                  {t(`screenshots.items.${s.key}`)}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
-
 
       <section className="py-20 border-t bg-muted/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -238,6 +241,36 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Capturas reais do produto */}
+      <section className="py-20 border-t">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('screenshots.heading')}</h2>
+            <p className="mt-4 text-muted-foreground text-lg">{t('screenshots.subheading')}</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {screenshots.map((s) => (
+              <figure key={s.src} className="space-y-3">
+                <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
+                  <img
+                    src={s.src}
+                    alt={s.caption}
+                    loading="lazy"
+                    width={1080}
+                    height={1920}
+                    className="w-full h-auto"
+                  />
+                </div>
+                <figcaption className="text-sm text-muted-foreground text-center">
+                  {s.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       {/* Pricing */}
       <section className="py-20 border-t bg-muted/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -249,17 +282,17 @@ export default function Landing() {
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Free */}
             <div className="rounded-xl border bg-card p-6 space-y-4">
-              <h3 className="font-bold text-xl">{t('pricing.free.name')}</h3>
+              <h3 className="font-bold text-xl">{freePlan?.name ?? t('pricing.free.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.free.description')}</p>
               <p className="text-3xl font-bold">
                 {priceOf(freePlan?.price ?? 0, freePlan?.currency, t('pricing.free.price'))}
                 <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
               </p>
               <ul className="space-y-2 text-sm">
-                {(['f1', 'f2', 'f3', 'f4'] as const).map((k) => (
-                  <li key={k} className="flex items-center gap-2">
+                {planFeatures(freePlan).map((label) => (
+                  <li key={label} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    {t(`pricing.free.features.${k}`)}
+                    {label}
                   </li>
                 ))}
               </ul>
@@ -273,17 +306,17 @@ export default function Landing() {
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-medium">
                 {t('pricing.recommended')}
               </span>
-              <h3 className="font-bold text-xl">{t('pricing.premium.name')}</h3>
+              <h3 className="font-bold text-xl">{premiumPlan?.name ?? t('pricing.premium.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.premium.description')}</p>
               <p className="text-3xl font-bold">
                 {priceOf(premiumPlan?.price, premiumPlan?.currency, t('pricing.premium.priceMonthly'))}
                 <span className="text-base font-normal text-muted-foreground">{t('pricing.perMonth')}</span>
               </p>
               <ul className="space-y-2 text-sm">
-                {(['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'] as const).map((k) => (
-                  <li key={k} className="flex items-center gap-2">
+                {planFeatures(premiumPlan).map((label) => (
+                  <li key={label} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    {t(`pricing.premium.features.${k}`)}
+                    {label}
                   </li>
                 ))}
               </ul>
