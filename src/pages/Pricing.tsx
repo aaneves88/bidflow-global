@@ -13,6 +13,7 @@ import { Check, ArrowLeft } from 'lucide-react';
 import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
 import { toast } from '@/hooks/use-toast';
+import { Seo } from '@/components/Seo';
 
 export default function Pricing() {
   const { t } = useTranslation(['pricing', 'common']);

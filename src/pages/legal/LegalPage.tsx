@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { Seo } from '@/components/Seo';
 
 type LegalDoc = 'terms' | 'privacy' | 'cookies';
 

@@ -9,6 +9,7 @@ import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Seo } from '@/components/Seo';
 
 
 export default function Landing() {

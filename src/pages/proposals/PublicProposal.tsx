@@ -20,6 +20,7 @@ import { LegalFooter } from '@/components/LegalFooter';
 import { PixPayment } from '@/components/PixPayment';
 import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import { Seo } from '@/components/Seo';
 
 export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
