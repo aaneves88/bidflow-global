@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { Seo } from '@/components/Seo';
 
 function safeNext(value: string | null): string | null {
   if (!value) return null;
@@ -41,6 +42,11 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <Seo
+        title="Entrar na sua conta — Orca"
+        description="Acesse sua conta Orca para criar, enviar e acompanhar propostas comerciais e orçamentos."
+        noindex
+      />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Orca</CardTitle>

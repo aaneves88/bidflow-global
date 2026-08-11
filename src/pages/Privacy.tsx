@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import { Seo } from '@/components/Seo';
 
 export default function Privacy() {
   const { t } = useTranslation('privacy');
@@ -10,6 +11,11 @@ export default function Privacy() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <Seo
+        title="Política de privacidade — Orca"
+        description="Como a Orca coleta, usa e protege os dados de quem usa a plataforma de propostas e orçamentos."
+        noindex
+      />
       <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">

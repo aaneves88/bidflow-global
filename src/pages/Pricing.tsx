@@ -13,6 +13,7 @@ import { Check, ArrowLeft } from 'lucide-react';
 import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
 import { toast } from '@/hooks/use-toast';
+import { Seo } from '@/components/Seo';
 
 export default function Pricing() {
   const { t } = useTranslation(['pricing', 'common']);
@@ -66,8 +67,29 @@ export default function Pricing() {
   };
 
 
+  // Descrição da busca puxa os valores reais do banco para nunca divergir da tela.
+  const freePlan = plans.find((p) => p.is_starter);
+  const paidPlan = plans.find((p) => !p.is_starter);
+  const freeLimit = freePlan
+    ? isUnlimited(freePlan.max_proposals)
+      ? 'propostas ilimitadas'
+      : `${freePlan.max_proposals} proposta${Number(freePlan.max_proposals) === 1 ? '' : 's'}`
+    : 'propostas grátis';
+  const paidPrice =
+    paidPlan && typeof paidPlan.price === 'number'
+      ? `${formatCurrency(paidPlan.price, paidPlan.currency || undefined)}${intervalSuffix(paidPlan.interval || 'month')}`
+      : null;
+  const seoDescription = paidPrice
+    ? `Comece grátis com ${freeLimit} e assine o ${paidPlan?.name || 'Premium'} por ${paidPrice} para propostas e clientes ilimitados, PDF, modelos e marca própria. Sem fidelidade.`
+    : `Comece grátis com ${freeLimit} e evolua para o plano pago com propostas e clientes ilimitados, PDF e marca própria. Sem fidelidade.`;
+
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Planos e preços — Orca | Grátis para começar"
+        description={seoDescription}
+        path="/pricing"
+      />
       <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="text-xl font-bold tracking-tight">Orca</Link>

@@ -9,6 +9,7 @@ import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Seo } from '@/components/Seo';
 
 
 export default function Landing() {
@@ -89,6 +90,11 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Orca — Propostas e Orçamentos Profissionais"
+        description="O app mais simples para freelancers e pequenas empresas criarem propostas comerciais e orçamentos. Envie pelo WhatsApp, receba pelo PIX. Comece grátis."
+        path="/"
+      />
       <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">

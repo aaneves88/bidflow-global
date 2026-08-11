@@ -20,6 +20,7 @@ import { LegalFooter } from '@/components/LegalFooter';
 import { PixPayment } from '@/components/PixPayment';
 import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import { Seo } from '@/components/Seo';
 
 export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
@@ -70,10 +71,19 @@ export default function PublicProposal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposal?.id]);
 
+  // Propostas são documentos comerciais privados: nunca indexar.
+  const noIndexSeo = (
+    <Seo
+      title={t('seo.title', { defaultValue: 'Proposta comercial — Orca' })}
+      description={t('seo.description', { defaultValue: 'Visualize e aprove sua proposta comercial.' })}
+      noindex
+    />
+  );
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        {noIndexSeo}
         <p className="text-muted-foreground">{t('loading')}</p>
       </div>
     );
@@ -82,6 +92,7 @@ export default function PublicProposal() {
   if (!proposal) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        {noIndexSeo}
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-2">{t('notFound.title')}</h1>
           <p className="text-muted-foreground">{t('notFound.description')}</p>
@@ -89,6 +100,7 @@ export default function PublicProposal() {
       </div>
     );
   }
+
 
   const statusName = proposal.proposal_statuses?.name || '';
   const isApproved = /aprov|approv/i.test(statusName);
@@ -140,6 +152,7 @@ export default function PublicProposal() {
 
   return (
     <div className="min-h-screen bg-muted/30">
+      {noIndexSeo}
       {/* Brand top bar */}
       <div className="h-1.5 w-full" style={{ backgroundColor: primary }} />
 
