@@ -152,6 +152,7 @@ export default function PublicProposal() {
 
   return (
     <div className="min-h-screen bg-muted/30">
+      {noIndexSeo}
       {/* Brand top bar */}
       <div className="h-1.5 w-full" style={{ backgroundColor: primary }} />
 

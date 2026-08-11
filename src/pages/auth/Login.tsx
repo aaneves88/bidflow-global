@@ -42,6 +42,11 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <Seo
+        title="Entrar na sua conta — Orca"
+        description="Acesse sua conta Orca para criar, enviar e acompanhar propostas comerciais e orçamentos."
+        noindex
+      />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Orca</CardTitle>

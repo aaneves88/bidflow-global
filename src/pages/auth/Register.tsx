@@ -54,6 +54,11 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <Seo
+        title="Criar conta grátis — Orca"
+        description="Crie sua conta gratuita na Orca em menos de um minuto, sem cartão de crédito. Monte propostas e orçamentos profissionais e envie pelo WhatsApp."
+        path="/register"
+      />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Orca</CardTitle>
