@@ -38,8 +38,20 @@ export default function LegalPage() {
 
   const sections = t(`${doc}.sections`, { returnObjects: true, company: companyName, email: contactEmail, year }) as Array<{ heading: string; body: string }>;
 
+  const seoTitles: Record<LegalDoc, string> = {
+    terms: 'Termos de uso — Orca',
+    privacy: 'Política de privacidade — Orca',
+    cookies: 'Política de cookies — Orca',
+  };
+  const seoDescriptions: Record<LegalDoc, string> = {
+    terms: `Condições de uso da plataforma ${companyName} para criação e envio de propostas comerciais.`,
+    privacy: `Como a ${companyName} coleta, usa e protege os dados de quem usa a plataforma.`,
+    cookies: `Quais cookies a ${companyName} utiliza e como você pode gerenciá-los.`,
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <Seo title={seoTitles[doc as LegalDoc]} description={seoDescriptions[doc as LegalDoc]} noindex />
       <nav className="border-b">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="text-xl font-bold tracking-tight">Orca</Link>
