@@ -65,6 +65,7 @@ export default function MobileEntry() {
       if (error) {
         toast({ title: t('register.errorTitle'), description: error.message, variant: 'destructive' });
       } else {
+        trackMeta('CompleteRegistration');
         toast({ title: t('register.successTitle'), description: t('register.successDescription') });
         navigate('/dashboard');
       }

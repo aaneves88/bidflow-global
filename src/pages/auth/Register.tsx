@@ -46,6 +46,7 @@ export default function Register() {
         },
       }).catch((e) => console.warn('welcome email failed', e));
 
+      trackMeta('CompleteRegistration');
       toast({ title: t('register.successTitle'), description: t('register.successDescription') });
       navigate('/onboarding');
     }
