@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { isNativeMobile } from '@/lib/platform';
+import { trackMeta } from '@/lib/analytics';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 export default function MobileEntry() {
@@ -64,6 +65,7 @@ export default function MobileEntry() {
       if (error) {
         toast({ title: t('register.errorTitle'), description: error.message, variant: 'destructive' });
       } else {
+        trackMeta('CompleteRegistration');
         toast({ title: t('register.successTitle'), description: t('register.successDescription') });
         navigate('/dashboard');
       }

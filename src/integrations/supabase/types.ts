@@ -594,6 +594,93 @@ export type Database = {
           },
         ]
       }
+      referral_partners: {
+        Row: {
+          contact: string | null
+          coupon_code: string
+          created_at: string | null
+          discount_duration: string
+          discount_percent: number
+          id: string
+          is_active: boolean | null
+          name: string
+          repasse_rule: string
+        }
+        Insert: {
+          contact?: string | null
+          coupon_code: string
+          created_at?: string | null
+          discount_duration: string
+          discount_percent: number
+          id?: string
+          is_active?: boolean | null
+          name: string
+          repasse_rule: string
+        }
+        Update: {
+          contact?: string | null
+          coupon_code?: string
+          created_at?: string | null
+          discount_duration?: string
+          discount_percent?: number
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          repasse_rule?: string
+        }
+        Relationships: []
+      }
+      referral_payouts: {
+        Row: {
+          amount_brl: number
+          created_at: string | null
+          id: string
+          notes: string | null
+          paid_at: string | null
+          partner_id: string
+          status: string
+          stripe_subscription_id: string | null
+          user_plan_id: string | null
+        }
+        Insert: {
+          amount_brl: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          paid_at?: string | null
+          partner_id: string
+          status?: string
+          stripe_subscription_id?: string | null
+          user_plan_id?: string | null
+        }
+        Update: {
+          amount_brl?: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          paid_at?: string | null
+          partner_id?: string
+          status?: string
+          stripe_subscription_id?: string | null
+          user_plan_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_payouts_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_payouts_user_plan_id_fkey"
+            columns: ["user_plan_id"]
+            isOneToOne: false
+            referencedRelation: "user_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       revenuecat_events: {
         Row: {
           app_user_id: string
@@ -750,6 +837,7 @@ export type Database = {
           granted_by: string | null
           id: string
           plan_id: string
+          referral_partner_id: string | null
           starts_at: string
           status: string
           stripe_customer_id: string | null
@@ -763,6 +851,7 @@ export type Database = {
           granted_by?: string | null
           id?: string
           plan_id: string
+          referral_partner_id?: string | null
           starts_at?: string
           status?: string
           stripe_customer_id?: string | null
@@ -776,6 +865,7 @@ export type Database = {
           granted_by?: string | null
           id?: string
           plan_id?: string
+          referral_partner_id?: string | null
           starts_at?: string
           status?: string
           stripe_customer_id?: string | null
@@ -789,6 +879,13 @@ export type Database = {
             columns: ["plan_id"]
             isOneToOne: false
             referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_plans_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners"
             referencedColumns: ["id"]
           },
         ]
