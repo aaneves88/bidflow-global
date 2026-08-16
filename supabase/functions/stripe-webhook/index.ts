@@ -139,6 +139,61 @@ Deno.serve(async (req) => {
     if (error) console.error("stripe-webhook: falha ao expirar plano gratuito", error);
   };
 
+  /** Extrai o código do cupom/promotion code usado na sessão de checkout. */
+  const resolveCouponCodes = async (session: Stripe.Checkout.Session): Promise<string[]> => {
+    const codes = new Set<string>();
+    try {
+      const full = await stripe.checkout.sessions.retrieve(session.id, {
+        expand: ["total_details.breakdown.discounts", "discounts.promotion_code", "discounts.coupon"],
+      });
+
+      const pushDiscount = (d: unknown) => {
+        const disc = d as {
+          promotion_code?: string | { code?: string; id?: string } | null;
+          coupon?: string | { name?: string | null; id?: string } | null;
+          discount?: unknown;
+        } | null;
+        if (!disc) return;
+        const pc = disc.promotion_code;
+        if (typeof pc === "string") codes.add(pc);
+        else if (pc?.code) codes.add(pc.code);
+        const c = disc.coupon;
+        if (typeof c === "string") codes.add(c);
+        else if (c) {
+          if (c.name) codes.add(c.name);
+          if (c.id) codes.add(c.id);
+        }
+      };
+
+      for (const d of (full.discounts ?? []) as unknown[]) pushDiscount(d);
+      for (const line of (full.total_details?.breakdown?.discounts ?? []) as unknown[]) {
+        pushDiscount((line as { discount?: unknown }).discount);
+      }
+    } catch (e) {
+      console.warn("stripe-webhook: não foi possível ler descontos da sessão", (e as Error).message);
+    }
+    return [...codes].filter(Boolean);
+  };
+
+  /** Casa o código do cupom com um parceiro de indicação ativo (case-insensitive). */
+  const findReferralPartnerId = async (codes: string[]): Promise<string | null> => {
+    if (!codes.length) return null;
+    for (const code of codes) {
+      const { data, error } = await admin
+        .from("referral_partners")
+        .select("id")
+        .eq("is_active", true)
+        .ilike("coupon_code", code)
+        .maybeSingle();
+      if (error) {
+        console.warn("stripe-webhook: falha ao buscar parceiro por cupom", error.message);
+        continue;
+      }
+      if (data?.id) return data.id as string;
+    }
+    return null;
+  };
+
   const activatePlan = async (opts: {
     userId: string;
     planId: string;
@@ -146,6 +201,7 @@ Deno.serve(async (req) => {
     subscriptionId?: string | null;
     email?: string | null;
     expiresAt?: string | null;
+    referralPartnerId?: string | null;
   }) => {
     // 1) planos gratuitos anteriores viram "expired" (fonte do bug de duas linhas ativas)
     await expireFreePlans(opts.userId);
@@ -166,8 +222,10 @@ Deno.serve(async (req) => {
       stripe_customer_id: opts.customerId ?? null,
       stripe_subscription_id: opts.subscriptionId ?? null,
       stripe_email: opts.email ?? null,
+      referral_partner_id: opts.referralPartnerId ?? null,
     });
   };
+
 
 
   const toIso = (seconds?: number | null) =>
@@ -209,8 +267,11 @@ Deno.serve(async (req) => {
           expiresAt = d.toISOString();
         }
 
-        await activatePlan({ userId, planId, customerId, subscriptionId, email, expiresAt });
-        console.log("stripe-webhook: premium ativado", { userId, subscriptionId });
+        const couponCodes = await resolveCouponCodes(session);
+        const referralPartnerId = await findReferralPartnerId(couponCodes);
+
+        await activatePlan({ userId, planId, customerId, subscriptionId, email, expiresAt, referralPartnerId });
+        console.log("stripe-webhook: premium ativado", { userId, subscriptionId, couponCodes, referralPartnerId });
         break;
       }
 
