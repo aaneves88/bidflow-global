@@ -36,4 +36,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'proposal-client-copy': proposalClientCopy,
   'support-report': supportReport,
   'support-reply': supportReply,
+  'activation-stuck': activationStuck,
+  'activation-progress': activationProgress,
 }
+
