@@ -21,6 +21,8 @@ project_id = "mhsyllzvzuorzyacobar"
     verify_jwt = false
   [functions.send-activation-emails]
     verify_jwt = false
+  [functions.send-coupon-nudge-email]
+    verify_jwt = false
 
 
 
