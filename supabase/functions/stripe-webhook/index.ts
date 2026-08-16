@@ -267,8 +267,11 @@ Deno.serve(async (req) => {
           expiresAt = d.toISOString();
         }
 
-        await activatePlan({ userId, planId, customerId, subscriptionId, email, expiresAt });
-        console.log("stripe-webhook: premium ativado", { userId, subscriptionId });
+        const couponCodes = await resolveCouponCodes(session);
+        const referralPartnerId = await findReferralPartnerId(couponCodes);
+
+        await activatePlan({ userId, planId, customerId, subscriptionId, email, expiresAt, referralPartnerId });
+        console.log("stripe-webhook: premium ativado", { userId, subscriptionId, couponCodes, referralPartnerId });
         break;
       }
 
