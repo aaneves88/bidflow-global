@@ -13,6 +13,9 @@ import { template as proposalClientCopy } from './proposal-client-copy.tsx'
 import { template as welcome } from './welcome.tsx'
 import { template as supportReport } from './support-report.tsx'
 import { template as supportReply } from './support-reply.tsx'
+import { template as activationStuck } from './activation-stuck.tsx'
+import { template as activationProgress } from './activation-progress.tsx'
+
 
 export interface TemplateEntry {
   // deno-lint-ignore no-explicit-any
