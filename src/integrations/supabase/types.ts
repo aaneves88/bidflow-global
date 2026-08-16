@@ -113,6 +113,27 @@ export type Database = {
         }
         Relationships: []
       }
+      coupon_email_log: {
+        Row: {
+          coupon_code: string
+          reason: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          coupon_code: string
+          reason: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          coupon_code?: string
+          reason?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string

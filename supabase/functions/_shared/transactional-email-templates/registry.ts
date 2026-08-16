@@ -15,6 +15,7 @@ import { template as supportReport } from './support-report.tsx'
 import { template as supportReply } from './support-reply.tsx'
 import { template as activationStuck } from './activation-stuck.tsx'
 import { template as activationProgress } from './activation-progress.tsx'
+import { template as couponOffer } from './coupon-offer.tsx'
 
 
 export interface TemplateEntry {
@@ -38,5 +39,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'support-reply': supportReply,
   'activation-stuck': activationStuck,
   'activation-progress': activationProgress,
+  'coupon-offer': couponOffer,
 }
 
