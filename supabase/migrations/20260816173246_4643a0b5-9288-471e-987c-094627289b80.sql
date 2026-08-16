@@ -1,0 +1,1 @@
+GRANT SELECT ON public.coupon_email_log TO authenticated;
