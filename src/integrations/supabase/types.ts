@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      activation_email_log: {
+        Row: {
+          sent_at: string
+          template_name: string
+          user_id: string
+        }
+        Insert: {
+          sent_at?: string
+          template_name: string
+          user_id: string
+        }
+        Update: {
+          sent_at?: string
+          template_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       app_settings: {
         Row: {
           category: string
