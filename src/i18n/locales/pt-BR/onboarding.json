@@ -29,5 +29,9 @@
   "messages": {
     "saved": "Configurações salvas",
     "clientCreated": "Cliente cadastrado"
+  },
+  "template": {
+    "title": "Pronto para sua primeira proposta?",
+    "description": "Escolha um modelo e comece com itens, prazo e validade já preenchidos — você edita tudo depois."
   }
 }
