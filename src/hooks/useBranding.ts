@@ -20,7 +20,7 @@ export const ORCA_BRANDING: Branding = {
 };
 
 /** Per-user branding stored on the user's profile. */
-export function useBranding(): Branding & { isLoading: boolean } {
+export function useBranding(): Branding & { isLoading: boolean; hasBranding: boolean } {
   const { user } = useAuth();
   const { data, isLoading } = useQuery({
     queryKey: ['user-branding', user?.id],
@@ -42,6 +42,9 @@ export function useBranding(): Branding & { isLoading: boolean } {
     secondaryColor: data?.secondary_color || ORCA_BRANDING.secondaryColor,
     accentColor: data?.accent_color || ORCA_BRANDING.accentColor,
     companyName: data?.company_name || ORCA_BRANDING.companyName,
+    // Derived from the raw profile row (before fallback), so a user who picks
+    // the exact Orca colors is still counted as configured.
+    hasBranding: !!(data?.logo_url || data?.primary_color || data?.company_name),
     isLoading,
   };
 }
