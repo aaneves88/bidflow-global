@@ -23,6 +23,8 @@ project_id = "mhsyllzvzuorzyacobar"
     verify_jwt = false
   [functions.send-coupon-nudge-email]
     verify_jwt = false
+  [functions.signup-guarded]
+    verify_jwt = false
 
 
 
