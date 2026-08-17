@@ -245,13 +245,6 @@ export default function ProposalForm() {
         onConfirmed={() => { void persistProposal(); }}
       />
 
-        open={blocked}
-        onOpenChange={(open) => {
-          setBlocked(open);
-          if (!open) navigate('/proposals');
-        }}
-      />
-
       {showPicker && (
         <Card>
           <CardHeader>
