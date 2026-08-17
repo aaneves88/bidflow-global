@@ -41,6 +41,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           <main className="flex-1 p-4 md:p-6 pb-safe">
             {children}
           </main>
+          <BrandUpsellBanner />
         </div>
       </div>
     </SidebarProvider>
