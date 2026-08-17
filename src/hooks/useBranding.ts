@@ -99,11 +99,12 @@ export async function fetchPublicBranding(supabase: any, publicCode?: string): P
       return { ...ORCA_BRANDING, hasActivePlan: false };
     }
     return {
-      logoUrl: row.logo_url || ORCA_BRANDING.logoUrl,
+      logoUrl: row.logo_url || '',
       primaryColor: row.primary_color || ORCA_BRANDING.primaryColor,
       secondaryColor: row.secondary_color || ORCA_BRANDING.secondaryColor,
       accentColor: row.accent_color || ORCA_BRANDING.accentColor,
       companyName: row.company_name || '',
+      tagline: row.tagline || '',
       hasActivePlan: true,
     };
   } catch {
