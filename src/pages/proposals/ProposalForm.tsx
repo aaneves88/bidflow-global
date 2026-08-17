@@ -54,7 +54,10 @@ export default function ProposalForm() {
   const create = useCreateProposal();
   const update = useUpdateProposal();
   const limits = useSubscription();
+  const { isAdmin } = useAuth();
+  const { data: taxIdState, isLoading: taxIdLoading } = useTaxId();
   const [blocked, setBlocked] = useState(false);
+  const [taxIdPrompt, setTaxIdPrompt] = useState(false);
 
   useEffect(() => {
     if (!isEditing && limits.isReady && limits.proposalLimitReached) {
