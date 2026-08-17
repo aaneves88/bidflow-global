@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
     if (countErr) console.error('rate limit lookup failed', countErr.message);
 
     if ((count ?? 0) >= MAX_SIGNUPS_PER_DAY) {
-      return json({ error: 'rate_limited' }, 429);
+      return json({ error: 'rate_limited' }, 200);
     }
 
     const anonClient = createClient(SUPABASE_URL, ANON);
@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
     });
 
     if (error) {
-      return json({ error: 'signup_failed', message: error.message }, 400);
+      return json({ error: 'signup_failed', message: error.message }, 200);
     }
 
     await admin.from('signup_ip_log').insert({ ip_hash: ipHash });
