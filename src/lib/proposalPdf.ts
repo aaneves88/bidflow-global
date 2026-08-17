@@ -2,6 +2,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import html2canvas from 'html2canvas';
 import QRCode from 'qrcode';
+import orcaMarkMono from '@/assets/brand/orca-mark-mono.png';
 import { formatCurrency, formatDate } from './format';
 import { discountValue } from './discount';
 
@@ -36,6 +37,8 @@ interface ItemLike {
 
 interface Options {
   companyName?: string;
+  /** Optional short phrase shown under the company name (own-brand header). */
+  tagline?: string;
   publicUrlBase?: string;
   logoDataUrl?: string;
   primaryColor?: string;
@@ -111,6 +114,7 @@ async function buildHeroCanvas(
   const accent = options.accentColor || '#22C55E';
   const isFree = !!options.watermark;
   const companyName = options.companyName || '';
+  const tagline = options.tagline || '';
 
   const total = formatCurrency(Number(proposal.total_amount), proposal.currency);
   const status = proposal.proposal_statuses?.name || '';
@@ -127,7 +131,7 @@ async function buildHeroCanvas(
   const brandHeader = isFree
     ? `
       <div style="display:flex;align-items:center;gap:12px;padding:18px 32px;background:${secondary};color:#fff;">
-        <div style="width:36px;height:36px;border-radius:50%;background:${primary};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;">O</div>
+        <img src="${orcaMarkMono}" alt="" style="height:38px;width:auto;object-fit:contain;" />
         <div>
           <div style="font-size:16px;font-weight:700;letter-spacing:-0.2px;">Orca</div>
           <div style="font-size:11px;opacity:0.7;">Proposta criada com Orca</div>
@@ -137,7 +141,10 @@ async function buildHeroCanvas(
     : `
       <div style="display:flex;align-items:center;gap:16px;padding:24px 32px;border-bottom:1px solid #e5e7eb;">
         ${options.logoDataUrl ? `<img src="${options.logoDataUrl}" alt="" style="height:52px;width:auto;max-width:200px;object-fit:contain;" crossorigin="anonymous" />` : ''}
-        ${companyName ? `<div style="font-size:20px;font-weight:700;color:${secondary};letter-spacing:-0.3px;">${escapeHtml(companyName)}</div>` : ''}
+        ${companyName || tagline ? `<div>
+          ${companyName ? `<div style="font-size:20px;font-weight:700;color:${secondary};letter-spacing:-0.3px;">${escapeHtml(companyName)}</div>` : ''}
+          ${tagline ? `<div style="font-size:11px;color:#64748b;margin-top:2px;">${escapeHtml(tagline)}</div>` : ''}
+        </div>` : ''}
       </div>
     `;
 
