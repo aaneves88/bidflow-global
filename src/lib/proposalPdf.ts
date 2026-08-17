@@ -139,11 +139,11 @@ async function buildHeroCanvas(
       </div>
     `
     : `
-      <div style="display:flex;align-items:center;gap:16px;padding:24px 32px;border-bottom:1px solid #e5e7eb;">
+      <div style="display:flex;align-items:center;gap:16px;padding:24px 32px;background:${secondary};color:#fff;">
         ${options.logoDataUrl ? `<img src="${options.logoDataUrl}" alt="" style="height:52px;width:auto;max-width:200px;object-fit:contain;" crossorigin="anonymous" />` : ''}
         ${companyName || tagline ? `<div>
-          ${companyName ? `<div style="font-size:20px;font-weight:700;color:${secondary};letter-spacing:-0.3px;">${escapeHtml(companyName)}</div>` : ''}
-          ${tagline ? `<div style="font-size:11px;color:#64748b;margin-top:2px;">${escapeHtml(tagline)}</div>` : ''}
+          ${companyName ? `<div style="font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.3px;">${escapeHtml(companyName)}</div>` : ''}
+          ${tagline ? `<div style="font-size:11px;color:#fff;opacity:0.7;margin-top:2px;">${escapeHtml(tagline)}</div>` : ''}
         </div>` : ''}
       </div>
     `;
