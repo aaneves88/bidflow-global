@@ -132,6 +132,7 @@ function BrandingTab() {
   const [primaryColor, setPrimaryColor] = useState('#3B82F6');
   const [secondaryColor, setSecondaryColor] = useState('#1F2937');
   const [accentColor, setAccentColor] = useState('#22C55E');
+  const [tagline, setTagline] = useState('');
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -140,6 +141,7 @@ function BrandingTab() {
       setPrimaryColor(branding.primaryColor);
       setSecondaryColor(branding.secondaryColor);
       setAccentColor(branding.accentColor);
+      setTagline(branding.tagline);
       setHydrated(true);
     }
   }, [branding, hydrated]);
@@ -151,6 +153,7 @@ function BrandingTab() {
         primary_color: primaryColor,
         secondary_color: secondaryColor,
         accent_color: accentColor,
+        tagline,
       });
       toast({ title: t('messages.saved') });
     } catch (e: any) {
@@ -187,6 +190,17 @@ function BrandingTab() {
             <div>
               <Label>{t('branding.logo')}</Label>
               <LogoUpload value={logoUrl} onChange={setLogoUrl} />
+            </div>
+            <div>
+              <Label>{t('branding.tagline')}</Label>
+              <Input
+                value={tagline}
+                onChange={(e) => setTagline(e.target.value)}
+                disabled={!canBrand}
+                maxLength={80}
+                placeholder={t('branding.taglinePlaceholder')}
+              />
+              <p className="text-xs text-muted-foreground mt-1">{t('branding.taglineHelp')}</p>
             </div>
             <ColorField label={t('branding.primaryColor')} help={t('branding.primaryHelp')} value={primaryColor} onChange={setPrimaryColor} disabled={!canBrand} />
             <ColorField label={t('branding.secondaryColor')} help={t('branding.secondaryHelp')} value={secondaryColor} onChange={setSecondaryColor} disabled={!canBrand} />
