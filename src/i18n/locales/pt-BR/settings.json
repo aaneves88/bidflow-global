@@ -7,9 +7,6 @@
   "integrationsCta": "Gerencie integrações em Administração → Integrações",
   "general": {
     "title": "Configurações gerais",
-    "companyName": "Nome da empresa",
-    "companyPlaceholder": "Sua empresa",
-    "companyNameHelp": "Aparece no cabeçalho e rodapé das propostas enviadas aos seus clientes.",
     "defaultCurrency": "Moeda padrão",
     "language": "Idioma da interface",
     "publicAppUrl": "URL pública do app",
@@ -27,6 +24,9 @@
   "branding": {
     "title": "Marca",
     "subtitle": "Estes elementos aparecem nas propostas públicas e PDFs enviados aos seus clientes.",
+    "companyName": "Nome da empresa",
+    "companyPlaceholder": "Sua empresa",
+    "companyNameHelp": "Aparece no cabeçalho e rodapé das propostas enviadas aos seus clientes.",
     "logo": "Logotipo da empresa",
     "primaryColor": "Cor primária",
     "primaryHelp": "Usada no cabeçalho da proposta, botão de aceitar e total.",

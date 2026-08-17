@@ -7,9 +7,6 @@
   "integrationsCta": "Manage integrations in Admin → Integrations",
   "general": {
     "title": "General Settings",
-    "companyName": "Company Name",
-    "companyPlaceholder": "Your Company",
-    "companyNameHelp": "Appears in the header and footer of proposals sent to your clients.",
     "defaultCurrency": "Default Currency",
     "language": "Interface language",
     "publicAppUrl": "Public app URL",
@@ -27,6 +24,9 @@
   "branding": {
     "title": "Branding",
     "subtitle": "These appear on your public proposal pages and PDFs sent to your clients.",
+    "companyName": "Company Name",
+    "companyPlaceholder": "Your Company",
+    "companyNameHelp": "Appears in the header and footer of proposals sent to your clients.",
     "logo": "Company logo",
     "primaryColor": "Primary color",
     "primaryHelp": "Used for the proposal header bar, accept button and total.",
