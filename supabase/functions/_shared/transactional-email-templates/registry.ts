@@ -16,6 +16,7 @@ import { template as supportReply } from './support-reply.tsx'
 import { template as activationStuck } from './activation-stuck.tsx'
 import { template as activationProgress } from './activation-progress.tsx'
 import { template as couponOffer } from './coupon-offer.tsx'
+import { template as ebookDelivery } from './ebook-delivery.tsx'
 
 
 export interface TemplateEntry {
