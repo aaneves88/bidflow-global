@@ -220,6 +220,63 @@ export default function ProposalForm() {
         }}
       />
 
+      {showPicker && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('templates.pickerTitle')}</CardTitle>
+            <p className="text-sm text-muted-foreground">{t('templates.pickerSubtitle')}</p>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            {PROPOSAL_TEMPLATE_IDS.map((tplId) => {
+              const Icon = TEMPLATE_ICONS[tplId];
+              return (
+                <button
+                  key={tplId}
+                  type="button"
+                  onClick={() => applyTemplate(tplId)}
+                  className="flex items-start gap-3 rounded-lg border bg-card p-4 text-left transition-colors hover:border-primary hover:bg-accent/40"
+                >
+                  <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <span>
+                    <span className="block font-medium">{t(`templates.options.${tplId}.title`)}</span>
+                    <span className="block text-sm text-muted-foreground">
+                      {t(`templates.options.${tplId}.description`)}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setPickerDismissed(true)}
+              className="flex items-start gap-3 rounded-lg border border-dashed p-4 text-left transition-colors hover:border-primary hover:bg-accent/40"
+            >
+              <PenLine className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+              <span>
+                <span className="block font-medium">{t('templates.blank.title')}</span>
+                <span className="block text-sm text-muted-foreground">{t('templates.blank.description')}</span>
+              </span>
+            </button>
+          </CardContent>
+        </Card>
+      )}
+
+      {!isEditing && appliedTemplate && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-muted/40 px-4 py-2">
+          <p className="text-sm text-muted-foreground">
+            {t('templates.applied', { name: t(`templates.options.${appliedTemplate}.title`) })}
+          </p>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => { setAppliedTemplate(null); setPickerDismissed(false); }}
+          >
+            {t('templates.change')}
+          </Button>
+        </div>
+      )}
+
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
