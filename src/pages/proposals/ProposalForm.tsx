@@ -15,7 +15,10 @@ import {
   useCreateProposal, useUpdateProposal, type ProposalItem,
 } from '@/hooks/useProposals';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useTaxId } from '@/hooks/useTaxId';
+import { useAuth } from '@/contexts/AuthContext';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { TaxIdDialog } from '@/components/TaxIdDialog';
 import { ProductPicker } from '@/components/ProductPicker';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
