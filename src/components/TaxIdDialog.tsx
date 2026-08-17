@@ -84,7 +84,7 @@ export function TaxIdDialog({ open, onOpenChange, onConfirmed }: Props) {
 
         <DialogFooter>
           <Button onClick={handleConfirm} disabled={save.isPending}>
-            {save.isPending ? t('common:actions.saving') : t('form.taxId.confirm')}
+            {save.isPending ? t('common:actions.save') : t('form.taxId.confirm')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -65,6 +65,25 @@
         "phone": "Phone",
         "random": "Random"
       }
+    },
+    "taxId": {
+      "title": "Confirm your tax ID",
+      "description": "To create your first proposal on the free plan, we need to confirm your tax ID. It is saved to your profile and won't be asked again.",
+      "type": "Type",
+      "field": "CPF / CNPJ",
+      "placeholder": {
+        "cpf": "000.000.000-00",
+        "cnpj": "00.000.000/0000-00"
+      },
+      "types": {
+        "cpf": "CPF",
+        "cnpj": "CNPJ"
+      },
+      "hint": "We only use the document to prevent multiple free accounts from the same person.",
+      "confirm": "Confirm and create proposal",
+      "invalid": "Invalid document for the selected type",
+      "duplicate": "This CPF/CNPJ is already registered on another account.",
+      "saveError": "Could not save the document. Please try again."
     }
   },
   "view": {

@@ -65,6 +65,25 @@
         "phone": "Telefone",
         "random": "Aleatória"
       }
+    },
+    "taxId": {
+      "title": "Confirme seu CPF ou CNPJ",
+      "description": "Para criar sua primeira proposta no plano grátis, precisamos confirmar seu documento. Ele fica salvo no seu perfil e não será pedido de novo.",
+      "type": "Tipo",
+      "field": "CPF / CNPJ",
+      "placeholder": {
+        "cpf": "000.000.000-00",
+        "cnpj": "00.000.000/0000-00"
+      },
+      "types": {
+        "cpf": "CPF",
+        "cnpj": "CNPJ"
+      },
+      "hint": "Usamos o documento apenas para evitar múltiplas contas grátis da mesma pessoa.",
+      "confirm": "Confirmar e criar proposta",
+      "invalid": "Documento inválido para o tipo selecionado",
+      "duplicate": "Esse CPF/CNPJ já está cadastrado em outra conta.",
+      "saveError": "Não foi possível salvar o documento. Tente novamente."
     }
   },
   "view": {
