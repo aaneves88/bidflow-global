@@ -7,9 +7,6 @@
   "integrationsCta": "Gerencie integrações em Administração → Integrações",
   "general": {
     "title": "Configurações gerais",
-    "companyName": "Nome da empresa",
-    "companyPlaceholder": "Sua empresa",
-    "companyNameHelp": "Aparece no cabeçalho e rodapé das propostas enviadas aos seus clientes.",
     "defaultCurrency": "Moeda padrão",
     "language": "Idioma da interface",
     "publicAppUrl": "URL pública do app",
