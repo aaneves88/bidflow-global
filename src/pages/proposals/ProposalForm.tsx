@@ -239,6 +239,19 @@ export default function ProposalForm() {
         }}
       />
 
+      <TaxIdDialog
+        open={taxIdPrompt}
+        onOpenChange={setTaxIdPrompt}
+        onConfirmed={() => { void persistProposal(); }}
+      />
+
+        open={blocked}
+        onOpenChange={(open) => {
+          setBlocked(open);
+          if (!open) navigate('/proposals');
+        }}
+      />
+
       {showPicker && (
         <Card>
           <CardHeader>
