@@ -41,5 +41,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'activation-stuck': activationStuck,
   'activation-progress': activationProgress,
   'coupon-offer': couponOffer,
+  'ebook-delivery': ebookDelivery,
 }
 
