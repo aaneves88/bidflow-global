@@ -138,5 +138,57 @@
     "watermark": "Orca",
     "subtotal": "Subtotal",
     "discount": "Desconto"
+  },
+  "templates": {
+    "pickerTitle": "Comece por um modelo",
+    "pickerSubtitle": "Escolha um modelo pronto com itens de exemplo, prazo e validade já sugeridos. Você edita tudo depois.",
+    "applied": "Modelo aplicado: {{name}}",
+    "change": "Escolher outro modelo",
+    "blank": {
+      "title": "Começar do zero",
+      "description": "Formulário em branco, do seu jeito."
+    },
+    "options": {
+      "simple": {
+        "title": "Serviço simples",
+        "description": "Poucos itens. Ideal para quem cobra por um serviço único.",
+        "proposalTitle": "Proposta de serviço",
+        "proposalDescription": "Proposta para execução do serviço combinado, com escopo, prazo e forma de pagamento definidos.",
+        "notes": "Prazo de entrega: até {{date}}, contado a partir da aprovação desta proposta.\nQualquer item fora do escopo acima será orçado separadamente.",
+        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: 50% na aprovação e 50% na entrega, via PIX.\nAlterações após a aprovação podem ajustar prazo e valor."
+      },
+      "phased": {
+        "title": "Projeto com etapas",
+        "description": "Várias linhas de item. Ideal para quem entrega em fases.",
+        "proposalTitle": "Proposta de projeto por etapas",
+        "proposalDescription": "Projeto dividido em etapas, com entregas e pagamentos vinculados à conclusão de cada fase.",
+        "notes": "Prazo total estimado: entrega final até {{date}}, contado a partir da aprovação.\nCada etapa só começa após a aprovação da etapa anterior.",
+        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: pagamento por etapa concluída, via PIX, em até 5 dias após cada entrega.\nAté 2 rodadas de ajuste por etapa estão incluídas."
+      },
+      "recurring": {
+        "title": "Pacote mensal / recorrente",
+        "description": "Pensado para quem presta serviço continuado.",
+        "proposalTitle": "Proposta de pacote mensal",
+        "proposalDescription": "Pacote de serviço continuado, com escopo mensal fixo e renovação automática.",
+        "notes": "Início previsto: até {{date}}, após a aprovação.\nO escopo mensal é fixo; demandas extras são orçadas à parte.",
+        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: mensalidade via PIX, todo dia 5, com renovação automática.\nCancelamento com aviso de 30 dias, sem multa."
+      }
+    },
+    "items": {
+      "simple": {
+        "service": "Serviço principal (escopo combinado)",
+        "extra": "Deslocamento / custos extras"
+      },
+      "phased": {
+        "discovery": "Etapa 1 — Briefing e planejamento",
+        "production": "Etapa 2 — Produção / execução",
+        "review": "Etapa 3 — Revisão e ajustes",
+        "delivery": "Etapa 4 — Entrega final e arquivos"
+      },
+      "recurring": {
+        "monthly": "Pacote mensal — escopo combinado",
+        "support": "Suporte e atendimento no mês"
+      }
+    }
   }
 }
