@@ -22,11 +22,21 @@ import { formatCurrency } from '@/lib/format';
 import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
 import { PIX_KEY_TYPES, isValidPixKey, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
+import {
+  buildProposalTemplate, PROPOSAL_TEMPLATE_IDS, type ProposalTemplateId,
+} from '@/lib/proposalTemplates';
 
 
 const emptyItem = (): ProposalItem => ({
   description: '', quantity: 1, unit_price: 0, total: 0, position: 0,
 });
+
+const TEMPLATE_ICONS: Record<ProposalTemplateId, typeof FileText> = {
+  simple: FileText,
+  phased: Layers,
+  recurring: Repeat,
+};
+
 
 export default function ProposalForm() {
   const { t } = useTranslation(['proposals', 'common']);
