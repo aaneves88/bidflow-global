@@ -73,6 +73,37 @@ export default function ProposalForm() {
   const [items, setItems] = useState<ProposalItem[]>([emptyItem()]);
   const [pixKey, setPixKey] = useState('');
   const [pixKeyType, setPixKeyType] = useState<PixKeyType>('cpf');
+  const [appliedTemplate, setAppliedTemplate] = useState<ProposalTemplateId | null>(null);
+  const [pickerDismissed, setPickerDismissed] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const applyTemplate = (templateId: ProposalTemplateId) => {
+    const tpl = buildProposalTemplate(templateId, (key: string, opts?: any) =>
+      t(key, { ns: 'proposals', ...(opts || {}) }) as string);
+    setTitle(tpl.title);
+    setDescription(tpl.description);
+    setNotes(tpl.notes);
+    setTerms(tpl.terms);
+    setValidUntil(tpl.validUntil);
+    setItems(tpl.items);
+    setAppliedTemplate(templateId);
+    setPickerDismissed(true);
+  };
+
+  // Modelo vindo do onboarding / atalhos: /proposals/new?template=simple
+  useEffect(() => {
+    if (isEditing || appliedTemplate) return;
+    const param = searchParams.get('template') as ProposalTemplateId | null;
+    if (param && PROPOSAL_TEMPLATE_IDS.includes(param)) {
+      applyTemplate(param);
+      searchParams.delete('template');
+      setSearchParams(searchParams, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditing, searchParams]);
+
+  const showPicker = !isEditing && !pickerDismissed;
+
 
   useEffect(() => {
     if (proposal && isEditing) {
