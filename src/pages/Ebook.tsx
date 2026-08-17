@@ -117,7 +117,7 @@ export default function Ebook() {
             <span className="font-semibold">Orca</span>
           </Link>
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/">Conhecer a Orca</Link>
+            <Link to="/register">Criar minha conta grátis</Link>
           </Button>
         </div>
       </header>
@@ -163,12 +163,12 @@ export default function Ebook() {
                       abaixo. Também enviamos o PDF para <strong>{email}</strong>.
                     </p>
                     <Button asChild className="w-full">
-                      <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
-                        <Download className="mr-2 h-4 w-4" /> Baixar o PDF
-                      </a>
+                      <Link to="/register">Criar minha conta grátis</Link>
                     </Button>
                     <Button variant="outline" asChild className="w-full">
-                      <Link to="/">Conhecer a Orca</Link>
+                      <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-2 h-4 w-4" /> Baixar o PDF novamente
+                      </a>
                     </Button>
                   </div>
                 ) : (
