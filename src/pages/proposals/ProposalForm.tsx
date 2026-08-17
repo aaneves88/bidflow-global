@@ -111,8 +111,12 @@ export default function ProposalForm() {
   const showPicker = !isEditing && !pickerDismissed;
 
 
+  const [proposalHydrated, setProposalHydrated] = useState(false);
+  const [itemsHydrated, setItemsHydrated] = useState(false);
+  const [statusHydrated, setStatusHydrated] = useState(false);
+
   useEffect(() => {
-    if (proposal && isEditing) {
+    if (proposal && isEditing && !proposalHydrated) {
       setTitle(proposal.title);
       setDescription(proposal.description || '');
       setNotes((proposal as any).notes || '');
@@ -125,11 +129,13 @@ export default function ProposalForm() {
       setDiscountType(((proposal as any).discount_type === 'percent' ? 'percent' : 'fixed') as DiscountType);
       setPixKey((proposal as any).pix_key || '');
       setPixKeyType((((proposal as any).pix_key_type as PixKeyType) || 'cpf'));
+      setProposalHydrated(true);
+      setStatusHydrated(true);
     }
-  }, [proposal, isEditing]);
+  }, [proposal, isEditing, proposalHydrated]);
 
   useEffect(() => {
-    if (existingItems?.length && isEditing) {
+    if (existingItems?.length && isEditing && !itemsHydrated) {
       setItems(existingItems.map((i) => ({
         description: i.description,
         quantity: Number(i.quantity),
@@ -137,15 +143,18 @@ export default function ProposalForm() {
         total: Number(i.total),
         position: i.position,
       })));
+      setItemsHydrated(true);
     }
-  }, [existingItems, isEditing]);
+  }, [existingItems, isEditing, itemsHydrated]);
 
   useEffect(() => {
-    if (!statusId && statuses?.length) {
+    if (!statusHydrated && !statusId && statuses?.length) {
       const def = statuses.find((s) => s.is_default);
       if (def) setStatusId(def.id);
+      setStatusHydrated(true);
     }
-  }, [statuses, statusId]);
+  }, [statuses, statusId, statusHydrated]);
+
 
   const updateItem = (idx: number, field: keyof ProposalItem, value: any) => {
     setItems((prev) => {
