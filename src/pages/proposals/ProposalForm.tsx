@@ -183,11 +183,12 @@ export default function ProposalForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+  /** Trava anti-abuso: plano grátis precisa ter CPF/CNPJ no perfil antes da 1ª proposta. */
+  const needsTaxId =
+    !isEditing && !isAdmin && limits.isReady && limits.isFree && !taxIdLoading && !taxIdState?.taxId;
+
+  const persistProposal = async () => {
     const trimmedPix = pixKey.trim();
-    if (trimmedPix && !isValidPixKey(trimmedPix, pixKeyType)) {
-      toast({ title: t('form.pix.invalid'), variant: 'destructive' });
-      return;
-    }
     const data = {
       title, description, notes, terms,
       client_id: clientId === 'none' ? null : clientId,
@@ -205,6 +206,20 @@ export default function ProposalForm() {
       await create.mutateAsync(data);
     }
     navigate('/proposals');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedPix = pixKey.trim();
+    if (trimmedPix && !isValidPixKey(trimmedPix, pixKeyType)) {
+      toast({ title: t('form.pix.invalid'), variant: 'destructive' });
+      return;
+    }
+    if (needsTaxId) {
+      setTaxIdPrompt(true);
+      return;
+    }
+    await persistProposal();
   };
 
   return (
