@@ -99,5 +99,10 @@
     "dismiss": "Dismiss",
     "iosHintPrefix": "Tap Share",
     "iosHintSuffix": "→ Add to Home Screen."
+  },
+  "brandUpsell": {
+    "message": "On a paid plan you can use your own brand (logo and colors) on proposals.",
+    "cta": "View plans",
+    "dismiss": "Dismiss"
   }
 }

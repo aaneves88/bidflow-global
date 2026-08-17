@@ -178,6 +178,12 @@ export default function Pricing() {
                             <span>{f}</span>
                           </li>
                         ))}
+                        {p.allow_custom_branding && !features.some((f) => /marca|brand/i.test(f)) && (
+                          <li className="flex items-start gap-2">
+                            <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                            <span>{t('features.customBranding')}</span>
+                          </li>
+                        )}
                       </ul>
 
                       {isCurrent && Number(p.price) > 0 ? (

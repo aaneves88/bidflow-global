@@ -6,6 +6,7 @@ import { BrandingStyle } from '@/components/BrandingStyle';
 import { NotificationsBell } from '@/components/NotificationsBell';
 import { OfflineBanner } from '@/components/OfflineBanner';
 import { InstallAppBanner } from '@/components/InstallAppBanner';
+import { BrandUpsellBanner } from '@/components/BrandUpsellBanner';
 
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
@@ -40,6 +41,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           <main className="flex-1 p-4 md:p-6 pb-safe">
             {children}
           </main>
+          <BrandUpsellBanner />
         </div>
       </div>
     </SidebarProvider>

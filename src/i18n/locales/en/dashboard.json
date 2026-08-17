@@ -52,5 +52,10 @@
   "checkoutSuccess": {
     "title": "Premium activated! 🎉",
     "description": "Enjoy unlimited features."
+  },
+  "branding": {
+    "title": "Set up your visual identity",
+    "subtitle": "Add your logo and colors so proposals go out with your own brand.",
+    "cta": "Set up branding"
   }
 }

@@ -25,7 +25,8 @@
     "proposalsLimit_other": "{{count}} proposals",
     "clientsLimit_one": "{{count}} client",
     "clientsLimit_other": "{{count}} clients",
-    "unlimitedProposals": "Unlimited proposals"
+    "unlimitedProposals": "Unlimited proposals",
+    "customBranding": "Own brand (logo and colors) on proposals"
   },
   "loading": "Loading plans...",
   "empty": "No plans available",
