@@ -86,6 +86,8 @@ export default function Dashboard() {
   const { data: statuses } = useProposalStatuses();
   const { data: clients } = useClients();
   const currentPlan = useSubscription();
+  const canCustomBrand = useCanCustomBrand();
+  const { hasBranding, isLoading: brandingLoading } = useBranding();
   const navigate = useNavigate();
   const [period, setPeriod] = useState<Period>('thisMonth');
   const [searchParams, setSearchParams] = useSearchParams();

@@ -6,6 +6,7 @@ import { BrandingStyle } from '@/components/BrandingStyle';
 import { NotificationsBell } from '@/components/NotificationsBell';
 import { OfflineBanner } from '@/components/OfflineBanner';
 import { InstallAppBanner } from '@/components/InstallAppBanner';
+import { BrandUpsellBanner } from '@/components/BrandUpsellBanner';
 
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
