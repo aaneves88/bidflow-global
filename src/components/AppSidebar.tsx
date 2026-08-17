@@ -25,10 +25,10 @@ export function AppSidebar() {
     { title: t('nav.proposals'), url: '/proposals', icon: FileText },
     { title: t('nav.pricing'), url: '/pricing', icon: CreditCard },
     { title: t('nav.account'), url: '/account', icon: UserCircle },
+    { title: t('nav.settings'), url: '/settings', icon: Settings },
   ];
   const adminItems = [
     { title: t('nav.admin'), url: '/admin', icon: Shield },
-    { title: t('nav.settings'), url: '/settings', icon: Settings },
   ];
 
   const isActive = (path: string) => {
