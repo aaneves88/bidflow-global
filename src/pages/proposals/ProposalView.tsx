@@ -136,6 +136,7 @@ export default function ProposalView() {
       : 'Orca';
     generateProposalPdf(proposal as any, items as any[], {
       companyName,
+      tagline: canBrand ? branding.tagline || undefined : undefined,
       publicUrlBase: publicBase,
       logoDataUrl: canBrand ? branding.logoUrl : undefined,
       primaryColor: canBrand ? branding.primaryColor : ORCA_BRANDING.primaryColor,
