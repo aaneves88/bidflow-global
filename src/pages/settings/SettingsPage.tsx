@@ -118,6 +118,7 @@ function BrandingTab() {
   const branding = useBranding();
   const updateBranding = useUpdateBranding();
   const canBrand = useCanCustomBrand();
+  const [companyName, setCompanyName] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [primaryColor, setPrimaryColor] = useState('#3B82F6');
   const [secondaryColor, setSecondaryColor] = useState('#1F2937');
@@ -127,6 +128,7 @@ function BrandingTab() {
 
   useEffect(() => {
     if (!branding.isLoading && !hydrated) {
+      setCompanyName(branding.companyName || '');
       setLogoUrl(branding.logoUrl);
       setPrimaryColor(branding.primaryColor);
       setSecondaryColor(branding.secondaryColor);
@@ -139,6 +141,7 @@ function BrandingTab() {
   const save = async () => {
     try {
       await updateBranding.mutateAsync({
+        company_name: companyName,
         logo_url: logoUrl,
         primary_color: primaryColor,
         secondary_color: secondaryColor,
