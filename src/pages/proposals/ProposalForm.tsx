@@ -181,8 +181,6 @@ export default function ProposalForm() {
   const discountValueApplied = discountValue(subtotal, discountAmount, discountType);
   const grandTotal = applyDiscount(subtotal, discountAmount, discountType);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
   /** Trava anti-abuso: plano grátis precisa ter CPF/CNPJ no perfil antes da 1ª proposta. */
   const needsTaxId =
     !isEditing && !isAdmin && limits.isReady && limits.isFree && !taxIdLoading && !taxIdState?.taxId;
