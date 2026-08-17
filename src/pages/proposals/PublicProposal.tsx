@@ -184,10 +184,17 @@ export default function PublicProposal() {
             {branding.logoUrl && (
               <img src={branding.logoUrl} alt="" className="h-12 w-auto object-contain" />
             )}
-            {branding.companyName && (
-              <span className="text-lg font-semibold tracking-tight" style={{ color: secondary }}>
-                {branding.companyName}
-              </span>
+            {(branding.companyName || branding.tagline) && (
+              <div className="min-w-0">
+                {branding.companyName && (
+                  <span className="block text-lg font-semibold tracking-tight" style={{ color: secondary }}>
+                    {branding.companyName}
+                  </span>
+                )}
+                {branding.tagline && (
+                  <span className="block text-xs text-muted-foreground">{branding.tagline}</span>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -376,6 +383,7 @@ export default function PublicProposal() {
             onClick={() => generateProposalPdf(proposal as any, sortedItems as any[], {
               publicUrlBase: window.location.origin,
               companyName: isFreeOwner ? 'Orca' : branding?.companyName,
+              tagline: isFreeOwner ? undefined : branding?.tagline || undefined,
               logoDataUrl: isFreeOwner ? undefined : branding?.logoUrl,
               primaryColor: primary,
               secondaryColor: secondary,

@@ -356,6 +356,7 @@ export type Database = {
           pix_key_type: string | null
           primary_color: string | null
           secondary_color: string | null
+          tagline: string | null
         }
         Insert: {
           accent_color?: string | null
@@ -371,6 +372,7 @@ export type Database = {
           pix_key_type?: string | null
           primary_color?: string | null
           secondary_color?: string | null
+          tagline?: string | null
         }
         Update: {
           accent_color?: string | null
@@ -386,6 +388,7 @@ export type Database = {
           pix_key_type?: string | null
           primary_color?: string | null
           secondary_color?: string | null
+          tagline?: string | null
         }
         Relationships: []
       }
@@ -1017,6 +1020,7 @@ export type Database = {
           logo_url: string
           primary_color: string
           secondary_color: string
+          tagline: string
         }[]
       }
       get_proposal_pix: {

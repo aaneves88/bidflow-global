@@ -37,7 +37,10 @@
     "preview": "Pré-visualização",
     "previewFreeNote": "No plano gratuito, suas propostas saem com a marca da Orca. Os ajustes ficam salvos para quando você fizer upgrade.",
     "freeLocked": "Personalização de marca é um recurso pago — no plano gratuito suas propostas usam a marca da Orca.",
-    "freeLockedCta": "Ver planos"
+    "freeLockedCta": "Ver planos",
+    "tagline": "Frase curta (opcional)",
+    "taglinePlaceholder": "Ex.: Marcenaria sob medida",
+    "taglineHelp": "Aparece abaixo do nome da empresa na proposta."
   },
   "messages": {
     "saved": "Configurações salvas",
