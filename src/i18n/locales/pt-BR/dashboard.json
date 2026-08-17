@@ -52,5 +52,10 @@
   "checkoutSuccess": {
     "title": "Premium ativado! 🎉",
     "description": "Aproveite recursos ilimitados."
+  },
+  "branding": {
+    "title": "Configure sua identidade visual",
+    "subtitle": "Adicione seu logo e suas cores para que as propostas saiam com a sua marca.",
+    "cta": "Configurar marca"
   }
 }

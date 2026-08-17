@@ -99,5 +99,10 @@
     "dismiss": "Dispensar",
     "iosHintPrefix": "Toque em Compartilhar",
     "iosHintSuffix": "→ Adicionar à Tela de Início."
+  },
+  "brandUpsell": {
+    "message": "No plano pago você pode usar sua própria marca (logo e cores) nas propostas.",
+    "cta": "Ver planos",
+    "dismiss": "Fechar aviso"
   }
 }
