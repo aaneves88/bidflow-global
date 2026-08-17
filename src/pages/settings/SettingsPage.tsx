@@ -181,8 +181,18 @@ function BrandingTab() {
           </CardHeader>
           <CardContent className="space-y-5">
             <div>
+              <Label>{t('branding.companyName')}</Label>
+              <Input
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                disabled={!canBrand}
+                placeholder={t('branding.companyPlaceholder')}
+              />
+              <p className="text-xs text-muted-foreground mt-1">{t('branding.companyNameHelp')}</p>
+            </div>
+            <div>
               <Label>{t('branding.logo')}</Label>
-              <LogoUpload value={logoUrl} onChange={setLogoUrl} />
+              <LogoUpload value={logoUrl} onChange={setLogoUrl} disabled={!canBrand} />
             </div>
             <div>
               <Label>{t('branding.tagline')}</Label>
