@@ -20,27 +20,22 @@ function GeneralTab() {
   const { t, i18n } = useTranslation(['settings', 'common']);
   const { isAdmin } = useAuth();
   const { getSetting, upsert, isLoading: settingsLoading } = useAppSettings('general');
-  const branding = useBranding();
-  const updateBranding = useUpdateBranding();
-  const [companyName, setCompanyName] = useState('');
   const [currency, setCurrency] = useState('BRL');
   const [language, setLanguage] = useState(i18n.language);
   const [publicAppUrl, setPublicAppUrl] = useState('');
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    if (!settingsLoading && !branding.isLoading && !hydrated) {
-      setCompanyName(branding.companyName || '');
+    if (!settingsLoading && !hydrated) {
       setCurrency((getSetting('default_currency') as string) || 'BRL');
       setLanguage((getSetting('language') as string) || i18n.language);
       setPublicAppUrl((getSetting('public_app_url') as string) || '');
       setHydrated(true);
     }
-  }, [settingsLoading, branding.isLoading, branding.companyName, hydrated, getSetting, i18n.language]);
+  }, [settingsLoading, hydrated, getSetting, i18n.language]);
 
   const save = async () => {
     try {
-      await updateBranding.mutateAsync({ company_name: companyName });
       // Currency / language / public app url stay global (Orca-level config for admin).
       if (isAdmin) {
         await upsert.mutateAsync({ key: 'default_currency', value: currency, category: 'general' });
@@ -58,11 +53,6 @@ function GeneralTab() {
     <Card>
       <CardHeader><CardTitle>{t('general.title')}</CardTitle></CardHeader>
       <CardContent className="space-y-4">
-        <div>
-          <Label>{t('general.companyName')}</Label>
-          <Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder={t('general.companyPlaceholder')} />
-          <p className="text-xs text-muted-foreground mt-1">{t('general.companyNameHelp')}</p>
-        </div>
         <div>
           <Label>{t('general.defaultCurrency')}</Label>
           <Select value={currency} onValueChange={setCurrency}>
@@ -93,7 +83,7 @@ function GeneralTab() {
             <p className="text-xs text-muted-foreground mt-1">{t('general.publicAppUrlHelp')}</p>
           </div>
         )}
-        <Button onClick={save} disabled={updateBranding.isPending || upsert.isPending}>{t('common:actions.save')}</Button>
+        <Button onClick={save} disabled={upsert.isPending}>{t('common:actions.save')}</Button>
       </CardContent>
     </Card>
   );
