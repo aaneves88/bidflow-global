@@ -63,6 +63,7 @@ export function useUpdateBranding() {
       primary_color: string;
       secondary_color: string;
       accent_color: string;
+      tagline: string;
     }>) => {
       if (!user) throw new Error('Not authenticated');
       const { error } = await supabase
