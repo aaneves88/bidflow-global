@@ -4,7 +4,8 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProposals, useProposalStatuses } from '@/hooks/useProposals';
-import { useSubscription } from '@/hooks/useSubscription';
+import { useSubscription, useCanCustomBrand } from '@/hooks/useSubscription';
+import { useBranding } from '@/hooks/useBranding';
 import { useClients } from '@/hooks/useClients';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -17,7 +18,7 @@ import { formatCurrency, formatDate } from '@/lib/format';
 import { UsageIndicator } from '@/components/UsageIndicator';
 import {
   FileText, Clock, CheckCircle, TrendingUp, AlertTriangle,
-  DollarSign, ArrowUpRight, ArrowDownRight, Users, PlusCircle, Activity,
+  DollarSign, ArrowUpRight, ArrowDownRight, Users, PlusCircle, Activity, Palette,
 } from 'lucide-react';
 
 type Period = 'thisMonth' | 'last30Days' | 'thisYear' | 'allTime';
@@ -256,6 +257,21 @@ export default function Dashboard() {
           <CardContent className="pt-6 flex items-center justify-between gap-4">
             <p className="text-sm">{t('trial.active', { days: currentPlan.daysLeft })}</p>
             <Button variant="outline" asChild><Link to="/pricing">{t('trial.upgrade')}</Link></Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {canCustomBrand && !brandingLoading && !hasBranding && (
+        <Card className="border-primary/30 bg-primary/5">
+          <CardContent className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <Palette className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-medium">{t('branding.title')}</p>
+                <p className="text-sm text-muted-foreground">{t('branding.subtitle')}</p>
+              </div>
+            </div>
+            <Button asChild><Link to="/settings">{t('branding.cta')}</Link></Button>
           </CardContent>
         </Card>
       )}
