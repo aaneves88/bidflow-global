@@ -137,5 +137,57 @@
     "watermark": "Orca",
     "subtotal": "Subtotal",
     "discount": "Discount"
+  },
+  "templates": {
+    "pickerTitle": "Start from a template",
+    "pickerSubtitle": "Pick a ready-made template with sample items, delivery time and validity already suggested. You can edit everything.",
+    "applied": "Template applied: {{name}}",
+    "change": "Choose another template",
+    "blank": {
+      "title": "Start from scratch",
+      "description": "Blank form, your way."
+    },
+    "options": {
+      "simple": {
+        "title": "Simple service",
+        "description": "A few items. Best for a single one-off service.",
+        "proposalTitle": "Service proposal",
+        "proposalDescription": "Proposal for the agreed service, with scope, deadline and payment terms defined.",
+        "notes": "Delivery deadline: by {{date}}, counted from approval of this proposal.\nAnything outside the scope above will be quoted separately.",
+        "terms": "This proposal is valid until {{date}}.\nPayment: 50% on approval and 50% on delivery.\nChanges after approval may affect deadline and price."
+      },
+      "phased": {
+        "title": "Project with phases",
+        "description": "Multiple line items. Best for phased delivery.",
+        "proposalTitle": "Phased project proposal",
+        "proposalDescription": "Project split into phases, with deliveries and payments tied to each phase.",
+        "notes": "Estimated total: final delivery by {{date}}, counted from approval.\nEach phase starts only after the previous one is approved.",
+        "terms": "This proposal is valid until {{date}}.\nPayment: per completed phase, within 5 days of each delivery.\nUp to 2 rounds of revisions per phase are included."
+      },
+      "recurring": {
+        "title": "Monthly / retainer package",
+        "description": "Built for ongoing, recurring work.",
+        "proposalTitle": "Monthly package proposal",
+        "proposalDescription": "Ongoing service package with a fixed monthly scope and automatic renewal.",
+        "notes": "Expected start: by {{date}}, after approval.\nMonthly scope is fixed; extra requests are quoted separately.",
+        "terms": "This proposal is valid until {{date}}.\nPayment: monthly fee on the 5th, with automatic renewal.\nCancellation with 30 days notice, no penalty."
+      }
+    },
+    "items": {
+      "simple": {
+        "service": "Main service (agreed scope)",
+        "extra": "Travel / extra costs"
+      },
+      "phased": {
+        "discovery": "Phase 1 — Briefing and planning",
+        "production": "Phase 2 — Production / execution",
+        "review": "Phase 3 — Review and adjustments",
+        "delivery": "Phase 4 — Final delivery and files"
+      },
+      "recurring": {
+        "monthly": "Monthly package — agreed scope",
+        "support": "Support during the month"
+      }
+    }
   }
 }

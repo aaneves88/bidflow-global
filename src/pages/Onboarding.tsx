@@ -7,20 +7,23 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppSettings } from '@/hooks/useAppSettings';
-import { useCreateClient } from '@/hooks/useClients';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, FileText, Layers, Repeat, PenLine } from 'lucide-react';
+import { PROPOSAL_TEMPLATE_IDS, type ProposalTemplateId } from '@/lib/proposalTemplates';
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 const DRAFT_KEY = 'orca:onboarding:draft';
 
 type Draft = {
   step: number;
   businessName: string;
-  clientName: string;
-  clientEmail: string;
-  clientCompany: string;
+};
+
+const TEMPLATE_ICONS: Record<ProposalTemplateId, typeof FileText> = {
+  simple: FileText,
+  phased: Layers,
+  recurring: Repeat,
 };
 
 /** Rascunho local do wizard: sobrevive a re-render/remount vindo de refresh de sessão. */
@@ -33,42 +36,22 @@ function loadDraft(): Partial<Draft> {
 }
 
 export default function Onboarding() {
-  const { t } = useTranslation(['onboarding', 'common']);
+  const { t } = useTranslation(['onboarding', 'proposals', 'common']);
   const { user, isAdmin, refreshOnboarding } = useAuth();
   const { upsert } = useAppSettings('general');
-  const createClient = useCreateClient();
   const navigate = useNavigate();
   const [step, setStep] = useState<number>(() => loadDraft().step ?? 1);
-
   const [businessName, setBusinessName] = useState(() => loadDraft().businessName ?? '');
-  const [clientName, setClientName] = useState(() => loadDraft().clientName ?? '');
-  const [clientEmail, setClientEmail] = useState(() => loadDraft().clientEmail ?? '');
-  const [clientCompany, setClientCompany] = useState(() => loadDraft().clientCompany ?? '');
 
-  // Salva o progresso a cada mudança (nunca depende de session/user).
   useEffect(() => {
-    sessionStorage.setItem(
-      DRAFT_KEY,
-      JSON.stringify({ step, businessName, clientName, clientEmail, clientCompany })
-    );
-  }, [step, businessName, clientName, clientEmail, clientCompany]);
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ step, businessName }));
+  }, [step, businessName]);
 
   useEffect(() => {
     if (user?.user_metadata?.full_name && !businessName) {
       setBusinessName(user.user_metadata.full_name);
     }
   }, [user, businessName]);
-
-  const finish = async () => {
-    const { data: { user: currentUser } } = await supabase.auth.getUser();
-    const uid = currentUser?.id;
-    if (uid) {
-      await supabase.from('profiles').update({ onboarding_complete: true }).eq('id', uid);
-      await refreshOnboarding();
-    }
-    sessionStorage.removeItem(DRAFT_KEY);
-    navigate('/dashboard', { replace: true });
-  };
 
   const finishAndGo = async (path: string) => {
     const { data: { user: currentUser } } = await supabase.auth.getUser();
@@ -81,12 +64,12 @@ export default function Onboarding() {
     navigate(path, { replace: true });
   };
 
+  const finish = () => finishAndGo('/dashboard');
+
   const handleStep1 = async () => {
     try {
       if (businessName.trim()) {
-        // Update profile
         await supabase.from('profiles').update({ full_name: businessName }).eq('id', user!.id);
-        // If admin, also save as company name in settings
         if (isAdmin) {
           await upsert.mutateAsync({ key: 'company_name', value: businessName, category: 'general' });
         }
@@ -96,24 +79,6 @@ export default function Onboarding() {
       // non-blocking
     }
     setStep(2);
-  };
-
-  const handleStep2 = async () => {
-    if (clientName.trim()) {
-      try {
-        await createClient.mutateAsync({
-          name: clientName,
-          email: clientEmail,
-          company: clientCompany,
-          phone: '',
-          notes: '',
-        });
-        toast({ title: t('messages.clientCreated') });
-      } catch {
-        // non-blocking
-      }
-    }
-    setStep(3);
   };
 
   return (
@@ -135,7 +100,11 @@ export default function Onboarding() {
               </div>
               <div>
                 <Label>{t('welcome.businessName')}</Label>
-                <Input value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder={t('welcome.businessPlaceholder')} />
+                <Input
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  placeholder={t('welcome.businessPlaceholder')}
+                />
               </div>
               <div className="flex justify-between">
                 <Button variant="ghost" onClick={() => setStep(2)}>{t('actions.skip')}</Button>
@@ -147,41 +116,44 @@ export default function Onboarding() {
           {step === 2 && (
             <>
               <div>
-                <h3 className="font-semibold text-lg">{t('client.title')}</h3>
-                <p className="text-sm text-muted-foreground">{t('client.description')}</p>
+                <h3 className="font-semibold text-lg">{t('template.title')}</h3>
+                <p className="text-sm text-muted-foreground">{t('template.description')}</p>
               </div>
-              <div className="space-y-3">
-                <div>
-                  <Label>{t('client.name')}</Label>
-                  <Input value={clientName} onChange={(e) => setClientName(e.target.value)} />
-                </div>
-                <div>
-                  <Label>{t('client.email')}</Label>
-                  <Input type="email" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} />
-                </div>
-                <div>
-                  <Label>{t('client.company')}</Label>
-                  <Input value={clientCompany} onChange={(e) => setClientCompany(e.target.value)} />
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <Button variant="ghost" onClick={() => setStep(3)}>{t('actions.skip')}</Button>
-                <Button onClick={handleStep2}>{t('actions.next')}<ArrowRight className="ml-2 h-4 w-4" /></Button>
-              </div>
-            </>
-          )}
-
-          {step === 3 && (
-            <>
-              <div>
-                <h3 className="font-semibold text-lg">{t('proposal.title')}</h3>
-                <p className="text-sm text-muted-foreground">{t('proposal.description')}</p>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Button onClick={() => finishAndGo('/proposals/new')}>
-                  {t('proposal.create')}
-                </Button>
-                <Button variant="outline" onClick={finish}>{t('proposal.later')}</Button>
+              <div className="grid gap-3">
+                {PROPOSAL_TEMPLATE_IDS.map((tplId) => {
+                  const Icon = TEMPLATE_ICONS[tplId];
+                  return (
+                    <button
+                      key={tplId}
+                      type="button"
+                      onClick={() => finishAndGo(`/proposals/new?template=${tplId}`)}
+                      className="flex items-start gap-3 rounded-lg border bg-card p-4 text-left transition-colors hover:border-primary hover:bg-accent/40"
+                    >
+                      <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                      <span>
+                        <span className="block font-medium">
+                          {t(`proposals:templates.options.${tplId}.title`)}
+                        </span>
+                        <span className="block text-sm text-muted-foreground">
+                          {t(`proposals:templates.options.${tplId}.description`)}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  onClick={() => finishAndGo('/proposals/new')}
+                  className="flex items-start gap-3 rounded-lg border border-dashed p-4 text-left transition-colors hover:border-primary hover:bg-accent/40"
+                >
+                  <PenLine className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+                  <span>
+                    <span className="block font-medium">{t('proposals:templates.blank.title')}</span>
+                    <span className="block text-sm text-muted-foreground">
+                      {t('proposals:templates.blank.description')}
+                    </span>
+                  </span>
+                </button>
               </div>
               <div className="text-center">
                 <Button variant="link" onClick={finish}>{t('actions.finish')}</Button>

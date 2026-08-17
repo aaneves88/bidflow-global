@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, FileText, Layers, Repeat, PenLine } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,11 +22,21 @@ import { formatCurrency } from '@/lib/format';
 import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
 import { PIX_KEY_TYPES, isValidPixKey, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
+import {
+  buildProposalTemplate, PROPOSAL_TEMPLATE_IDS, type ProposalTemplateId,
+} from '@/lib/proposalTemplates';
 
 
 const emptyItem = (): ProposalItem => ({
   description: '', quantity: 1, unit_price: 0, total: 0, position: 0,
 });
+
+const TEMPLATE_ICONS: Record<ProposalTemplateId, typeof FileText> = {
+  simple: FileText,
+  phased: Layers,
+  recurring: Repeat,
+};
+
 
 export default function ProposalForm() {
   const { t } = useTranslation(['proposals', 'common']);
@@ -62,6 +73,37 @@ export default function ProposalForm() {
   const [items, setItems] = useState<ProposalItem[]>([emptyItem()]);
   const [pixKey, setPixKey] = useState('');
   const [pixKeyType, setPixKeyType] = useState<PixKeyType>('cpf');
+  const [appliedTemplate, setAppliedTemplate] = useState<ProposalTemplateId | null>(null);
+  const [pickerDismissed, setPickerDismissed] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const applyTemplate = (templateId: ProposalTemplateId) => {
+    const tpl = buildProposalTemplate(templateId, (key: string, opts?: any) =>
+      t(key, { ns: 'proposals', ...(opts || {}) }) as string);
+    setTitle(tpl.title);
+    setDescription(tpl.description);
+    setNotes(tpl.notes);
+    setTerms(tpl.terms);
+    setValidUntil(tpl.validUntil);
+    setItems(tpl.items);
+    setAppliedTemplate(templateId);
+    setPickerDismissed(true);
+  };
+
+  // Modelo vindo do onboarding / atalhos: /proposals/new?template=simple
+  useEffect(() => {
+    if (isEditing || appliedTemplate) return;
+    const param = searchParams.get('template') as ProposalTemplateId | null;
+    if (param && PROPOSAL_TEMPLATE_IDS.includes(param)) {
+      applyTemplate(param);
+      searchParams.delete('template');
+      setSearchParams(searchParams, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditing, searchParams]);
+
+  const showPicker = !isEditing && !pickerDismissed;
+
 
   useEffect(() => {
     if (proposal && isEditing) {
@@ -177,6 +219,63 @@ export default function ProposalForm() {
           if (!open) navigate('/proposals');
         }}
       />
+
+      {showPicker && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('templates.pickerTitle')}</CardTitle>
+            <p className="text-sm text-muted-foreground">{t('templates.pickerSubtitle')}</p>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            {PROPOSAL_TEMPLATE_IDS.map((tplId) => {
+              const Icon = TEMPLATE_ICONS[tplId];
+              return (
+                <button
+                  key={tplId}
+                  type="button"
+                  onClick={() => applyTemplate(tplId)}
+                  className="flex items-start gap-3 rounded-lg border bg-card p-4 text-left transition-colors hover:border-primary hover:bg-accent/40"
+                >
+                  <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <span>
+                    <span className="block font-medium">{t(`templates.options.${tplId}.title`)}</span>
+                    <span className="block text-sm text-muted-foreground">
+                      {t(`templates.options.${tplId}.description`)}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setPickerDismissed(true)}
+              className="flex items-start gap-3 rounded-lg border border-dashed p-4 text-left transition-colors hover:border-primary hover:bg-accent/40"
+            >
+              <PenLine className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+              <span>
+                <span className="block font-medium">{t('templates.blank.title')}</span>
+                <span className="block text-sm text-muted-foreground">{t('templates.blank.description')}</span>
+              </span>
+            </button>
+          </CardContent>
+        </Card>
+      )}
+
+      {!isEditing && appliedTemplate && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-muted/40 px-4 py-2">
+          <p className="text-sm text-muted-foreground">
+            {t('templates.applied', { name: t(`templates.options.${appliedTemplate}.title`) })}
+          </p>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => { setAppliedTemplate(null); setPickerDismissed(false); }}
+          >
+            {t('templates.change')}
+          </Button>
+        </div>
+      )}
 
 
       <form onSubmit={handleSubmit} className="space-y-6">
