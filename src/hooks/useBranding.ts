@@ -19,14 +19,6 @@ export const ORCA_BRANDING: Branding = {
   companyName: 'Orca',
 };
 
-const DEFAULTS: Branding = {
-  logoUrl: '',
-  primaryColor: '#3B82F6',
-  secondaryColor: '#1F2937',
-  accentColor: '#22C55E',
-  companyName: '',
-};
-
 /** Per-user branding stored on the user's profile. */
 export function useBranding(): Branding & { isLoading: boolean } {
   const { user } = useAuth();
@@ -45,11 +37,11 @@ export function useBranding(): Branding & { isLoading: boolean } {
   });
 
   return {
-    logoUrl: data?.logo_url || DEFAULTS.logoUrl,
-    primaryColor: data?.primary_color || DEFAULTS.primaryColor,
-    secondaryColor: data?.secondary_color || DEFAULTS.secondaryColor,
-    accentColor: data?.accent_color || DEFAULTS.accentColor,
-    companyName: data?.company_name || DEFAULTS.companyName,
+    logoUrl: data?.logo_url || ORCA_BRANDING.logoUrl,
+    primaryColor: data?.primary_color || ORCA_BRANDING.primaryColor,
+    secondaryColor: data?.secondary_color || ORCA_BRANDING.secondaryColor,
+    accentColor: data?.accent_color || ORCA_BRANDING.accentColor,
+    companyName: data?.company_name || ORCA_BRANDING.companyName,
     isLoading,
   };
 }
