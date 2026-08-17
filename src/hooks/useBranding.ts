@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import orcaMarkMono from '@/assets/brand/orca-mark-mono.png';
 
 export type Branding = {
   logoUrl: string;
@@ -8,15 +9,17 @@ export type Branding = {
   secondaryColor: string;
   accentColor: string;
   companyName: string;
+  tagline: string;
 };
 
 /** Orca defaults — also used as the visible brand for free-tier proposals. */
 export const ORCA_BRANDING: Branding = {
-  logoUrl: '',
+  logoUrl: orcaMarkMono,
   primaryColor: '#06B6D4', // cyan
   secondaryColor: '#0F172A', // slate
   accentColor: '#22C55E',
   companyName: 'Orca',
+  tagline: '',
 };
 
 /** Per-user branding stored on the user's profile. */
@@ -28,7 +31,7 @@ export function useBranding(): Branding & { isLoading: boolean; hasBranding: boo
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('company_name, logo_url, primary_color, secondary_color, accent_color')
+        .select('company_name, logo_url, primary_color, secondary_color, accent_color, tagline')
         .eq('id', user!.id)
         .maybeSingle();
       if (error) throw error;
@@ -42,6 +45,7 @@ export function useBranding(): Branding & { isLoading: boolean; hasBranding: boo
     secondaryColor: data?.secondary_color || ORCA_BRANDING.secondaryColor,
     accentColor: data?.accent_color || ORCA_BRANDING.accentColor,
     companyName: data?.company_name || ORCA_BRANDING.companyName,
+    tagline: data?.tagline || '',
     // Derived from the raw profile row (before fallback), so a user who picks
     // the exact Orca colors is still counted as configured.
     hasBranding: !!(data?.logo_url || data?.primary_color || data?.company_name),
