@@ -1,5 +1,6 @@
-import type { TFunction } from 'i18next';
 import type { ProposalItem } from '@/hooks/useProposals';
+
+export type Translate = (key: string, opts?: Record<string, unknown>) => string;
 
 export type ProposalTemplateId = 'simple' | 'phased' | 'recurring';
 
@@ -60,18 +61,18 @@ function addDays(days: number): string {
 
 export function buildProposalTemplate(
   id: ProposalTemplateId,
-  t: TFunction
+  t: Translate
 ): AppliedTemplate {
   const seed = SEEDS[id];
-  const tr = (suffix: string) => t(`templates.items.${id}.${suffix}`) as string;
+  const tr = (suffix: string) => t(`templates.items.${id}.${suffix}`);
   const validUntil = addDays(seed.validDays);
   const deliveryDate = addDays(seed.validDays + 30);
 
   return {
-    title: t(`templates.options.${id}.proposalTitle`) as string,
-    description: t(`templates.options.${id}.proposalDescription`) as string,
-    notes: t(`templates.options.${id}.notes`, { date: formatDate(deliveryDate) }) as string,
-    terms: t(`templates.options.${id}.terms`, { date: formatDate(validUntil) }) as string,
+    title: t(`templates.options.${id}.proposalTitle`),
+    description: t(`templates.options.${id}.proposalDescription`),
+    notes: t(`templates.options.${id}.notes`, { date: formatDate(deliveryDate) }),
+    terms: t(`templates.options.${id}.terms`, { date: formatDate(validUntil) }),
     validUntil,
     items: seed.items.map((item, idx) => ({
       description: tr(item.key),
