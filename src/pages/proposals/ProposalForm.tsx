@@ -15,7 +15,10 @@ import {
   useCreateProposal, useUpdateProposal, type ProposalItem,
 } from '@/hooks/useProposals';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useTaxId } from '@/hooks/useTaxId';
+import { useAuth } from '@/contexts/AuthContext';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { TaxIdDialog } from '@/components/TaxIdDialog';
 import { ProductPicker } from '@/components/ProductPicker';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
@@ -51,7 +54,10 @@ export default function ProposalForm() {
   const create = useCreateProposal();
   const update = useUpdateProposal();
   const limits = useSubscription();
+  const { isAdmin } = useAuth();
+  const { data: taxIdState, isLoading: taxIdLoading } = useTaxId();
   const [blocked, setBlocked] = useState(false);
+  const [taxIdPrompt, setTaxIdPrompt] = useState(false);
 
   useEffect(() => {
     if (!isEditing && limits.isReady && limits.proposalLimitReached) {
@@ -175,13 +181,12 @@ export default function ProposalForm() {
   const discountValueApplied = discountValue(subtotal, discountAmount, discountType);
   const grandTotal = applyDiscount(subtotal, discountAmount, discountType);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  /** Trava anti-abuso: plano grátis precisa ter CPF/CNPJ no perfil antes da 1ª proposta. */
+  const needsTaxId =
+    !isEditing && !isAdmin && limits.isReady && limits.isFree && !taxIdLoading && !taxIdState?.taxId;
+
+  const persistProposal = async () => {
     const trimmedPix = pixKey.trim();
-    if (trimmedPix && !isValidPixKey(trimmedPix, pixKeyType)) {
-      toast({ title: t('form.pix.invalid'), variant: 'destructive' });
-      return;
-    }
     const data = {
       title, description, notes, terms,
       client_id: clientId === 'none' ? null : clientId,
@@ -201,6 +206,20 @@ export default function ProposalForm() {
     navigate('/proposals');
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedPix = pixKey.trim();
+    if (trimmedPix && !isValidPixKey(trimmedPix, pixKeyType)) {
+      toast({ title: t('form.pix.invalid'), variant: 'destructive' });
+      return;
+    }
+    if (needsTaxId) {
+      setTaxIdPrompt(true);
+      return;
+    }
+    await persistProposal();
+  };
+
   return (
     <div className="space-y-6 max-w-3xl">
       <div className="flex items-center gap-4">
@@ -218,6 +237,12 @@ export default function ProposalForm() {
           setBlocked(open);
           if (!open) navigate('/proposals');
         }}
+      />
+
+      <TaxIdDialog
+        open={taxIdPrompt}
+        onOpenChange={setTaxIdPrompt}
+        onConfirmed={() => { void persistProposal(); }}
       />
 
       {showPicker && (

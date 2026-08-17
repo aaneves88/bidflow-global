@@ -357,6 +357,8 @@ export type Database = {
           primary_color: string | null
           secondary_color: string | null
           tagline: string | null
+          tax_id: string | null
+          tax_id_type: string | null
         }
         Insert: {
           accent_color?: string | null
@@ -373,6 +375,8 @@ export type Database = {
           primary_color?: string | null
           secondary_color?: string | null
           tagline?: string | null
+          tax_id?: string | null
+          tax_id_type?: string | null
         }
         Update: {
           accent_color?: string | null
@@ -389,6 +393,8 @@ export type Database = {
           primary_color?: string | null
           secondary_color?: string | null
           tagline?: string | null
+          tax_id?: string | null
+          tax_id_type?: string | null
         }
         Relationships: []
       }
