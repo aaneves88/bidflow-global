@@ -193,6 +193,9 @@ function BrandingTab() {
             <div>
               <Label>{t('branding.logo')}</Label>
               <LogoUpload value={logoUrl} onChange={setLogoUrl} />
+              {!canBrand && (
+                <p className="text-xs text-muted-foreground mt-1">{t('branding.logoFreeHelp')}</p>
+              )}
             </div>
             <div>
               <Label>{t('branding.tagline')}</Label>

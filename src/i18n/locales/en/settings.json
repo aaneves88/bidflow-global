@@ -28,6 +28,7 @@
     "companyPlaceholder": "Your Company",
     "companyNameHelp": "Appears in the header and footer of proposals sent to your clients.",
     "logo": "Company logo",
+    "logoFreeHelp": "Not applied on the free plan — your proposal keeps using Orca branding.",
     "primaryColor": "Primary color",
     "primaryHelp": "Used for the proposal header bar, accept button and total.",
     "secondaryColor": "Secondary color",

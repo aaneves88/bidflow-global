@@ -28,6 +28,7 @@
     "companyPlaceholder": "Sua empresa",
     "companyNameHelp": "Aparece no cabeçalho e rodapé das propostas enviadas aos seus clientes.",
     "logo": "Logotipo da empresa",
+    "logoFreeHelp": "Não aplicado no plano grátis — sua proposta continua usando a marca da Orca.",
     "primaryColor": "Cor primária",
     "primaryHelp": "Usada no cabeçalho da proposta, botão de aceitar e total.",
     "secondaryColor": "Cor secundária",
