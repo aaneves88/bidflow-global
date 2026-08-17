@@ -22,36 +22,54 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
+
+    const { data, error: invokeError } = await supabase.functions.invoke('signup-guarded', {
+      body: {
+        email,
+        password,
+        fullName,
         emailRedirectTo: `${window.location.origin}/dashboard`,
       },
     });
-    if (error) {
-      toast({ title: t('register.errorTitle'), description: error.message, variant: 'destructive' });
-    } else {
-      // Fire welcome email (best-effort, non-blocking)
-      supabase.functions.invoke('send-transactional-email', {
-        body: {
-          templateName: 'welcome',
-          recipientEmail: email,
-          idempotencyKey: `welcome-${email.toLowerCase()}`,
-          templateData: {
-            firstName: fullName.split(' ')[0] || undefined,
-            appUrl: 'https://orca-mento.app',
-          },
-        },
-      }).catch((e) => console.warn('welcome email failed', e));
 
-      trackMeta('CompleteRegistration');
-      toast({ title: t('register.successTitle'), description: t('register.successDescription') });
-      navigate('/onboarding');
+    const result = data as { ok?: boolean; error?: string; message?: string; session?: any } | null;
+    const failure = invokeError || !result?.ok;
+
+    if (failure) {
+      const code = result?.error;
+      const description =
+        code === 'rate_limited'
+          ? t('register.rateLimited')
+          : result?.message || t('register.genericError');
+      toast({ title: t('register.errorTitle'), description, variant: 'destructive' });
+      setLoading(false);
+      return;
     }
-    setLoading(false);
 
+    if (result?.session) {
+      await supabase.auth.setSession({
+        access_token: result.session.access_token,
+        refresh_token: result.session.refresh_token,
+      });
+    }
+
+    // Fire welcome email (best-effort, non-blocking)
+    supabase.functions.invoke('send-transactional-email', {
+      body: {
+        templateName: 'welcome',
+        recipientEmail: email,
+        idempotencyKey: `welcome-${email.toLowerCase()}`,
+        templateData: {
+          firstName: fullName.split(' ')[0] || undefined,
+          appUrl: 'https://orca-mento.app',
+        },
+      },
+    }).catch((e) => console.warn('welcome email failed', e));
+
+    trackMeta('CompleteRegistration');
+    toast({ title: t('register.successTitle'), description: t('register.successDescription') });
+    navigate('/onboarding');
+    setLoading(false);
   };
 
   return (
