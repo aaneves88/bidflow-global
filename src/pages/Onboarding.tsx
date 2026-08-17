@@ -42,16 +42,18 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const [step, setStep] = useState<number>(() => loadDraft().step ?? 1);
   const [businessName, setBusinessName] = useState(() => loadDraft().businessName ?? '');
+  const [namePrefilled, setNamePrefilled] = useState(false);
 
   useEffect(() => {
     sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ step, businessName }));
   }, [step, businessName]);
 
   useEffect(() => {
-    if (user?.user_metadata?.full_name && !businessName) {
+    if (!namePrefilled && user?.user_metadata?.full_name && !businessName) {
       setBusinessName(user.user_metadata.full_name);
     }
-  }, [user, businessName]);
+    if (user) setNamePrefilled(true);
+  }, [user, businessName, namePrefilled]);
 
   const finishAndGo = async (path: string) => {
     const { data: { user: currentUser } } = await supabase.auth.getUser();
