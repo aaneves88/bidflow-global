@@ -9,7 +9,8 @@ const STORAGE_KEY = 'orca:brand-upsell-dismissed';
 
 /**
  * Discreet, persistent nudge for free users: own brand is a paid feature.
- * Dismissible — stays dismissed for the browser session via localStorage.
+ * Compact pill anchored bottom-right so it never covers in-flow page actions.
+ * Dismissible — stays dismissed via localStorage.
  */
 export function BrandUpsellBanner() {
   const { t } = useTranslation('common');
@@ -32,10 +33,10 @@ export function BrandUpsellBanner() {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-3 pb-safe pointer-events-none">
-      <div className="pointer-events-auto mx-auto flex max-w-2xl items-center gap-3 rounded-lg border bg-card/95 px-3 py-2 shadow-lg backdrop-blur">
+    <div className="fixed bottom-4 right-4 z-40 max-w-sm pb-safe">
+      <div className="flex items-center gap-2 rounded-lg border bg-card/95 px-3 py-2 shadow-lg backdrop-blur">
         <Palette className="h-4 w-4 shrink-0 text-primary" />
-        <p className="flex-1 text-xs text-muted-foreground sm:text-sm">
+        <p className="flex-1 text-xs text-muted-foreground">
           {t('brandUpsell.message')}
         </p>
         <Button size="sm" variant="outline" asChild>
