@@ -9,6 +9,7 @@ import { AppLayout } from "@/components/AppLayout";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import Landing from "@/pages/Landing";
+import Ebook from "@/pages/Ebook";
 import Pricing from "@/pages/Pricing";
 import Onboarding from "@/pages/Onboarding";
 import Dashboard from "@/pages/Dashboard";
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
+            <Route path="/ebook" element={<Ebook />} />
 
             <Route path="/legal/:doc" element={<LegalPage />} />
             <Route path="/privacidade" element={<Privacy />} />
