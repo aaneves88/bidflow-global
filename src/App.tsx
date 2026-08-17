@@ -148,7 +148,7 @@ const App = () => (
             <Route
               path="/settings"
               element={
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute>
                   <AppLayout><SettingsPage /></AppLayout>
                 </ProtectedRoute>
               }
