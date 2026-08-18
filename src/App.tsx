@@ -15,6 +15,7 @@ import Onboarding from "@/pages/Onboarding";
 import Dashboard from "@/pages/Dashboard";
 import Clients from "@/pages/clients/Clients";
 import Products from "@/pages/products/Products";
+import Snippets from "@/pages/snippets/Snippets";
 import Proposals from "@/pages/proposals/Proposals";
 import ProposalForm from "@/pages/proposals/ProposalForm";
 import ProposalView from "@/pages/proposals/ProposalView";
@@ -88,6 +89,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <AppLayout><Clients /></AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/snippets"
+              element={
+                <ProtectedRoute>
+                  <AppLayout><Snippets /></AppLayout>
                 </ProtectedRoute>
               }
             />
