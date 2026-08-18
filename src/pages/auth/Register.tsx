@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from '@/hooks/use-toast';
 import { trackMeta } from '@/lib/analytics';
 import { Seo } from '@/components/Seo';
+import { GoogleSignInButton } from '@/components/GoogleSignInButton';
+import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
 
 export default function Register() {
   const { t } = useTranslation('auth');
