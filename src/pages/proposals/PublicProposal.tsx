@@ -22,6 +22,11 @@ import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 import { Seo } from '@/components/Seo';
 
+const ORCA_CTA_URL =
+  'https://orca-mento.app/register?utm_source=proposta&utm_medium=link_publico&utm_campaign=viral_cta';
+const ORCA_SEAL_URL =
+  'https://orca-mento.app/?utm_source=proposta&utm_medium=link_publico&utm_campaign=selo';
+
 export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
   const { publicCode } = useParams();
