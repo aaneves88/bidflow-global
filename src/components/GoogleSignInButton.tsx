@@ -4,10 +4,13 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { lovable } from '@/integrations/lovable';
+import { OAUTH_CALLBACK_PATH, rememberOAuthNext } from '@/lib/oauthCallback';
 
 type Props = {
   /** Para onde ir quando a sessão já vier resolvida (sem redirect de página inteira). */
   onSuccess?: () => void;
+  /** Destino same-origin depois do redirect de página inteira. */
+  next?: string | null;
   disabled?: boolean;
   className?: string;
 };
