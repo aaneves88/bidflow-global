@@ -1,0 +1,92 @@
+{
+  "title": "Blocos de texto",
+  "subtitle": "Trechos que você reutiliza nas propostas: pagamento, prazo, revisões e o que mais quiser.",
+  "newButton": "Novo bloco",
+  "searchPlaceholder": "Buscar bloco...",
+  "presetsTitle": "Sugestões para começar",
+  "usePreset": "Usar este bloco",
+  "kinds": {
+    "description": "Descrição",
+    "notes": "Observações",
+    "terms": "Termos e condições"
+  },
+  "fields": {
+    "title": "Título",
+    "titlePlaceholder": "Ex.: Pagamento 50/50",
+    "kind": "Onde usar",
+    "body": "Texto",
+    "bodyPlaceholder": "Escreva o texto que você quer reutilizar..."
+  },
+  "table": {
+    "title": "Título",
+    "body": "Texto",
+    "kind": "Onde usar",
+    "actions": "Ações"
+  },
+  "dialog": {
+    "newTitle": "Novo bloco",
+    "editTitle": "Editar bloco"
+  },
+  "save": {
+    "title": "Salvar como bloco",
+    "description": "Dê um nome curto para reutilizar esse texto nas próximas propostas."
+  },
+  "picker": {
+    "trigger": "Blocos",
+    "placeholder": "Buscar bloco...",
+    "empty": "Nenhum bloco encontrado.",
+    "manage": "Gerenciar blocos",
+    "mine": "Meus blocos",
+    "suggested": "Sugestões",
+    "save": "Salvar como bloco"
+  },
+  "empty": {
+    "none": "Você ainda não tem blocos salvos.",
+    "noResults": "Nenhum bloco encontrado para essa busca.",
+    "addFirst": "Criar meu primeiro bloco"
+  },
+  "delete": {
+    "title": "Excluir bloco?",
+    "description": "Essa ação não pode ser desfeita. As propostas já criadas não são alteradas."
+  },
+  "messages": {
+    "created": "Bloco criado",
+    "updated": "Bloco atualizado",
+    "deleted": "Bloco excluído",
+    "inserted": "Bloco inserido"
+  },
+  "presets": {
+    "payment5050": {
+      "title": "Pagamento 50/50",
+      "body": "Pagamento em duas parcelas: 50% na aprovação da proposta e 50% na entrega final do trabalho."
+    },
+    "paymentUpfront": {
+      "title": "Pagamento antecipado",
+      "body": "Pagamento integral no ato da aprovação da proposta. O início da execução ocorre após a confirmação do pagamento."
+    },
+    "deadline": {
+      "title": "Prazo de entrega",
+      "body": "O prazo de entrega começa a contar a partir da aprovação da proposta e do envio de todo o material necessário pelo cliente."
+    },
+    "revisions": {
+      "title": "Rodadas de revisão",
+      "body": "Estão incluídas até 2 rodadas de revisão. Ajustes adicionais serão orçados à parte."
+    },
+    "cancellation": {
+      "title": "Cancelamento",
+      "body": "Em caso de cancelamento após o início do trabalho, será cobrado o valor proporcional às etapas já executadas."
+    },
+    "validity": {
+      "title": "Validade da proposta",
+      "body": "Esta proposta é válida por 15 dias a partir da data de envio."
+    },
+    "whatIncludes": {
+      "title": "O que está incluso",
+      "body": "Estão inclusos os itens listados acima. Serviços não descritos nesta proposta não fazem parte do escopo."
+    },
+    "scope": {
+      "title": "Resumo do escopo",
+      "body": "Este orçamento contempla o desenvolvimento das entregas descritas abaixo, com acompanhamento durante todo o projeto."
+    }
+  }
+}

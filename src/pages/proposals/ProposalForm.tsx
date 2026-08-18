@@ -20,6 +20,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { UpgradeModal } from '@/components/UpgradeModal';
 import { TaxIdDialog } from '@/components/TaxIdDialog';
 import { ProductPicker } from '@/components/ProductPicker';
+import { SnippetPicker } from '@/components/SnippetPicker';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
 import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
@@ -33,6 +34,9 @@ import {
 const emptyItem = (): ProposalItem => ({
   description: '', quantity: 1, unit_price: 0, total: 0, position: 0,
 });
+
+const appendText = (current: string, addition: string) =>
+  current.trim() ? `${current.trimEnd()}\n\n${addition}` : addition;
 
 const TEMPLATE_ICONS: Record<ProposalTemplateId, typeof FileText> = {
   simple: FileText,
@@ -321,7 +325,14 @@ export default function ProposalForm() {
               <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
             </div>
             <div>
-              <Label htmlFor="description">{t('form.description')}</Label>
+              <div className="flex items-center justify-between gap-2">
+                <Label htmlFor="description">{t('form.description')}</Label>
+                <SnippetPicker
+                  kind="description"
+                  value={description}
+                  onInsert={(text) => setDescription((v) => appendText(v, text))}
+                />
+              </div>
               <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -479,7 +490,14 @@ export default function ProposalForm() {
           <CardHeader><CardTitle>{t('form.notesAndTerms')}</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="notes">{t('form.notes')}</Label>
+              <div className="flex items-center justify-between gap-2">
+                <Label htmlFor="notes">{t('form.notes')}</Label>
+                <SnippetPicker
+                  kind="notes"
+                  value={notes}
+                  onInsert={(text) => setNotes((v) => appendText(v, text))}
+                />
+              </div>
               <Textarea
                 id="notes"
                 value={notes}
@@ -489,7 +507,14 @@ export default function ProposalForm() {
               />
             </div>
             <div>
-              <Label htmlFor="terms">{t('form.terms')}</Label>
+              <div className="flex items-center justify-between gap-2">
+                <Label htmlFor="terms">{t('form.terms')}</Label>
+                <SnippetPicker
+                  kind="terms"
+                  value={terms}
+                  onInsert={(text) => setTerms((v) => appendText(v, text))}
+                />
+              </div>
               <Textarea
                 id="terms"
                 value={terms}
