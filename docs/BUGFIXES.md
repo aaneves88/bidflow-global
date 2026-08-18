@@ -93,3 +93,9 @@ A produção (orca-mento.app) estava desatualizada — várias correções exist
 - **Publicação é obrigatória** após esta rodada — vários bugs vistos em produção eram versão antiga publicada.
 - **Nenhum reset de dados** foi necessário; a conta de teste já estava correta no banco.
 - **Banco de dados:** sem alterações nesta rodada (correções foram todas no frontend/resolução de plano).
+
+## 2026-08-18 — Login com Google voltava pro login sem mensagem
+- **Sintoma:** ao entrar com Google numa conta criada por e-mail/senha, a tela carregava e voltava pro login, sem nenhum aviso.
+- **Diagnóstico:** a vinculação de identidades funciona no backend (usuário com `providers = ["email","google"]`). O problema era front: nenhum lugar lia `error`/`error_description` da URL de retorno do OAuth, e o `AuthContext` gravava só a sessão (não o usuário) no evento `INITIAL_SESSION`, criando corrida com o `getSession()`.
+- **Correção:** novo `src/lib/oauthError.ts` + `src/hooks/useOAuthErrorNotice.ts` (toast com mensagem específica para conta já existente com senha, cancelamento e erro genérico); `AuthContext` hidrata `user` no `INITIAL_SESSION`; botão do Google extraído para `src/components/GoogleSignInButton.tsx` e adicionado também em `/login` e `/register`.
+- **Doc:** `docs/AUTH.md`.

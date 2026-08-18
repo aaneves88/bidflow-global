@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from '@/hooks/use-toast';
 import { trackMeta } from '@/lib/analytics';
 import { Seo } from '@/components/Seo';
+import { GoogleSignInButton } from '@/components/GoogleSignInButton';
+import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
 
 export default function Register() {
   const { t } = useTranslation('auth');
@@ -18,6 +20,9 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useOAuthErrorNotice();
+
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,6 +91,16 @@ export default function Register() {
         </CardHeader>
         <form onSubmit={handleRegister}>
           <CardContent className="space-y-4">
+            <GoogleSignInButton
+              className="w-full"
+              disabled={loading}
+              onSuccess={() => navigate('/onboarding')}
+            />
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-xs uppercase text-muted-foreground">{t('entry.or')}</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="fullName">{t('register.fullName')}</Label>
               <Input id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} required placeholder={t('register.fullNamePlaceholder')} />
