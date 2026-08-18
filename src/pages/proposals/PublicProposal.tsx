@@ -433,6 +433,35 @@ export default function PublicProposal() {
           </Card>
         )}
 
+        {/* Viral CTA: quem recebe a proposta também pode criar a dele */}
+        {isFreeOwner && (
+          <Card className="border-dashed" style={{ borderColor: `${primary}55`, backgroundColor: `${primary}0d` }}>
+            <CardContent className="py-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+              <img
+                src={orcaMark}
+                alt=""
+                width={40}
+                height={40}
+                loading="lazy"
+                decoding="async"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                className="h-10 w-10 object-contain shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-base" style={{ color: secondary }}>
+                  {t('viralCta.title')}
+                </p>
+                <p className="text-sm text-muted-foreground">{t('viralCta.description')}</p>
+              </div>
+              <Button asChild style={{ backgroundColor: primary, color: '#fff' }} className="hover:opacity-90 shrink-0">
+                <a href={ORCA_CTA_URL} target="_blank" rel="noopener noreferrer">
+                  {t('viralCta.action')}
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Footer: branded for paid, watermarked for free */}
         <div className="pt-8 mt-8 border-t text-center space-y-3">
           {!isFreeOwner && branding?.companyName && (
@@ -441,7 +470,7 @@ export default function PublicProposal() {
             </p>
           )}
           <a
-            href="https://orca-mento.app"
+            href={ORCA_SEAL_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors ${isFreeOwner ? 'text-sm' : 'text-[11px]'}`}
