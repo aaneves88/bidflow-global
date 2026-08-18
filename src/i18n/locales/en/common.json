@@ -54,7 +54,8 @@
     "signOut": "Sign out",
     "getStarted": "Get started",
     "administration": "Administration",
-    "products": "Products"
+    "products": "Products",
+    "snippets": "Text blocks"
   },
   "notifications": {
     "title": "Notifications",
