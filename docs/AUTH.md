@@ -19,13 +19,21 @@ Comportamento confirmado no banco em 2026-08-18: quando o e-mail da conta já ex
 
 Quando a vinculação **não** acontece (e-mail não confirmado, ou linking manual exigido), o provedor devolve erro na URL de retorno e o usuário deve entrar com e-mail e senha.
 
+## Dois modos do SDK (essencial)
+
+`@lovable.dev/cloud-auth-js` se comporta de forma diferente conforme o contexto:
+
+- **Dentro de iframe (preview do Lovable / desktop):** abre popup, recebe os tokens por `web_message` e o wrapper chama `supabase.auth.setSession` sozinho. `signInWithOAuth` devolve `{ tokens }`.
+- **Fora de iframe (navegador do celular, app publicado):** faz `window.location.href = /~oauth/initiate?...` e devolve `{ redirected: true }`. **Não existe handler de callback no SDK** — os tokens voltam na URL de retorno e o app é que precisa lê-los e chamar `setSession`. Foi exatamente isso que faltava e causava "carrega e volta pro login" no celular (corrigido em 2026-08-18).
+
 ## Fluxo de retorno do OAuth
 
-1. Usuário clica em "Continuar com Google" (`src/components/GoogleSignInButton.tsx`).
-2. Redirect (ou popup no preview) → volta em `window.location.origin`.
-3. Em mobile/PWA, a Landing (`src/pages/Landing.tsx`) redireciona para `/app` (`MobileEntry`).
-4. `AuthContext` hidrata a sessão. O evento `INITIAL_SESSION` grava **sessão e usuário** — se gravar só a sessão, a tela de entrada acha que ninguém está logado e volta pro login (bug corrigido em 2026-08-18).
-5. Se veio erro na URL, `useOAuthErrorNotice` (`src/hooks/useOAuthErrorNotice.ts`) lê `error` / `error_code` / `error_description` da query **e** do hash, mostra toast e limpa a URL (`src/lib/oauthError.ts`).
+1. Usuário clica em "Continuar com Google" (`src/components/GoogleSignInButton.tsx`). O destino pretendido vai para `sessionStorage` (`rememberOAuthNext`), nunca para a URL do provedor.
+2. `redirect_uri` = `${window.location.origin}/auth/callback` (rota pública, `src/pages/auth/AuthCallback.tsx`).
+3. O callback lê `access_token` / `refresh_token` da query **e** do hash (`src/lib/oauthCallback.ts`), chama `supabase.auth.setSession`, limpa a URL e só então navega para `takeOAuthNext()` (padrão `/dashboard`).
+4. Rede de segurança: se o retorno cair em `/`, a Landing detecta (`hasOAuthReturn`) e reenvia os parâmetros para `/auth/callback` **antes** do redirect mobile para `/app` — senão os tokens seriam descartados.
+5. `AuthContext` hidrata a sessão. O evento `INITIAL_SESSION` grava **sessão e usuário** — se gravar só a sessão, a tela de entrada acha que ninguém está logado e volta pro login.
+6. Se veio erro na URL, o callback (e `useOAuthErrorNotice` nas telas de login) lê `error` / `error_code` / `error_description` da query e do hash, mostra toast e limpa a URL (`src/lib/oauthError.ts`).
 
 Mensagens tratadas (namespace i18n `auth.oauth`):
 
@@ -34,6 +42,9 @@ Mensagens tratadas (namespace i18n `auth.oauth`):
 | E-mail já cadastrado com senha / linking manual | `oauth.identityConflict` |
 | Usuário cancelou no Google | `oauth.cancelled` |
 | Qualquer outro erro | `oauth.generic` (ou a descrição do provedor) |
+| Tela de espera do callback | `oauth.completing` |
+
+O service worker (`public/sw.js`) já ignora `/~oauth` — não cachear esse caminho.
 
 ## Onde o botão do Google aparece
 

@@ -99,3 +99,9 @@ A produção (orca-mento.app) estava desatualizada — várias correções exist
 - **Diagnóstico:** a vinculação de identidades funciona no backend (usuário com `providers = ["email","google"]`). O problema era front: nenhum lugar lia `error`/`error_description` da URL de retorno do OAuth, e o `AuthContext` gravava só a sessão (não o usuário) no evento `INITIAL_SESSION`, criando corrida com o `getSession()`.
 - **Correção:** novo `src/lib/oauthError.ts` + `src/hooks/useOAuthErrorNotice.ts` (toast com mensagem específica para conta já existente com senha, cancelamento e erro genérico); `AuthContext` hidrata `user` no `INITIAL_SESSION`; botão do Google extraído para `src/components/GoogleSignInButton.tsx` e adicionado também em `/login` e `/register`.
 - **Doc:** `docs/AUTH.md`.
+
+## 2026-08-18 (2) — Google no celular: sessão nunca era gravada
+- **Sintoma:** no navegador do celular, o login com Google voltava pro login sem erro nenhum, mesmo com os logs de auth mostrando login 200 (contas `aaneves88@` e `nvs.antonio5@`).
+- **Diagnóstico:** fora de iframe o SDK (`@lovable.dev/cloud-auth-js`) faz redirect de página inteira e devolve `{ redirected: true }`; os tokens voltam **na URL** e o SDK **não** tem handler de callback. Nenhum lugar do app chamava `supabase.auth.setSession` com esses tokens — e a Landing ainda redirecionava para `/app` com `replace`, descartando os parâmetros. No desktop/preview funcionava porque lá o fluxo é por popup.
+- **Correção:** nova rota pública `/auth/callback` (`src/pages/auth/AuthCallback.tsx`) + helper `src/lib/oauthCallback.ts` (lê tokens da query e do hash, grava a sessão, limpa a URL, navega para o destino guardado em `sessionStorage`); `GoogleSignInButton` passa `redirect_uri = origin + /auth/callback`; Landing reenvia retornos que caiam em `/` para o callback antes de qualquer outro redirect.
+- **Doc:** `docs/AUTH.md`.

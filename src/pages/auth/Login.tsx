@@ -62,6 +62,7 @@ export default function Login() {
             <GoogleSignInButton
               className="w-full"
               disabled={loading}
+              next={next}
               onSuccess={() => (next ? (window.location.href = next) : navigate('/dashboard'))}
             />
             <div className="flex items-center gap-3">

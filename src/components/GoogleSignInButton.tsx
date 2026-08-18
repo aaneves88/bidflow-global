@@ -4,26 +4,31 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { lovable } from '@/integrations/lovable';
+import { OAUTH_CALLBACK_PATH, rememberOAuthNext } from '@/lib/oauthCallback';
 
 type Props = {
   /** Para onde ir quando a sessão já vier resolvida (sem redirect de página inteira). */
   onSuccess?: () => void;
+  /** Destino same-origin depois do redirect de página inteira. */
+  next?: string | null;
   disabled?: boolean;
   className?: string;
 };
 
 const CONFLICT_HINTS = ['identity_already_exists', 'already registered', 'already exists', 'manual linking'];
 
-export function GoogleSignInButton({ onSuccess, disabled, className }: Props) {
+export function GoogleSignInButton({ onSuccess, next, disabled, className }: Props) {
   const { t } = useTranslation('auth');
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     setLoading(true);
+    // O destino fica no sessionStorage; a URL do provedor recebe só a rota
+    // pública de callback, que grava a sessão antes de navegar.
+    rememberOAuthNext(next ?? null);
     const result = await lovable.auth.signInWithOAuth('google', {
-      // Sempre uma URL pública same-origin — nunca uma rota protegida.
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}${OAUTH_CALLBACK_PATH}`,
     });
 
     if (result.error) {

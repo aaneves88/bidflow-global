@@ -10,6 +10,7 @@ import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Seo } from '@/components/Seo';
+import { hasOAuthReturn, OAUTH_CALLBACK_PATH } from '@/lib/oauthCallback';
 
 
 export default function Landing() {
@@ -18,6 +19,17 @@ export default function Landing() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    // Rede de segurança: se o retorno do login social cair em "/", mandamos os
+    // parâmetros para o callback antes de qualquer outro redirect — senão os
+    // tokens são descartados e a sessão nunca é gravada.
+    if (hasOAuthReturn()) {
+      window.location.replace(
+        `${OAUTH_CALLBACK_PATH}${window.location.search}${window.location.hash}`,
+      );
+      return;
+    }
+
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as unknown as { standalone?: boolean }).standalone === true;
