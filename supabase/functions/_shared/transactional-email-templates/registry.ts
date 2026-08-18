@@ -10,6 +10,7 @@ import { template as proposalAccepted } from './proposal-accepted.tsx'
 import { template as proposalSigned } from './proposal-signed.tsx'
 import { template as proposalRejected } from './proposal-rejected.tsx'
 import { template as proposalClientCopy } from './proposal-client-copy.tsx'
+import { template as proposalFollowup } from './proposal-followup.tsx'
 import { template as welcome } from './welcome.tsx'
 import { template as supportReport } from './support-report.tsx'
 import { template as supportReply } from './support-reply.tsx'
@@ -36,6 +37,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'proposal-signed': proposalSigned,
   'proposal-rejected': proposalRejected,
   'proposal-client-copy': proposalClientCopy,
+  'proposal-followup': proposalFollowup,
   'support-report': supportReport,
   'support-reply': supportReply,
   'activation-stuck': activationStuck,

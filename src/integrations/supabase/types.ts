@@ -398,6 +398,35 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_followup_log: {
+        Row: {
+          id: string
+          proposal_id: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          proposal_id: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          proposal_id?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_followup_log_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: true
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_items: {
         Row: {
           created_at: string
