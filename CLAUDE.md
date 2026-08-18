@@ -18,3 +18,7 @@ Stack: React + TypeScript + Vite + Tailwind + shadcn/ui + Supabase
 - Usar sistema i18n existente para todo texto visível
 - Não quebrar fluxos existentes (onboarding, auth, proposta pública)
 - Traduções em src/i18n/locales/pt-BR/ e src/i18n/locales/en/
+
+## Autenticação
+Ver `docs/AUTH.md` — login social (Google), vinculação de contas, tratamento de erro do OAuth
+e checklist de diagnóstico. Nunca editar `src/integrations/lovable/`; `redirect_uri` sempre público.
