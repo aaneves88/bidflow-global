@@ -59,6 +59,16 @@ export default function Login() {
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
+            <GoogleSignInButton
+              className="w-full"
+              disabled={loading}
+              onSuccess={() => (next ? (window.location.href = next) : navigate('/dashboard'))}
+            />
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-xs uppercase text-muted-foreground">{t('entry.or')}</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">{t('login.email')}</Label>
               <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="voce@exemplo.com" />
