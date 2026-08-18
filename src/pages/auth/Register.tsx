@@ -21,6 +21,9 @@ export default function Register() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  useOAuthErrorNotice();
+
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
