@@ -58,7 +58,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
         if (event === 'INITIAL_SESSION') {
+          // Precisa hidratar o usuário também: no retorno do OAuth este evento
+          // pode chegar antes do getSession(), e sem isso a tela de entrada
+          // acha que ninguém está logado e volta pro login.
+          currentUserId = session?.user?.id ?? null;
           setSession(session);
+          setUser(session?.user ?? null);
           return;
         }
 

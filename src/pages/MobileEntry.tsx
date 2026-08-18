@@ -29,19 +29,6 @@ export default function MobileEntry() {
     if (!authLoading && user) navigate('/dashboard', { replace: true });
   }, [user, authLoading, navigate]);
 
-  const handleGoogle = async () => {
-    setGoogleLoading(true);
-    const result = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      toast({ title: t('entry.googleError'), description: String(result.error?.message ?? ''), variant: 'destructive' });
-      setGoogleLoading(false);
-      return;
-    }
-    if (result.redirected) return;
-    navigate('/dashboard');
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
