@@ -17,16 +17,18 @@ type Props = {
 
 const CONFLICT_HINTS = ['identity_already_exists', 'already registered', 'already exists', 'manual linking'];
 
-export function GoogleSignInButton({ onSuccess, disabled, className }: Props) {
+export function GoogleSignInButton({ onSuccess, next, disabled, className }: Props) {
   const { t } = useTranslation('auth');
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     setLoading(true);
+    // O destino fica no sessionStorage; a URL do provedor recebe só a rota
+    // pública de callback, que grava a sessão antes de navegar.
+    rememberOAuthNext(next ?? null);
     const result = await lovable.auth.signInWithOAuth('google', {
-      // Sempre uma URL pública same-origin — nunca uma rota protegida.
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}${OAUTH_CALLBACK_PATH}`,
     });
 
     if (result.error) {
