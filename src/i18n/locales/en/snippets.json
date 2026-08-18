@@ -1,0 +1,92 @@
+{
+  "title": "Text blocks",
+  "subtitle": "Snippets you reuse across proposals: payment, deadlines, revisions and anything else.",
+  "newButton": "New block",
+  "searchPlaceholder": "Search blocks...",
+  "presetsTitle": "Suggestions to get started",
+  "usePreset": "Use this block",
+  "kinds": {
+    "description": "Description",
+    "notes": "Notes",
+    "terms": "Terms and conditions"
+  },
+  "fields": {
+    "title": "Title",
+    "titlePlaceholder": "e.g. 50/50 payment",
+    "kind": "Where to use",
+    "body": "Text",
+    "bodyPlaceholder": "Write the text you want to reuse..."
+  },
+  "table": {
+    "title": "Title",
+    "body": "Text",
+    "kind": "Where to use",
+    "actions": "Actions"
+  },
+  "dialog": {
+    "newTitle": "New block",
+    "editTitle": "Edit block"
+  },
+  "save": {
+    "title": "Save as block",
+    "description": "Give it a short name to reuse this text in future proposals."
+  },
+  "picker": {
+    "trigger": "Blocks",
+    "placeholder": "Search blocks...",
+    "empty": "No blocks found.",
+    "manage": "Manage blocks",
+    "mine": "My blocks",
+    "suggested": "Suggestions",
+    "save": "Save as block"
+  },
+  "empty": {
+    "none": "You don't have any saved blocks yet.",
+    "noResults": "No blocks match your search.",
+    "addFirst": "Create my first block"
+  },
+  "delete": {
+    "title": "Delete block?",
+    "description": "This action cannot be undone. Existing proposals are not affected."
+  },
+  "messages": {
+    "created": "Block created",
+    "updated": "Block updated",
+    "deleted": "Block deleted",
+    "inserted": "Block inserted"
+  },
+  "presets": {
+    "payment5050": {
+      "title": "50/50 payment",
+      "body": "Payment in two installments: 50% upon approval of this proposal and 50% on final delivery."
+    },
+    "paymentUpfront": {
+      "title": "Upfront payment",
+      "body": "Full payment upon approval of this proposal. Work starts after payment confirmation."
+    },
+    "deadline": {
+      "title": "Delivery deadline",
+      "body": "The delivery deadline starts from the approval of this proposal and receipt of all required materials from the client."
+    },
+    "revisions": {
+      "title": "Revision rounds",
+      "body": "Up to 2 revision rounds are included. Additional changes will be quoted separately."
+    },
+    "cancellation": {
+      "title": "Cancellation",
+      "body": "If the project is cancelled after work has started, the amount proportional to the completed stages will be charged."
+    },
+    "validity": {
+      "title": "Proposal validity",
+      "body": "This proposal is valid for 15 days from the date it was sent."
+    },
+    "whatIncludes": {
+      "title": "What's included",
+      "body": "The items listed above are included. Services not described in this proposal are out of scope."
+    },
+    "scope": {
+      "title": "Scope summary",
+      "body": "This quote covers the deliverables described below, with support throughout the project."
+    }
+  }
+}
