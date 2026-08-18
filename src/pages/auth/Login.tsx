@@ -27,6 +27,9 @@ export default function Login() {
   const next = safeNext(params.get('next'));
   const { toast } = useToast();
 
+  useOAuthErrorNotice();
+
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
