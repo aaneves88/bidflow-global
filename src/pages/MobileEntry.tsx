@@ -73,22 +73,8 @@ export default function MobileEntry() {
 
         {!isNativeMobile() && (
           <>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full h-12"
-              onClick={handleGoogle}
-              disabled={googleLoading || loading}
-            >
-              {googleLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <>
-                  <GoogleIcon />
-                  <span className="ml-2">{t('entry.google')}</span>
-                </>
-              )}
-            </Button>
+            <GoogleSignInButton disabled={loading} onSuccess={() => navigate('/dashboard')} />
+
 
             <div className="flex items-center gap-3 my-6">
               <div className="flex-1 h-px bg-border" />
