@@ -69,5 +69,10 @@
     "poweredBy": "Create your proposals free on Orca"
   },
   "subtotalLabel": "Subtotal",
-  "discountLabel": "Discount"
+  "discountLabel": "Discount",
+  "viralCta": {
+    "title": "Need to send quotes like this?",
+    "description": "Create professional proposals with payment, signature and PDF in minutes. Start free.",
+    "action": "Create my free proposal"
+  }
 }
