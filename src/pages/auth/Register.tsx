@@ -88,6 +88,16 @@ export default function Register() {
         </CardHeader>
         <form onSubmit={handleRegister}>
           <CardContent className="space-y-4">
+            <GoogleSignInButton
+              className="w-full"
+              disabled={loading}
+              onSuccess={() => navigate('/onboarding')}
+            />
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-xs uppercase text-muted-foreground">{t('entry.or')}</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="fullName">{t('register.fullName')}</Label>
               <Input id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} required placeholder={t('register.fullNamePlaceholder')} />
