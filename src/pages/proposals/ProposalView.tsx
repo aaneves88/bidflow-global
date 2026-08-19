@@ -25,6 +25,7 @@ import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { toast } from '@/hooks/use-toast';
+import { ProposalStatusChangePopup, findSentStatusId, type SendableProposal } from '@/components/proposals/ProposalStatusChangePopup';
 
 
 function buildWhatsAppUrl(phone: string | null | undefined, message: string) {
@@ -49,6 +50,7 @@ export default function ProposalView() {
   const publicBase = usePublicAppUrl();
 
   const [closeOpen, setCloseOpen] = useState(false);
+  const [sendOpen, setSendOpen] = useState(false);
   const [phoneOpen, setPhoneOpen] = useState(false);
   const [phoneInput, setPhoneInput] = useState('');
   const [savePhone, setSavePhone] = useState(true);
@@ -116,6 +118,7 @@ export default function ProposalView() {
       setCloseOpen(true);
     } else {
       updateStatus.mutate({ id: proposal.id, status_id: newStatusId });
+      if (newStatusId === findSentStatusId(statuses as any)) setSendOpen(true);
     }
   };
 
@@ -218,7 +221,7 @@ export default function ProposalView() {
         )}
         <Select
           value={proposal.status_id || ''}
-          onValueChange={(val) => updateStatus.mutate({ id: proposal.id, status_id: val })}
+          onValueChange={handleStatusChange}
         >
           <SelectTrigger className="w-48">
             <SelectValue placeholder={t('view.changeStatus')} />
@@ -341,6 +344,12 @@ export default function ProposalView() {
           </CardContent>
         </Card>
       )}
+
+      <ProposalStatusChangePopup
+        open={sendOpen}
+        onOpenChange={setSendOpen}
+        proposal={proposal as unknown as SendableProposal}
+      />
 
       <Dialog open={phoneOpen} onOpenChange={setPhoneOpen}>
         <DialogContent>

@@ -10,7 +10,7 @@ import { CalendarClock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useProposalStatuses, useUpdateProposalStatus, type Proposal } from '@/hooks/useProposals';
 import { formatCurrency, formatDate } from '@/lib/format';
-import { SendProposalDialog, type SendableProposal } from '@/components/proposals/SendProposalDialog';
+import { ProposalStatusChangePopup, findSentStatusId, type SendableProposal } from '@/components/proposals/ProposalStatusChangePopup';
 import { cn } from '@/lib/utils';
 
 type Status = { id: string; name: string; color: string; position: number; is_final: boolean | null };
@@ -96,11 +96,7 @@ export default function ProposalsKanban({ proposals }: { proposals: Proposal[] }
 
   const cols = (statuses ?? []) as unknown as Status[];
 
-  const sentStatusId = useMemo(() => {
-    const open = cols.filter((s) => !s.is_final);
-    const byName = open.find((s) => /envi|sent/i.test(s.name));
-    return byName?.id ?? open.find((s) => s.position === 1)?.id ?? null;
-  }, [cols]);
+  const sentStatusId = useMemo(() => findSentStatusId(cols), [cols]);
 
   const byStatus = useMemo(() => {
     const map = new Map<string, Proposal[]>();
@@ -158,7 +154,7 @@ export default function ProposalsKanban({ proposals }: { proposals: Proposal[] }
         </DragOverlay>
       </DndContext>
 
-      <SendProposalDialog
+      <ProposalStatusChangePopup
         open={!!sendTarget}
         onOpenChange={(o) => !o && setSendTarget(null)}
         proposal={sendTarget}
