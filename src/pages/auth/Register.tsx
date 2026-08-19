@@ -11,6 +11,7 @@ import { trackMeta } from '@/lib/analytics';
 import { Seo } from '@/components/Seo';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
+import { persistSignupAttribution } from '@/lib/attributionSync';
 
 export default function Register() {
   const { t } = useTranslation('auth');
@@ -56,6 +57,7 @@ export default function Register() {
         access_token: result.session.access_token,
         refresh_token: result.session.refresh_token,
       });
+      await persistSignupAttribution();
     }
 
     // Fire welcome email (best-effort, non-blocking)

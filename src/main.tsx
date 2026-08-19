@@ -5,6 +5,10 @@ import "./index.css";
 import "./i18n";
 
 import { isNativeMobile } from "@/lib/platform";
+import { captureAttribution } from "@/lib/attribution";
+
+// Registra a origem (UTM ou referrer) da primeira visita, antes de qualquer rota.
+captureAttribution();
 
 // Native-only bootstrap: configure status bar + splash on Android/iOS.
 // Safe no-op on web (dynamic import + isNativeMobile guard).

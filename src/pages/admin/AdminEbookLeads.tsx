@@ -29,7 +29,7 @@ export default function AdminEbookLeads() {
     queryFn: async () => {
       const { data: leads, error } = await supabase
         .from('ebook_leads')
-        .select('id, name, email, source, created_at')
+        .select('id, name, email, source, created_at, utm_source, utm_medium, utm_campaign, utm_content, referrer')
         .order('created_at', { ascending: false })
         .limit(2000);
       if (error) throw error;
@@ -58,7 +58,18 @@ export default function AdminEbookLeads() {
   const rate = rows.length ? Math.round((converted / rows.length) * 1000) / 10 : 0;
 
   const exportCsv = () => {
-    const header = ['name', 'email', 'source', 'created_at', 'registered'];
+    const header = [
+      'name',
+      'email',
+      'source',
+      'created_at',
+      'registered',
+      'utm_source',
+      'utm_medium',
+      'utm_campaign',
+      'utm_content',
+      'referrer',
+    ];
     const lines = rows.map((l) =>
       [
         l.name ?? '',
@@ -66,6 +77,11 @@ export default function AdminEbookLeads() {
         l.source ?? '',
         l.created_at,
         data?.registered.has((l.email || '').trim().toLowerCase()) ? 'yes' : 'no',
+        l.utm_source ?? '',
+        l.utm_medium ?? '',
+        l.utm_campaign ?? '',
+        l.utm_content ?? '',
+        l.referrer ?? '',
       ]
         .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(','),
@@ -134,6 +150,7 @@ export default function AdminEbookLeads() {
                   <TableHead>{t('leads.table.name')}</TableHead>
                   <TableHead>{t('leads.table.email')}</TableHead>
                   <TableHead>{t('leads.table.source')}</TableHead>
+                  <TableHead>{t('leads.table.origin')}</TableHead>
                   <TableHead>{t('leads.table.date')}</TableHead>
                   <TableHead>{t('leads.table.status')}</TableHead>
                 </TableRow>
@@ -146,6 +163,11 @@ export default function AdminEbookLeads() {
                       <TableCell>{l.name || '—'}</TableCell>
                       <TableCell>{l.email}</TableCell>
                       <TableCell className="text-muted-foreground">{l.source}</TableCell>
+                      <TableCell className="text-muted-foreground text-xs">
+                        {[l.utm_source, l.utm_medium, l.utm_campaign].filter(Boolean).join(' / ') ||
+                          l.referrer ||
+                          '—'}
+                      </TableCell>
                       <TableCell className="whitespace-nowrap">{formatDateTime(l.created_at)}</TableCell>
                       <TableCell>
                         <Badge variant={isReg ? 'default' : 'secondary'}>
