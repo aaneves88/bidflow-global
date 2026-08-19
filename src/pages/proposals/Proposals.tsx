@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Search, Eye, Pencil, Trash2, Copy, Files } from 'lucide-react';
+import { Plus, Search, Eye, Pencil, Trash2, Copy, Files, List, LayoutGrid } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ProposalsKanban from './ProposalsKanban';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,6 +30,14 @@ export default function Proposals() {
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [view, setView] = useState<'list' | 'kanban'>(
+    () => (localStorage.getItem('proposals:view') === 'kanban' ? 'kanban' : 'list'),
+  );
+  const changeView = (v: string) => {
+    const next = v === 'kanban' ? 'kanban' : 'list';
+    setView(next);
+    localStorage.setItem('proposals:view', next);
+  };
 
   const filtered = proposals?.filter((p) => {
     const q = search.toLowerCase();
@@ -68,14 +78,26 @@ export default function Proposals() {
       <UsageIndicator variant="banner" />
 
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={t('searchPlaceholder')}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
-        />
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative max-w-sm flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={t('searchPlaceholder')}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Tabs value={view} onValueChange={changeView}>
+          <TabsList>
+            <TabsTrigger value="list">
+              <List className="mr-2 h-4 w-4" /> {t('views.list')}
+            </TabsTrigger>
+            <TabsTrigger value="kanban">
+              <LayoutGrid className="mr-2 h-4 w-4" /> {t('views.kanban')}
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       {isLoading ? (
@@ -91,6 +113,8 @@ export default function Proposals() {
             </Button>
           )}
         </div>
+      ) : view === 'kanban' ? (
+        <ProposalsKanban proposals={filtered} />
       ) : (
         <div className="rounded-md border overflow-x-auto">
           <Table>
