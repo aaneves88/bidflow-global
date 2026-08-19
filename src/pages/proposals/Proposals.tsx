@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Search, Eye, Pencil, Trash2, Copy, Files } from 'lucide-react';
+import { Plus, Search, Eye, Pencil, Trash2, Copy, Files, List, LayoutGrid } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ProposalsKanban from './ProposalsKanban';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
