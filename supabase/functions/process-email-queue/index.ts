@@ -254,6 +254,8 @@ Deno.serve(async (req) => {
             run_id: payload.run_id,
             to: payload.to,
             from: payload.from,
+            // Centralized reply-to: any user reply lands in a mailbox we read.
+            reply_to: (payload.reply_to as string) ?? REPLY_TO,
             sender_domain: payload.sender_domain,
             subject: payload.subject,
             html: payload.html,
@@ -264,6 +266,7 @@ Deno.serve(async (req) => {
             unsubscribe_token: payload.unsubscribe_token,
             message_id: payload.message_id,
           },
+
           // sendUrl is optional — when LOVABLE_SEND_URL is not set, the library
           // falls back to the default Lovable API endpoint (https://api.lovable.dev).
           // Set LOVABLE_SEND_URL as a Supabase secret to override (e.g. for local dev).
