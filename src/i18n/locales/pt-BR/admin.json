@@ -463,6 +463,7 @@
       "name": "Nome",
       "email": "E-mail",
       "source": "Origem",
+      "origin": "Atribuição",
       "date": "Data",
       "status": "Status"
     }
