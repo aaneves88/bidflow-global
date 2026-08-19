@@ -451,6 +451,14 @@ export default function PublicProposal() {
               accentColor: accent,
               watermark: isFreeOwner,
               showPoweredBy: true,
+              cover: showCover,
+              whyMe: showWhyMe
+                ? {
+                    photoDataUrl: branding?.photoUrl || undefined,
+                    credential: branding?.credentialNote || undefined,
+                    testimonial: branding?.trustNote || undefined,
+                  }
+                : undefined,
               pix: pixPayload
                 ? {
                     payload: pixPayload,
