@@ -1,44 +1,37 @@
-# Páginas extras da proposta: Capa + "Por que eu"
+# Acompanhamento de usuários no painel admin
 
-Duas seções opcionais, ligadas por toggle na hora de montar a proposta. Nenhuma alonga o documento por padrão: se o dado não existe no perfil, o toggle nem aparece.
+Hoje a aba **Usuários** mostra nome, e-mail, papéis, plano e data de cadastro. A aba **Visão geral** mostra números agregados (funil de ativação, ativos 7/30 dias), mas não dá para olhar usuário por usuário e responder "esse aqui já criou proposta?" ou "quando ele entrou pela última vez?".
 
-## 1. Campos novos — onde encaixar
+A proposta é enriquecer a própria aba **Usuários** com essas informações, em vez de criar mais uma tela.
 
-**No perfil (`profiles`), aba Marca de `/settings`** — junto de `company_name`, `logo_url` e `tagline`, que a capa e o "Por que eu" já reaproveitam:
+## O que a tela passa a mostrar
 
-| Coluna | Tipo | Uso |
-| --- | --- | --- |
-| `photo_url` | text | Foto de rosto (não é o logo). Upload via `LogoUpload` já existente (base64, redimensionado, max ~200px) |
-| `credential_note` | text | 1-2 linhas de credencial/certificação. Limite 120 caracteres |
-| `trust_note` | text | Depoimento curto de cliente. Limite 200 caracteres |
+Para cada usuário, além do que já existe:
 
-Ficam num bloco próprio "Por que eu" dentro da aba Marca, abaixo do bloco de cores, com contador de caracteres. Como é conteúdo de prova social e não identidade visual, **não** fica sob o bloqueio `canBrand` — free também preenche e usa (o que free não tem é logo/cores próprias, que já é tratado hoje).
+- **Último acesso** — data do último login (ex.: "há 3 dias"), ou "nunca acessou".
+- **Propostas** — quantas criou (0, 1, 12...) e a data da última.
+- **Clientes** — quantos cadastrou.
+- **Situação** — um selo simples derivado dos dados:
+  - `Nunca acessou` — conta criada, nenhum login além do cadastro
+  - `Sem proposta` — acessa mas nunca criou proposta
+  - `Ativo` — criou proposta e acessou nos últimos 30 dias
+  - `Inativo` — já criou proposta, mas sem acesso há mais de 30 dias
 
-**Na proposta (`proposals`)** — dois booleans, default `false`:
+Complementos na mesma aba:
 
-| Coluna | Uso |
-| --- | --- |
-| `show_cover` | Renderiza a capa |
-| `show_why_me` | Renderiza a seção "Por que eu" |
+- Campo de busca por nome/e-mail.
+- Filtro rápido por situação (todos / nunca acessou / sem proposta / ativo / inativo).
+- Ordenação por último acesso e por número de propostas.
+- Quatro contadores no topo: total, nunca acessaram, sem proposta, ativos 30 dias.
 
-## 2. Conteúdo das seções
+As ações que já existem (tornar admin, conceder Premium) continuam iguais.
 
-**Capa** (dados já existentes, nada novo): logo, nome da empresa, tagline, título da proposta, nome/empresa do cliente, data de emissão, validade se houver. Uma página, sem texto institucional.
+## Detalhes técnicos
 
-**"Por que eu"**: foto (`photo_url`) + credencial (`credential_note`) + depoimento entre aspas (`trust_note`). Cada um é opcional — renderiza só o que estiver preenchido. Se os três estiverem vazios, o toggle fica escondido no formulário.
-
-## 3. Onde aparece
-
-- **`ProposalForm.tsx`**: bloco "Páginas extras" com dois switches, perto de Observações/Termos. Cada switch só aparece se houver dado para ele (capa exige `company_name` ou `logo_url`; "Por que eu" exige pelo menos um dos três campos novos). Texto de ajuda curto: proposta boa é curta, use só se ajudar a fechar.
-- **`PublicProposal.tsx`**: capa como bloco de topo antes do cabeçalho atual; "Por que eu" como card discreto antes das Observações.
-- **`proposalPdf.ts`**: capa como primeira página (canvas, seguindo o hero híbrido atual); "Por que eu" como bloco compacto antes de Observações, sem forçar quebra de página se couber.
-
-## 4. Backend
-
-- Migração: colunas novas em `profiles` e `proposals` (nullable / default false).
-- `get_proposal_branding` ganha `photo_url`, `credential_note`, `trust_note` no retorno (mesma RPC segura já usada pelo link público); `get_public_proposal` ganha `show_cover` e `show_why_me`.
-- `useBranding.ts` e `fetchPublicBranding` passam os campos novos adiante; `ORCA_BRANDING` recebe strings vazias para eles.
-
-## 5. i18n
-
-Chaves novas em `settings.json` (bloco "Por que eu") e `proposals.json` (`form.extraPages.*`, `view.whyMe.*`, `pdf.whyMe`) nos dois idiomas.
+- Nova função no banco `get_admin_user_activity()` (`SECURITY DEFINER`, `search_path = public`), protegida por `has_role(auth.uid(), 'admin')` e com `REVOKE` de `anon` — mesmo padrão de `get_admin_activation_stats()`.
+  Retorna por usuário: `id, full_name, email, created_at, last_sign_in_at, proposals_count, last_proposal_at, clients_count`.
+  `last_sign_in_at` vem de `auth.users` (somente leitura, sem trigger nem alteração no schema `auth`).
+- `src/hooks/useAdminUsers.ts`: buscar a nova RPC e mesclar com os dados atuais de perfis/papéis/planos, expondo os campos novos em `AdminUser`.
+- `src/pages/admin/AdminUsers.tsx`: colunas novas, busca, filtro por situação, ordenação e cartões de contagem. Selo e "há X dias" derivados no front.
+- Traduções novas em `src/i18n/locales/pt-BR/admin.json` e `src/i18n/locales/en/admin.json` (`users.activity.*`).
+- Sem mudança de schema (só uma função nova); nenhum fluxo existente é alterado.
