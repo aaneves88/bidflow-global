@@ -140,6 +140,10 @@ export default function PublicProposal() {
     proposal.discount_type,
   );
   const notes = (proposal as any).notes as string | null;
+  const showCover = !!(proposal as any).show_cover;
+  const showWhyMe =
+    !!(proposal as any).show_why_me &&
+    !!(branding?.photoUrl || branding?.credentialNote || branding?.trustNote);
   const terms = (proposal as any).terms as string | null;
 
   const pixAmount = Number(proposal.total_amount);
@@ -206,6 +210,28 @@ export default function PublicProposal() {
       ) : null}
 
       <div className="max-w-3xl mx-auto px-4 sm:px-10 py-8 sm:py-12 space-y-6">
+        {showCover && (
+          <Card className="overflow-hidden">
+            <div className="h-1 w-full" style={{ backgroundColor: accent }} />
+            <CardContent className="py-8 text-center space-y-3">
+              {!isFreeOwner && branding?.logoUrl && (
+                <img src={branding.logoUrl} alt="" className="mx-auto h-14 w-auto object-contain" />
+              )}
+              {branding?.companyName && (
+                <p className="text-sm font-medium" style={{ color: secondary }}>{branding.companyName}</p>
+              )}
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">{t('cover.label')}</p>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{proposal.title}</h2>
+              {proposal.clients?.name && (
+                <p className="text-sm text-muted-foreground">
+                  {t('cover.preparedFor', { name: proposal.clients.company || proposal.clients.name })}
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground">{formatDate(proposal.created_at)}</p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Title + status */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="min-w-0 flex-1">
@@ -327,6 +353,36 @@ export default function PublicProposal() {
             </div>
           </CardContent>
         </Card>
+
+        {showWhyMe && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">{t('whyMe.title')}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-4">
+                {branding?.photoUrl && (
+                  <img
+                    src={branding.photoUrl}
+                    alt=""
+                    className="h-16 w-16 rounded-full object-cover shrink-0"
+                  />
+                )}
+                {branding?.credentialNote && (
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{branding.credentialNote}</p>
+                )}
+              </div>
+              {branding?.trustNote && (
+                <blockquote
+                  className="border-l-2 pl-4 text-sm italic text-muted-foreground"
+                  style={{ borderColor: accent }}
+                >
+                  “{branding.trustNote}”
+                </blockquote>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {notes && (
           <Card>
