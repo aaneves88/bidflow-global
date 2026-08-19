@@ -30,6 +30,14 @@ export default function Proposals() {
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [view, setView] = useState<'list' | 'kanban'>(
+    () => (localStorage.getItem('proposals:view') === 'kanban' ? 'kanban' : 'list'),
+  );
+  const changeView = (v: string) => {
+    const next = v === 'kanban' ? 'kanban' : 'list';
+    setView(next);
+    localStorage.setItem('proposals:view', next);
+  };
 
   const filtered = proposals?.filter((p) => {
     const q = search.toLowerCase();
