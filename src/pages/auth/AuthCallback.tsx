@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { clearOAuthError, isUserCancelled, readOAuthError } from '@/lib/oauthError';
 import { consumeOAuthTokens, readOAuthTokens, takeOAuthNext } from '@/lib/oauthCallback';
+import { persistSignupAttribution } from '@/lib/attributionSync';
 
 /**
  * Rota pública de retorno do login social (redirect de página inteira).
@@ -50,6 +51,7 @@ export default function AuthCallback() {
         fail(t('oauth.generic'));
         return;
       }
+      void persistSignupAttribution();
       navigate(takeOAuthNext(), { replace: true });
     });
   }, [navigate, t, toast]);

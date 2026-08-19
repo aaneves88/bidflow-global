@@ -11,6 +11,7 @@ import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
 import { isNativeMobile } from '@/lib/platform';
 import { trackMeta } from '@/lib/analytics';
+import { persistSignupAttribution } from '@/lib/attributionSync';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 
 export default function MobileEntry() {
@@ -53,6 +54,7 @@ export default function MobileEntry() {
       if (error) {
         toast({ title: t('register.errorTitle'), description: error.message, variant: 'destructive' });
       } else {
+        await persistSignupAttribution();
         trackMeta('CompleteRegistration');
         toast({ title: t('register.successTitle'), description: t('register.successDescription') });
         navigate('/dashboard');

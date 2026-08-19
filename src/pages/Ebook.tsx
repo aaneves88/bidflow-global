@@ -17,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Seo } from '@/components/Seo';
+import { attributionForLead } from '@/lib/attribution';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 import ebookAsset from '@/assets/ebook-orcamento-gratuito.pdf.asset.json';
 
@@ -73,6 +74,7 @@ export default function Ebook() {
         email: cleanEmail,
         name: cleanName,
         source: 'ebook-orcamento',
+        ...attributionForLead(),
       });
       if (error) throw error;
 
