@@ -280,6 +280,8 @@ export default function Dashboard() {
 
       <UsageIndicator />
 
+      <AttentionPanel proposals={proposals ?? []} finalStatusIds={finalStatuses} />
+
       {isEmpty && (
         <Card className="border-primary/30 bg-primary/5">
           <CardHeader>
