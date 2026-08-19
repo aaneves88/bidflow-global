@@ -10,6 +10,9 @@ export type Branding = {
   accentColor: string;
   companyName: string;
   tagline: string;
+  photoUrl: string;
+  credentialNote: string;
+  trustNote: string;
 };
 
 /** Orca defaults — also used as the visible brand for free-tier proposals. */
@@ -20,6 +23,9 @@ export const ORCA_BRANDING: Branding = {
   accentColor: '#22C55E',
   companyName: 'Orca',
   tagline: '',
+  photoUrl: '',
+  credentialNote: '',
+  trustNote: '',
 };
 
 /** Per-user branding stored on the user's profile. */
@@ -31,7 +37,7 @@ export function useBranding(): Branding & { isLoading: boolean; hasBranding: boo
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('company_name, logo_url, primary_color, secondary_color, accent_color, tagline')
+        .select('company_name, logo_url, primary_color, secondary_color, accent_color, tagline, photo_url, credential_note, trust_note')
         .eq('id', user!.id)
         .maybeSingle();
       if (error) throw error;
@@ -46,6 +52,9 @@ export function useBranding(): Branding & { isLoading: boolean; hasBranding: boo
     accentColor: data?.accent_color || ORCA_BRANDING.accentColor,
     companyName: data?.company_name || ORCA_BRANDING.companyName,
     tagline: data?.tagline || '',
+    photoUrl: data?.photo_url || '',
+    credentialNote: data?.credential_note || '',
+    trustNote: data?.trust_note || '',
     // Derived from the raw profile row (before fallback), so a user who picks
     // the exact Orca colors is still counted as configured.
     hasBranding: !!(data?.logo_url || data?.primary_color || data?.company_name),
@@ -64,6 +73,9 @@ export function useUpdateBranding() {
       secondary_color: string;
       accent_color: string;
       tagline: string;
+      photo_url: string;
+      credential_note: string;
+      trust_note: string;
     }>) => {
       if (!user) throw new Error('Not authenticated');
       const { error } = await supabase
@@ -95,8 +107,15 @@ export async function fetchPublicBranding(supabase: any, publicCode?: string): P
     }
     const row = data[0];
     const hasActivePlan = !!row.has_active_plan;
+    // Social proof ("Por que eu") is available on every plan — only the visual
+    // identity (logo/colors/company name) is gated behind a paid plan.
+    const trust = {
+      photoUrl: row.photo_url || '',
+      credentialNote: row.credential_note || '',
+      trustNote: row.trust_note || '',
+    };
     if (!hasActivePlan) {
-      return { ...ORCA_BRANDING, hasActivePlan: false };
+      return { ...ORCA_BRANDING, ...trust, hasActivePlan: false };
     }
     return {
       logoUrl: row.logo_url || '',
@@ -105,6 +124,9 @@ export async function fetchPublicBranding(supabase: any, publicCode?: string): P
       accentColor: row.accent_color || ORCA_BRANDING.accentColor,
       companyName: row.company_name || '',
       tagline: row.tagline || '',
+      photoUrl: row.photo_url || '',
+      credentialNote: row.credential_note || '',
+      trustNote: row.trust_note || '',
       hasActivePlan: true,
     };
   } catch {

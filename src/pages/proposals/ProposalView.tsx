@@ -147,6 +147,14 @@ export default function ProposalView() {
       accentColor: canBrand ? branding.accentColor : ORCA_BRANDING.accentColor,
       watermark: !canBrand,
       showPoweredBy: true,
+      cover: !!(proposal as any).show_cover,
+      whyMe: (proposal as any).show_why_me
+        ? {
+            photoDataUrl: branding.photoUrl || undefined,
+            credential: branding.credentialNote || undefined,
+            testimonial: branding.trustNote || undefined,
+          }
+        : undefined,
       labels: {
         proposalFor: t('pdf.proposalFor'),
         description: t('pdf.description'),
@@ -165,6 +173,9 @@ export default function ProposalView() {
         generatedAt: t('pdf.generatedAt'),
         poweredBy: t('pdf.poweredBy'),
         watermark: t('pdf.watermark'),
+        coverLabel: t('pdf.coverLabel'),
+        coverPreparedFor: t('pdf.coverPreparedFor'),
+        whyMe: t('pdf.whyMe'),
       },
     });
   };

@@ -100,5 +100,15 @@
     "upgrade": "Upgrade",
     "portalError": "Couldn't open the billing portal",
     "portalErrorHint": "Please try again shortly. If it persists, contact support."
+  },
+  "whyMe": {
+    "title": "Why me",
+    "subtitle": "Short social proof you can switch on per proposal. Available on every plan.",
+    "photo": "Your photo",
+    "photoHelp": "A headshot, not your logo. Shown in the \"Why me\" section.",
+    "credential": "Credential or certification",
+    "credentialPlaceholder": "e.g. 8 years in custom woodworking, certified by SENAI.",
+    "testimonial": "Short client testimonial",
+    "testimonialPlaceholder": "e.g. \"Delivered on time and the finish was flawless.\" — Marina"
   }
 }

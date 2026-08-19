@@ -365,11 +365,13 @@ export type Database = {
           avatar_url: string | null
           company_name: string | null
           created_at: string
+          credential_note: string | null
           email: string | null
           full_name: string | null
           id: string
           logo_url: string | null
           onboarding_complete: boolean
+          photo_url: string | null
           pix_key: string | null
           pix_key_type: string | null
           primary_color: string | null
@@ -383,17 +385,20 @@ export type Database = {
           tagline: string | null
           tax_id: string | null
           tax_id_type: string | null
+          trust_note: string | null
         }
         Insert: {
           accent_color?: string | null
           avatar_url?: string | null
           company_name?: string | null
           created_at?: string
+          credential_note?: string | null
           email?: string | null
           full_name?: string | null
           id: string
           logo_url?: string | null
           onboarding_complete?: boolean
+          photo_url?: string | null
           pix_key?: string | null
           pix_key_type?: string | null
           primary_color?: string | null
@@ -407,17 +412,20 @@ export type Database = {
           tagline?: string | null
           tax_id?: string | null
           tax_id_type?: string | null
+          trust_note?: string | null
         }
         Update: {
           accent_color?: string | null
           avatar_url?: string | null
           company_name?: string | null
           created_at?: string
+          credential_note?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
           logo_url?: string | null
           onboarding_complete?: boolean
+          photo_url?: string | null
           pix_key?: string | null
           pix_key_type?: string | null
           primary_color?: string | null
@@ -431,6 +439,7 @@ export type Database = {
           tagline?: string | null
           tax_id?: string | null
           tax_id_type?: string | null
+          trust_note?: string | null
         }
         Relationships: []
       }
@@ -660,6 +669,8 @@ export type Database = {
           pix_key: string | null
           pix_key_type: string | null
           public_code: string
+          show_cover: boolean
+          show_why_me: boolean
           status_id: string | null
           terms: string | null
           title: string
@@ -683,6 +694,8 @@ export type Database = {
           pix_key?: string | null
           pix_key_type?: string | null
           public_code?: string
+          show_cover?: boolean
+          show_why_me?: boolean
           status_id?: string | null
           terms?: string | null
           title: string
@@ -706,6 +719,8 @@ export type Database = {
           pix_key?: string | null
           pix_key_type?: string | null
           public_code?: string
+          show_cover?: boolean
+          show_why_me?: boolean
           status_id?: string | null
           terms?: string | null
           title?: string
@@ -1120,11 +1135,14 @@ export type Database = {
         Returns: {
           accent_color: string
           company_name: string
+          credential_note: string
           has_active_plan: boolean
           logo_url: string
+          photo_url: string
           primary_color: string
           secondary_color: string
           tagline: string
+          trust_note: string
         }[]
       }
       get_proposal_pix: {

@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -110,6 +111,79 @@ function ColorField({ label, help, value, onChange, disabled }: { label: string;
       </div>
       {help && <p className="text-xs text-muted-foreground mt-1">{help}</p>}
     </div>
+  );
+}
+
+function WhyMeCard() {
+  const { t } = useTranslation(['settings', 'common']);
+  const branding = useBranding();
+  const updateBranding = useUpdateBranding();
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [credentialNote, setCredentialNote] = useState('');
+  const [trustNote, setTrustNote] = useState('');
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    if (!branding.isLoading && !hydrated) {
+      setPhotoUrl(branding.photoUrl);
+      setCredentialNote(branding.credentialNote);
+      setTrustNote(branding.trustNote);
+      setHydrated(true);
+    }
+  }, [branding, hydrated]);
+
+  const save = async () => {
+    try {
+      await updateBranding.mutateAsync({
+        photo_url: photoUrl,
+        credential_note: credentialNote,
+        trust_note: trustNote,
+      });
+      toast({ title: t('messages.saved') });
+    } catch (e: any) {
+      toast({ title: t('messages.error'), description: e?.message, variant: 'destructive' });
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{t('whyMe.title')}</CardTitle>
+        <p className="text-sm text-muted-foreground">{t('whyMe.subtitle')}</p>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        <div>
+          <Label>{t('whyMe.photo')}</Label>
+          <LogoUpload value={photoUrl} onChange={setPhotoUrl} maxSize={256} maxKb={300} />
+          <p className="text-xs text-muted-foreground mt-1">{t('whyMe.photoHelp')}</p>
+        </div>
+        <div>
+          <Label htmlFor="credential_note">{t('whyMe.credential')}</Label>
+          <Textarea
+            id="credential_note"
+            value={credentialNote}
+            onChange={(e) => setCredentialNote(e.target.value)}
+            maxLength={120}
+            rows={2}
+            placeholder={t('whyMe.credentialPlaceholder')}
+          />
+          <p className="text-xs text-muted-foreground mt-1">{credentialNote.length}/120</p>
+        </div>
+        <div>
+          <Label htmlFor="trust_note">{t('whyMe.testimonial')}</Label>
+          <Textarea
+            id="trust_note"
+            value={trustNote}
+            onChange={(e) => setTrustNote(e.target.value)}
+            maxLength={200}
+            rows={3}
+            placeholder={t('whyMe.testimonialPlaceholder')}
+          />
+          <p className="text-xs text-muted-foreground mt-1">{trustNote.length}/200</p>
+        </div>
+        <Button onClick={save} disabled={updateBranding.isPending}>{t('common:actions.save')}</Button>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -258,6 +332,7 @@ function BrandingTab() {
           </CardContent>
         </Card>
       </div>
+      <WhyMeCard />
     </div>
   );
 }

@@ -33,6 +33,8 @@ export type Proposal = {
   discount_type?: string | null;
   pix_key?: string | null;
   pix_key_type?: string | null;
+  show_cover?: boolean | null;
+  show_why_me?: boolean | null;
   status_id: string | null;
   valid_until: string | null;
   created_at: string;
@@ -54,6 +56,8 @@ export type ProposalFormData = {
   discount_type?: DiscountType;
   pix_key?: string | null;
   pix_key_type?: string | null;
+  show_cover?: boolean;
+  show_why_me?: boolean;
   items: ProposalItem[];
 };
 
@@ -169,6 +173,8 @@ export function useCreateProposal() {
           valid_until: data.valid_until || null,
           pix_key: data.pix_key?.trim() || null,
           pix_key_type: data.pix_key?.trim() ? data.pix_key_type || null : null,
+          show_cover: !!data.show_cover,
+          show_why_me: !!data.show_why_me,
           public_code,
         })
         .select()
@@ -236,6 +242,8 @@ export function useUpdateProposal() {
           valid_until: data.valid_until || null,
           pix_key: data.pix_key?.trim() || null,
           pix_key_type: data.pix_key?.trim() ? data.pix_key_type || null : null,
+          show_cover: !!data.show_cover,
+          show_why_me: !!data.show_why_me,
         })
         .eq('id', id);
       if (error) throw error;
@@ -384,6 +392,8 @@ export function useDuplicateProposal() {
           valid_until: src.valid_until,
           pix_key: (src as any).pix_key ?? null,
           pix_key_type: (src as any).pix_key_type ?? null,
+          show_cover: (src as any).show_cover ?? false,
+          show_why_me: (src as any).show_why_me ?? false,
         })
         .select()
         .single();

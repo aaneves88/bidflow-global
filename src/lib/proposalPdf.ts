@@ -48,6 +48,14 @@ interface Options {
   watermark?: boolean;
   /** Small "Powered by Orca" line in the footer. Default on. */
   showPoweredBy?: boolean;
+  /** Optional cover page (client name, project title, date, logo). */
+  cover?: boolean;
+  /** Optional short social-proof block ("Por que eu"). */
+  whyMe?: {
+    photoDataUrl?: string;
+    credential?: string;
+    testimonial?: string;
+  };
   /** Owner's PIX BR Code — rendered as a QR block at the end of the document. */
   pix?: {
     payload: string;
@@ -73,6 +81,9 @@ interface Options {
     generatedAt?: string;
     poweredBy?: string;
     watermark?: string;
+    coverLabel?: string;
+    coverPreparedFor?: string;
+    whyMe?: string;
   };
 }
 
@@ -94,6 +105,9 @@ const DEFAULT_LABELS = {
   generatedAt: 'Gerado em',
   poweredBy: 'Feito com Orca · orca-mento.app',
   watermark: 'Orca',
+  coverLabel: 'Proposta comercial',
+  coverPreparedFor: 'Preparada para',
+  whyMe: 'Por que eu',
 };
 
 function hexToRgb(hex: string): [number, number, number] {
@@ -228,6 +242,56 @@ async function buildHeroCanvas(
   }
 }
 
+/** Cover page markup — reuses profile branding, no institutional copy. */
+async function buildCoverCanvas(
+  proposal: ProposalLike,
+  options: Options,
+  labels: typeof DEFAULT_LABELS,
+  pxWidth: number,
+): Promise<HTMLCanvasElement> {
+  const primary = options.primaryColor || '#3B82F6';
+  const secondary = options.secondaryColor || '#0F172A';
+  const accent = options.accentColor || '#22C55E';
+  const isFree = !!options.watermark;
+  const logo = isFree ? orcaMarkMono : options.logoDataUrl || '';
+  const companyName = options.companyName || '';
+  const tagline = options.tagline || '';
+  const clientName = proposal.clients?.company || proposal.clients?.name || '';
+  const generatedAt = formatDate(new Date().toISOString());
+
+  const html = `
+    <div style="background:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#0f172a;text-align:center;padding:72px 48px;border:1px solid #e5e7eb;border-radius:12px;">
+      <div style="height:6px;background:${primary};border-radius:3px;margin:0 auto 40px auto;width:80px;"></div>
+      ${logo ? `<img src="${logo}" alt="" style="height:64px;width:auto;max-width:240px;object-fit:contain;margin-bottom:16px;" crossorigin="anonymous" />` : ''}
+      ${companyName ? `<div style="font-size:16px;font-weight:700;color:${secondary};">${escapeHtml(companyName)}</div>` : ''}
+      ${tagline ? `<div style="font-size:12px;color:#64748b;margin-top:4px;">${escapeHtml(tagline)}</div>` : ''}
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#94a3b8;margin:40px 0 12px 0;">${escapeHtml(labels.coverLabel)}</div>
+      <div style="font-size:36px;font-weight:800;letter-spacing:-0.8px;line-height:1.2;">${escapeHtml(proposal.title)}</div>
+      ${clientName ? `<div style="font-size:14px;color:#475569;margin-top:20px;">${escapeHtml(labels.coverPreparedFor)} ${escapeHtml(clientName)}</div>` : ''}
+      <div style="font-size:12px;color:#94a3b8;margin-top:8px;">${escapeHtml(generatedAt)}</div>
+      <div style="height:4px;background:${accent};border-radius:2px;margin:40px auto 0 auto;width:48px;"></div>
+    </div>
+  `;
+
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  wrapper.style.left = '-99999px';
+  wrapper.style.top = '0';
+  wrapper.style.width = `${pxWidth}px`;
+  wrapper.style.background = '#fff';
+  wrapper.innerHTML = html;
+  document.body.appendChild(wrapper);
+
+  const img = wrapper.querySelector('img') as HTMLImageElement | null;
+  if (img) await img.decode().catch(() => undefined);
+
+  try {
+    return await html2canvas(wrapper, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false });
+  } finally {
+    document.body.removeChild(wrapper);
+  }
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')
@@ -264,6 +328,29 @@ export async function generateProposalPdf(
   const heroDataUrl = heroCanvas.toDataURL('image/jpeg', 0.92);
 
   let y = margin;
+
+  // === Optional cover page ===
+  if (options.cover) {
+    const coverCanvas = await buildCoverCanvas(proposal, options, labels, heroPxWidth);
+    const coverHeightPt = Math.min(
+      contentWidth * (coverCanvas.height / coverCanvas.width),
+      pageHeight - margin * 2,
+    );
+    const coverWidthPt = coverHeightPt * (coverCanvas.width / coverCanvas.height);
+    doc.addImage(
+      coverCanvas.toDataURL('image/jpeg', 0.92),
+      'JPEG',
+      (pageWidth - coverWidthPt) / 2,
+      (pageHeight - coverHeightPt) / 2,
+      coverWidthPt,
+      coverHeightPt,
+      undefined,
+      'FAST',
+    );
+    doc.addPage();
+    y = margin;
+  }
+
   doc.addImage(heroDataUrl, 'JPEG', margin, y, contentWidth, heroHeightPt, undefined, 'FAST');
   y += heroHeightPt + 18;
 
@@ -387,6 +474,56 @@ export async function generateProposalPdf(
   doc.setTextColor(15, 23, 42);
   doc.text(totalText, pageWidth - margin, y, { align: 'right' });
   y += 24;
+
+  // === Optional "Por que eu" block (short social proof) ===
+  const whyMe = options.whyMe;
+  if (whyMe && (whyMe.photoDataUrl || whyMe.credential || whyMe.testimonial)) {
+    const photoSize = 56;
+    ensureSpace(photoSize + 40);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(sr, sg, sb);
+    doc.text(labels.whyMe, margin, y);
+    y += 14;
+
+    let textX = margin;
+    let textWidth = contentWidth;
+    const blockTop = y;
+    if (whyMe.photoDataUrl) {
+      try {
+        doc.addImage(whyMe.photoDataUrl, 'JPEG', margin, y, photoSize, photoSize, undefined, 'FAST');
+        textX = margin + photoSize + 14;
+        textWidth = contentWidth - photoSize - 14;
+      } catch {
+        /* ignore broken photo */
+      }
+    }
+
+    let ty = y + 4;
+    if (whyMe.credential) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(60, 60, 60);
+      for (const line of doc.splitTextToSize(whyMe.credential, textWidth)) {
+        doc.text(line, textX, ty);
+        ty += 13;
+      }
+    }
+    y = Math.max(ty, blockTop + (whyMe.photoDataUrl ? photoSize : 0)) + 8;
+
+    if (whyMe.testimonial) {
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(10);
+      doc.setTextColor(90, 90, 90);
+      for (const line of doc.splitTextToSize(`\u201C${whyMe.testimonial}\u201D`, contentWidth - 12)) {
+        ensureSpace(14);
+        doc.text(line, margin + 12, y);
+        y += 13;
+      }
+      doc.setFont('helvetica', 'normal');
+    }
+    y += 12;
+  }
 
   if (proposal.notes) renderTextSection(labels.notes, proposal.notes);
   if (proposal.terms) renderTextSection(labels.terms, proposal.terms);
