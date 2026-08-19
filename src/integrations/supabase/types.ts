@@ -139,22 +139,40 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          landing_path: string | null
           name: string | null
+          referrer: string | null
           source: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
+          landing_path?: string | null
           name?: string | null
+          referrer?: string | null
           source?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
+          landing_path?: string | null
           name?: string | null
+          referrer?: string | null
           source?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Relationships: []
       }
@@ -356,6 +374,12 @@ export type Database = {
           pix_key_type: string | null
           primary_color: string | null
           secondary_color: string | null
+          signup_landing_path: string | null
+          signup_referrer: string | null
+          signup_utm_campaign: string | null
+          signup_utm_content: string | null
+          signup_utm_medium: string | null
+          signup_utm_source: string | null
           tagline: string | null
           tax_id: string | null
           tax_id_type: string | null
@@ -374,6 +398,12 @@ export type Database = {
           pix_key_type?: string | null
           primary_color?: string | null
           secondary_color?: string | null
+          signup_landing_path?: string | null
+          signup_referrer?: string | null
+          signup_utm_campaign?: string | null
+          signup_utm_content?: string | null
+          signup_utm_medium?: string | null
+          signup_utm_source?: string | null
           tagline?: string | null
           tax_id?: string | null
           tax_id_type?: string | null
@@ -392,6 +422,12 @@ export type Database = {
           pix_key_type?: string | null
           primary_color?: string | null
           secondary_color?: string | null
+          signup_landing_path?: string | null
+          signup_referrer?: string | null
+          signup_utm_campaign?: string | null
+          signup_utm_content?: string | null
+          signup_utm_medium?: string | null
+          signup_utm_source?: string | null
           tagline?: string | null
           tax_id?: string | null
           tax_id_type?: string | null
