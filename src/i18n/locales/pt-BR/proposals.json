@@ -209,5 +209,14 @@
         "support": "Suporte e atendimento no mês"
       }
     }
+  },
+  "views": {
+    "list": "Lista",
+    "kanban": "Kanban"
+  },
+  "send": {
+    "title": "Enviar proposta",
+    "description": "Escolha como enviar \"{{title}}\" para o cliente.",
+    "statusOnly": "Só mudar o status"
   }
 }

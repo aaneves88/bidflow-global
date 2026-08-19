@@ -208,5 +208,14 @@
         "support": "Support during the month"
       }
     }
+  },
+  "views": {
+    "list": "List",
+    "kanban": "Kanban"
+  },
+  "send": {
+    "title": "Send proposal",
+    "description": "Choose how to send \"{{title}}\" to your client.",
+    "statusOnly": "Just change the status"
   }
 }
