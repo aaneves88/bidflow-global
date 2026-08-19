@@ -107,8 +107,15 @@ export async function fetchPublicBranding(supabase: any, publicCode?: string): P
     }
     const row = data[0];
     const hasActivePlan = !!row.has_active_plan;
+    // Social proof ("Por que eu") is available on every plan — only the visual
+    // identity (logo/colors/company name) is gated behind a paid plan.
+    const trust = {
+      photoUrl: row.photo_url || '',
+      credentialNote: row.credential_note || '',
+      trustNote: row.trust_note || '',
+    };
     if (!hasActivePlan) {
-      return { ...ORCA_BRANDING, hasActivePlan: false };
+      return { ...ORCA_BRANDING, ...trust, hasActivePlan: false };
     }
     return {
       logoUrl: row.logo_url || '',
