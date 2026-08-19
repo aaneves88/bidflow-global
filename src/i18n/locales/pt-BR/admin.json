@@ -9,7 +9,8 @@
     "qa": "QA",
     "roadmap": "Roadmap",
     "marketing": "Materiais",
-    "brand": "Marca"
+    "brand": "Marca",
+    "leads": "Leads e-book"
   },
   "roadmap": {
     "title": "Roadmap do produto",
@@ -440,5 +441,30 @@
     "stalledSubtitle": "Criadas há mais de 7 dias e ainda sem nenhuma proposta. Principal vazamento do funil — vale um contato manual.",
     "stalledEmpty": "Nenhuma conta parada. 🎉",
     "contact": "Enviar e-mail"
+  },
+  "leads": {
+    "title": "Leads do e-book",
+    "subtitle": "Quem baixou o e-book e quantos viraram conta na Orca.",
+    "loading": "Carregando leads...",
+    "empty": "Nenhum lead no período.",
+    "exportCsv": "Exportar CSV",
+    "total": "Leads no período",
+    "converted": "Viraram conta",
+    "rate": "Taxa de conversão",
+    "registered": "Cadastrado",
+    "notRegistered": "Só lead",
+    "periods": {
+      "today": "Hoje",
+      "7d": "7 dias",
+      "30d": "30 dias",
+      "all": "Tudo"
+    },
+    "table": {
+      "name": "Nome",
+      "email": "E-mail",
+      "source": "Origem",
+      "date": "Data",
+      "status": "Status"
+    }
   }
 }

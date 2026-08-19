@@ -12,6 +12,7 @@ import AdminRoadmap from './AdminRoadmap';
 import AdminSupport from './AdminSupport';
 import AdminMarketing from './AdminMarketing';
 import AdminBrand from './AdminBrand';
+import AdminEbookLeads from './AdminEbookLeads';
 
 
 export default function Admin() {
@@ -48,6 +49,7 @@ export default function Admin() {
           <TabsTrigger value="qa">{t('tabs.qa')}</TabsTrigger>
           <TabsTrigger value="roadmap">{t('tabs.roadmap')}</TabsTrigger>
           <TabsTrigger value="support">{tSupport('admin.title')}</TabsTrigger>
+          <TabsTrigger value="leads">{t('tabs.leads')}</TabsTrigger>
           <TabsTrigger value="marketing">{t('tabs.marketing')}</TabsTrigger>
           <TabsTrigger value="brand">{t('tabs.brand')}</TabsTrigger>
         </TabsList>
@@ -59,6 +61,7 @@ export default function Admin() {
         <TabsContent value="qa"><AdminQAChecklist /></TabsContent>
         <TabsContent value="roadmap"><AdminRoadmap /></TabsContent>
         <TabsContent value="support"><AdminSupport /></TabsContent>
+        <TabsContent value="leads"><AdminEbookLeads /></TabsContent>
         <TabsContent value="marketing"><AdminMarketing /></TabsContent>
         <TabsContent value="brand"><AdminBrand /></TabsContent>
 
