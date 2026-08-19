@@ -57,5 +57,17 @@
     "title": "Set up your visual identity",
     "subtitle": "Add your logo and colors so proposals go out with your own brand.",
     "cta": "Set up branding"
+  },
+  "attention": {
+    "title": "Needs attention",
+    "expiring": "Expiring",
+    "expired": "Expired",
+    "stale": "No movement",
+    "emptyBucket": "Nothing here.",
+    "summary": "{{count}} proposal(s) · {{value}} at stake",
+    "expiresIn": "expires in {{days}} day(s)",
+    "expiredOn": "expired on {{date}}",
+    "stalledFor": "stalled for {{days}} day(s)",
+    "viewAll": "View all {{count}}"
   }
 }

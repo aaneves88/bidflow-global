@@ -57,5 +57,17 @@
     "title": "Configure sua identidade visual",
     "subtitle": "Adicione seu logo e suas cores para que as propostas saiam com a sua marca.",
     "cta": "Configurar marca"
+  },
+  "attention": {
+    "title": "Precisam de atenção",
+    "expiring": "Vencendo",
+    "expired": "Vencidas",
+    "stale": "Sem movimento",
+    "emptyBucket": "Nada por aqui.",
+    "summary": "{{count}} proposta(s) · {{value}} em jogo",
+    "expiresIn": "vence em {{days}} dia(s)",
+    "expiredOn": "venceu em {{date}}",
+    "stalledFor": "parada há {{days}} dia(s)",
+    "viewAll": "Ver todas as {{count}}"
   }
 }
