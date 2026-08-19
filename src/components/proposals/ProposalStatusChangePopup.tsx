@@ -35,7 +35,15 @@ type Props = {
   proposal: SendableProposal | null;
 };
 
-export function SendProposalDialog({ open, onOpenChange, proposal }: Props) {
+export function findSentStatusId(
+  statuses: Array<{ id: string; name: string; position: number; is_final?: boolean | null }> | undefined | null,
+): string | null {
+  const open = (statuses ?? []).filter((s) => !s.is_final);
+  const byName = open.find((s) => /envi|sent/i.test(s.name));
+  return byName?.id ?? open.find((s) => s.position === 1)?.id ?? null;
+}
+
+export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Props) {
   const { t } = useTranslation(['proposals', 'common']);
   const branding = useBranding();
   const publicBase = usePublicAppUrl();
