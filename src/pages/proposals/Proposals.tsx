@@ -78,14 +78,26 @@ export default function Proposals() {
       <UsageIndicator variant="banner" />
 
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={t('searchPlaceholder')}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
-        />
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative max-w-sm flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={t('searchPlaceholder')}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Tabs value={view} onValueChange={changeView}>
+          <TabsList>
+            <TabsTrigger value="list">
+              <List className="mr-2 h-4 w-4" /> {t('views.list')}
+            </TabsTrigger>
+            <TabsTrigger value="kanban">
+              <LayoutGrid className="mr-2 h-4 w-4" /> {t('views.kanban')}
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       {isLoading ? (
@@ -101,6 +113,8 @@ export default function Proposals() {
             </Button>
           )}
         </div>
+      ) : view === 'kanban' ? (
+        <ProposalsKanban proposals={filtered} />
       ) : (
         <div className="rounded-md border overflow-x-auto">
           <Table>
