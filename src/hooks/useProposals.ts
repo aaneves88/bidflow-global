@@ -37,7 +37,7 @@ export type Proposal = {
   valid_until: string | null;
   created_at: string;
   updated_at: string;
-  clients?: { name: string; email: string | null; company: string | null } | null;
+  clients?: { name: string; email: string | null; company: string | null; phone?: string | null } | null;
   proposal_statuses?: { name: string; color: string } | null;
 };
 
