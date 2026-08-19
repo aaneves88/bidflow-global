@@ -21,6 +21,8 @@ import { UpgradeModal } from '@/components/UpgradeModal';
 import { TaxIdDialog } from '@/components/TaxIdDialog';
 import { ProductPicker } from '@/components/ProductPicker';
 import { SnippetPicker } from '@/components/SnippetPicker';
+import { Switch } from '@/components/ui/switch';
+import { useBranding } from '@/hooks/useBranding';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
 import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
@@ -81,6 +83,8 @@ export default function ProposalForm() {
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [discountType, setDiscountType] = useState<DiscountType>('fixed');
   const [items, setItems] = useState<ProposalItem[]>([emptyItem()]);
+  const [showCover, setShowCover] = useState(false);
+  const [showWhyMe, setShowWhyMe] = useState(false);
   const [pixKey, setPixKey] = useState('');
   const [pixKeyType, setPixKeyType] = useState<PixKeyType>('cpf');
   const [appliedTemplate, setAppliedTemplate] = useState<ProposalTemplateId | null>(null);
@@ -131,6 +135,8 @@ export default function ProposalForm() {
       setValidUntil(proposal.valid_until ? proposal.valid_until.split('T')[0] : '');
       setDiscountAmount(Number((proposal as any).discount_amount) || 0);
       setDiscountType(((proposal as any).discount_type === 'percent' ? 'percent' : 'fixed') as DiscountType);
+      setShowCover(!!(proposal as any).show_cover);
+      setShowWhyMe(!!(proposal as any).show_why_me);
       setPixKey((proposal as any).pix_key || '');
       setPixKeyType((((proposal as any).pix_key_type as PixKeyType) || 'cpf'));
       setProposalHydrated(true);
@@ -190,6 +196,10 @@ export default function ProposalForm() {
   const addItem = () => setItems((p) => [...p, emptyItem()]);
   const removeItem = (idx: number) => setItems((p) => p.filter((_, i) => i !== idx));
 
+  const branding = useBranding();
+  const canShowCover = !!(branding.companyName || branding.logoUrl);
+  const canShowWhyMe = !!(branding.photoUrl || branding.credentialNote || branding.trustNote);
+
   const subtotal = items.reduce((s, i) => s + i.total, 0);
   const discountValueApplied = discountValue(subtotal, discountAmount, discountType);
   const grandTotal = applyDiscount(subtotal, discountAmount, discountType);
@@ -209,6 +219,8 @@ export default function ProposalForm() {
       discount_type: discountType,
       pix_key: trimmedPix || null,
       pix_key_type: trimmedPix ? pixKeyType : null,
+      show_cover: canShowCover && showCover,
+      show_why_me: canShowWhyMe && showWhyMe,
       items,
     };
     if (isEditing) {
@@ -526,6 +538,35 @@ export default function ProposalForm() {
           </CardContent>
         </Card>
 
+
+        {(canShowCover || canShowWhyMe) && (
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('form.extraPages.title')}</CardTitle>
+              <p className="text-sm text-muted-foreground">{t('form.extraPages.hint')}</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {canShowCover && (
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <Label htmlFor="show_cover">{t('form.extraPages.cover')}</Label>
+                    <p className="text-xs text-muted-foreground">{t('form.extraPages.coverHelp')}</p>
+                  </div>
+                  <Switch id="show_cover" checked={showCover} onCheckedChange={setShowCover} />
+                </div>
+              )}
+              {canShowWhyMe && (
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <Label htmlFor="show_why_me">{t('form.extraPages.whyMe')}</Label>
+                    <p className="text-xs text-muted-foreground">{t('form.extraPages.whyMeHelp')}</p>
+                  </div>
+                  <Switch id="show_why_me" checked={showWhyMe} onCheckedChange={setShowWhyMe} />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         <Card>
           <CardHeader><CardTitle>{t('form.pix.title')}</CardTitle></CardHeader>
