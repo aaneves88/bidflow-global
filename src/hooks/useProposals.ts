@@ -66,7 +66,7 @@ export function useProposals() {
       // (admin-wide visibility belongs to /admin only).
       const { data, error } = await supabase
         .from('proposals')
-        .select('*, clients(name, email, company), proposal_statuses(name, color)')
+        .select('*, clients(name, email, company, phone), proposal_statuses(name, color)')
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false });
       if (error) throw error;
