@@ -33,6 +33,8 @@ export type Proposal = {
   discount_type?: string | null;
   pix_key?: string | null;
   pix_key_type?: string | null;
+  show_cover?: boolean | null;
+  show_why_me?: boolean | null;
   status_id: string | null;
   valid_until: string | null;
   created_at: string;
@@ -54,6 +56,8 @@ export type ProposalFormData = {
   discount_type?: DiscountType;
   pix_key?: string | null;
   pix_key_type?: string | null;
+  show_cover?: boolean;
+  show_why_me?: boolean;
   items: ProposalItem[];
 };
 
