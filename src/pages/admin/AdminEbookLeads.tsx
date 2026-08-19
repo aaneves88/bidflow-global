@@ -150,6 +150,7 @@ export default function AdminEbookLeads() {
                   <TableHead>{t('leads.table.name')}</TableHead>
                   <TableHead>{t('leads.table.email')}</TableHead>
                   <TableHead>{t('leads.table.source')}</TableHead>
+                  <TableHead>{t('leads.table.origin')}</TableHead>
                   <TableHead>{t('leads.table.date')}</TableHead>
                   <TableHead>{t('leads.table.status')}</TableHead>
                 </TableRow>
@@ -162,6 +163,11 @@ export default function AdminEbookLeads() {
                       <TableCell>{l.name || '—'}</TableCell>
                       <TableCell>{l.email}</TableCell>
                       <TableCell className="text-muted-foreground">{l.source}</TableCell>
+                      <TableCell className="text-muted-foreground text-xs">
+                        {[l.utm_source, l.utm_medium, l.utm_campaign].filter(Boolean).join(' / ') ||
+                          l.referrer ||
+                          '—'}
+                      </TableCell>
                       <TableCell className="whitespace-nowrap">{formatDateTime(l.created_at)}</TableCell>
                       <TableCell>
                         <Badge variant={isReg ? 'default' : 'secondary'}>
