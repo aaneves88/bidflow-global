@@ -100,5 +100,15 @@
     "upgrade": "Fazer upgrade",
     "portalError": "Não foi possível abrir o portal de assinatura",
     "portalErrorHint": "Tente novamente em instantes. Se persistir, fale com o suporte."
+  },
+  "whyMe": {
+    "title": "Por que eu",
+    "subtitle": "Prova social curta que você pode ligar em cada proposta. Disponível em qualquer plano.",
+    "photo": "Sua foto",
+    "photoHelp": "Foto de rosto, não o logo. Aparece na seção \"Por que eu\".",
+    "credential": "Credencial ou certificação",
+    "credentialPlaceholder": "Ex.: 8 anos em marcenaria sob medida, certificada pelo SENAI.",
+    "testimonial": "Depoimento curto de cliente",
+    "testimonialPlaceholder": "Ex.: \"Entregou no prazo e o acabamento ficou impecável.\" — Marina, Pinheiros"
   }
 }

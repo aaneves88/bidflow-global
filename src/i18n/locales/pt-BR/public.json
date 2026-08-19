@@ -74,5 +74,12 @@
     "title": "Precisa enviar orçamentos assim?",
     "description": "Crie propostas profissionais com PIX, assinatura e PDF em minutos. Comece grátis.",
     "action": "Criar minha proposta grátis"
+  },
+  "cover": {
+    "label": "Proposta comercial",
+    "preparedFor": "Preparada para {{name}}"
+  },
+  "whyMe": {
+    "title": "Por que eu"
   }
 }

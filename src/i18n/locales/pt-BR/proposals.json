@@ -84,6 +84,14 @@
       "invalid": "Documento inválido para o tipo selecionado",
       "duplicate": "Esse CPF/CNPJ já está cadastrado em outra conta.",
       "saveError": "Não foi possível salvar o documento. Tente novamente."
+    },
+    "extraPages": {
+      "title": "Páginas extras",
+      "hint": "Opcional. Proposta que fecha costuma ser curta — use só se ajudar a reforçar confiança em serviço de ticket mais alto.",
+      "cover": "Capa",
+      "coverHelp": "Página de abertura com sua marca, o título da proposta, o cliente e a data.",
+      "whyMe": "Por que eu",
+      "whyMeHelp": "Sua foto, credencial e um depoimento curto de cliente (preenchidos em Configurações → Marca)."
     }
   },
   "view": {
@@ -156,7 +164,10 @@
     "poweredBy": "Feito com Orca · orca-mento.app",
     "watermark": "Orca",
     "subtotal": "Subtotal",
-    "discount": "Desconto"
+    "discount": "Desconto",
+    "coverLabel": "Proposta comercial",
+    "coverPreparedFor": "Preparada para",
+    "whyMe": "Por que eu"
   },
   "templates": {
     "pickerTitle": "Comece por um modelo",

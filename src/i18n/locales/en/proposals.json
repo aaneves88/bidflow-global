@@ -84,6 +84,14 @@
       "invalid": "Invalid document for the selected type",
       "duplicate": "This CPF/CNPJ is already registered on another account.",
       "saveError": "Could not save the document. Please try again."
+    },
+    "extraPages": {
+      "title": "Extra pages",
+      "hint": "Optional. Winning proposals tend to be short — only add these if they help build trust on higher-ticket work.",
+      "cover": "Cover page",
+      "coverHelp": "Opening page with your brand, the proposal title, the client and the date.",
+      "whyMe": "Why me",
+      "whyMeHelp": "Your photo, credential and a short client testimonial (filled in Settings → Branding)."
     }
   },
   "view": {
@@ -155,7 +163,10 @@
     "poweredBy": "Made with Orca · orca-mento.app",
     "watermark": "Orca",
     "subtotal": "Subtotal",
-    "discount": "Discount"
+    "discount": "Discount",
+    "coverLabel": "Proposal",
+    "coverPreparedFor": "Prepared for",
+    "whyMe": "Why me"
   },
   "templates": {
     "pickerTitle": "Start from a template",
