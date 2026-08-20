@@ -38,6 +38,7 @@ import enPrivacy from './locales/en/privacy.json';
 import enProducts from './locales/en/products.json';
 import enSupport from './locales/en/support.json';
 import enSnippets from './locales/en/snippets.json';
+import enReferrals from './locales/en/referrals.json';
 
 export const defaultNS = 'common';
 
