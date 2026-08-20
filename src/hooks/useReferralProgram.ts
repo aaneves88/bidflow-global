@@ -12,11 +12,9 @@ export interface Referral {
   created_at: string;
   converted_at: string | null;
   paid_at: string | null;
-  referred?: {
-    full_name: string | null;
-    email: string | null;
-    created_at: string;
-  } | null;
+  referred_full_name: string | null;
+  referred_email: string | null;
+  referred_created_at: string | null;
 }
 
 export function useReferralProgram() {
@@ -42,23 +40,13 @@ export function useReferralProgram() {
     queryKey: ['referrals', user?.id],
     queryFn: async () => {
       if (!user) return [];
-      const [{ data: rows, error }, { data: profiles }] = await Promise.all([
-        supabase
-          .from('referrals')
-          .select('id, referral_code, status, discount_percent, created_at, converted_at, paid_at, referred_user_id')
-          .eq('referrer_user_id', user.id)
-          .order('created_at', { ascending: false }),
-        supabase.from('profiles').select('id, full_name, email, created_at'),
-      ]);
+      const { data, error } = await supabase.rpc('get_my_referrals');
       if (error) throw error;
-      const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
-      return (rows ?? []).map((r) => ({
-        ...r,
-        referred: profileMap.get(r.referred_user_id) || null,
-      })) as Referral[];
+      return (data ?? []) as Referral[];
     },
     enabled: !!user,
   });
+
 
   const copyLink = async () => {
     const code = profileQuery.data?.referral_code;
