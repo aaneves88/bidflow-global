@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useReferralProgram } from '@/hooks/useReferralProgram';
+import { useAuth } from '@/contexts/AuthContext';
 import { Gift, Copy, Users, ArrowLeft, CheckCircle } from 'lucide-react';
 
 export default function Referrals() {
