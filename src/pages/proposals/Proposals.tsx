@@ -196,7 +196,7 @@ export default function Proposals() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} />
+      <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} context="proposals_limit" />
     </div>
   );
 }

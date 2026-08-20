@@ -228,6 +228,43 @@ Deno.serve(async (req) => {
 
 
 
+  // Funil: assinatura paga (evento único, atribuído pela origem do cadastro).
+  const logSubscriptionPaid = async (
+    userId: string,
+    properties: Record<string, unknown>,
+  ) => {
+    try {
+      const { data: existing } = await admin
+        .from("product_events")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("event_name", "subscription_paid")
+        .limit(1);
+      if (existing && existing.length > 0) return;
+
+      const { data: profile } = await admin
+        .from("profiles")
+        .select(
+          "signup_utm_source, signup_utm_medium, signup_utm_campaign, signup_utm_content, signup_referrer",
+        )
+        .eq("id", userId)
+        .maybeSingle();
+
+      await admin.from("product_events").insert({
+        user_id: userId,
+        event_name: "subscription_paid",
+        properties,
+        utm_source: profile?.signup_utm_source ?? null,
+        utm_medium: profile?.signup_utm_medium ?? null,
+        utm_campaign: profile?.signup_utm_campaign ?? null,
+        utm_content: profile?.signup_utm_content ?? null,
+        referrer: profile?.signup_referrer ?? null,
+      });
+    } catch (e) {
+      console.warn("stripe-webhook: falha ao registrar subscription_paid", e);
+    }
+  };
+
   const toIso = (seconds?: number | null) =>
     typeof seconds === "number" ? new Date(seconds * 1000).toISOString() : null;
 
@@ -271,6 +308,15 @@ Deno.serve(async (req) => {
         const referralPartnerId = await findReferralPartnerId(couponCodes);
 
         await activatePlan({ userId, planId, customerId, subscriptionId, email, expiresAt, referralPartnerId });
+        await logSubscriptionPaid(userId, {
+          plan_id: planId,
+          mode: session.mode,
+          subscription_id: subscriptionId,
+          coupon_codes: couponCodes,
+          referral_partner_id: referralPartnerId,
+          amount_total: session.amount_total ?? null,
+          currency: session.currency ?? null,
+        });
         console.log("stripe-webhook: premium ativado", { userId, subscriptionId, couponCodes, referralPartnerId });
         break;
       }

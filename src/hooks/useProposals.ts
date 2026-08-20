@@ -4,6 +4,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import i18n from '@/i18n';
 import { applyDiscount, type DiscountType } from '@/lib/discount';
+import { trackProductEvent } from '@/lib/productEvents';
+import { trackMeta } from '@/lib/analytics';
 
 const tr = (key: string) => i18n.t(key, { ns: 'proposals' });
 const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
@@ -202,6 +204,20 @@ export function useCreateProposal() {
           changed_by: user!.id,
           notes: 'Proposal created',
         });
+      }
+
+      // Funil: primeira proposta criada (best-effort, nunca quebra o fluxo)
+      try {
+        const { count } = await supabase
+          .from('proposals')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user!.id);
+        if (count === 1) {
+          void trackProductEvent('first_proposal_created', user!.id, { proposal_id: proposal.id });
+          trackMeta('Lead');
+        }
+      } catch {
+        /* telemetria é best-effort */
       }
 
       return proposal;

@@ -14,6 +14,8 @@ import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
 import { toast } from '@/hooks/use-toast';
 import { Seo } from '@/components/Seo';
+import { trackProductEvent } from '@/lib/productEvents';
+import { trackMeta } from '@/lib/analytics';
 
 export default function Pricing() {
   const { t } = useTranslation(['pricing', 'common']);
@@ -42,6 +44,8 @@ export default function Pricing() {
     // Payment Link (com client_reference_id + prefilled_email) tem prioridade
     const paymentLink = getStripePaymentLink(user);
     if (paymentLink) {
+      void trackProductEvent('checkout_started', user.id, { context: 'pricing', plan_id: planId });
+      trackMeta('InitiateCheckout');
       window.open(paymentLink, '_blank', 'noopener,noreferrer');
       return;
     }

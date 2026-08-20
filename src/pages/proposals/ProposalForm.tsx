@@ -257,6 +257,7 @@ export default function ProposalForm() {
       </div>
 
       <UpgradeModal
+        context="proposal_form"
         open={blocked}
         onOpenChange={(open) => {
           setBlocked(open);
