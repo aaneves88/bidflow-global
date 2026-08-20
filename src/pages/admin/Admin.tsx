@@ -13,6 +13,8 @@ import AdminSupport from './AdminSupport';
 import AdminMarketing from './AdminMarketing';
 import AdminBrand from './AdminBrand';
 import AdminEbookLeads from './AdminEbookLeads';
+import AdminReferrals from './AdminReferrals';
+
 
 
 export default function Admin() {
