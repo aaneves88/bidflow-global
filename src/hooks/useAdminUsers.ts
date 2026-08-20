@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
+export type ActivityStatus = 'never' | 'no_proposal' | 'active' | 'inactive';
+
 export interface AdminUser {
   id: string;
   full_name: string | null;
@@ -11,6 +13,11 @@ export interface AdminUser {
   is_premium: boolean;
   is_courtesy: boolean;
   plan_expires_at: string | null;
+  last_sign_in_at: string | null;
+  proposals_count: number;
+  last_proposal_at: string | null;
+  clients_count: number;
+  activity_status: ActivityStatus;
 }
 
 export function useAdminUsers() {
@@ -32,7 +39,12 @@ export function useAdminUsers() {
         .order('starts_at', { ascending: false });
       if (upErr) throw upErr;
 
+      const { data: activity, error: aErr } = await supabase.rpc('get_admin_user_activity');
+      if (aErr) throw aErr;
+
       const now = Date.now();
+      const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
       return (profiles ?? []).map((p) => {
         const active = (userPlans ?? []).find(
           (up) =>
@@ -40,6 +52,16 @@ export function useAdminUsers() {
             (!up.expires_at || new Date(up.expires_at).getTime() > now),
         );
         const planName = active?.plans?.name ?? null;
+        const act = (activity ?? []).find((a) => a.id === p.id);
+        const lastSignIn = act?.last_sign_in_at ?? null;
+        const proposalsCount = act?.proposals_count ?? 0;
+
+        let activityStatus: ActivityStatus;
+        if (!lastSignIn) activityStatus = 'never';
+        else if (proposalsCount === 0) activityStatus = 'no_proposal';
+        else if (now - new Date(lastSignIn).getTime() <= THIRTY_DAYS) activityStatus = 'active';
+        else activityStatus = 'inactive';
+
         return {
           id: p.id,
           full_name: p.full_name,
@@ -50,6 +72,11 @@ export function useAdminUsers() {
           is_premium: !!planName && /premium/i.test(planName),
           is_courtesy: !!active?.granted_by,
           plan_expires_at: active?.expires_at ?? null,
+          last_sign_in_at: lastSignIn,
+          proposals_count: proposalsCount,
+          last_proposal_at: act?.last_proposal_at ?? null,
+          clients_count: act?.clients_count ?? 0,
+          activity_status: activityStatus,
         };
       }) as AdminUser[];
     },

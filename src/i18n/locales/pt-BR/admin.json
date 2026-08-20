@@ -296,6 +296,39 @@
     "badges": {
       "premium": "Premium",
       "premiumCourtesy": "Premium (cortesia)"
+    },
+    "activity": {
+      "columns": {
+        "status": "Situação",
+        "lastSignIn": "Último acesso",
+        "proposals": "Propostas",
+        "clients": "Clientes"
+      },
+      "status": {
+        "never": "Nunca acessou",
+        "no_proposal": "Sem proposta",
+        "active": "Ativo",
+        "inactive": "Inativo"
+      },
+      "filters": {
+        "all": "Todas as situações"
+      },
+      "sort": {
+        "lastSignIn": "Ordenar por último acesso",
+        "proposals": "Ordenar por propostas",
+        "joined": "Ordenar por cadastro"
+      },
+      "summary": {
+        "total": "Total de usuários",
+        "never": "Nunca acessaram",
+        "noProposal": "Sem proposta",
+        "active": "Ativos (30 dias)"
+      },
+      "searchPlaceholder": "Buscar por nome ou e-mail",
+      "today": "hoje",
+      "daysAgo_one": "há {{count}} dia",
+      "daysAgo_other": "há {{count}} dias",
+      "empty": "Nenhum usuário encontrado"
     }
   },
   "plans": {
