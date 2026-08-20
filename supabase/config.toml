@@ -25,6 +25,8 @@ project_id = "mhsyllzvzuorzyacobar"
     verify_jwt = false
   [functions.signup-guarded]
     verify_jwt = false
+  [functions.send-ebook-nurture-emails]
+    verify_jwt = false
 
 
 
