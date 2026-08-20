@@ -30,6 +30,7 @@ interface AdminReferral {
   converted_at: string | null;
   paid_at: string | null;
   reward_granted_at: string | null;
+  referrer_user_id: string;
   referrer_full_name: string | null;
   referrer_email: string | null;
   referred_full_name: string | null;
