@@ -13,7 +13,15 @@ import { Gift, Copy, Users, ArrowLeft, CheckCircle } from 'lucide-react';
 export default function Referrals() {
   const { t } = useTranslation('referrals');
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const { referralCode, referrals, isLoading, copyLink } = useReferralProgram();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/login', { replace: true });
+    }
+  }, [authLoading, user, navigate]);
 
   const shareUrl = referralCode ? `https://orca-mento.app/register?ref=${referralCode}` : '';
 
