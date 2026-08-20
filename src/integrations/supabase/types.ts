@@ -176,6 +176,35 @@ export type Database = {
         }
         Relationships: []
       }
+      ebook_nurture_log: {
+        Row: {
+          ebook_lead_id: string
+          id: string
+          sent_at: string
+          step: string
+        }
+        Insert: {
+          ebook_lead_id: string
+          id?: string
+          sent_at?: string
+          step: string
+        }
+        Update: {
+          ebook_lead_id?: string
+          id?: string
+          sent_at?: string
+          step?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ebook_nurture_log_ebook_lead_id_fkey"
+            columns: ["ebook_lead_id"]
+            isOneToOne: false
+            referencedRelation: "ebook_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_send_log: {
         Row: {
           created_at: string
