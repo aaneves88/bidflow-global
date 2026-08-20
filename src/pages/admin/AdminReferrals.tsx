@@ -47,10 +47,14 @@ const daysSince = (iso: string) =>
   Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
 
 
+type PendingAction = { id: string; kind: 'paid' | 'reward'; early?: boolean } | null;
+
 export default function AdminReferrals() {
   const { t } = useTranslation('admin');
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [pending, setPending] = useState<PendingAction>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin_referrals'],
@@ -60,6 +64,22 @@ export default function AdminReferrals() {
       return (data ?? []) as AdminReferral[];
     },
   });
+
+  const updateReferral = useMutation({
+    mutationFn: async ({ id, kind }: { id: string; kind: 'paid' | 'reward' }) => {
+      const patch = kind === 'paid'
+        ? { status: 'paid', paid_at: new Date().toISOString() }
+        : { reward_granted_at: new Date().toISOString() };
+      const { error } = await supabase.from('referrals').update(patch).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['admin_referrals'] });
+      toast.success(t(vars.kind === 'paid' ? 'referrals.actions.markedPaid' : 'referrals.actions.markedReward'));
+    },
+    onError: () => toast.error(t('referrals.actions.error')),
+  });
+
 
   const referrals = data ?? [];
 
