@@ -46,6 +46,14 @@ export default function Referrals() {
     }
   };
 
+  if (authLoading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">{t('loading')}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <nav className="border-b">
