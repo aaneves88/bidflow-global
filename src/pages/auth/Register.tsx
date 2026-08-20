@@ -70,6 +70,9 @@ export default function Register() {
         refresh_token: result.session.refresh_token,
       });
       await persistSignupAttribution();
+      import('@/hooks/useReferralProgram').then(({ clearPendingReferralCode }) => {
+        clearPendingReferralCode();
+      });
     }
 
     // Fire welcome email (best-effort, non-blocking)
