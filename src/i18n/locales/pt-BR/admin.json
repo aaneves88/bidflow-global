@@ -10,7 +10,8 @@
     "roadmap": "Roadmap",
     "marketing": "Materiais",
     "brand": "Marca",
-    "leads": "Leads e-book"
+    "leads": "Leads e-book",
+    "referrals": "Indicações"
   },
   "roadmap": {
     "title": "Roadmap do produto",
@@ -499,6 +500,33 @@
       "origin": "Atribuição",
       "date": "Data",
       "status": "Status"
+    }
+  },
+  "referrals": {
+    "loading": "Carregando indicações...",
+    "searchPlaceholder": "Buscar por nome, e-mail ou código",
+    "empty": "Nenhuma indicação encontrada",
+    "filters": {
+      "all": "Todos os status"
+    },
+    "status": {
+      "pending": "Pendente",
+      "converted": "Convertido",
+      "paid": "Pago"
+    },
+    "summary": {
+      "total": "Total de indicações",
+      "pending": "Pendentes",
+      "closed": "Convertidas/pagas"
+    },
+    "columns": {
+      "referrer": "Quem indicou",
+      "referred": "Quem foi indicado",
+      "code": "Código",
+      "status": "Status",
+      "createdAt": "Indicação",
+      "convertedAt": "Conversão",
+      "paidAt": "Pagamento"
     }
   }
 }

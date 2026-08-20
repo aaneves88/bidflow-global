@@ -128,7 +128,7 @@ export default function Referrals() {
                   >
                     <div>
                       <p className="font-medium">
-                        {r.referred?.full_name || r.referred?.email || t('history.anonymous')}
+                        {r.referred_full_name || r.referred_email || t('history.anonymous')}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {new Date(r.created_at).toLocaleDateString()}
