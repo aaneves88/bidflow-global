@@ -29,6 +29,7 @@ import MobileEntry from "@/pages/MobileEntry";
 import Unsubscribe from "@/pages/Unsubscribe";
 import MobilePaywall from "@/pages/MobilePaywall";
 import AccountPage from "@/pages/account/AccountPage";
+import Referrals from "@/pages/Referrals";
 import OAuthConsent from "@/pages/auth/OAuthConsent";
 import AuthCallback from "@/pages/auth/AuthCallback";
 
