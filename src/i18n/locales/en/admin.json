@@ -10,7 +10,8 @@
     "roadmap": "Roadmap",
     "marketing": "Assets",
     "brand": "Brand",
-    "leads": "Ebook leads"
+    "leads": "Ebook leads",
+    "referrals": "Referrals"
   },
   "roadmap": {
     "title": "Product roadmap",
@@ -499,6 +500,33 @@
       "origin": "Attribution",
       "date": "Date",
       "status": "Status"
+    }
+  },
+  "referrals": {
+    "loading": "Loading referrals...",
+    "searchPlaceholder": "Search by name, email or code",
+    "empty": "No referrals found",
+    "filters": {
+      "all": "All statuses"
+    },
+    "status": {
+      "pending": "Pending",
+      "converted": "Converted",
+      "paid": "Paid"
+    },
+    "summary": {
+      "total": "Total referrals",
+      "pending": "Pending",
+      "closed": "Converted/paid"
+    },
+    "columns": {
+      "referrer": "Referrer",
+      "referred": "Referred",
+      "code": "Code",
+      "status": "Status",
+      "createdAt": "Referred on",
+      "convertedAt": "Converted",
+      "paidAt": "Paid"
     }
   }
 }
