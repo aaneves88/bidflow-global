@@ -45,6 +45,7 @@ export default function Admin() {
         >
           <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
           <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
+          <TabsTrigger value="referrals">{t('tabs.referrals')}</TabsTrigger>
           <TabsTrigger value="plans">{t('tabs.plans')}</TabsTrigger>
           <TabsTrigger value="statuses">{t('tabs.statuses')}</TabsTrigger>
           <TabsTrigger value="integrations">{t('tabs.integrations')}</TabsTrigger>
@@ -57,6 +58,7 @@ export default function Admin() {
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
+        <TabsContent value="referrals"><AdminReferrals /></TabsContent>
         <TabsContent value="plans"><AdminPlans /></TabsContent>
         <TabsContent value="statuses"><AdminStatuses /></TabsContent>
         <TabsContent value="integrations"><AdminIntegrations /></TabsContent>
