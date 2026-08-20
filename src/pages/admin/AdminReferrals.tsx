@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Search } from 'lucide-react';
 import { toast } from 'sonner';
+import { useGrantReferralReward } from '@/hooks/useReferralProgram';
 
 type ReferralStatus = 'pending' | 'converted' | 'paid';
 type StatusFilter = 'all' | ReferralStatus;
