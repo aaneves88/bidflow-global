@@ -42,22 +42,20 @@ export function useReferralProgram() {
     queryKey: ['referrals', user?.id],
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase
-        .from('referrals')
-        .select(`
-          id,
-          referral_code,
-          status,
-          discount_percent,
-          created_at,
-          converted_at,
-          paid_at,
-          referred:referred_user_id(full_name, email, created_at)
-        `)
-        .eq('referrer_user_id', user.id)
-        .order('created_at', { ascending: false });
+      const [{ data: rows, error }, { data: profiles }] = await Promise.all([
+        supabase
+          .from('referrals')
+          .select('id, referral_code, status, discount_percent, created_at, converted_at, paid_at, referred_user_id')
+          .eq('referrer_user_id', user.id)
+          .order('created_at', { ascending: false }),
+        supabase.from('profiles').select('id, full_name, email, created_at'),
+      ]);
       if (error) throw error;
-      return (data ?? []) as unknown as Referral[];
+      const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+      return (rows ?? []).map((r) => ({
+        ...r,
+        referred: profileMap.get(r.referred_user_id) || null,
+      })) as Referral[];
     },
     enabled: !!user,
   });
