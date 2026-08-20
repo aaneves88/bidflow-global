@@ -637,10 +637,13 @@ export async function generateProposalPdf(
   }
 
 
-  // === Footer + watermark on every page ===
+  // === Footer + watermark on every page (cover page stays clean) ===
   const pageCount = doc.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
+    if (options.cover && i === 1) continue;
     doc.setPage(i);
+
+
 
     if (options.watermark) {
       // @ts-ignore
