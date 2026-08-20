@@ -1,16 +1,24 @@
 import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Search } from 'lucide-react';
+import { toast } from 'sonner';
 
 type ReferralStatus = 'pending' | 'converted' | 'paid';
 type StatusFilter = 'all' | ReferralStatus;
+
+const SAFETY_WINDOW_DAYS = 14;
 
 interface AdminReferral {
   id: string;
@@ -20,6 +28,7 @@ interface AdminReferral {
   created_at: string;
   converted_at: string | null;
   paid_at: string | null;
+  reward_granted_at: string | null;
   referrer_full_name: string | null;
   referrer_email: string | null;
   referred_full_name: string | null;
@@ -33,6 +42,10 @@ const statusVariant: Record<ReferralStatus, 'default' | 'secondary' | 'outline'>
 };
 
 const fmt = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString() : '—');
+
+const daysSince = (iso: string) =>
+  Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+
 
 export default function AdminReferrals() {
   const { t } = useTranslation('admin');
