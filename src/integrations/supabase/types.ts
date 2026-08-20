@@ -846,6 +846,7 @@ export type Database = {
           referral_code: string
           referred_user_id: string | null
           referrer_user_id: string
+          reward_granted_at: string | null
           status: string
           updated_at: string
         }
@@ -858,6 +859,7 @@ export type Database = {
           referral_code: string
           referred_user_id?: string | null
           referrer_user_id: string
+          reward_granted_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -870,6 +872,7 @@ export type Database = {
           referral_code?: string
           referred_user_id?: string | null
           referrer_user_id?: string
+          reward_granted_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -1186,6 +1189,7 @@ export type Database = {
           referred_full_name: string
           referrer_email: string
           referrer_full_name: string
+          reward_granted_at: string
           status: string
         }[]
       }

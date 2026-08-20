@@ -1,16 +1,24 @@
 import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Search } from 'lucide-react';
+import { toast } from 'sonner';
 
 type ReferralStatus = 'pending' | 'converted' | 'paid';
 type StatusFilter = 'all' | ReferralStatus;
+
+const SAFETY_WINDOW_DAYS = 14;
 
 interface AdminReferral {
   id: string;
@@ -20,6 +28,7 @@ interface AdminReferral {
   created_at: string;
   converted_at: string | null;
   paid_at: string | null;
+  reward_granted_at: string | null;
   referrer_full_name: string | null;
   referrer_email: string | null;
   referred_full_name: string | null;
@@ -34,10 +43,18 @@ const statusVariant: Record<ReferralStatus, 'default' | 'secondary' | 'outline'>
 
 const fmt = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString() : '—');
 
+const daysSince = (iso: string) =>
+  Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+
+
+type PendingAction = { id: string; kind: 'paid' | 'reward'; early?: boolean } | null;
+
 export default function AdminReferrals() {
   const { t } = useTranslation('admin');
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [pending, setPending] = useState<PendingAction>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin_referrals'],
@@ -47,6 +64,22 @@ export default function AdminReferrals() {
       return (data ?? []) as AdminReferral[];
     },
   });
+
+  const updateReferral = useMutation({
+    mutationFn: async ({ id, kind }: { id: string; kind: 'paid' | 'reward' }) => {
+      const patch = kind === 'paid'
+        ? { status: 'paid', paid_at: new Date().toISOString() }
+        : { reward_granted_at: new Date().toISOString() };
+      const { error } = await supabase.from('referrals').update(patch).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['admin_referrals'] });
+      toast.success(t(vars.kind === 'paid' ? 'referrals.actions.markedPaid' : 'referrals.actions.markedReward'));
+    },
+    onError: () => toast.error(t('referrals.actions.error')),
+  });
+
 
   const referrals = data ?? [];
 
@@ -119,17 +152,23 @@ export default function AdminReferrals() {
               <TableHead>{t('referrals.columns.createdAt')}</TableHead>
               <TableHead>{t('referrals.columns.convertedAt')}</TableHead>
               <TableHead>{t('referrals.columns.paidAt')}</TableHead>
+              <TableHead>{t('referrals.columns.reward')}</TableHead>
+              <TableHead className="text-right">{t('referrals.columns.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {visible.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground py-6">
+                <TableCell colSpan={9} className="text-center text-muted-foreground py-6">
                   {t('referrals.empty')}
                 </TableCell>
               </TableRow>
             )}
-            {visible.map((r) => (
+            {visible.map((r) => {
+              const days = r.paid_at ? daysSince(r.paid_at) : 0;
+              const released = r.status === 'paid' && !r.reward_granted_at && days >= SAFETY_WINDOW_DAYS;
+              const waiting = r.status === 'paid' && !r.reward_granted_at && days < SAFETY_WINDOW_DAYS;
+              return (
               <TableRow key={r.id}>
                 <TableCell className="font-medium">
                   <div>{r.referrer_full_name || '—'}</div>
@@ -146,11 +185,72 @@ export default function AdminReferrals() {
                 <TableCell className="whitespace-nowrap text-sm">{fmt(r.created_at)}</TableCell>
                 <TableCell className="whitespace-nowrap text-sm">{fmt(r.converted_at)}</TableCell>
                 <TableCell className="whitespace-nowrap text-sm">{fmt(r.paid_at)}</TableCell>
+                <TableCell className="whitespace-nowrap text-sm">
+                  {r.reward_granted_at ? (
+                    <Badge variant="secondary">
+                      {t('referrals.reward.granted', { date: fmt(r.reward_granted_at) })}
+                    </Badge>
+                  ) : waiting ? (
+                    <Badge variant="outline" className="border-amber-500 text-amber-600">
+                      {t('referrals.reward.waiting', { days, total: SAFETY_WINDOW_DAYS })}
+                    </Badge>
+                  ) : released ? (
+                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">
+                      {t('referrals.reward.released')}
+                    </Badge>
+                  ) : (
+                    <span className="text-muted-foreground">—</span>
+                  )}
+                </TableCell>
+                <TableCell className="text-right whitespace-nowrap">
+                  {(r.status === 'pending' || r.status === 'converted') && (
+                    <Button size="sm" variant="outline" onClick={() => setPending({ id: r.id, kind: 'paid' })}>
+                      {t('referrals.actions.markPaid')}
+                    </Button>
+                  )}
+                  {r.status === 'paid' && !r.reward_granted_at && (
+                    <Button
+                      size="sm"
+                      variant={released ? 'default' : 'ghost'}
+                      className={released ? '' : 'text-muted-foreground'}
+                      onClick={() => setPending({ id: r.id, kind: 'reward', early: !released })}
+                    >
+                      {t('referrals.actions.markReward')}
+                    </Button>
+                  )}
+                </TableCell>
               </TableRow>
-            ))}
+            );})}
           </TableBody>
         </Table>
       </div>
+
+      <AlertDialog open={!!pending} onOpenChange={(o) => !o && setPending(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t(pending?.kind === 'reward' ? 'referrals.confirm.rewardTitle' : 'referrals.confirm.paidTitle')}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {pending?.early
+                ? t('referrals.confirm.rewardEarly', { total: SAFETY_WINDOW_DAYS })
+                : t(pending?.kind === 'reward' ? 'referrals.confirm.rewardDesc' : 'referrals.confirm.paidDesc')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('referrals.confirm.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pending) updateReferral.mutate({ id: pending.id, kind: pending.kind });
+                setPending(null);
+              }}
+            >
+              {t('referrals.confirm.confirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
+
 }

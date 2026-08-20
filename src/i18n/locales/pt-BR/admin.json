@@ -526,7 +526,30 @@
       "status": "Status",
       "createdAt": "Indicação",
       "convertedAt": "Conversão",
-      "paidAt": "Pagamento"
+      "paidAt": "Pagamento",
+      "reward": "Recompensa",
+      "actions": "Ações"
+    },
+    "reward": {
+      "granted": "Recompensa aplicada em {{date}}",
+      "waiting": "Aguardando janela de segurança ({{days}}/{{total}} dias)",
+      "released": "Liberado pra recompensar quem indicou"
+    },
+    "actions": {
+      "markPaid": "Marcar como pago",
+      "markReward": "Marcar recompensa aplicada",
+      "markedPaid": "Indicação marcada como paga",
+      "markedReward": "Recompensa registrada",
+      "error": "Erro ao atualizar indicação"
+    },
+    "confirm": {
+      "paidTitle": "Marcar indicação como paga?",
+      "paidDesc": "Confirme no Stripe que o pagamento do indicado foi concluído antes de continuar.",
+      "rewardTitle": "Marcar recompensa como aplicada?",
+      "rewardDesc": "Isso é apenas registro. Conceda o mês grátis manualmente na aba Usuários.",
+      "rewardEarly": "Atenção: a janela de segurança de {{total}} dias contra chargeback ainda não terminou. Marcar agora é uma exceção à regra.",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
     }
   }
 }
