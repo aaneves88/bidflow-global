@@ -65,6 +65,7 @@ const App = () => (
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
             <Route path="/ebook" element={<Ebook />} />
+            <Route path="/convidar" element={<Referrals />} />
 
             <Route path="/legal/:doc" element={<LegalPage />} />
             <Route path="/privacidade" element={<Privacy />} />
