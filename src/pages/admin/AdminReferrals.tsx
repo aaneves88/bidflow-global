@@ -220,7 +220,7 @@ export default function AdminReferrals() {
                 </TableCell>
                 <TableCell className="text-right whitespace-nowrap">
                   {(r.status === 'pending' || r.status === 'converted') && (
-                    <Button size="sm" variant="outline" onClick={() => setPending({ id: r.id, kind: 'paid' })}>
+                    <Button size="sm" variant="outline" onClick={() => setPending({ id: r.id, userId: r.referrer_user_id, kind: 'paid' })}>
                       {t('referrals.actions.markPaid')}
                     </Button>
                   )}
@@ -229,9 +229,10 @@ export default function AdminReferrals() {
                       size="sm"
                       variant={released ? 'default' : 'ghost'}
                       className={released ? '' : 'text-muted-foreground'}
-                      onClick={() => setPending({ id: r.id, kind: 'reward', early: !released })}
+                      disabled={grantReward.isPending}
+                      onClick={() => setPending({ id: r.id, userId: r.referrer_user_id, kind: 'reward', early: !released })}
                     >
-                      {t('referrals.actions.markReward')}
+                      {t('referrals.actions.grantReward')}
                     </Button>
                   )}
                 </TableCell>
