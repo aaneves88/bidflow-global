@@ -8,6 +8,7 @@ import { ArrowLeft, Check, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/hooks/useSubscription';
+import { trackProductEvent } from '@/lib/productEvents';
 
 type RCPackage = {
   identifier: string;
@@ -33,6 +34,11 @@ export default function MobilePaywall() {
   const [packages, setPackages] = useState<RCPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [purchasing, setPurchasing] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    void trackProductEvent('paywall_viewed', user.id, { context: 'mobile_paywall' });
+  }, [user?.id]);
 
   useEffect(() => {
     let cancelled = false;
