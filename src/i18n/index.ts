@@ -94,6 +94,7 @@ i18n
         products: enProducts,
         support: enSupport,
         snippets: enSnippets,
+        referrals: enReferrals,
       },
     },
   });
