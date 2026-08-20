@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { Seo } from '@/components/Seo';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
 import { persistSignupAttribution } from '@/lib/attributionSync';
+import { storePendingReferralCode, getPendingReferralCode } from '@/hooks/useReferralProgram';
 
 export default function Register() {
   const { t } = useTranslation('auth');
