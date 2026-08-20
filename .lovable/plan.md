@@ -1,27 +1,59 @@
-# Campo de cupom no checkout
+# Nova capa da proposta + próximas ondas
 
-## O que está acontecendo
+## 1. Capa do PDF (prioridade imediata)
 
-A tela da captura é o **Stripe Checkout** gerado pelo Payment Link (`VITE_STRIPE_PAYMENT_LINK`). O campo "Adicionar código promocional" não aparece porque é uma opção do próprio Payment Link no Stripe — não existe nada no código da Orca que possa habilitá-lo.
+A capa atual é branca, com logo pequeno no topo e muito espaço vazio no meio. Vira uma **capa cheia colorida**, em faixas de largura total:
 
-Dois pontos secundários visíveis na mesma tela:
-- O nome da conta aparece como **StateMatch** (branding da conta Stripe), não Orca.
-- O produto está como "OrcaPremium" (sem espaço).
+```text
+┌──────────────────────────────┐
+│  [faixa cor da marca]        │
+│   logo + nome da empresa     │
+│   tagline                    │
+│                              │
+│   PROPOSTA COMERCIAL         │
+│   Título da proposta         │  <- tipografia grande, alinhada à esquerda
+│                              │
+├──────────────────────────────┤
+│  [faixa clara / cartão]      │
+│  Preparada para: Cliente     │
+│  Válida até | Data | Valor   │
+├──────────────────────────────┤
+│  faixa de acento fina        │
+└──────────────────────────────┘
+```
 
-## Ajuste no Stripe (feito por você, sem código)
+Detalhes:
+- Fundo ocupa a página inteira na cor secundária da marca (padrão `#0F172A`), sem moldura branca.
+- Bloco superior: logo do freelancer (ou marca Orca no plano gratuito), nome e tagline.
+- Bloco central: rótulo "Proposta comercial" em maiúsculas espaçadas + título em tipografia grande alinhada à esquerda, ocupando o espaço que hoje fica vazio.
+- Rodapé da capa: cartão com cliente, data de emissão, validade e **valor total** em destaque na cor de acento — resolve o "espaço mal usado" trazendo informação útil.
+- Cores sempre vindas do branding do usuário (primária / secundária / acento), com contraste automático de texto claro sobre fundo escuro.
+- No plano gratuito a capa continua exibindo a marca Orca; nos planos pagos, só a marca do usuário.
 
-1. Payment Link usado pela Orca → editar → marcar **"Permitir códigos promocionais"** (Allow promotion codes). O Stripe passa a exibir o link "Adicionar código promocional" no checkout.
-   - Se o link já teve pagamentos, o Stripe pode exigir criar um novo link; nesse caso basta trocar o valor de `VITE_STRIPE_PAYMENT_LINK`.
-2. Conferir em Configurações → Branding se o nome/logo devem virar Orca.
-3. Renomear o produto para "Orca Premium" se quiser.
+Técnico: reescrita de `buildCoverCanvas` em `src/lib/proposalPdf.ts`, capa renderizada em página inteira (sem margens), novos rótulos em `labels` e traduções em `pt-BR/proposals.json` e `en/proposals.json`.
 
-Os cupons dos parceiros de indicação (`referral_partners.coupon_code`) precisam existir como **Promotion codes** no Stripe com o mesmo texto, senão o cliente digita e recebe erro. O webhook já lê o cupom aplicado e liga ao parceiro.
+## 2. O que mais precisamos — ondas seguintes
 
-## Opcional, do lado do app
+Você marcou as quatro frentes; ordem sugerida por impacto:
 
-Depois que a opção estiver ativa no Stripe, dá para pré-preencher o cupom automaticamente:
+### Onda A — Lançamento nas lojas (bloqueia receita mobile)
+- Compra in-app obrigatória na Play/App Store: fechar o fluxo RevenueCat (produtos, entitlement, sincronização com `user_plans`) e esconder o link Stripe dentro do app nativo.
+- Assets e ficha das lojas: ícone, screenshots, descrição PT/EN, política de privacidade e exclusão de conta (já existem, revisar).
+- Build assinado Android + checklist de review.
 
-- `src/lib/stripeCheckout.ts`: aceitar um `promoCode` opcional e adicionar `prefilled_promo_code` na URL do Payment Link.
-- `UpgradeModal.tsx` / `Pricing.tsx`: passar o cupom quando o usuário chegou por um link de parceiro (`?coupon=` / indicação já guardada no localStorage), para o desconto já vir aplicado.
+### Onda B — Conversão e receita
+- Plano anual (R$ 239,90) ativo no app e no checkout, com selo "2 meses grátis".
+- Cupom pré-preenchido no checkout para quem vem de indicação/parceiro.
+- Página de preços e paywall com prova social e comparativo enxuto.
 
-Me diga se quer que eu implemente essa parte opcional — a habilitação do campo em si é só no painel do Stripe.
+### Onda C — Qualidade do produto
+- Nova capa (item 1) + revisão das seções "Por que eu" e PIX no PDF.
+- Pré-visualização da proposta antes de enviar.
+- Polimento do editor de itens no mobile.
+
+### Onda D — Retenção
+- Resumo semanal por e-mail: propostas abertas, vencendo e taxa de aceite.
+- Notificação quando o cliente abre a proposta (hoje só há registro).
+- Lembrete automático de follow-up para propostas paradas.
+
+Começo pela capa; as ondas seguem em releases separadas com doc em `docs/releases/`.
