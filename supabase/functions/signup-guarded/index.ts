@@ -28,6 +28,7 @@ Deno.serve(async (req) => {
     const email = typeof body?.email === 'string' ? body.email.trim() : '';
     const password = typeof body?.password === 'string' ? body.password : '';
     const fullName = typeof body?.fullName === 'string' ? body.fullName.trim().slice(0, 120) : '';
+    const referralCode = typeof body?.referralCode === 'string' ? body.referralCode.toUpperCase().trim() : '';
     const emailRedirectTo = typeof body?.emailRedirectTo === 'string' ? body.emailRedirectTo : undefined;
 
     if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 255) {
