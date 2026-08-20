@@ -152,17 +152,23 @@ export default function AdminReferrals() {
               <TableHead>{t('referrals.columns.createdAt')}</TableHead>
               <TableHead>{t('referrals.columns.convertedAt')}</TableHead>
               <TableHead>{t('referrals.columns.paidAt')}</TableHead>
+              <TableHead>{t('referrals.columns.reward')}</TableHead>
+              <TableHead className="text-right">{t('referrals.columns.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {visible.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground py-6">
+                <TableCell colSpan={9} className="text-center text-muted-foreground py-6">
                   {t('referrals.empty')}
                 </TableCell>
               </TableRow>
             )}
-            {visible.map((r) => (
+            {visible.map((r) => {
+              const days = r.paid_at ? daysSince(r.paid_at) : 0;
+              const released = r.status === 'paid' && !r.reward_granted_at && days >= SAFETY_WINDOW_DAYS;
+              const waiting = r.status === 'paid' && !r.reward_granted_at && days < SAFETY_WINDOW_DAYS;
+              return (
               <TableRow key={r.id}>
                 <TableCell className="font-medium">
                   <div>{r.referrer_full_name || '—'}</div>
@@ -179,11 +185,72 @@ export default function AdminReferrals() {
                 <TableCell className="whitespace-nowrap text-sm">{fmt(r.created_at)}</TableCell>
                 <TableCell className="whitespace-nowrap text-sm">{fmt(r.converted_at)}</TableCell>
                 <TableCell className="whitespace-nowrap text-sm">{fmt(r.paid_at)}</TableCell>
+                <TableCell className="whitespace-nowrap text-sm">
+                  {r.reward_granted_at ? (
+                    <Badge variant="secondary">
+                      {t('referrals.reward.granted', { date: fmt(r.reward_granted_at) })}
+                    </Badge>
+                  ) : waiting ? (
+                    <Badge variant="outline" className="border-amber-500 text-amber-600">
+                      {t('referrals.reward.waiting', { days, total: SAFETY_WINDOW_DAYS })}
+                    </Badge>
+                  ) : released ? (
+                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">
+                      {t('referrals.reward.released')}
+                    </Badge>
+                  ) : (
+                    <span className="text-muted-foreground">—</span>
+                  )}
+                </TableCell>
+                <TableCell className="text-right whitespace-nowrap">
+                  {(r.status === 'pending' || r.status === 'converted') && (
+                    <Button size="sm" variant="outline" onClick={() => setPending({ id: r.id, kind: 'paid' })}>
+                      {t('referrals.actions.markPaid')}
+                    </Button>
+                  )}
+                  {r.status === 'paid' && !r.reward_granted_at && (
+                    <Button
+                      size="sm"
+                      variant={released ? 'default' : 'ghost'}
+                      className={released ? '' : 'text-muted-foreground'}
+                      onClick={() => setPending({ id: r.id, kind: 'reward', early: !released })}
+                    >
+                      {t('referrals.actions.markReward')}
+                    </Button>
+                  )}
+                </TableCell>
               </TableRow>
-            ))}
+            );})}
           </TableBody>
         </Table>
       </div>
+
+      <AlertDialog open={!!pending} onOpenChange={(o) => !o && setPending(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t(pending?.kind === 'reward' ? 'referrals.confirm.rewardTitle' : 'referrals.confirm.paidTitle')}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {pending?.early
+                ? t('referrals.confirm.rewardEarly', { total: SAFETY_WINDOW_DAYS })
+                : t(pending?.kind === 'reward' ? 'referrals.confirm.rewardDesc' : 'referrals.confirm.paidDesc')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('referrals.confirm.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pending) updateReferral.mutate({ id: pending.id, kind: pending.kind });
+                setPending(null);
+              }}
+            >
+              {t('referrals.confirm.confirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
+
 }
