@@ -19,6 +19,7 @@ import ptPrivacy from './locales/pt-BR/privacy.json';
 import ptProducts from './locales/pt-BR/products.json';
 import ptSupport from './locales/pt-BR/support.json';
 import ptSnippets from './locales/pt-BR/snippets.json';
+import ptReferrals from './locales/pt-BR/referrals.json';
 
 import enCommon from './locales/en/common.json';
 import enLanding from './locales/en/landing.json';
