@@ -4,6 +4,7 @@ Histórico de versões. Cada release entrega uma "onda" do [roadmap](../ROADMAP.
 
 ## Lançadas
 
+- [v0.8.0 — Programa de Indicação](./v0.8.0-referral.md) — Convite entre usuários e acompanhamento de indicações
 - [v0.6.0 — Mobile Android](./v0.6.0-mobile.md) — Capacitor + Play Store + RevenueCat
 - [v0.5.0 — E-mails](./v0.5.0-emails.md) — Auth + transacionais com branding Orca
 - [v0.4.0 — Hardening](./v0.4.0-hardening.md) — Segurança em camadas (RLS, RPC público, HIBP)

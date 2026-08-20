@@ -19,6 +19,7 @@ import ptPrivacy from './locales/pt-BR/privacy.json';
 import ptProducts from './locales/pt-BR/products.json';
 import ptSupport from './locales/pt-BR/support.json';
 import ptSnippets from './locales/pt-BR/snippets.json';
+import ptReferrals from './locales/pt-BR/referrals.json';
 
 import enCommon from './locales/en/common.json';
 import enLanding from './locales/en/landing.json';
@@ -37,6 +38,7 @@ import enPrivacy from './locales/en/privacy.json';
 import enProducts from './locales/en/products.json';
 import enSupport from './locales/en/support.json';
 import enSnippets from './locales/en/snippets.json';
+import enReferrals from './locales/en/referrals.json';
 
 export const defaultNS = 'common';
 
@@ -72,6 +74,7 @@ i18n
         products: ptProducts,
         support: ptSupport,
         snippets: ptSnippets,
+        referrals: ptReferrals,
       },
       en: {
         common: enCommon,
@@ -91,6 +94,7 @@ i18n
         products: enProducts,
         support: enSupport,
         snippets: enSnippets,
+        referrals: enReferrals,
       },
     },
   });

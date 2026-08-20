@@ -28,6 +28,7 @@ Deno.serve(async (req) => {
     const email = typeof body?.email === 'string' ? body.email.trim() : '';
     const password = typeof body?.password === 'string' ? body.password : '';
     const fullName = typeof body?.fullName === 'string' ? body.fullName.trim().slice(0, 120) : '';
+    const referralCode = typeof body?.referralCode === 'string' ? body.referralCode.toUpperCase().trim() : '';
     const emailRedirectTo = typeof body?.emailRedirectTo === 'string' ? body.emailRedirectTo : undefined;
 
     if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 255) {
@@ -77,6 +78,29 @@ Deno.serve(async (req) => {
     }
 
     await admin.from('signup_ip_log').insert({ ip_hash: ipHash });
+
+    // Track referral if a valid referral code was provided
+    if (referralCode && data.user?.id) {
+      try {
+        const { data: referrer } = await admin
+          .from('profiles')
+          .select('id')
+          .eq('referral_code', referralCode)
+          .single();
+
+        if (referrer && referrer.id !== data.user.id) {
+          await admin.from('referrals').insert({
+            referrer_user_id: referrer.id,
+            referred_user_id: data.user.id,
+            referral_code: referralCode,
+            status: 'pending',
+            discount_percent: 20,
+          });
+        }
+      } catch (referralErr) {
+        console.error('referral tracking failed', referralErr);
+      }
+    }
 
     return json({ ok: true, session: data.session ?? null });
   } catch (e) {

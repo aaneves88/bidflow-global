@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { Seo } from '@/components/Seo';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
 import { persistSignupAttribution } from '@/lib/attributionSync';
+import { storePendingReferralCode, getPendingReferralCode, clearPendingReferralCode } from '@/hooks/useReferralProgram';
 
 export default function Register() {
   const { t } = useTranslation('auth');
@@ -19,21 +20,32 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useOAuthErrorNotice();
+
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      storePendingReferralCode(ref.toUpperCase().trim());
+    }
+  }, [searchParams]);
 
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    const referralCode = getPendingReferralCode();
+
     const { data, error: invokeError } = await supabase.functions.invoke('signup-guarded', {
       body: {
         email,
         password,
         fullName,
+        referralCode,
         emailRedirectTo: `${window.location.origin}/dashboard`,
       },
     });
@@ -58,6 +70,7 @@ export default function Register() {
         refresh_token: result.session.refresh_token,
       });
       await persistSignupAttribution();
+      clearPendingReferralCode();
     }
 
     // Fire welcome email (best-effort, non-blocking)

@@ -29,6 +29,7 @@ import MobileEntry from "@/pages/MobileEntry";
 import Unsubscribe from "@/pages/Unsubscribe";
 import MobilePaywall from "@/pages/MobilePaywall";
 import AccountPage from "@/pages/account/AccountPage";
+import Referrals from "@/pages/Referrals";
 import OAuthConsent from "@/pages/auth/OAuthConsent";
 import AuthCallback from "@/pages/auth/AuthCallback";
 
@@ -64,6 +65,7 @@ const App = () => (
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             <Route path="/p/:publicCode" element={<PublicProposal />} />
             <Route path="/ebook" element={<Ebook />} />
+            <Route path="/convidar" element={<Referrals />} />
 
             <Route path="/legal/:doc" element={<LegalPage />} />
             <Route path="/privacidade" element={<Privacy />} />

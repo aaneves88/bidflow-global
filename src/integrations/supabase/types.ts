@@ -375,6 +375,7 @@ export type Database = {
           pix_key: string | null
           pix_key_type: string | null
           primary_color: string | null
+          referral_code: string | null
           secondary_color: string | null
           signup_landing_path: string | null
           signup_referrer: string | null
@@ -402,6 +403,7 @@ export type Database = {
           pix_key?: string | null
           pix_key_type?: string | null
           primary_color?: string | null
+          referral_code?: string | null
           secondary_color?: string | null
           signup_landing_path?: string | null
           signup_referrer?: string | null
@@ -429,6 +431,7 @@ export type Database = {
           pix_key?: string | null
           pix_key_type?: string | null
           primary_color?: string | null
+          referral_code?: string | null
           secondary_color?: string | null
           signup_landing_path?: string | null
           signup_referrer?: string | null
@@ -833,6 +836,45 @@ export type Database = {
           },
         ]
       }
+      referrals: {
+        Row: {
+          converted_at: string | null
+          created_at: string
+          discount_percent: number
+          id: string
+          paid_at: string | null
+          referral_code: string
+          referred_user_id: string | null
+          referrer_user_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          converted_at?: string | null
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          paid_at?: string | null
+          referral_code: string
+          referred_user_id?: string | null
+          referrer_user_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          converted_at?: string | null
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          paid_at?: string | null
+          referral_code?: string
+          referred_user_id?: string | null
+          referrer_user_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       revenuecat_events: {
         Row: {
           app_user_id: string
@@ -1129,6 +1171,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      generate_referral_code: { Args: never; Returns: string }
       get_admin_activation_stats: { Args: never; Returns: Json }
       get_admin_user_activity: {
         Args: never

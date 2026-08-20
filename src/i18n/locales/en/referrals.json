@@ -1,0 +1,26 @@
+{
+  "title": "Refer and earn",
+  "subtitle": "Invite other freelancers to Orca and earn rewards when they become paying customers.",
+  "back": "Back",
+  "loading": "Loading...",
+  "copySuccess": "Link copied!",
+  "copyError": "Could not copy the link",
+  "share": {
+    "title": "Your referral link",
+    "description": "Share this link with friends, colleagues, or clients. When they sign up, they'll appear here.",
+    "copy": "Copy link",
+    "benefit1": "People who sign up through your link get a discount on their first subscription.",
+    "benefit2": "You earn credits as your referrals become paying customers."
+  },
+  "history": {
+    "title": "Who you referred",
+    "description": "Track the status of your referrals.",
+    "empty": "You haven't referred anyone yet. Share your link to get started!",
+    "anonymous": "Anonymous user"
+  },
+  "status": {
+    "pending": "Pending",
+    "converted": "Converted",
+    "paid": "Paid"
+  }
+}
