@@ -10,13 +10,14 @@ Status atualizado em cada release. Documento vivo.
 | 3.5  | v0.3.1 | PDF híbrido (canvas + texto), branding completo no PDF | ✅ Lançada |
 | 4    | v0.4.0 | Hardening de segurança (RLS, RPC público, realtime, HIBP) | ✅ Lançada |
 | 5    | v0.5.0 | E-mails transacionais (auth + notificações de propostas) | ✅ Lançada |
-| 6    | v0.6.0 | **Mobile Android (Play Store) + RevenueCat** | 🚧 Em desenvolvimento |
-| 7    | v0.7.0 | iOS / App Store + Apple IAP | ⏳ Planejada |
-| 8    | v0.8.0 | Painel administrativo completo (métricas, usuários, settings) | ⏳ Planejada |
-| 7    | v0.7.0 | Pagamentos Stripe (assinaturas Pro/Business, checkout) | ⏳ Planejada |
-| 8    | v0.8.0 | LGPD + conformidade legal (termos, privacidade, consentimento) | ⏳ Planejada |
-| 9    | v0.9.0 | Landing institucional + SEO completo | ⏳ Planejada |
-| 10   | v0.10.0 | Onboarding + polish pré-lançamento | ⏳ Planejada |
+| 6    | v0.6.0 | Mobile Android (Play Store) + RevenueCat | ✅ Lançada |
+| 6.1  | v0.6.1 | Fechamento técnico Play Store (ícones, splash, assetlinks) | 🚧 Em desenvolvimento |
+| 7    | v0.7.0 | Templates de proposta + onboarding simplificado | ✅ Lançada |
+| 7.1  | v0.7.1 | Marca própria + trava anti-abuso (Tax ID) | ✅ Lançada |
+| 8    | v0.8.0 | **Programa de indicação** | ✅ Lançada |
+| 8.1  | v0.8.1 | Automação de conversão no Stripe + créditos de indicação | 🚧 Em desenvolvimento |
+| 9    | v0.9.0 | SEO + landing institucional + páginas de nicho | ⏳ Planejada |
+| 10   | v0.10.0 | LGPD + termos + consentimento + ajustes pré-lançamento | ⏳ Planejada |
 | 11   | v1.0.0 | Observabilidade + lançamento comercial 🚀 | ⏳ Planejada |
 
 ## Convenções
