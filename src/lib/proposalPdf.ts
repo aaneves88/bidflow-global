@@ -242,34 +242,88 @@ async function buildHeroCanvas(
   }
 }
 
-/** Cover page markup — reuses profile branding, no institutional copy. */
+/** Relative luminance → decides light/dark text over a brand color. */
+function isDark(hex: string): boolean {
+  const [r, g, b] = hexToRgb(hex);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.6;
+}
+
+/** Full-bleed cover page: brand color band, big title, summary card. */
 async function buildCoverCanvas(
   proposal: ProposalLike,
   options: Options,
   labels: typeof DEFAULT_LABELS,
   pxWidth: number,
+  pxHeight: number,
 ): Promise<HTMLCanvasElement> {
   const primary = options.primaryColor || '#3B82F6';
   const secondary = options.secondaryColor || '#0F172A';
   const accent = options.accentColor || '#22C55E';
   const isFree = !!options.watermark;
   const logo = isFree ? orcaMarkMono : options.logoDataUrl || '';
-  const companyName = options.companyName || '';
+  const companyName = isFree ? options.companyName || 'Orca' : options.companyName || '';
   const tagline = options.tagline || '';
   const clientName = proposal.clients?.company || proposal.clients?.name || '';
   const generatedAt = formatDate(new Date().toISOString());
+  const validUntil = proposal.valid_until ? formatDate(proposal.valid_until) : '';
+  const total = formatCurrency(Number(proposal.total_amount), proposal.currency);
+
+  const onDark = isDark(secondary);
+  const fg = onDark ? '#ffffff' : '#0f172a';
+  const fgMuted = onDark ? 'rgba(255,255,255,0.62)' : 'rgba(15,23,42,0.6)';
+  const cardBg = onDark ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.05)';
+  const cardBorder = onDark ? 'rgba(255,255,255,0.16)' : 'rgba(15,23,42,0.12)';
+
+  const metaCell = (label: string, value: string) => `
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:${fgMuted};margin-bottom:6px;">${escapeHtml(label)}</div>
+      <div style="font-size:15px;font-weight:600;color:${fg};line-height:1.3;word-break:break-word;">${escapeHtml(value)}</div>
+    </div>`;
 
   const html = `
-    <div style="background:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#0f172a;text-align:center;padding:72px 48px;border:1px solid #e5e7eb;border-radius:12px;">
-      <div style="height:6px;background:${primary};border-radius:3px;margin:0 auto 40px auto;width:80px;"></div>
-      ${logo ? `<img src="${logo}" alt="" style="height:64px;width:auto;max-width:240px;object-fit:contain;margin-bottom:16px;" crossorigin="anonymous" />` : ''}
-      ${companyName ? `<div style="font-size:16px;font-weight:700;color:${secondary};">${escapeHtml(companyName)}</div>` : ''}
-      ${tagline ? `<div style="font-size:12px;color:#64748b;margin-top:4px;">${escapeHtml(tagline)}</div>` : ''}
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#94a3b8;margin:40px 0 12px 0;">${escapeHtml(labels.coverLabel)}</div>
-      <div style="font-size:36px;font-weight:800;letter-spacing:-0.8px;line-height:1.2;">${escapeHtml(proposal.title)}</div>
-      ${clientName ? `<div style="font-size:14px;color:#475569;margin-top:20px;">${escapeHtml(labels.coverPreparedFor)} ${escapeHtml(clientName)}</div>` : ''}
-      <div style="font-size:12px;color:#94a3b8;margin-top:8px;">${escapeHtml(generatedAt)}</div>
-      <div style="height:4px;background:${accent};border-radius:2px;margin:40px auto 0 auto;width:48px;"></div>
+    <div style="width:${pxWidth}px;height:${pxHeight}px;box-sizing:border-box;background:${secondary};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:${fg};display:flex;flex-direction:column;position:relative;overflow:hidden;">
+      <div style="height:14px;background:${primary};"></div>
+
+      <div style="padding:64px 72px 0 72px;display:flex;align-items:center;gap:18px;">
+        ${logo ? `<img src="${logo}" alt="" style="height:60px;width:auto;max-width:240px;object-fit:contain;" crossorigin="anonymous" />` : ''}
+        <div>
+          ${companyName ? `<div style="font-size:20px;font-weight:700;letter-spacing:-0.3px;color:${fg};">${escapeHtml(companyName)}</div>` : ''}
+          ${tagline ? `<div style="font-size:12px;color:${fgMuted};margin-top:3px;">${escapeHtml(tagline)}</div>` : ''}
+        </div>
+      </div>
+
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 72px;">
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:4px;color:${primary};font-weight:700;margin-bottom:20px;">
+          ${escapeHtml(labels.coverLabel)}
+        </div>
+        <div style="font-size:60px;font-weight:800;letter-spacing:-1.6px;line-height:1.08;color:${fg};">
+          ${escapeHtml(proposal.title)}
+        </div>
+        <div style="height:5px;width:96px;background:${accent};border-radius:3px;margin-top:32px;"></div>
+      </div>
+
+      <div style="padding:0 72px 64px 72px;">
+        <div style="background:${cardBg};border:1px solid ${cardBorder};border-radius:16px;padding:28px 32px;">
+          ${
+            clientName
+              ? `<div style="margin-bottom:22px;">
+                  <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:${fgMuted};margin-bottom:6px;">${escapeHtml(labels.coverPreparedFor)}</div>
+                  <div style="font-size:24px;font-weight:700;letter-spacing:-0.4px;color:${fg};">${escapeHtml(clientName)}</div>
+                </div>`
+              : ''
+          }
+          <div style="display:flex;gap:28px;align-items:flex-end;">
+            ${metaCell(labels.generatedAt, generatedAt)}
+            ${validUntil ? metaCell(labels.validUntil, validUntil) : ''}
+            <div style="text-align:right;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:${fgMuted};margin-bottom:6px;">${escapeHtml(labels.grandTotal)}</div>
+              <div style="font-size:32px;font-weight:800;letter-spacing:-0.8px;color:${accent};line-height:1.1;">${escapeHtml(total)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:10px;background:${accent};"></div>
     </div>
   `;
 
@@ -278,7 +332,6 @@ async function buildCoverCanvas(
   wrapper.style.left = '-99999px';
   wrapper.style.top = '0';
   wrapper.style.width = `${pxWidth}px`;
-  wrapper.style.background = '#fff';
   wrapper.innerHTML = html;
   document.body.appendChild(wrapper);
 
@@ -286,11 +339,12 @@ async function buildCoverCanvas(
   if (img) await img.decode().catch(() => undefined);
 
   try {
-    return await html2canvas(wrapper, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false });
+    return await html2canvas(wrapper, { scale: 2, backgroundColor: secondary, useCORS: true, logging: false });
   } finally {
     document.body.removeChild(wrapper);
   }
 }
+
 
 function escapeHtml(s: string): string {
   return s
