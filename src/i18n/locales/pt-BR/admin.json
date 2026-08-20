@@ -515,9 +515,9 @@
       "paid": "Pago"
     },
     "summary": {
-      "total": "Total de indicações",
-      "pending": "Pendentes",
-      "closed": "Convertidas/pagas"
+      "made": "Indicações feitas",
+      "validated": "Validadas",
+      "granted": "Concedidas"
     },
     "columns": {
       "referrer": "Quem indicou",
@@ -531,22 +531,22 @@
       "actions": "Ações"
     },
     "reward": {
-      "granted": "Recompensa aplicada em {{date}}",
+      "granted": "Recompensa concedida em {{date}}",
       "waiting": "Aguardando janela de segurança ({{days}}/{{total}} dias)",
       "released": "Liberado pra recompensar quem indicou"
     },
     "actions": {
       "markPaid": "Marcar como pago",
-      "markReward": "Marcar recompensa aplicada",
+      "grantReward": "Conceder 30 dias",
       "markedPaid": "Indicação marcada como paga",
-      "markedReward": "Recompensa registrada",
+      "grantedReward": "30 dias concedidos e recompensa registrada",
       "error": "Erro ao atualizar indicação"
     },
     "confirm": {
       "paidTitle": "Marcar indicação como paga?",
       "paidDesc": "Confirme no Stripe que o pagamento do indicado foi concluído antes de continuar.",
-      "rewardTitle": "Marcar recompensa como aplicada?",
-      "rewardDesc": "Isso é apenas registro. Conceda o mês grátis manualmente na aba Usuários.",
+      "rewardTitle": "Conceder 30 dias a quem indicou?",
+      "rewardDesc": "Se a pessoa já tem plano ativo com vencimento, somamos 30 dias. Se não tem plano, concedemos o Premium por 30 dias.",
       "rewardEarly": "Atenção: a janela de segurança de {{total}} dias contra chargeback ainda não terminou. Marcar agora é uma exceção à regra.",
       "cancel": "Cancelar",
       "confirm": "Confirmar"

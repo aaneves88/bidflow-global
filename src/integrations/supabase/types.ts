@@ -1189,6 +1189,7 @@ export type Database = {
           referred_full_name: string
           referrer_email: string
           referrer_full_name: string
+          referrer_user_id: string
           reward_granted_at: string
           status: string
         }[]

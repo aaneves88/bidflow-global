@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Search } from 'lucide-react';
 import { toast } from 'sonner';
+import { useGrantReferralReward } from '@/hooks/useReferralProgram';
 
 type ReferralStatus = 'pending' | 'converted' | 'paid';
 type StatusFilter = 'all' | ReferralStatus;
@@ -29,6 +30,7 @@ interface AdminReferral {
   converted_at: string | null;
   paid_at: string | null;
   reward_granted_at: string | null;
+  referrer_user_id: string;
   referrer_full_name: string | null;
   referrer_email: string | null;
   referred_full_name: string | null;
@@ -47,7 +49,7 @@ const daysSince = (iso: string) =>
   Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
 
 
-type PendingAction = { id: string; kind: 'paid' | 'reward'; early?: boolean } | null;
+type PendingAction = { id: string; userId: string; kind: 'paid' | 'reward'; early?: boolean } | null;
 
 export default function AdminReferrals() {
   const { t } = useTranslation('admin');
@@ -55,6 +57,7 @@ export default function AdminReferrals() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [pending, setPending] = useState<PendingAction>(null);
+  const grantReward = useGrantReferralReward();
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin_referrals'],
@@ -65,28 +68,41 @@ export default function AdminReferrals() {
     },
   });
 
-  const updateReferral = useMutation({
-    mutationFn: async ({ id, kind }: { id: string; kind: 'paid' | 'reward' }) => {
-      const patch = kind === 'paid'
-        ? { status: 'paid', paid_at: new Date().toISOString() }
-        : { reward_granted_at: new Date().toISOString() };
-      const { error } = await supabase.from('referrals').update(patch).eq('id', id);
+  const markPaid = useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      const { error } = await supabase
+        .from('referrals')
+        .update({ status: 'paid', paid_at: new Date().toISOString() })
+        .eq('id', id);
       if (error) throw error;
     },
-    onSuccess: (_d, vars) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin_referrals'] });
-      toast.success(t(vars.kind === 'paid' ? 'referrals.actions.markedPaid' : 'referrals.actions.markedReward'));
+      toast.success(t('referrals.actions.markedPaid'));
     },
     onError: () => toast.error(t('referrals.actions.error')),
   });
 
+  const confirmAction = (action: NonNullable<PendingAction>) => {
+    if (action.kind === 'paid') {
+      markPaid.mutate({ id: action.id });
+      return;
+    }
+    grantReward.mutate(
+      { referralId: action.id, userId: action.userId },
+      {
+        onSuccess: () => toast.success(t('referrals.actions.grantedReward')),
+        onError: () => toast.error(t('referrals.actions.error')),
+      },
+    );
+  };
 
   const referrals = data ?? [];
 
   const counts = useMemo(() => ({
     total: referrals.length,
-    pending: referrals.filter((r) => r.status === 'pending').length,
-    closed: referrals.filter((r) => r.status === 'converted' || r.status === 'paid').length,
+    validated: referrals.filter((r) => r.status === 'paid').length,
+    granted: referrals.filter((r) => !!r.reward_granted_at).length,
   }), [referrals]);
 
   const visible = useMemo(() => {
@@ -102,9 +118,9 @@ export default function AdminReferrals() {
   if (isLoading) return <p className="text-muted-foreground mt-4">{t('referrals.loading')}</p>;
 
   const summary = [
-    { label: t('referrals.summary.total'), value: counts.total },
-    { label: t('referrals.summary.pending'), value: counts.pending },
-    { label: t('referrals.summary.closed'), value: counts.closed },
+    { label: t('referrals.summary.made'), value: counts.total },
+    { label: t('referrals.summary.validated'), value: counts.validated },
+    { label: t('referrals.summary.granted'), value: counts.granted },
   ];
 
   return (
@@ -204,7 +220,7 @@ export default function AdminReferrals() {
                 </TableCell>
                 <TableCell className="text-right whitespace-nowrap">
                   {(r.status === 'pending' || r.status === 'converted') && (
-                    <Button size="sm" variant="outline" onClick={() => setPending({ id: r.id, kind: 'paid' })}>
+                    <Button size="sm" variant="outline" onClick={() => setPending({ id: r.id, userId: r.referrer_user_id, kind: 'paid' })}>
                       {t('referrals.actions.markPaid')}
                     </Button>
                   )}
@@ -213,9 +229,10 @@ export default function AdminReferrals() {
                       size="sm"
                       variant={released ? 'default' : 'ghost'}
                       className={released ? '' : 'text-muted-foreground'}
-                      onClick={() => setPending({ id: r.id, kind: 'reward', early: !released })}
+                      disabled={grantReward.isPending}
+                      onClick={() => setPending({ id: r.id, userId: r.referrer_user_id, kind: 'reward', early: !released })}
                     >
-                      {t('referrals.actions.markReward')}
+                      {t('referrals.actions.grantReward')}
                     </Button>
                   )}
                 </TableCell>
@@ -241,7 +258,7 @@ export default function AdminReferrals() {
             <AlertDialogCancel>{t('referrals.confirm.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                if (pending) updateReferral.mutate({ id: pending.id, kind: pending.kind });
+                if (pending) confirmAction(pending);
                 setPending(null);
               }}
             >
