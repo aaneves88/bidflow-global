@@ -308,6 +308,15 @@ Deno.serve(async (req) => {
         const referralPartnerId = await findReferralPartnerId(couponCodes);
 
         await activatePlan({ userId, planId, customerId, subscriptionId, email, expiresAt, referralPartnerId });
+        await logSubscriptionPaid(userId, {
+          plan_id: planId,
+          mode: session.mode,
+          subscription_id: subscriptionId,
+          coupon_codes: couponCodes,
+          referral_partner_id: referralPartnerId,
+          amount_total: session.amount_total ?? null,
+          currency: session.currency ?? null,
+        });
         console.log("stripe-webhook: premium ativado", { userId, subscriptionId, couponCodes, referralPartnerId });
         break;
       }
