@@ -1173,6 +1173,22 @@ export type Database = {
       }
       generate_referral_code: { Args: never; Returns: string }
       get_admin_activation_stats: { Args: never; Returns: Json }
+      get_admin_referrals: {
+        Args: never
+        Returns: {
+          converted_at: string
+          created_at: string
+          discount_percent: number
+          id: string
+          paid_at: string
+          referral_code: string
+          referred_email: string
+          referred_full_name: string
+          referrer_email: string
+          referrer_full_name: string
+          status: string
+        }[]
+      }
       get_admin_user_activity: {
         Args: never
         Returns: {
@@ -1184,6 +1200,21 @@ export type Database = {
           last_proposal_at: string
           last_sign_in_at: string
           proposals_count: number
+        }[]
+      }
+      get_my_referrals: {
+        Args: never
+        Returns: {
+          converted_at: string
+          created_at: string
+          discount_percent: number
+          id: string
+          paid_at: string
+          referral_code: string
+          referred_created_at: string
+          referred_email: string
+          referred_full_name: string
+          status: string
         }[]
       }
       get_proposal_branding: {
