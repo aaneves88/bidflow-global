@@ -74,6 +74,7 @@ i18n
         products: ptProducts,
         support: ptSupport,
         snippets: ptSnippets,
+        referrals: ptReferrals,
       },
       en: {
         common: enCommon,
