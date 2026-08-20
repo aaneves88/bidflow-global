@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
+export type ActivityStatus = 'never' | 'no_proposal' | 'active' | 'inactive';
+
 export interface AdminUser {
   id: string;
   full_name: string | null;
@@ -11,6 +13,11 @@ export interface AdminUser {
   is_premium: boolean;
   is_courtesy: boolean;
   plan_expires_at: string | null;
+  last_sign_in_at: string | null;
+  proposals_count: number;
+  last_proposal_at: string | null;
+  clients_count: number;
+  activity_status: ActivityStatus;
 }
 
 export function useAdminUsers() {
