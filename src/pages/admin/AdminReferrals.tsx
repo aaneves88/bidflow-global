@@ -258,7 +258,7 @@ export default function AdminReferrals() {
             <AlertDialogCancel>{t('referrals.confirm.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                if (pending) updateReferral.mutate({ id: pending.id, kind: pending.kind });
+                if (pending) confirmAction(pending);
                 setPending(null);
               }}
             >
