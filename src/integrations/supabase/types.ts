@@ -1130,6 +1130,19 @@ export type Database = {
         Returns: number
       }
       get_admin_activation_stats: { Args: never; Returns: Json }
+      get_admin_user_activity: {
+        Args: never
+        Returns: {
+          clients_count: number
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          last_proposal_at: string
+          last_sign_in_at: string
+          proposals_count: number
+        }[]
+      }
       get_proposal_branding: {
         Args: { p_code: string }
         Returns: {
