@@ -20,10 +20,18 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useOAuthErrorNotice();
+
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      storePendingReferralCode(ref.toUpperCase().trim());
+    }
+  }, [searchParams]);
 
 
   const handleRegister = async (e: React.FormEvent) => {
