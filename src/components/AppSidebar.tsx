@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, FileText, Package, LibraryBig, Settings, Shield, LogOut, CreditCard, UserCircle } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Package, LibraryBig, Settings, Shield, LogOut, CreditCard, UserCircle, Gift } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from '@/components/NavLink';
 import { useLocation } from 'react-router-dom';
