@@ -38,11 +38,14 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
 
+    const referralCode = getPendingReferralCode();
+
     const { data, error: invokeError } = await supabase.functions.invoke('signup-guarded', {
       body: {
         email,
         password,
         fullName,
+        referralCode,
         emailRedirectTo: `${window.location.origin}/dashboard`,
       },
     });
