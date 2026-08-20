@@ -1,0 +1,26 @@
+{
+  "title": "Indique e ganhe",
+  "subtitle": "Convide outros freelancers para a Orca e ganhe recompensas quando eles se tornarem clientes pagos.",
+  "back": "Voltar",
+  "loading": "Carregando...",
+  "copySuccess": "Link copiado!",
+  "copyError": "Não foi possível copiar o link",
+  "share": {
+    "title": "Seu link de indicação",
+    "description": "Compartilhe este link com amigos, colegas ou clientes. Quando eles criarem uma conta, aparecerão aqui.",
+    "copy": "Copiar link",
+    "benefit1": "Quem se cadastrar pelo seu link ganha desconto na primeira assinatura.",
+    "benefit2": "Você recebe créditos conforme os indicados se tornam clientes pagos."
+  },
+  "history": {
+    "title": "Quem você indicou",
+    "description": "Acompanhe o status das suas indicações.",
+    "empty": "Você ainda não indicou ninguém. Compartilhe seu link para começar!",
+    "anonymous": "Usuário anônimo"
+  },
+  "status": {
+    "pending": "Pendente",
+    "converted": "Convertido",
+    "paid": "Pago"
+  }
+}
