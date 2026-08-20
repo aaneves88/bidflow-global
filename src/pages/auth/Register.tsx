@@ -12,7 +12,7 @@ import { Seo } from '@/components/Seo';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
 import { persistSignupAttribution } from '@/lib/attributionSync';
-import { storePendingReferralCode, getPendingReferralCode } from '@/hooks/useReferralProgram';
+import { storePendingReferralCode, getPendingReferralCode, clearPendingReferralCode } from '@/hooks/useReferralProgram';
 
 export default function Register() {
   const { t } = useTranslation('auth');
