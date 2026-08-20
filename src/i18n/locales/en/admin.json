@@ -296,6 +296,39 @@
     "badges": {
       "premium": "Premium",
       "premiumCourtesy": "Premium (courtesy)"
+    },
+    "activity": {
+      "columns": {
+        "status": "Status",
+        "lastSignIn": "Last sign-in",
+        "proposals": "Proposals",
+        "clients": "Clients"
+      },
+      "status": {
+        "never": "Never signed in",
+        "no_proposal": "No proposal",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "filters": {
+        "all": "All statuses"
+      },
+      "sort": {
+        "lastSignIn": "Sort by last sign-in",
+        "proposals": "Sort by proposals",
+        "joined": "Sort by signup"
+      },
+      "summary": {
+        "total": "Total users",
+        "never": "Never signed in",
+        "noProposal": "No proposal",
+        "active": "Active (30 days)"
+      },
+      "searchPlaceholder": "Search by name or email",
+      "today": "today",
+      "daysAgo_one": "{{count}} day ago",
+      "daysAgo_other": "{{count}} days ago",
+      "empty": "No users found"
     }
   },
   "plans": {
