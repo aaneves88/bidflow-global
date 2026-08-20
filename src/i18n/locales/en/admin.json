@@ -515,9 +515,9 @@
       "paid": "Paid"
     },
     "summary": {
-      "total": "Total referrals",
-      "pending": "Pending",
-      "closed": "Converted/paid"
+      "made": "Referrals made",
+      "validated": "Validated",
+      "granted": "Granted"
     },
     "columns": {
       "referrer": "Referrer",
@@ -537,16 +537,16 @@
     },
     "actions": {
       "markPaid": "Mark as paid",
-      "markReward": "Mark reward granted",
+      "grantReward": "Grant 30 days",
       "markedPaid": "Referral marked as paid",
-      "markedReward": "Reward recorded",
+      "grantedReward": "30 days granted and reward recorded",
       "error": "Failed to update referral"
     },
     "confirm": {
       "paidTitle": "Mark referral as paid?",
       "paidDesc": "Confirm in Stripe that the referred user's payment went through before continuing.",
-      "rewardTitle": "Mark reward as granted?",
-      "rewardDesc": "This is a record only. Grant the free month manually in the Users tab.",
+      "rewardTitle": "Grant 30 days to the referrer?",
+      "rewardDesc": "If the referrer has an active plan with an expiry date, we add 30 days. If not, we grant Premium for 30 days.",
       "rewardEarly": "Warning: the {{total}}-day chargeback safety window hasn't passed yet. Marking now is an exception.",
       "cancel": "Cancel",
       "confirm": "Confirm"
