@@ -383,27 +383,25 @@ export async function generateProposalPdf(
 
   let y = margin;
 
-  // === Optional cover page ===
+  // === Optional cover page (full bleed) ===
   if (options.cover) {
-    const coverCanvas = await buildCoverCanvas(proposal, options, labels, heroPxWidth);
-    const coverHeightPt = Math.min(
-      contentWidth * (coverCanvas.height / coverCanvas.width),
-      pageHeight - margin * 2,
-    );
-    const coverWidthPt = coverHeightPt * (coverCanvas.width / coverCanvas.height);
+    const coverPxWidth = 900;
+    const coverPxHeight = Math.round(coverPxWidth * (pageHeight / pageWidth));
+    const coverCanvas = await buildCoverCanvas(proposal, options, labels, coverPxWidth, coverPxHeight);
     doc.addImage(
-      coverCanvas.toDataURL('image/jpeg', 0.92),
+      coverCanvas.toDataURL('image/jpeg', 0.94),
       'JPEG',
-      (pageWidth - coverWidthPt) / 2,
-      (pageHeight - coverHeightPt) / 2,
-      coverWidthPt,
-      coverHeightPt,
+      0,
+      0,
+      pageWidth,
+      pageHeight,
       undefined,
       'FAST',
     );
     doc.addPage();
     y = margin;
   }
+
 
   doc.addImage(heroDataUrl, 'JPEG', margin, y, contentWidth, heroHeightPt, undefined, 'FAST');
   y += heroHeightPt + 18;
