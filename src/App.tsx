@@ -68,6 +68,7 @@ const App = () => (
             <Route path="/p/:publicCode" element={<PublicProposal />} />
             <Route path="/ebook" element={<Ebook />} />
             <Route path="/modelos-de-proposta-comercial" element={<ProposalTemplates />} />
+            <Route path="/modelo-de-orcamento/:nicho" element={<NicheTemplate />} />
             <Route path="/convidar" element={<Referrals />} />
 
             <Route path="/legal/:doc" element={<LegalPage />} />

@@ -2,6 +2,7 @@
 
 import { writeFileSync } from "fs"
 import { resolve } from "path"
+import { NICHES, nichePath } from "../src/content/niches"
 
 const BASE_URL = "https://orca-mento.app"
 
@@ -18,6 +19,11 @@ const entries: SitemapEntry[] = [
   { path: "/register", changefreq: "yearly", priority: "0.6" },
   { path: "/ebook", changefreq: "monthly", priority: "0.7" },
   { path: "/modelos-de-proposta-comercial", changefreq: "monthly", priority: "0.9" },
+  ...NICHES.map((n) => ({
+    path: nichePath(n.slug),
+    changefreq: "monthly" as const,
+    priority: "0.8",
+  })),
   { path: "/privacidade", changefreq: "yearly", priority: "0.3" },
   { path: "/legal/terms", changefreq: "yearly", priority: "0.3" },
   { path: "/legal/privacy", changefreq: "yearly", priority: "0.3" },
