@@ -407,6 +407,8 @@ export default function Landing() {
       <footer className="border-t py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-3">
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <Link to="/modelos-de-proposta-comercial" className="hover:text-foreground">Modelos de proposta comercial</Link>
+            <span className="opacity-30">·</span>
             <Link to="/legal/terms" className="hover:text-foreground">Termos de Uso</Link>
             <span className="opacity-30">·</span>
             <Link to="/privacidade" className="hover:text-foreground">Política de Privacidade</Link>
