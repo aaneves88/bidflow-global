@@ -11,6 +11,7 @@ import Register from "@/pages/auth/Register";
 import Landing from "@/pages/Landing";
 import Ebook from "@/pages/Ebook";
 import ProposalTemplates from "@/pages/ProposalTemplates";
+import NicheTemplate from "@/pages/NicheTemplate";
 import Pricing from "@/pages/Pricing";
 import Onboarding from "@/pages/Onboarding";
 import Dashboard from "@/pages/Dashboard";
