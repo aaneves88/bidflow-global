@@ -179,44 +179,43 @@
     },
     "options": {
       "simple": {
-        "title": "Simple service",
-        "description": "A few items. Best for a single one-off service.",
-        "proposalTitle": "Service proposal",
-        "proposalDescription": "Proposal for the agreed service, with scope, deadline and payment terms defined.",
-        "notes": "Delivery deadline: by {{date}}, counted from approval of this proposal.\nAnything outside the scope above will be quoted separately.",
-        "terms": "This proposal is valid until {{date}}.\nPayment: 50% on approval and 50% on delivery.\nChanges after approval may affect deadline and price."
+        "title": "Design",
+        "description": "Fixed-scope creative project with a single concept and limited revision rounds.",
+        "proposalTitle": "Commercial proposal — Design",
+        "proposalDescription": "One defended visual concept (not 3 options), up to 2 rounds of revisions per piece, and final source and exported files (PNG, SVG, PDF).\nNot included: copywriting, licensed fonts or images, and website implementation.",
+        "notes": "Concept presentation: 7 business days after approval and full brief, by {{date}}.\nRevisions: 3 business days per round, within the 2 included rounds.",
+        "terms": "This proposal is valid until {{date}}.\nPayment: 40% on approval and 60% on delivery of the final files.\nExtra revision round: R$ 200.00 each, beyond the 2 included."
       },
       "phased": {
-        "title": "Project with phases",
-        "description": "Multiple line items. Best for phased delivery.",
-        "proposalTitle": "Phased project proposal",
-        "proposalDescription": "Project split into phases, with deliveries and payments tied to each phase.",
-        "notes": "Estimated total: final delivery by {{date}}, counted from approval.\nEach phase starts only after the previous one is approved.",
-        "terms": "This proposal is valid until {{date}}.\nPayment: per completed phase, within 5 days of each delivery.\nUp to 2 rounds of revisions per phase are included."
+        "title": "Consulting",
+        "description": "Phased project: paid diagnosis, action plan and follow-up.",
+        "proposalTitle": "Commercial proposal — Consulting",
+        "proposalDescription": "Consulting in 3 phases: initial diagnosis with interviews and review of current data, a prioritized action plan with up to 10 recommendations (effort and impact), and 2 follow-up meetings of 60 minutes.\nNot included: execution of the recommendations and paid third-party tools.",
+        "notes": "Phase 1 — Diagnosis: 5 business days after approval.\nPhase 2 — Action plan: 5 business days after phase 1.\nPhase 3 — Follow-up: up to 30 days after delivery, ending around {{date}}.",
+        "terms": "This proposal is valid until {{date}}.\nPayment: 50% on approval (deposit) and 50% on delivery of the action plan.\nTo approve, confirm acceptance in writing or sign through the link sent."
       },
       "recurring": {
-        "title": "Monthly / retainer package",
-        "description": "Built for ongoing, recurring work.",
-        "proposalTitle": "Monthly package proposal",
-        "proposalDescription": "Ongoing service package with a fixed monthly scope and automatic renewal.",
-        "notes": "Expected start: by {{date}}, after approval.\nMonthly scope is fixed; extra requests are quoted separately.",
-        "terms": "This proposal is valid until {{date}}.\nPayment: monthly fee on the 5th, with automatic renewal.\nCancellation with 30 days notice, no penalty."
+        "title": "Marketing",
+        "description": "Monthly retainer with a fixed monthly scope and clear cancellation rules.",
+        "proposalTitle": "Commercial proposal — Marketing (retainer)",
+        "proposalDescription": "Monthly scope: planning and content calendar, 12 posts (design + caption), paid campaign management, and a monthly report with results and next steps.\nNot included: media budget, on-location video production and PR.",
+        "notes": "Expected start: by {{date}}, in the next cycle after approval.\nMonthly scope is fixed; extra requests are quoted separately. Media budget is paid by the client.",
+        "terms": "This proposal is valid until {{date}}.\nPayment: monthly fee on the 5th, with automatic renewal and annual inflation adjustment.\nCancellation with 30 days notice, no penalty."
       }
     },
     "items": {
       "simple": {
-        "service": "Main service (agreed scope)",
-        "extra": "Travel / extra costs"
+        "concept": "Concept and creation",
+        "applications": "Applications and variations"
       },
       "phased": {
-        "discovery": "Phase 1 — Briefing and planning",
-        "production": "Phase 2 — Production / execution",
-        "review": "Phase 3 — Review and adjustments",
-        "delivery": "Phase 4 — Final delivery and files"
+        "diagnosis": "Diagnosis",
+        "actionPlan": "Action plan",
+        "followUp": "Follow-up"
       },
       "recurring": {
-        "monthly": "Monthly package — agreed scope",
-        "support": "Support during the month"
+        "monthly": "Monthly management",
+        "support": "Support and account management"
       }
     }
   },

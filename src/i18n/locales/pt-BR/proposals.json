@@ -180,44 +180,43 @@
     },
     "options": {
       "simple": {
-        "title": "Serviço simples",
-        "description": "Poucos itens. Ideal para quem cobra por um serviço único.",
-        "proposalTitle": "Proposta de serviço",
-        "proposalDescription": "Proposta para execução do serviço combinado, com escopo, prazo e forma de pagamento definidos.",
-        "notes": "Prazo de entrega: até {{date}}, contado a partir da aprovação desta proposta.\nQualquer item fora do escopo acima será orçado separadamente.",
-        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: 50% na aprovação e 50% na entrega, via PIX.\nAlterações após a aprovação podem ajustar prazo e valor."
+        "title": "Design",
+        "description": "Projeto fechado de criação, com conceito único e rodadas de ajuste limitadas.",
+        "proposalTitle": "Proposta comercial — Design",
+        "proposalDescription": "Criação de 1 conceito visual defendido (não são 3 opções), com até 2 rodadas de ajustes por peça e arquivos finais abertos e exportados (PNG, SVG, PDF).\nNão incluso: redação dos textos, compra de fontes ou imagens licenciadas e implementação em site.",
+        "notes": "Apresentação do conceito: 7 dias úteis após o aceite e o envio do briefing completo, até {{date}}.\nAjustes: 3 dias úteis por rodada, dentro das 2 rodadas inclusas.",
+        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: 40% na aprovação e 60% na entrega dos arquivos finais, via PIX.\nRodada extra de ajustes: R$ 200,00 cada, fora das 2 inclusas."
       },
       "phased": {
-        "title": "Projeto com etapas",
-        "description": "Várias linhas de item. Ideal para quem entrega em fases.",
-        "proposalTitle": "Proposta de projeto por etapas",
-        "proposalDescription": "Projeto dividido em etapas, com entregas e pagamentos vinculados à conclusão de cada fase.",
-        "notes": "Prazo total estimado: entrega final até {{date}}, contado a partir da aprovação.\nCada etapa só começa após a aprovação da etapa anterior.",
-        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: pagamento por etapa concluída, via PIX, em até 5 dias após cada entrega.\nAté 2 rodadas de ajuste por etapa estão incluídas."
+        "title": "Consultoria",
+        "description": "Projeto por etapas: diagnóstico pago, plano de ação e acompanhamento.",
+        "proposalTitle": "Proposta comercial — Consultoria",
+        "proposalDescription": "Consultoria em 3 etapas: diagnóstico inicial com entrevistas e leitura dos dados atuais, plano de ação priorizado com até 10 recomendações (esforço e impacto) e 2 reuniões de acompanhamento de 60 minutos.\nNão incluso: execução das recomendações e ferramentas pagas de terceiros.",
+        "notes": "Etapa 1 — Diagnóstico: 5 dias úteis após o aceite.\nEtapa 2 — Plano de ação: 5 dias úteis após a etapa 1.\nEtapa 3 — Acompanhamento: até 30 dias após a entrega, com término previsto para {{date}}.",
+        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: 50% na aprovação (sinal) e 50% na entrega do plano de ação, via PIX.\nPara aprovar, confirme o aceite por escrito ou assine no link enviado."
       },
       "recurring": {
-        "title": "Pacote mensal / recorrente",
-        "description": "Pensado para quem presta serviço continuado.",
-        "proposalTitle": "Proposta de pacote mensal",
-        "proposalDescription": "Pacote de serviço continuado, com escopo mensal fixo e renovação automática.",
-        "notes": "Início previsto: até {{date}}, após a aprovação.\nO escopo mensal é fixo; demandas extras são orçadas à parte.",
-        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: mensalidade via PIX, todo dia 5, com renovação automática.\nCancelamento com aviso de 30 dias, sem multa."
+        "title": "Marketing",
+        "description": "Contrato mensal recorrente, com escopo por mês e regra clara de cancelamento.",
+        "proposalTitle": "Proposta comercial — Marketing (recorrente)",
+        "proposalDescription": "Escopo mensal: planejamento e calendário do mês, 12 publicações (arte + legenda), gestão de campanhas pagas e relatório mensal com resultados e próximos passos.\nNão incluso: verba de mídia, produção audiovisual em locação e assessoria de imprensa.",
+        "notes": "Início previsto: até {{date}}, no próximo ciclo após a aprovação.\nO escopo mensal é fixo; demandas extras são orçadas à parte. A verba de mídia fica por conta do cliente.",
+        "terms": "Validade desta proposta: {{date}}.\nForma de pagamento: mensalidade via PIX, todo dia 5, com renovação automática e reajuste anual pelo IPCA.\nCancelamento com aviso prévio de 30 dias, sem multa."
       }
     },
     "items": {
       "simple": {
-        "service": "Serviço principal (escopo combinado)",
-        "extra": "Deslocamento / custos extras"
+        "concept": "Conceito e criação",
+        "applications": "Aplicações e variações"
       },
       "phased": {
-        "discovery": "Etapa 1 — Briefing e planejamento",
-        "production": "Etapa 2 — Produção / execução",
-        "review": "Etapa 3 — Revisão e ajustes",
-        "delivery": "Etapa 4 — Entrega final e arquivos"
+        "diagnosis": "Diagnóstico",
+        "actionPlan": "Plano de ação",
+        "followUp": "Acompanhamento"
       },
       "recurring": {
-        "monthly": "Pacote mensal — escopo combinado",
-        "support": "Suporte e atendimento no mês"
+        "monthly": "Gestão mensal",
+        "support": "Suporte e atendimento"
       }
     }
   },
