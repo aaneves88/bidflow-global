@@ -62,13 +62,61 @@ export default function NicheTemplate() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
         <header className="space-y-4">
+          <figure className="space-y-2">
+            <div className="relative overflow-hidden rounded-xl h-[280px] sm:h-[320px]">
+              <img
+                src={`${niche.heroImage.url}?auto=format&fit=crop&w=1600&q=80`}
+                alt={niche.heroImage.alt}
+                loading="eager"
+                width={1600}
+                height={640}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-foreground/30" aria-hidden />
+              <span
+                className="absolute left-0 top-0 h-1.5 w-full"
+                style={{ backgroundColor: accent }}
+                aria-hidden
+              />
+            </div>
+            <figcaption className="text-xs text-muted-foreground">
+              Foto de{' '}
+              <a
+                href={`${niche.heroImage.credit.profileUrl}?utm_source=orca&utm_medium=referral`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                {niche.heroImage.credit.name}
+              </a>{' '}
+              no{' '}
+              <a
+                href="https://unsplash.com?utm_source=orca&utm_medium=referral"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                Unsplash
+              </a>
+            </figcaption>
+          </figure>
+
           <p className="text-sm text-muted-foreground">
             <Link to="/modelos-de-proposta-comercial" className="hover:text-foreground underline underline-offset-4">
               Modelos de proposta comercial
             </Link>{' '}
             · {niche.label}
           </p>
-          <h1 className="text-4xl font-bold tracking-tight">{niche.h1}</h1>
+          <div className="flex items-start gap-3">
+            <span
+              className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
+              style={{ backgroundColor: `hsl(var(--${niche.accentColor}) / 0.12)`, color: accent }}
+              aria-hidden
+            >
+              <NicheIcon className="h-6 w-6" />
+            </span>
+            <h1 className="text-4xl font-bold tracking-tight">{niche.h1}</h1>
+          </div>
           <p className="text-lg text-muted-foreground leading-relaxed">{niche.intro}</p>
         </header>
 
@@ -79,12 +127,13 @@ export default function NicheTemplate() {
           <ul className="space-y-2">
             {niche.essentials.map((e) => (
               <li key={e} className="flex gap-3 text-muted-foreground">
-                <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+                <Check className="mt-0.5 h-5 w-5 shrink-0" style={{ color: accent }} aria-hidden />
                 <span className="leading-relaxed">{e}</span>
               </li>
             ))}
           </ul>
         </section>
+
 
         <section className="space-y-5" aria-labelledby="modelo">
           <h2 id="modelo" className="text-2xl font-semibold tracking-tight">Modelo pronto para copiar</h2>
