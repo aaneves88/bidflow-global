@@ -22,7 +22,14 @@ export type NicheContent = {
   slug: string;
   /** Nome curto da profissão, usado em listas e links. */
   label: string;
+  /** Nome do ícone lucide-react usado no cabeçalho. */
+  icon: string;
+  /** Token de acento da página. */
+  accentColor: NicheAccent;
+  /** Imagem de topo (Unsplash) com crédito obrigatório. */
+  heroImage: NicheHeroImage;
   seoTitle: string;
+
   seoDescription: string;
   h1: string;
   intro: string;
