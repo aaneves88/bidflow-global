@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Copy, Check, ArrowRight, FileText } from 'lucide-react';
+import { Copy, Check, ArrowRight, FileText, icons } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { useToast } from '@/hooks/use-toast';
 import { NICHES, getNiche, nichePath } from '@/content/niches';
@@ -15,6 +15,10 @@ export default function NicheTemplate() {
   const { toast } = useToast();
 
   if (!niche) return <NotFound />;
+
+  const NicheIcon = icons[niche.icon as keyof typeof icons] ?? FileText;
+  const accent = `hsl(var(--${niche.accentColor}))`;
+
 
   const copy = async () => {
     try {
@@ -58,13 +62,61 @@ export default function NicheTemplate() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
         <header className="space-y-4">
+          <figure className="space-y-2">
+            <div className="relative overflow-hidden rounded-xl h-[280px] sm:h-[320px]">
+              <img
+                src={`${niche.heroImage.url}?auto=format&fit=crop&w=1600&q=80`}
+                alt={niche.heroImage.alt}
+                loading="eager"
+                width={1600}
+                height={640}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-foreground/30" aria-hidden />
+              <span
+                className="absolute left-0 top-0 h-1.5 w-full"
+                style={{ backgroundColor: accent }}
+                aria-hidden
+              />
+            </div>
+            <figcaption className="text-xs text-muted-foreground">
+              Foto de{' '}
+              <a
+                href={`${niche.heroImage.credit.profileUrl}?utm_source=orca&utm_medium=referral`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                {niche.heroImage.credit.name}
+              </a>{' '}
+              no{' '}
+              <a
+                href="https://unsplash.com?utm_source=orca&utm_medium=referral"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                Unsplash
+              </a>
+            </figcaption>
+          </figure>
+
           <p className="text-sm text-muted-foreground">
             <Link to="/modelos-de-proposta-comercial" className="hover:text-foreground underline underline-offset-4">
               Modelos de proposta comercial
             </Link>{' '}
             · {niche.label}
           </p>
-          <h1 className="text-4xl font-bold tracking-tight">{niche.h1}</h1>
+          <div className="flex items-start gap-3">
+            <span
+              className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
+              style={{ backgroundColor: `hsl(var(--${niche.accentColor}) / 0.12)`, color: accent }}
+              aria-hidden
+            >
+              <NicheIcon className="h-6 w-6" />
+            </span>
+            <h1 className="text-4xl font-bold tracking-tight">{niche.h1}</h1>
+          </div>
           <p className="text-lg text-muted-foreground leading-relaxed">{niche.intro}</p>
         </header>
 
@@ -75,12 +127,13 @@ export default function NicheTemplate() {
           <ul className="space-y-2">
             {niche.essentials.map((e) => (
               <li key={e} className="flex gap-3 text-muted-foreground">
-                <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+                <Check className="mt-0.5 h-5 w-5 shrink-0" style={{ color: accent }} aria-hidden />
                 <span className="leading-relaxed">{e}</span>
               </li>
             ))}
           </ul>
         </section>
+
 
         <section className="space-y-5" aria-labelledby="modelo">
           <h2 id="modelo" className="text-2xl font-semibold tracking-tight">Modelo pronto para copiar</h2>
@@ -100,12 +153,13 @@ export default function NicheTemplate() {
                   {copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
                   {copied ? 'Copiado' : 'Copiar modelo'}
                 </Button>
-                <Button asChild>
+                <Button asChild style={{ backgroundColor: accent, color: 'hsl(var(--primary-foreground))' }}>
                   <Link to={`/register?modelo=${niche.slug}`}>
                     Usar este modelo no Orca
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
+
               </div>
             </CardContent>
           </Card>
@@ -153,7 +207,7 @@ export default function NicheTemplate() {
             No Orca você monta o orçamento com seus itens salvos, envia um link pelo WhatsApp com QR Code
             PIX, recebe o aceite e vê a hora em que o cliente abriu.
           </p>
-          <Button size="lg" asChild>
+          <Button size="lg" asChild style={{ backgroundColor: accent, color: 'hsl(var(--primary-foreground))' }}>
             <Link to={`/register?modelo=${niche.slug}`}>Começar grátis</Link>
           </Button>
         </section>

@@ -3,6 +3,13 @@ import type { NicheContent } from './types';
 export const decoracaoDeCasamento: NicheContent = {
   slug: 'decoracao-de-casamento',
   label: 'Decoração de casamento',
+  icon: 'Sparkles',
+  accentColor: 'niche-blush',
+  heroImage: {
+    url: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a',
+    alt: 'Arranjo de flores para decoração de casamento',
+    credit: { name: 'Shardayyy Photography', profileUrl: 'https://unsplash.com/@shardayyy' },
+  },
   seoTitle: 'Modelo de orçamento para decoração de casamento e festas',
   seoDescription:
     'Modelo de orçamento de decoração de casamento pronto para copiar: itens do projeto, flores, aluguel de peças, montagem, desmontagem e condições de pagamento.',

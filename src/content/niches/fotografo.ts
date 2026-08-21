@@ -3,6 +3,13 @@ import type { NicheContent } from './types';
 export const fotografo: NicheContent = {
   slug: 'fotografo',
   label: 'Fotógrafo',
+  icon: 'Camera',
+  accentColor: 'niche-coral',
+  heroImage: {
+    url: 'https://images.unsplash.com/photo-1513031300226-c8fb12de9ade',
+    alt: 'Pessoa fotografando com uma câmera Canon',
+    credit: { name: 'Ailbhe Flynn', profileUrl: 'https://unsplash.com/@aflynnn' },
+  },
   seoTitle: 'Modelo de orçamento para fotógrafo: exemplo pronto para copiar',
   seoDescription:
     'Modelo de orçamento de fotografia pronto para copiar: horas de cobertura, número de fotos tratadas, prazo de entrega, direitos de uso e condições de pagamento.',

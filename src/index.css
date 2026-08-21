@@ -110,3 +110,22 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Acentos das landing pages por nicho — variações sutis dentro da paleta da marca */
+@layer base {
+  :root {
+    --niche-amber: 32 85% 44%;
+    --niche-coral: 348 70% 52%;
+    --niche-ice: 199 82% 40%;
+    --niche-blush: 340 45% 52%;
+    --niche-moss: 158 62% 32%;
+  }
+
+  .dark {
+    --niche-amber: 38 92% 60%;
+    --niche-coral: 348 80% 68%;
+    --niche-ice: 199 88% 62%;
+    --niche-blush: 340 60% 70%;
+    --niche-moss: 158 55% 55%;
+  }
+}
