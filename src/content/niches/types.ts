@@ -2,6 +2,21 @@ export type NicheFaq = { q: string; a: string };
 
 export type NicheExtra = { item: string; how: string };
 
+export type NicheHeroImage = {
+  url: string;
+  alt: string;
+  credit: { name: string; profileUrl: string };
+};
+
+/** Token de acento (variável CSS definida em index.css). */
+export type NicheAccent =
+  | 'niche-amber'
+  | 'niche-coral'
+  | 'niche-ice'
+  | 'niche-blush'
+  | 'niche-moss';
+
+
 export type NicheContent = {
   /** Slug da URL: /modelo-de-orcamento/{slug} */
   slug: string;
