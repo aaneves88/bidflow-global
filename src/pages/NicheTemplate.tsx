@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Copy, Check, ArrowRight, FileText } from 'lucide-react';
+import { Copy, Check, ArrowRight, FileText, icons } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { useToast } from '@/hooks/use-toast';
 import { NICHES, getNiche, nichePath } from '@/content/niches';
@@ -15,6 +15,10 @@ export default function NicheTemplate() {
   const { toast } = useToast();
 
   if (!niche) return <NotFound />;
+
+  const NicheIcon = icons[niche.icon as keyof typeof icons] ?? FileText;
+  const accent = `hsl(var(--${niche.accentColor}))`;
+
 
   const copy = async () => {
     try {
