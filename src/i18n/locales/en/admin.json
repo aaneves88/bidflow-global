@@ -11,7 +11,8 @@
     "marketing": "Assets",
     "brand": "Brand",
     "leads": "Ebook leads",
-    "referrals": "Referrals"
+    "referrals": "Referrals",
+    "partners": "Partners"
   },
   "roadmap": {
     "title": "Product roadmap",
@@ -550,6 +551,47 @@
       "rewardEarly": "Warning: the {{total}}-day chargeback safety window hasn't passed yet. Marking now is an exception.",
       "cancel": "Cancel",
       "confirm": "Confirm"
+    }
+  },
+  "partners": {
+    "title": "Partners",
+    "subtitle": "Accountants and partner businesses — from prospect to active partner with a coupon.",
+    "loading": "Loading partners...",
+    "empty": "No partners yet.",
+    "new": "New partner",
+    "newTitle": "New partner",
+    "editTitle": "Edit partner",
+    "saved": "Partner saved",
+    "error": "Error saving partner",
+    "status": {
+      "prospectado": "Prospect",
+      "contatado": "Contacted",
+      "negociando": "Negotiating",
+      "ativo": "Active",
+      "recusado": "Declined"
+    },
+    "columns": {
+      "name": "Name",
+      "contact": "Contact",
+      "status": "Status",
+      "coupon": "Coupon",
+      "commission": "Commission",
+      "lastContact": "Last contact",
+      "notes": "Notes",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Name",
+      "contact": "Contact",
+      "status": "Status",
+      "coupon": "Coupon",
+      "discountPercent": "Discount (%)",
+      "discountDuration": "Discount duration",
+      "commission": "Commission rule",
+      "lastContact": "Last contact",
+      "notes": "Notes",
+      "cancel": "Cancel",
+      "save": "Save"
     }
   }
 }
