@@ -33,8 +33,7 @@ export default function Landing() {
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as unknown as { standalone?: boolean }).standalone === true;
-    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(window.navigator.userAgent);
-    if (isStandalone || isMobile) {
+    if (isStandalone) {
       navigate('/app', { replace: true });
     }
   }, [navigate]);
