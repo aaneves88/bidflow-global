@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Copy, Check, ArrowRight, FileText } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { useToast } from '@/hooks/use-toast';
+import { NICHES, nichePath } from '@/content/niches';
 
 type Template = {
   id: string;
