@@ -4,7 +4,8 @@ export type Translate = (key: string, opts?: Record<string, unknown>) => string;
 
 export type ProposalTemplateId = 'simple' | 'phased' | 'recurring';
 
-export const PROPOSAL_TEMPLATE_IDS: ProposalTemplateId[] = ['simple', 'phased', 'recurring'];
+/** Ordem exibida ao usuário: Consultoria, Design, Marketing (igual à landing). */
+export const PROPOSAL_TEMPLATE_IDS: ProposalTemplateId[] = ['phased', 'simple', 'recurring'];
 
 type ItemSeed = { key: string; quantity: number; unit_price: number };
 
@@ -16,24 +17,26 @@ type TemplateSeed = {
 };
 
 const SEEDS: Record<ProposalTemplateId, TemplateSeed> = {
+  // Design — conceito único + até 2 rodadas de ajuste
   simple: {
     id: 'simple',
     validDays: 15,
     items: [
-      { key: 'service', quantity: 1, unit_price: 1200 },
-      { key: 'extra', quantity: 1, unit_price: 300 },
+      { key: 'concept', quantity: 1, unit_price: 1200 },
+      { key: 'applications', quantity: 1, unit_price: 300 },
     ],
   },
+  // Consultoria — diagnóstico → plano de ação → acompanhamento
   phased: {
     id: 'phased',
-    validDays: 20,
+    validDays: 15,
     items: [
-      { key: 'discovery', quantity: 1, unit_price: 800 },
-      { key: 'production', quantity: 1, unit_price: 2500 },
-      { key: 'review', quantity: 1, unit_price: 600 },
-      { key: 'delivery', quantity: 1, unit_price: 400 },
+      { key: 'diagnosis', quantity: 1, unit_price: 800 },
+      { key: 'actionPlan', quantity: 1, unit_price: 2500 },
+      { key: 'followUp', quantity: 1, unit_price: 600 },
     ],
   },
+  // Marketing — pacote mensal recorrente
   recurring: {
     id: 'recurring',
     validDays: 10,
@@ -43,6 +46,7 @@ const SEEDS: Record<ProposalTemplateId, TemplateSeed> = {
     ],
   },
 };
+
 
 export type AppliedTemplate = {
   title: string;
