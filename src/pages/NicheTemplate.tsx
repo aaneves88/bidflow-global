@@ -207,7 +207,7 @@ export default function NicheTemplate() {
             No Orca você monta o orçamento com seus itens salvos, envia um link pelo WhatsApp com QR Code
             PIX, recebe o aceite e vê a hora em que o cliente abriu.
           </p>
-          <Button size="lg" asChild>
+          <Button size="lg" asChild style={{ backgroundColor: accent, color: 'hsl(var(--primary-foreground))' }}>
             <Link to={`/register?modelo=${niche.slug}`}>Começar grátis</Link>
           </Button>
         </section>
