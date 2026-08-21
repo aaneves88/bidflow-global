@@ -31,6 +31,31 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://orca-mento.app/modelo-de-orcamento/prestador-de-servicos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://orca-mento.app/modelo-de-orcamento/eletricista</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://orca-mento.app/modelo-de-orcamento/fotografo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://orca-mento.app/modelo-de-orcamento/ar-condicionado</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://orca-mento.app/modelo-de-orcamento/decoracao-de-casamento</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://orca-mento.app/privacidade</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
