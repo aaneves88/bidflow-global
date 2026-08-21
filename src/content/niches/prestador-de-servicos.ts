@@ -3,6 +3,13 @@ import type { NicheContent } from './types';
 export const prestadorDeServicos: NicheContent = {
   slug: 'prestador-de-servicos',
   label: 'Prestador de serviços',
+  icon: 'Wrench',
+  accentColor: 'niche-moss',
+  heroImage: {
+    url: 'https://images.unsplash.com/photo-1567361808960-dec9cb578182',
+    alt: 'Ferramentas de trabalho organizadas sobre uma bancada',
+    credit: { name: 'Louis Hansel', profileUrl: 'https://unsplash.com/@louishansel' },
+  },
   seoTitle: 'Modelo de orçamento de prestação de serviços pronto para copiar',
   seoDescription:
     'Modelo de orçamento de prestação de serviços para autônomos e pequenas empresas: escopo, exclusões, prazo, valores, condições de pagamento e validade.',

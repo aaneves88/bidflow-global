@@ -3,6 +3,13 @@ import type { NicheContent } from './types';
 export const eletricista: NicheContent = {
   slug: 'eletricista',
   label: 'Eletricista',
+  icon: 'Zap',
+  accentColor: 'niche-amber',
+  heroImage: {
+    url: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e',
+    alt: 'Eletricista instalando fiação em um quadro elétrico',
+    credit: { name: 'Emmanuel Ikwuegbu', profileUrl: 'https://unsplash.com/@emmages' },
+  },
   seoTitle: 'Modelo de orçamento para eletricista: exemplo pronto para copiar',
   seoDescription:
     'Modelo de orçamento de serviços elétricos pronto para copiar: pontos, quadro, material, deslocamento, prazo e condições de pagamento. Com o que cobrar à parte.',

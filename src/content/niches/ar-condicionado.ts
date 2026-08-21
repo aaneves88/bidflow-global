@@ -3,6 +3,13 @@ import type { NicheContent } from './types';
 export const arCondicionado: NicheContent = {
   slug: 'ar-condicionado',
   label: 'Ar-condicionado',
+  icon: 'Wind',
+  accentColor: 'niche-ice',
+  heroImage: {
+    url: 'https://images.unsplash.com/photo-1722131646940-b821a6cc6252',
+    alt: 'Condensadora de ar-condicionado instalada na parede externa',
+    credit: { name: 'Jonny Clow', profileUrl: 'https://unsplash.com/@jonnyclow' },
+  },
   seoTitle: 'Modelo de orçamento de ar-condicionado (instalação e manutenção)',
   seoDescription:
     'Modelo de orçamento para instalação, limpeza e manutenção de ar-condicionado pronto para copiar: BTUs, metragem de tubulação, material, garantia e pagamento.',
