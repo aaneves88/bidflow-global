@@ -820,36 +820,45 @@ export type Database = {
       referral_partners: {
         Row: {
           contact: string | null
-          coupon_code: string
+          coupon_code: string | null
           created_at: string | null
-          discount_duration: string
-          discount_percent: number
+          discount_duration: string | null
+          discount_percent: number | null
           id: string
           is_active: boolean | null
+          last_contact_at: string | null
           name: string
-          repasse_rule: string
+          notes: string | null
+          repasse_rule: string | null
+          status: string
         }
         Insert: {
           contact?: string | null
-          coupon_code: string
+          coupon_code?: string | null
           created_at?: string | null
-          discount_duration: string
-          discount_percent: number
+          discount_duration?: string | null
+          discount_percent?: number | null
           id?: string
           is_active?: boolean | null
+          last_contact_at?: string | null
           name: string
-          repasse_rule: string
+          notes?: string | null
+          repasse_rule?: string | null
+          status?: string
         }
         Update: {
           contact?: string | null
-          coupon_code?: string
+          coupon_code?: string | null
           created_at?: string | null
-          discount_duration?: string
-          discount_percent?: number
+          discount_duration?: string | null
+          discount_percent?: number | null
           id?: string
           is_active?: boolean | null
+          last_contact_at?: string | null
           name?: string
-          repasse_rule?: string
+          notes?: string | null
+          repasse_rule?: string | null
+          status?: string
         }
         Relationships: []
       }
