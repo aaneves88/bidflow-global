@@ -11,7 +11,8 @@
     "marketing": "Materiais",
     "brand": "Marca",
     "leads": "Leads e-book",
-    "referrals": "Indicações"
+    "referrals": "Indicações",
+    "partners": "Parceiros"
   },
   "roadmap": {
     "title": "Roadmap do produto",
@@ -550,6 +551,47 @@
       "rewardEarly": "Atenção: a janela de segurança de {{total}} dias contra chargeback ainda não terminou. Marcar agora é uma exceção à regra.",
       "cancel": "Cancelar",
       "confirm": "Confirmar"
+    }
+  },
+  "partners": {
+    "title": "Parceiros",
+    "subtitle": "Contadores e negócios parceiros — do prospect ao parceiro ativo com cupom.",
+    "loading": "Carregando parceiros...",
+    "empty": "Nenhum parceiro cadastrado.",
+    "new": "Novo parceiro",
+    "newTitle": "Novo parceiro",
+    "editTitle": "Editar parceiro",
+    "saved": "Parceiro salvo",
+    "error": "Erro ao salvar parceiro",
+    "status": {
+      "prospectado": "Prospectado",
+      "contatado": "Contatado",
+      "negociando": "Negociando",
+      "ativo": "Ativo",
+      "recusado": "Recusado"
+    },
+    "columns": {
+      "name": "Nome",
+      "contact": "Contato",
+      "status": "Situação",
+      "coupon": "Cupom",
+      "commission": "Comissão",
+      "lastContact": "Último contato",
+      "notes": "Notas",
+      "actions": "Ações"
+    },
+    "form": {
+      "name": "Nome",
+      "contact": "Contato",
+      "status": "Situação",
+      "coupon": "Cupom",
+      "discountPercent": "Desconto (%)",
+      "discountDuration": "Duração do desconto",
+      "commission": "Regra de comissão",
+      "lastContact": "Último contato",
+      "notes": "Notas",
+      "cancel": "Cancelar",
+      "save": "Salvar"
     }
   }
 }
