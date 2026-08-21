@@ -153,12 +153,13 @@ export default function NicheTemplate() {
                   {copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
                   {copied ? 'Copiado' : 'Copiar modelo'}
                 </Button>
-                <Button asChild>
+                <Button asChild style={{ backgroundColor: accent, color: 'hsl(var(--primary-foreground))' }}>
                   <Link to={`/register?modelo=${niche.slug}`}>
                     Usar este modelo no Orca
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
+
               </div>
             </CardContent>
           </Card>
