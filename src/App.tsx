@@ -11,6 +11,7 @@ import Register from "@/pages/auth/Register";
 import Landing from "@/pages/Landing";
 import Ebook from "@/pages/Ebook";
 import ProposalTemplates from "@/pages/ProposalTemplates";
+import NicheTemplate from "@/pages/NicheTemplate";
 import Pricing from "@/pages/Pricing";
 import Onboarding from "@/pages/Onboarding";
 import Dashboard from "@/pages/Dashboard";
@@ -67,6 +68,7 @@ const App = () => (
             <Route path="/p/:publicCode" element={<PublicProposal />} />
             <Route path="/ebook" element={<Ebook />} />
             <Route path="/modelos-de-proposta-comercial" element={<ProposalTemplates />} />
+            <Route path="/modelo-de-orcamento/:nicho" element={<NicheTemplate />} />
             <Route path="/convidar" element={<Referrals />} />
 
             <Route path="/legal/:doc" element={<LegalPage />} />

@@ -409,6 +409,8 @@ export default function Landing() {
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
             <Link to="/modelos-de-proposta-comercial" className="hover:text-foreground">Modelos de proposta comercial</Link>
             <span className="opacity-30">·</span>
+            <Link to="/modelo-de-orcamento/prestador-de-servicos" className="hover:text-foreground">Modelos de orçamento por profissão</Link>
+            <span className="opacity-30">·</span>
             <Link to="/legal/terms" className="hover:text-foreground">Termos de Uso</Link>
             <span className="opacity-30">·</span>
             <Link to="/privacidade" className="hover:text-foreground">Política de Privacidade</Link>

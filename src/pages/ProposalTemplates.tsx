@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Copy, Check, ArrowRight, FileText } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { useToast } from '@/hooks/use-toast';
+import { NICHES, nichePath } from '@/content/niches';
 
 type Template = {
   id: string;
@@ -262,6 +263,25 @@ export default function ProposalTemplates() {
               </CardContent>
             </Card>
           ))}
+        </section>
+
+        <section className="space-y-6" aria-labelledby="profissoes">
+          <h2 id="profissoes" className="text-2xl font-semibold tracking-tight">Modelos por profissão</h2>
+          <p className="text-muted-foreground">
+            Modelos de orçamento com os itens, exclusões e perguntas típicas de cada serviço.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {NICHES.map((n) => (
+              <Link
+                key={n.slug}
+                to={nichePath(n.slug)}
+                className="rounded-lg border p-4 space-y-1 hover:bg-muted/50 transition-colors"
+              >
+                <span className="font-semibold block">{n.label}</span>
+                <span className="text-sm text-muted-foreground">{n.h1}</span>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <section className="space-y-6" aria-labelledby="faq">
