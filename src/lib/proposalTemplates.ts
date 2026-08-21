@@ -4,7 +4,8 @@ export type Translate = (key: string, opts?: Record<string, unknown>) => string;
 
 export type ProposalTemplateId = 'simple' | 'phased' | 'recurring';
 
-export const PROPOSAL_TEMPLATE_IDS: ProposalTemplateId[] = ['simple', 'phased', 'recurring'];
+/** Ordem exibida ao usuário: Consultoria, Design, Marketing (igual à landing). */
+export const PROPOSAL_TEMPLATE_IDS: ProposalTemplateId[] = ['phased', 'simple', 'recurring'];
 
 type ItemSeed = { key: string; quantity: number; unit_price: number };
 
