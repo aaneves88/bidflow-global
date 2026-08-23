@@ -62,7 +62,8 @@
     "title": "Notifications",
     "empty": "Nothing new here",
     "viewed": "Your proposal was viewed",
-    "viewedBy": "{{name}} viewed your proposal"
+    "viewedBy": "{{name}} viewed your proposal",
+    "new": "new"
   },
   "notFound": {
     "title": "404",
