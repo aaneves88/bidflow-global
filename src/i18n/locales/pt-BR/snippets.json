@@ -32,12 +32,12 @@
     "description": "Dê um nome curto para reutilizar esse texto nas próximas propostas."
   },
   "picker": {
-    "trigger": "Blocos",
+    "trigger": "Inserir bloco de texto",
     "placeholder": "Buscar bloco...",
     "empty": "Nenhum bloco encontrado.",
     "manage": "Gerenciar blocos",
     "mine": "Meus blocos",
-    "suggested": "Sugestões",
+    "suggested": "Sugestões prontas (clique para inserir)",
     "save": "Salvar como bloco"
   },
   "empty": {
