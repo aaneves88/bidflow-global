@@ -48,15 +48,21 @@ export function SnippetPicker({ kind, value, onInsert }: Props) {
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex flex-wrap items-center gap-2">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button type="button" variant="outline" size="sm" className="h-7 gap-1 px-2 text-xs">
-            <LibraryBig className="h-3.5 w-3.5" />
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="h-8 gap-1.5 border border-primary/30 bg-primary/10 px-3 text-xs font-medium text-primary hover:bg-primary/20"
+          >
+            <LibraryBig className="h-4 w-4" />
             {t('picker.trigger')}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-96 p-0 pointer-events-auto" align="end">
+        <PopoverContent className="w-[min(24rem,calc(100vw-2rem))] p-0 pointer-events-auto" align="start">
+
           <Command>
             <CommandInput placeholder={t('picker.placeholder')} />
             <CommandList>
