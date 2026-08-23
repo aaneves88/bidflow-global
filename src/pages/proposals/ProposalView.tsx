@@ -25,6 +25,7 @@ import { useCanCustomBrand } from '@/hooks/useSubscription';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
+import { buildPixPayload, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
 import { ProposalStatusChangePopup, findSentStatusId, type SendableProposal } from '@/components/proposals/ProposalStatusChangePopup';
 
