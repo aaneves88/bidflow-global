@@ -32,12 +32,12 @@
     "description": "Give it a short name to reuse this text in future proposals."
   },
   "picker": {
-    "trigger": "Blocks",
+    "trigger": "Insert text block",
     "placeholder": "Search blocks...",
     "empty": "No blocks found.",
     "manage": "Manage blocks",
     "mine": "My blocks",
-    "suggested": "Suggestions",
+    "suggested": "Ready-made suggestions (click to insert)",
     "save": "Save as block"
   },
   "empty": {
