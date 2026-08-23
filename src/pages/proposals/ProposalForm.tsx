@@ -501,15 +501,8 @@ export default function ProposalForm() {
         <Card>
           <CardHeader><CardTitle>{t('form.notesAndTerms')}</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <Label htmlFor="notes">{t('form.notes')}</Label>
-                <SnippetPicker
-                  kind="notes"
-                  value={notes}
-                  onInsert={(text) => setNotes((v) => appendText(v, text))}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="notes">{t('form.notes')}</Label>
               <Textarea
                 id="notes"
                 value={notes}
@@ -517,16 +510,14 @@ export default function ProposalForm() {
                 rows={4}
                 placeholder={t('form.notesPlaceholder')}
               />
+              <SnippetPicker
+                kind="notes"
+                value={notes}
+                onInsert={(text) => setNotes((v) => appendText(v, text))}
+              />
             </div>
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <Label htmlFor="terms">{t('form.terms')}</Label>
-                <SnippetPicker
-                  kind="terms"
-                  value={terms}
-                  onInsert={(text) => setTerms((v) => appendText(v, text))}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="terms">{t('form.terms')}</Label>
               <Textarea
                 id="terms"
                 value={terms}
@@ -534,6 +525,13 @@ export default function ProposalForm() {
                 rows={5}
                 placeholder={t('form.termsPlaceholder')}
               />
+              <SnippetPicker
+                kind="terms"
+                value={terms}
+                onInsert={(text) => setTerms((v) => appendText(v, text))}
+              />
+            </div>
+
             </div>
           </CardContent>
         </Card>
