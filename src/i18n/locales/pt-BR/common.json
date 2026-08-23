@@ -62,7 +62,8 @@
     "title": "Notificações",
     "empty": "Nenhuma novidade por aqui",
     "viewed": "Sua proposta foi visualizada",
-    "viewedBy": "{{name}} visualizou sua proposta"
+    "viewedBy": "{{name}} visualizou sua proposta",
+    "new": "novo"
   },
   "notFound": {
     "title": "404",

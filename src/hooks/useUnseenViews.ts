@@ -17,7 +17,11 @@ export interface UnseenView {
   proposal_title: string;
   viewed_at: string;
   client_name: string | null;
+  seen: boolean;
 }
+
+const HISTORY_DAYS = 60;
+const HISTORY_LIMIT = 30;
 
 export function useUnseenViews() {
   const { user } = useAuth();
@@ -27,6 +31,7 @@ export function useUnseenViews() {
     refetchInterval: 60000,
     queryFn: async () => {
       const since = getLastSeenViewsAt();
+      const from = new Date(Date.now() - HISTORY_DAYS * 86400000).toISOString();
       const { data: proposals } = await supabase
         .from('proposals')
         .select('id, title, clients(name)')
@@ -38,8 +43,9 @@ export function useUnseenViews() {
         .from('proposal_views')
         .select('proposal_id, viewed_at')
         .in('proposal_id', ids)
-        .gt('viewed_at', since)
-        .order('viewed_at', { ascending: false });
+        .gte('viewed_at', from)
+        .order('viewed_at', { ascending: false })
+        .limit(HISTORY_LIMIT);
 
       if (error) throw error;
 
@@ -53,8 +59,10 @@ export function useUnseenViews() {
         viewed_at: v.viewed_at,
         proposal_title: map.get(v.proposal_id)?.title ?? '—',
         client_name: map.get(v.proposal_id)?.client_name ?? null,
+        seen: v.viewed_at <= since,
       }));
       return out;
     },
   });
 }
+
