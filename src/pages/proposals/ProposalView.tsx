@@ -156,8 +156,39 @@ export default function ProposalView() {
     const companyName = canBrand
       ? (branding.companyName || (getSetting('company_name') as string) || undefined)
       : 'Orca';
+
+    // PIX: chave da proposta tem prioridade; senão usa a do perfil. Só para BRL.
+    const rawPixKey =
+      ((proposal as any).pix_key || '').trim() || (profilePix?.pix_key || '').trim();
+    const rawPixType = ((proposal as any).pix_key || '').trim()
+      ? (proposal as any).pix_key_type
+      : profilePix?.pix_key_type;
+    const merchantName =
+      profilePix?.company_name || profilePix?.full_name || companyName || 'RECEBEDOR';
+    let pixBlock: { payload: string; merchantName: string; title: string; instructions: string } | undefined;
+    if (rawPixKey && proposal.currency === 'BRL') {
+      try {
+        pixBlock = {
+          payload: buildPixPayload({
+            key: rawPixKey,
+            keyType: (rawPixType as PixKeyType) || undefined,
+            merchantName,
+            amount: Number(proposal.total_amount),
+            txid: proposal.public_code,
+          }),
+          merchantName,
+          title: t('pdf.pix.title'),
+          instructions: t('pdf.pix.instructions'),
+        };
+      } catch (e) {
+        console.warn('pix payload failed', e);
+      }
+    }
+
     generateProposalPdf(proposal as any, items as any[], {
+      pix: pixBlock,
       companyName,
+
       tagline: canBrand ? branding.tagline || undefined : undefined,
       publicUrlBase: publicBase,
       logoDataUrl: canBrand ? branding.logoUrl : undefined,
