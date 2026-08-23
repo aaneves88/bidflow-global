@@ -126,13 +126,14 @@ export function SnippetPicker({ kind, value, onInsert }: Props) {
         type="button"
         variant="ghost"
         size="sm"
-        className="h-7 gap-1 px-2 text-xs"
+        className="h-8 gap-1.5 px-2 text-xs"
         disabled={!value.trim()}
         onClick={() => setSaveOpen(true)}
       >
-        <Bookmark className="h-3.5 w-3.5" />
+        <Bookmark className="h-4 w-4" />
         {t('picker.save')}
       </Button>
+
 
       <Dialog open={saveOpen} onOpenChange={setSaveOpen}>
         <DialogContent className="sm:max-w-md">
