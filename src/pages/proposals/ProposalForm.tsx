@@ -531,8 +531,6 @@ export default function ProposalForm() {
                 onInsert={(text) => setTerms((v) => appendText(v, text))}
               />
             </div>
-
-            </div>
           </CardContent>
         </Card>
 
