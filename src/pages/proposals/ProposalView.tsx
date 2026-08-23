@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown, Mail, Loader2 } from 'lucide-react';
@@ -24,6 +25,7 @@ import { useCanCustomBrand } from '@/hooks/useSubscription';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
+import { buildPixPayload, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
 import { ProposalStatusChangePopup, findSentStatusId, type SendableProposal } from '@/components/proposals/ProposalStatusChangePopup';
 
@@ -60,6 +62,23 @@ export default function ProposalView() {
   const [pendingStatusId, setPendingStatusId] = useState<string>('');
   const [closedAmount, setClosedAmount] = useState<string>('');
   const [closedNotes, setClosedNotes] = useState<string>('');
+
+  // Chave PIX do perfil — usada como fallback quando a proposta não tem chave própria.
+  const { data: profilePix } = useQuery({
+    queryKey: ['profile-pix'],
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth.user) return null;
+      const { data } = await supabase
+        .from('profiles')
+        .select('pix_key, pix_key_type, company_name, full_name')
+        .eq('id', auth.user.id)
+        .maybeSingle();
+      return data;
+    },
+  });
+
 
   if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
   if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
@@ -137,8 +156,39 @@ export default function ProposalView() {
     const companyName = canBrand
       ? (branding.companyName || (getSetting('company_name') as string) || undefined)
       : 'Orca';
+
+    // PIX: chave da proposta tem prioridade; senão usa a do perfil. Só para BRL.
+    const rawPixKey =
+      ((proposal as any).pix_key || '').trim() || (profilePix?.pix_key || '').trim();
+    const rawPixType = ((proposal as any).pix_key || '').trim()
+      ? (proposal as any).pix_key_type
+      : profilePix?.pix_key_type;
+    const merchantName =
+      profilePix?.company_name || profilePix?.full_name || companyName || 'RECEBEDOR';
+    let pixBlock: { payload: string; merchantName: string; title: string; instructions: string } | undefined;
+    if (rawPixKey && proposal.currency === 'BRL') {
+      try {
+        pixBlock = {
+          payload: buildPixPayload({
+            key: rawPixKey,
+            keyType: (rawPixType as PixKeyType) || undefined,
+            merchantName,
+            amount: Number(proposal.total_amount),
+            txid: proposal.public_code,
+          }),
+          merchantName,
+          title: t('pdf.pix.title'),
+          instructions: t('pdf.pix.instructions'),
+        };
+      } catch (e) {
+        console.warn('pix payload failed', e);
+      }
+    }
+
     generateProposalPdf(proposal as any, items as any[], {
+      pix: pixBlock,
       companyName,
+
       tagline: canBrand ? branding.tagline || undefined : undefined,
       publicUrlBase: publicBase,
       logoDataUrl: canBrand ? branding.logoUrl : undefined,

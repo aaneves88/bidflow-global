@@ -147,6 +147,10 @@
     "whatsappMessage": "Hi {{clientName}}, here's the proposal \"{{title}}\" for {{total}}.\nYou can view and accept it here: {{url}}\nLet me know if you have any questions."
   },
   "pdf": {
+    "pix": {
+      "title": "Pay with PIX",
+      "instructions": "Open your banking app, choose PIX and scan the QR code — or use the copy-and-paste code below."
+    },
     "proposalFor": "Client",
     "description": "Description",
     "notes": "Notes",

@@ -337,17 +337,16 @@ export default function ProposalForm() {
               <Label htmlFor="title">{t('form.title')} *</Label>
               <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
             </div>
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <Label htmlFor="description">{t('form.description')}</Label>
-                <SnippetPicker
-                  kind="description"
-                  value={description}
-                  onInsert={(text) => setDescription((v) => appendText(v, text))}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">{t('form.description')}</Label>
               <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+              <SnippetPicker
+                kind="description"
+                value={description}
+                onInsert={(text) => setDescription((v) => appendText(v, text))}
+              />
             </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>{t('form.client')}</Label>
@@ -502,15 +501,8 @@ export default function ProposalForm() {
         <Card>
           <CardHeader><CardTitle>{t('form.notesAndTerms')}</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <Label htmlFor="notes">{t('form.notes')}</Label>
-                <SnippetPicker
-                  kind="notes"
-                  value={notes}
-                  onInsert={(text) => setNotes((v) => appendText(v, text))}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="notes">{t('form.notes')}</Label>
               <Textarea
                 id="notes"
                 value={notes}
@@ -518,22 +510,25 @@ export default function ProposalForm() {
                 rows={4}
                 placeholder={t('form.notesPlaceholder')}
               />
+              <SnippetPicker
+                kind="notes"
+                value={notes}
+                onInsert={(text) => setNotes((v) => appendText(v, text))}
+              />
             </div>
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <Label htmlFor="terms">{t('form.terms')}</Label>
-                <SnippetPicker
-                  kind="terms"
-                  value={terms}
-                  onInsert={(text) => setTerms((v) => appendText(v, text))}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="terms">{t('form.terms')}</Label>
               <Textarea
                 id="terms"
                 value={terms}
                 onChange={(e) => setTerms(e.target.value)}
                 rows={5}
                 placeholder={t('form.termsPlaceholder')}
+              />
+              <SnippetPicker
+                kind="terms"
+                value={terms}
+                onInsert={(text) => setTerms((v) => appendText(v, text))}
               />
             </div>
           </CardContent>
