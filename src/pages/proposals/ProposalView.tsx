@@ -63,6 +63,23 @@ export default function ProposalView() {
   const [closedAmount, setClosedAmount] = useState<string>('');
   const [closedNotes, setClosedNotes] = useState<string>('');
 
+  // Chave PIX do perfil — usada como fallback quando a proposta não tem chave própria.
+  const { data: profilePix } = useQuery({
+    queryKey: ['profile-pix'],
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth.user) return null;
+      const { data } = await supabase
+        .from('profiles')
+        .select('pix_key, pix_key_type, company_name, full_name')
+        .eq('id', auth.user.id)
+        .maybeSingle();
+      return data;
+    },
+  });
+
+
   if (isLoading) return <p className="text-muted-foreground">{t('common:actions.loading')}</p>;
   if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
 
