@@ -140,6 +140,10 @@ All colors MUST be HSL.
 
     --paper: 217.2 32.6% 14%;
     --paper-foreground: 210 40% 98%;
+
+    --niche-hero: 222.2 60% 6%;
+    --niche-hero-foreground: 210 40% 98%;
   }
+
 
 }
