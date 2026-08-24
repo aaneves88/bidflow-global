@@ -119,7 +119,17 @@ All colors MUST be HSL.
     --niche-ice: 199 82% 40%;
     --niche-blush: 340 45% 52%;
     --niche-moss: 158 62% 32%;
+
+    /* Fundo tipo "papel" para documentos/modelos */
+    --paper: 40 33% 97%;
+    --paper-foreground: 222.2 47.4% 11.2%;
+
+    /* Superfície escura de hero/CTA (igual nos dois temas) */
+    --niche-hero: 222.2 47.4% 11.2%;
+    --niche-hero-foreground: 210 40% 98%;
   }
+
+
 
   .dark {
     --niche-amber: 38 92% 60%;
@@ -127,5 +137,13 @@ All colors MUST be HSL.
     --niche-ice: 199 88% 62%;
     --niche-blush: 340 60% 70%;
     --niche-moss: 158 55% 55%;
+
+    --paper: 217.2 32.6% 14%;
+    --paper-foreground: 210 40% 98%;
+
+    --niche-hero: 222.2 60% 6%;
+    --niche-hero-foreground: 210 40% 98%;
   }
+
+
 }
