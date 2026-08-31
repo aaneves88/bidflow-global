@@ -92,6 +92,32 @@ export function useUpdateBranding() {
 
 export type PublicBranding = Branding & { hasActivePlan: boolean };
 
+/** Maps a `get_proposal_branding` row into the public branding shape. */
+export function mapPublicBranding(row: any): PublicBranding {
+  if (!row) return { ...ORCA_BRANDING, hasActivePlan: false };
+  const hasActivePlan = !!row.has_active_plan;
+  // Social proof ("Por que eu") is available on every plan — only the visual
+  // identity (logo/colors/company name) is gated behind a paid plan.
+  const trust = {
+    photoUrl: row.photo_url || '',
+    credentialNote: row.credential_note || '',
+    trustNote: row.trust_note || '',
+  };
+  if (!hasActivePlan) {
+    return { ...ORCA_BRANDING, ...trust, hasActivePlan: false };
+  }
+  return {
+    logoUrl: row.logo_url || '',
+    primaryColor: row.primary_color || ORCA_BRANDING.primaryColor,
+    secondaryColor: row.secondary_color || ORCA_BRANDING.secondaryColor,
+    accentColor: row.accent_color || ORCA_BRANDING.accentColor,
+    companyName: row.company_name || '',
+    tagline: row.tagline || '',
+    ...trust,
+    hasActivePlan: true,
+  };
+}
+
 /**
  * Public branding for a shared proposal page. Free-tier owners always show
  * Orca branding; paid owners show their own profile branding.
@@ -105,31 +131,9 @@ export async function fetchPublicBranding(supabase: any, publicCode?: string): P
     if (error || !data || data.length === 0) {
       return { ...ORCA_BRANDING, hasActivePlan: false };
     }
-    const row = data[0];
-    const hasActivePlan = !!row.has_active_plan;
-    // Social proof ("Por que eu") is available on every plan — only the visual
-    // identity (logo/colors/company name) is gated behind a paid plan.
-    const trust = {
-      photoUrl: row.photo_url || '',
-      credentialNote: row.credential_note || '',
-      trustNote: row.trust_note || '',
-    };
-    if (!hasActivePlan) {
-      return { ...ORCA_BRANDING, ...trust, hasActivePlan: false };
-    }
-    return {
-      logoUrl: row.logo_url || '',
-      primaryColor: row.primary_color || ORCA_BRANDING.primaryColor,
-      secondaryColor: row.secondary_color || ORCA_BRANDING.secondaryColor,
-      accentColor: row.accent_color || ORCA_BRANDING.accentColor,
-      companyName: row.company_name || '',
-      tagline: row.tagline || '',
-      photoUrl: row.photo_url || '',
-      credentialNote: row.credential_note || '',
-      trustNote: row.trust_note || '',
-      hasActivePlan: true,
-    };
+    return mapPublicBranding(data[0]);
   } catch {
     return { ...ORCA_BRANDING, hasActivePlan: false };
   }
 }
+
