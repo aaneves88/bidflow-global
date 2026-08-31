@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
 import { CheckCircle, MessageCircle, Clock, FileDown, PenLine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { supabase } from '@/integrations/supabase/client';
 import { usePublicProposal } from '@/hooks/useProposals';
 import { useRecordProposalView } from '@/hooks/useProposalViews';
-import { fetchPublicBranding, ORCA_BRANDING } from '@/hooks/useBranding';
+import { ORCA_BRANDING } from '@/hooks/useBranding';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { discountValue } from '@/lib/discount';
@@ -30,35 +29,16 @@ const ORCA_SEAL_URL =
 export default function PublicProposal() {
   const { t } = useTranslation(['public', 'common']);
   const { publicCode } = useParams();
-  const { data: proposal, isLoading, refetch } = usePublicProposal(publicCode);
+  const { data: bundle, isLoading, refetch } = usePublicProposal(publicCode);
   const recordView = useRecordProposalView();
   const [signatureOpen, setSignatureOpen] = useState(false);
 
-  const { data: branding } = useQuery({
-    queryKey: ['public-branding', publicCode],
-    enabled: !!publicCode,
-    queryFn: () => fetchPublicBranding(supabase, publicCode),
-    staleTime: 5 * 60 * 1000,
-  });
+  const proposal = bundle?.proposal;
+  const branding = bundle?.branding;
+  const signature = bundle?.signature;
+  const pix = bundle?.pix;
 
-  const { data: signature, refetch: refetchSig } = useQuery({
-    queryKey: ['public-signature', publicCode],
-    enabled: !!publicCode,
-    queryFn: async () => {
-      const { data } = await supabase.rpc('get_proposal_signature', { p_code: publicCode! });
-      return Array.isArray(data) && data.length > 0 ? data[0] : null;
-    },
-  });
 
-  const { data: pix } = useQuery({
-    queryKey: ['public-pix', publicCode],
-    enabled: !!publicCode,
-    staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data } = await (supabase as any).rpc('get_proposal_pix', { p_code: publicCode! });
-      return Array.isArray(data) && data.length > 0 ? data[0] : null;
-    },
-  });
 
 
   useEffect(() => {

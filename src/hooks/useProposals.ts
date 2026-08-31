@@ -6,6 +6,7 @@ import i18n from '@/i18n';
 import { applyDiscount, type DiscountType } from '@/lib/discount';
 import { trackProductEvent } from '@/lib/productEvents';
 import { trackMeta } from '@/lib/analytics';
+import { mapPublicBranding, type PublicBranding } from '@/hooks/useBranding';
 
 const tr = (key: string) => i18n.t(key, { ns: 'proposals' });
 const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
