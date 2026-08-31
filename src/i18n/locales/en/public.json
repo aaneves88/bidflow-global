@@ -47,7 +47,8 @@
     "nameTooShort": "Please provide your full name",
     "mustAgree": "You must accept the terms to continue",
     "signed": "Proposal signed",
-    "signedOn": "Signed on {{date}}"
+    "signedOn": "Signed on {{date}}",
+    "rateLimited": "Too many attempts. Please wait a moment and try again."
   },
   "share": {
     "whatsappText": "Regarding proposal: {{title}}"
