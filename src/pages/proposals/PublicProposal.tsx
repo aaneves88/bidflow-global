@@ -99,7 +99,7 @@ export default function PublicProposal() {
 
   const handleSigned = (signerName?: string) => {
     refetch();
-    refetchSig();
+    
     toast({ title: t('messages.accepted') });
     if (publicCode) {
       // Fire signed + accepted (sign_proposal also moves to approved status)

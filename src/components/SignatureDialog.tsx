@@ -43,13 +43,20 @@ export function SignatureDialog({ open, onOpenChange, publicCode, defaultEmail, 
     }
     setSubmitting(true);
     try {
-      const { error } = await supabase.rpc('sign_proposal', {
-        p_code: publicCode,
-        p_signer_name: name.trim(),
-        p_signer_email: email.trim() || null,
-        p_user_agent: navigator.userAgent.slice(0, 250),
+      const { data, error } = await supabase.functions.invoke('public-proposal-sign', {
+        body: {
+          publicCode,
+          signerName: name.trim(),
+          signerEmail: email.trim() || undefined,
+          userAgent: navigator.userAgent.slice(0, 250),
+        },
       });
       if (error) throw error;
+      if (data?.error === 'rate_limited') {
+        toast({ title: t('signature.rateLimited'), variant: 'destructive' });
+        return;
+      }
+      if (data?.error) throw new Error(data.message || data.error);
       toast({ title: t('signature.success') });
       reset();
       onOpenChange(false);
@@ -57,6 +64,7 @@ export function SignatureDialog({ open, onOpenChange, publicCode, defaultEmail, 
     } catch (e: any) {
       toast({ title: t('signature.error'), description: e.message, variant: 'destructive' });
     } finally {
+
       setSubmitting(false);
     }
   };
