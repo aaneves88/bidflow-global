@@ -27,6 +27,11 @@ project_id = "mhsyllzvzuorzyacobar"
     verify_jwt = false
   [functions.send-ebook-nurture-emails]
     verify_jwt = false
+  [functions.public-proposal-view]
+    verify_jwt = false
+  [functions.public-proposal-sign]
+    verify_jwt = false
+
 
 
 
