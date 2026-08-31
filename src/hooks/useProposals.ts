@@ -6,6 +6,7 @@ import i18n from '@/i18n';
 import { applyDiscount, type DiscountType } from '@/lib/discount';
 import { trackProductEvent } from '@/lib/productEvents';
 import { trackMeta } from '@/lib/analytics';
+import { mapPublicBranding, type PublicBranding } from '@/hooks/useBranding';
 
 const tr = (key: string) => i18n.t(key, { ns: 'proposals' });
 const trCommon = (key: string) => i18n.t(key, { ns: 'common' });
@@ -441,17 +442,33 @@ export function useDuplicateProposal() {
   });
 }
 
-// For public page — uses a SECURITY DEFINER RPC that returns ONLY the proposal
-// matching the public_code (prevents anon enumeration of all proposals).
+// For public page — goes through the rate-limited `public-proposal-view` edge
+// function, which bundles proposal + signature + pix + branding in one call.
+export type PublicProposalBundle = {
+  proposal: any;
+  signature: { signer_name: string; signed_at: string } | null;
+  pix: { pix_key: string; pix_key_type: string | null; merchant_name: string } | null;
+  branding: PublicBranding;
+};
+
 export function usePublicProposal(publicCode: string | undefined) {
-  return useQuery({
+  return useQuery<PublicProposalBundle>({
     queryKey: ['public-proposal', publicCode],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_public_proposal', { p_code: publicCode! });
+      const { data, error } = await supabase.functions.invoke('public-proposal-view', {
+        body: { publicCode, action: 'load' },
+      });
       if (error) throw error;
-      if (!data) throw new Error('Proposal not found');
-      return data as any;
+      if (data?.error === 'rate_limited') throw new Error('rate_limited');
+      if (!data || data.error || !data.proposal) throw new Error('Proposal not found');
+      return {
+        proposal: data.proposal,
+        signature: data.signature ?? null,
+        pix: data.pix ?? null,
+        branding: mapPublicBranding(data.branding),
+      };
     },
     enabled: !!publicCode,
   });
 }
+

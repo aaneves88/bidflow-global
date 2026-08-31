@@ -47,7 +47,8 @@
     "nameTooShort": "Informe seu nome completo",
     "mustAgree": "Você precisa aceitar os termos para continuar",
     "signed": "Proposta assinada",
-    "signedOn": "Assinada em {{date}}"
+    "signedOn": "Assinada em {{date}}",
+    "rateLimited": "Muitas tentativas. Aguarde um pouco e tente de novo."
   },
   "share": {
     "whatsappText": "Sobre a proposta: {{title}}"

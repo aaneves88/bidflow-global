@@ -36,10 +36,14 @@ export function useRecordProposalView() {
       if (sessionStorage.getItem(key)) return;
       sessionStorage.setItem(key, '1');
 
-      // Recording requires knowing the proposal's public code (link holder only).
-      await supabase.rpc('record_proposal_view', {
-        p_code: publicCode,
-        p_user_agent: navigator.userAgent.slice(0, 200),
+      // Recording requires knowing the proposal's public code (link holder only)
+      // and goes through the rate-limited edge function.
+      await supabase.functions.invoke('public-proposal-view', {
+        body: {
+          publicCode,
+          action: 'record_view',
+          userAgent: navigator.userAgent.slice(0, 200),
+        },
       });
     },
   });
