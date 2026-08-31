@@ -817,6 +817,27 @@ export type Database = {
           },
         ]
       }
+      public_proposal_rate_log: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          ip_hash: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          ip_hash: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          ip_hash?: string
+        }
+        Relationships: []
+      }
       referral_partners: {
         Row: {
           contact: string | null
