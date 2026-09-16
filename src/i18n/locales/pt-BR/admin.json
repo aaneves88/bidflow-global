@@ -12,7 +12,24 @@
     "brand": "Marca",
     "leads": "Leads e-book",
     "referrals": "Indicações",
-    "partners": "Parceiros"
+    "partners": "Parceiros",
+    "niches": "Nichos"
+  },
+  "niches": {
+    "title": "Funil por nicho",
+    "description": "Da visita na página de nicho até a proposta enviada ao cliente.",
+    "days": "{{count}} dias",
+    "empty": "Ainda não há cliques registrados nesse período.",
+    "columns": {
+      "niche": "Nicho",
+      "views": "Visitas",
+      "copies": "Modelos copiados",
+      "ctas": "Cliques no botão",
+      "signups": "Cadastros",
+      "proposals": "1ª proposta",
+      "publicViews": "Link aberto",
+      "conversion": "Visita → cadastro"
+    }
   },
   "roadmap": {
     "title": "Roadmap do produto",
