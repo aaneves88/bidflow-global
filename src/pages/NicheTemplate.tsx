@@ -29,7 +29,12 @@ export default function NicheTemplate() {
   const accentSoft = `hsl(var(--${niche.accentColor}) / 0.14)`;
   const onAccent = 'hsl(var(--primary-foreground))';
 
+  const trackCta = (position: 'topo' | 'modelo' | 'rodape') => {
+    void trackProductEvent('niche_cta_clicked', null, { niche: niche.slug, position });
+  };
+
   const copy = async () => {
+    void trackProductEvent('niche_template_copied', null, { niche: niche.slug });
     try {
       await navigator.clipboard.writeText(niche.template);
       setCopied(true);
