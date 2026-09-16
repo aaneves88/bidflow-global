@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { captureNicheOrigin } from '@/lib/attribution';
+import { trackProductEvent } from '@/lib/productEvents';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Copy, Check, ArrowRight, FileText, icons } from 'lucide-react';
@@ -13,6 +15,12 @@ export default function NicheTemplate() {
   const niche = getNiche(nicho);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!niche) return;
+    captureNicheOrigin(niche.slug);
+    void trackProductEvent('niche_page_viewed', null, { niche: niche.slug });
+  }, [niche?.slug]);
 
   if (!niche) return <NotFound />;
 
