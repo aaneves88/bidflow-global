@@ -8,7 +8,44 @@
  */
 
 const STORAGE_KEY = 'orca_attribution';
+const NICHE_KEY = 'orca_niche_origin';
 const TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 dias
+
+interface NicheOrigin {
+  niche: string;
+  captured_at: number;
+}
+
+/**
+ * Guarda de qual página de conteúdo (nicho ou hub de modelos) o visitante veio.
+ * Não sobrescreve uma origem válida já registrada.
+ */
+export function captureNicheOrigin(niche: string): void {
+  if (typeof window === 'undefined' || !niche) return;
+  try {
+    if (readNicheOrigin()) return;
+    const payload: NicheOrigin = { niche, captured_at: Date.now() };
+    window.localStorage.setItem(NICHE_KEY, JSON.stringify(payload));
+  } catch {
+    /* localStorage indisponível */
+  }
+}
+
+export function readNicheOrigin(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(NICHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as NicheOrigin;
+    if (!parsed?.niche || !parsed.captured_at || Date.now() - parsed.captured_at > TTL_MS) {
+      window.localStorage.removeItem(NICHE_KEY);
+      return null;
+    }
+    return parsed.niche;
+  } catch {
+    return null;
+  }
+}
 
 export interface Attribution {
   utm_source: string | null;
