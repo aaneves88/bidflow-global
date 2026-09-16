@@ -15,6 +15,7 @@ import AdminBrand from './AdminBrand';
 import AdminEbookLeads from './AdminEbookLeads';
 import AdminReferrals from './AdminReferrals';
 import AdminPartners from './AdminPartners';
+import AdminNicheFunnel from './AdminNicheFunnel';
 
 
 
@@ -55,6 +56,7 @@ export default function Admin() {
           <TabsTrigger value="roadmap">{t('tabs.roadmap')}</TabsTrigger>
           <TabsTrigger value="support">{tSupport('admin.title')}</TabsTrigger>
           <TabsTrigger value="leads">{t('tabs.leads')}</TabsTrigger>
+          <TabsTrigger value="niches">{t('tabs.niches')}</TabsTrigger>
           <TabsTrigger value="marketing">{t('tabs.marketing')}</TabsTrigger>
           <TabsTrigger value="brand">{t('tabs.brand')}</TabsTrigger>
         </TabsList>
@@ -69,6 +71,7 @@ export default function Admin() {
         <TabsContent value="roadmap"><AdminRoadmap /></TabsContent>
         <TabsContent value="support"><AdminSupport /></TabsContent>
         <TabsContent value="leads"><AdminEbookLeads /></TabsContent>
+        <TabsContent value="niches"><AdminNicheFunnel /></TabsContent>
         <TabsContent value="marketing"><AdminMarketing /></TabsContent>
         <TabsContent value="brand"><AdminBrand /></TabsContent>
 
