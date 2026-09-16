@@ -1274,6 +1274,18 @@ export type Database = {
       }
       generate_referral_code: { Args: never; Returns: string }
       get_admin_activation_stats: { Args: never; Returns: Json }
+      get_admin_niche_funnel: {
+        Args: { p_days?: number }
+        Returns: {
+          cta_clicks: number
+          first_proposals: number
+          niche: string
+          page_views: number
+          public_views: number
+          signups: number
+          template_copies: number
+        }[]
+      }
       get_admin_referrals: {
         Args: never
         Returns: {

@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { captureNicheOrigin } from '@/lib/attribution';
+import { trackProductEvent } from '@/lib/productEvents';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Copy, Check, ArrowRight, FileText, icons } from 'lucide-react';
@@ -14,6 +16,12 @@ export default function NicheTemplate() {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
+  useEffect(() => {
+    if (!niche) return;
+    captureNicheOrigin(niche.slug);
+    void trackProductEvent('niche_page_viewed', null, { niche: niche.slug });
+  }, [niche?.slug]);
+
   if (!niche) return <NotFound />;
 
   const NicheIcon = icons[niche.icon as keyof typeof icons] ?? FileText;
@@ -21,7 +29,12 @@ export default function NicheTemplate() {
   const accentSoft = `hsl(var(--${niche.accentColor}) / 0.14)`;
   const onAccent = 'hsl(var(--primary-foreground))';
 
+  const trackCta = (position: 'topo' | 'modelo' | 'rodape') => {
+    void trackProductEvent('niche_cta_clicked', null, { niche: niche.slug, position });
+  };
+
   const copy = async () => {
+    void trackProductEvent('niche_template_copied', null, { niche: niche.slug });
     try {
       await navigator.clipboard.writeText(niche.template);
       setCopied(true);
@@ -56,7 +69,7 @@ export default function NicheTemplate() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="text-xl font-bold tracking-tight">Orca</Link>
           <Button size="sm" className="min-h-11" asChild>
-            <Link to={`/register?modelo=${niche.slug}`}>Criar orçamento grátis</Link>
+            <Link to={`/register?modelo=${niche.slug}`} onClick={() => trackCta('topo')}>Criar orçamento grátis</Link>
           </Button>
         </div>
       </nav>
@@ -182,7 +195,7 @@ export default function NicheTemplate() {
                   {copied ? 'Copiado' : 'Copiar modelo'}
                 </Button>
                 <Button asChild className="min-h-11" style={{ backgroundColor: accent, color: onAccent }}>
-                  <Link to={`/register?modelo=${niche.slug}`}>
+                  <Link to={`/register?modelo=${niche.slug}`} onClick={() => trackCta('modelo')}>
                     Usar este modelo no Orca
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -240,7 +253,7 @@ export default function NicheTemplate() {
             className="min-h-12 text-base font-semibold shadow-lg hover:opacity-90"
             style={{ backgroundColor: 'hsl(var(--niche-hero))', color: 'hsl(var(--niche-hero-foreground))' }}
           >
-            <Link to={`/register?modelo=${niche.slug}`}>
+            <Link to={`/register?modelo=${niche.slug}`} onClick={() => trackCta('rodape')}>
               Começar grátis
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

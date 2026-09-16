@@ -12,7 +12,24 @@
     "brand": "Brand",
     "leads": "Ebook leads",
     "referrals": "Referrals",
-    "partners": "Partners"
+    "partners": "Partners",
+    "niches": "Niches"
+  },
+  "niches": {
+    "title": "Funnel by niche",
+    "description": "From the niche page visit to the proposal sent to the client.",
+    "days": "{{count}} days",
+    "empty": "No clicks recorded in this period yet.",
+    "columns": {
+      "niche": "Niche",
+      "views": "Visits",
+      "copies": "Templates copied",
+      "ctas": "Button clicks",
+      "signups": "Signups",
+      "proposals": "1st proposal",
+      "publicViews": "Link opened",
+      "conversion": "Visit → signup"
+    }
   },
   "roadmap": {
     "title": "Product roadmap",
