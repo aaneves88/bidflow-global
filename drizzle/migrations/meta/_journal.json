@@ -8,6 +8,13 @@
       "when": 1788143094352,
       "tag": "0000_public_proposal_rate_log",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789528627081,
+      "tag": "0001_niche_funnel_tracking",
+      "breakpoints": true
     }
   ]
 }
