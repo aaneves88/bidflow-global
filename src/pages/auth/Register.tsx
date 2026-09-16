@@ -12,6 +12,7 @@ import { Seo } from '@/components/Seo';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useOAuthErrorNotice } from '@/hooks/useOAuthErrorNotice';
 import { persistSignupAttribution } from '@/lib/attributionSync';
+import { trackProductEvent } from '@/lib/productEvents';
 import { storePendingReferralCode, getPendingReferralCode, clearPendingReferralCode } from '@/hooks/useReferralProgram';
 
 export default function Register() {
@@ -71,6 +72,12 @@ export default function Register() {
       });
       await persistSignupAttribution();
       clearPendingReferralCode();
+      const { data: signed } = await supabase.auth.getUser();
+      if (signed.user?.id) {
+        void trackProductEvent('signup_completed', signed.user.id, {
+          modelo: searchParams.get('modelo') ?? undefined,
+        });
+      }
     }
 
     // Fire welcome email (best-effort, non-blocking)

@@ -6,6 +6,7 @@ import { Copy, Check, ArrowRight, FileText } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { useToast } from '@/hooks/use-toast';
 import { NICHES, nichePath } from '@/content/niches';
+import { trackProductEvent } from '@/lib/productEvents';
 
 type Template = {
   id: string;
@@ -276,6 +277,7 @@ export default function ProposalTemplates() {
                 key={n.slug}
                 to={nichePath(n.slug)}
                 className="rounded-lg border p-4 space-y-1 hover:bg-muted/50 transition-colors"
+                onClick={() => void trackProductEvent('hub_niche_clicked', null, { niche: n.slug })}
               >
                 <span className="font-semibold block">{n.label}</span>
                 <span className="text-sm text-muted-foreground">{n.h1}</span>
