@@ -6,9 +6,13 @@ import "./i18n";
 
 import { isNativeMobile } from "@/lib/platform";
 import { captureAttribution } from "@/lib/attribution";
+import { initGoogleAds } from "@/lib/googleAds";
 
 // Registra a origem (UTM ou referrer) da primeira visita, antes de qualquer rota.
 captureAttribution();
+
+// Google Ads (gtag.js) — no-op fora de produção.
+initGoogleAds();
 
 // Native-only bootstrap: configure status bar + splash on Android/iOS.
 // Safe no-op on web (dynamic import + isNativeMobile guard).
