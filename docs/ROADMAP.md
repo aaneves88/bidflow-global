@@ -16,6 +16,7 @@ Status atualizado em cada release. Documento vivo.
 | 7.1  | v0.7.1 | Marca própria + trava anti-abuso (Tax ID) | ✅ Lançada |
 | 8    | v0.8.0 | **Programa de indicação** | ✅ Lançada |
 | 8.1  | v0.8.1 | Automação de conversão no Stripe + créditos de indicação | 🚧 Em desenvolvimento |
+| 8.2  | v0.8.2 | Rastreamento de aquisição (GTM, Google Ads, funil por nicho) | ✅ Lançada |
 | 9    | v0.9.0 | SEO + landing institucional + páginas de nicho | ⏳ Planejada |
 | 10   | v0.10.0 | LGPD + termos + consentimento + ajustes pré-lançamento | ⏳ Planejada |
 | 11   | v1.0.0 | Observabilidade + lançamento comercial 🚀 | ⏳ Planejada |
