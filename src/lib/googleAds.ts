@@ -20,7 +20,7 @@ export const GOOGLE_ADS_ID = 'AW-18401533293';
 
 const PRODUCTION_HOSTS = ['orca-mento.app', 'www.orca-mento.app'];
 
-/** Marca nas cópias baixadas por este módulo, para识别 duplicação própria. */
+/** Marca as cópias baixadas por este módulo, para reconhecer duplicação própria. */
 const OWN_SCRIPT_ATTR = 'data-orca-ads';
 
 declare global {
