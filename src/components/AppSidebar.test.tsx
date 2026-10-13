@@ -41,7 +41,12 @@ function renderMenu() {
   );
 }
 
-const sheet = () => document.querySelector('[data-sidebar="sheet"]');
+// No celular a gaveta é uma folha (Sheet) marcada com data-mobile="true".
+const drawer = () => document.querySelector('[data-sidebar="sidebar"][data-mobile="true"]');
+const openDrawer = async () => {
+  fireEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
+  await waitFor(() => expect(drawer()).not.toBeNull());
+};
 
 beforeEach(() => {
   Object.defineProperty(window, "ResizeObserver", {
@@ -66,25 +71,21 @@ describe("AppSidebar no celular", () => {
 
   it("fecha a gaveta ao tocar num item principal", async () => {
     renderMenu();
-    expect(sheet()).toBeNull();
+    expect(drawer()).toBeNull();
 
-    fireEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
-    await waitFor(() => expect(sheet()).not.toBeNull());
-
+    await openDrawer();
     fireEvent.click(screen.getByRole("link", { name: /nav\.clients/ }));
 
-    await waitFor(() => expect(sheet()).toBeNull());
+    await waitFor(() => expect(drawer()).toBeNull());
   });
 
   it("fecha a gaveta ao tocar num item da administração", async () => {
     renderMenu();
 
-    fireEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
-    await waitFor(() => expect(sheet()).not.toBeNull());
-
+    await openDrawer();
     fireEvent.click(screen.getByRole("link", { name: /nav\.admin/ }));
 
-    await waitFor(() => expect(sheet()).toBeNull());
+    await waitFor(() => expect(drawer()).toBeNull());
   });
 });
 
@@ -95,13 +96,13 @@ describe("AppSidebar no computador", () => {
 
   it("navega sem abrir nem fechar gaveta nenhuma", async () => {
     renderMenu();
-    expect(sheet()).toBeNull();
+    expect(drawer()).toBeNull();
 
     fireEvent.click(screen.getByRole("link", { name: /nav\.clients/ }));
 
     await waitFor(() =>
       expect(document.querySelector('[data-sidebar="sidebar"]')).not.toBeNull(),
     );
-    expect(sheet()).toBeNull();
+    expect(drawer()).toBeNull();
   });
 });
