@@ -13,10 +13,17 @@ import { SupportDialog } from '@/components/SupportDialog';
 
 export function AppSidebar() {
   const { t } = useTranslation('common');
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const collapsed = state === 'collapsed';
   const location = useLocation();
   const { isAdmin, signOut, user } = useAuth();
+
+  // No mobile o menu é uma gaveta (Sheet) que fica sobre a tela; em desktop é
+  // barra fixa colapsável, então lá o clique não muda nada.
+  const closeMobileMenu = () => {
+    if (isMobile) setOpenMobile(false);
+  };
+
 
   const mainItems = [
     { title: t('nav.dashboard'), url: '/dashboard', icon: LayoutDashboard },
@@ -50,7 +57,7 @@ export function AppSidebar() {
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                    <NavLink to={item.url} end={item.url === '/'} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
+                    <NavLink to={item.url} end={item.url === '/'} onClick={closeMobileMenu} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -69,7 +76,7 @@ export function AppSidebar() {
                 {adminItems.map((item) => (
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                      <NavLink to={item.url} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
+                      <NavLink to={item.url} onClick={closeMobileMenu} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
                         <item.icon className="mr-2 h-4 w-4" />
                         {!collapsed && <span>{item.title}</span>}
                       </NavLink>
