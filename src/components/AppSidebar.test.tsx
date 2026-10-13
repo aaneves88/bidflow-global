@@ -2,6 +2,13 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+// Controla diretamente se a tela é considerada celular ou computador.
+const screenState = vi.hoisted(() => ({ mobile: false }));
+
+vi.mock("@/hooks/use-mobile", () => ({
+  useIsMobile: () => screenState.mobile,
+}));
+
 // O menu usa auth, traduções e o diálogo de suporte; aqui o que importa é só o
 // comportamento da gaveta, então essas dependências entram simplificadas.
 vi.mock("@/contexts/AuthContext", () => ({
@@ -22,28 +29,6 @@ vi.mock("@/components/SupportDialog", () => ({
 
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-
-function setViewportWidth(width: number) {
-  Object.defineProperty(window, "innerWidth", {
-    writable: true,
-    configurable: true,
-    value: width,
-  });
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
-    configurable: true,
-    value: (query: string) => ({
-      matches: width < 768,
-      media: query,
-      onchange: null,
-      addListener: () => {},
-      removeListener: () => {},
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      dispatchEvent: () => false,
-    }),
-  });
-}
 
 function renderMenu() {
   return render(
@@ -75,7 +60,9 @@ afterEach(() => {
 });
 
 describe("AppSidebar no celular", () => {
-  beforeEach(() => setViewportWidth(390));
+  beforeEach(() => {
+    screenState.mobile = true;
+  });
 
   it("fecha a gaveta ao tocar num item principal", async () => {
     renderMenu();
@@ -102,7 +89,9 @@ describe("AppSidebar no celular", () => {
 });
 
 describe("AppSidebar no computador", () => {
-  beforeEach(() => setViewportWidth(1280));
+  beforeEach(() => {
+    screenState.mobile = false;
+  });
 
   it("navega sem abrir nem fechar gaveta nenhuma", async () => {
     renderMenu();
