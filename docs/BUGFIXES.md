@@ -105,3 +105,9 @@ A produção (orca-mento.app) estava desatualizada — várias correções exist
 - **Diagnóstico:** fora de iframe o SDK (`@lovable.dev/cloud-auth-js`) faz redirect de página inteira e devolve `{ redirected: true }`; os tokens voltam **na URL** e o SDK **não** tem handler de callback. Nenhum lugar do app chamava `supabase.auth.setSession` com esses tokens — e a Landing ainda redirecionava para `/app` com `replace`, descartando os parâmetros. No desktop/preview funcionava porque lá o fluxo é por popup.
 - **Correção:** nova rota pública `/auth/callback` (`src/pages/auth/AuthCallback.tsx`) + helper `src/lib/oauthCallback.ts` (lê tokens da query e do hash, grava a sessão, limpa a URL, navega para o destino guardado em `sessionStorage`); `GoogleSignInButton` passa `redirect_uri = origin + /auth/callback`; Landing reenvia retornos que caiam em `/` para o callback antes de qualquer outro redirect.
 - **Doc:** `docs/AUTH.md`.
+
+## 2026-10-13 — Gaveta do menu não fechava ao tocar num link (celular)
+- **Sintoma:** no celular/app, tocar num item do menu lateral navegava para a tela, mas a gaveta continuava aberta sobre o conteúdo até o usuário fechar manualmente.
+- **Diagnóstico:** os `NavLink` do `AppSidebar` nunca pediam para fechar o `Sheet`. O `useSidebar()` já expõe `isMobile` e `setOpenMobile`, mas nada os chamava no clique — em desktop isso não aparece porque lá o menu é barra fixa, não gaveta.
+- **Correção:** `closeMobileMenu()` no `AppSidebar` (age só quando `isMobile`) chamada no `onClick` de todos os links — itens principais e itens da administração. Comportamento de desktop inalterado.
+- **Teste:** `src/components/AppSidebar.test.tsx` (3 casos: item principal fecha a gaveta, item da administração fecha, desktop navega sem abrir/fechar gaveta). Sem o corrigive, os 2 casos de celular falham — os testes pegam o bug de verdade.
