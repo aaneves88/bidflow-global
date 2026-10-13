@@ -79,6 +79,25 @@ Deno.serve(async (req) => {
 
     await admin.from('signup_ip_log').insert({ ip_hash: ipHash });
 
+    // Welcome email: awaited server-side so it can't be aborted by the browser
+    // navigating away. Best-effort — a failure is logged but never blocks signup.
+    try {
+      const { error: mailErr } = await admin.functions.invoke('send-transactional-email', {
+        body: {
+          templateName: 'welcome',
+          recipientEmail: email,
+          idempotencyKey: `welcome-${email.toLowerCase()}`,
+          templateData: {
+            firstName: fullName.split(' ')[0] || undefined,
+            appUrl: 'https://orca-mento.app',
+          },
+        },
+      });
+      if (mailErr) console.error('welcome email failed', mailErr.message ?? mailErr);
+    } catch (mailErr) {
+      console.error('welcome email threw', mailErr);
+    }
+
     // Track referral if a valid referral code was provided
     if (referralCode && data.user?.id) {
       try {

@@ -6,6 +6,40 @@ import { useToast } from '@/hooks/use-toast';
 import { clearOAuthError, isUserCancelled, readOAuthError } from '@/lib/oauthError';
 import { consumeOAuthTokens, readOAuthTokens, takeOAuthNext } from '@/lib/oauthCallback';
 import { persistSignupAttribution } from '@/lib/attributionSync';
+import { supabase } from '@/integrations/supabase/client';
+
+const NEW_ACCOUNT_WINDOW_MS = 2 * 60 * 1000;
+
+/** Conta criada há menos de 2 min = cadastro novo pelo Google → boas-vindas. */
+async function sendWelcomeIfNewAccount() {
+  try {
+    const { data: auth } = await supabase.auth.getUser();
+    const user = auth.user;
+    if (!user?.email) return;
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('created_at, full_name')
+      .eq('id', user.id)
+      .maybeSingle();
+    const createdAt = profile?.created_at ?? user.created_at;
+    if (!createdAt || Date.now() - new Date(createdAt).getTime() > NEW_ACCOUNT_WINDOW_MS) return;
+    const fullName = (profile?.full_name ?? '').trim();
+    const { error } = await supabase.functions.invoke('send-transactional-email', {
+      body: {
+        templateName: 'welcome',
+        recipientEmail: user.email,
+        idempotencyKey: `welcome-${user.email.toLowerCase()}`,
+        templateData: {
+          firstName: fullName.split(' ')[0] || undefined,
+          appUrl: 'https://orca-mento.app',
+        },
+      },
+    });
+    if (error) console.warn('welcome email failed', error);
+  } catch (e) {
+    console.warn('welcome email failed', e);
+  }
+}
 
 /**
  * Rota pública de retorno do login social (redirect de página inteira).
@@ -46,12 +80,13 @@ export default function AuthCallback() {
       return;
     }
 
-    consumeOAuthTokens().then((ok) => {
+    consumeOAuthTokens().then(async (ok) => {
       if (!ok) {
         fail(t('oauth.generic'));
         return;
       }
       void persistSignupAttribution();
+      await sendWelcomeIfNewAccount();
       navigate(takeOAuthNext(), { replace: true });
     });
   }, [navigate, t, toast]);

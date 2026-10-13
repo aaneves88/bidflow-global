@@ -80,18 +80,8 @@ export default function Register() {
       }
     }
 
-    // Fire welcome email (best-effort, non-blocking)
-    supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'welcome',
-        recipientEmail: email,
-        idempotencyKey: `welcome-${email.toLowerCase()}`,
-        templateData: {
-          firstName: fullName.split(' ')[0] || undefined,
-          appUrl: 'https://orca-mento.app',
-        },
-      },
-    }).catch((e) => console.warn('welcome email failed', e));
+    // O e-mail de boas-vindas é enviado pelo servidor dentro de signup-guarded.
+
 
     trackMeta('CompleteRegistration');
     toast({ title: t('register.successTitle'), description: t('register.successDescription') });
