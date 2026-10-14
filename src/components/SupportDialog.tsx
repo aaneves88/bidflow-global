@@ -18,7 +18,6 @@ import { useAuth } from '@/contexts/AuthContext';
 
 type Category = 'bug' | 'question' | 'suggestion';
 
-const SUPPORT_INBOX = 'statematch@statematch.global';
 
 export function SupportDialog({ trigger }: { trigger?: React.ReactNode }) {
   const { t } = useTranslation('support');
@@ -80,21 +79,8 @@ export function SupportDialog({ trigger }: { trigger?: React.ReactNode }) {
       });
 
       // Notificação por e-mail (fila de e-mail do projeto) — best effort.
-      const { error: mailErr } = await supabase.functions.invoke('send-transactional-email', {
-        body: {
-          templateName: 'support-report',
-          recipientEmail: SUPPORT_INBOX,
-          idempotencyKey: `support-report-${ticket.id}`,
-          templateData: {
-            reporterEmail: user.email ?? '',
-            categoryLabel: t(`categories.${category}`),
-            description: body,
-            pagePath: location.pathname + location.search,
-            userAgent: navigator.userAgent,
-            createdAt: new Date(ticket.created_at).toLocaleString('pt-BR'),
-            ticketId: ticket.id,
-          },
-        },
+      const { error: mailErr } = await supabase.functions.invoke('send-support-email', {
+        body: { action: 'report', ticketId: ticket.id, categoryLabel: t(`categories.${category}`) },
       });
       if (mailErr) console.error('support notification failed', mailErr);
 

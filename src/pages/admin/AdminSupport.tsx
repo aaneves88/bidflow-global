@@ -66,16 +66,11 @@ export default function AdminSupport() {
         .single();
       if (error) throw error;
 
-      const { error: mailErr } = await supabase.functions.invoke('send-transactional-email', {
+      const { error: mailErr } = await supabase.functions.invoke('send-support-email', {
         body: {
-          templateName: 'support-reply',
-          recipientEmail: ticket.reporter_email,
-          idempotencyKey: `support-reply-${msg.id}`,
-          templateData: {
-            categoryLabel: t(`categories.${ticket.category}`),
-            originalMessage: ticket.description,
-            replyMessage: body,
-          },
+          action: 'reply',
+          messageId: msg.id,
+          categoryLabel: t(`categories.${ticket.category}`),
         },
       });
       if (mailErr) throw mailErr;

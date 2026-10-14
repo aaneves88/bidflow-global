@@ -478,19 +478,15 @@ export default function ProposalView() {
                 if (!proposal) return;
                 setSendingEmail(true);
                 try {
-                  const { error } = await supabase.functions.invoke('send-transactional-email', {
+                  const { error } = await supabase.functions.invoke('send-proposal-email', {
                     body: {
-                      templateName: 'proposal-sent',
+                      proposalId: proposal.id,
                       recipientEmail: emailTo.trim(),
-                      idempotencyKey: `proposal-sent-${proposal.id}-${emailTo.trim().toLowerCase()}`,
-                      templateData: {
-                        clientName: proposal.clients?.name || null,
-                        senderName: branding?.companyName || null,
-                        proposalTitle: proposal.title,
-                        proposalTotal: formatCurrency(Number(proposal.total_amount), proposal.currency),
-                        publicUrl,
-                        validUntil: proposal.valid_until ? formatDate(proposal.valid_until) : null,
-                      },
+                      clientName: proposal.clients?.name || null,
+                      senderName: branding?.companyName || null,
+                      proposalTotal: formatCurrency(Number(proposal.total_amount), proposal.currency),
+                      publicUrl,
+                      validUntil: proposal.valid_until ? formatDate(proposal.valid_until) : null,
                     },
                   });
                   if (error) throw error;

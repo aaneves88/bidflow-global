@@ -6,6 +6,7 @@
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAppEmail } from '../_shared/app-email.ts'
 
 const MIN_HOURS = 48
 const MAX_DAYS = 30
@@ -87,10 +88,7 @@ Deno.serve(async (req) => {
       Math.floor((now - new Date(proposal.created_at).getTime()) / 86_400_000),
     )
 
-    const { error: sendError } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'proposal-followup',
-        recipientEmail: owner.email,
+    const sendError = await sendAppEmail(supabase, 'proposal-followup', owner.email, {
         idempotencyKey: `followup-${proposal.id}`,
         templateData: {
           firstName: (owner.full_name || '').trim().split(/\s+/)[0] || undefined,
@@ -102,8 +100,7 @@ Deno.serve(async (req) => {
           wasViewed: (viewCount ?? 0) > 0,
           appProposalUrl: `${APP_URL}/proposals/${proposal.id}`,
         },
-      },
-    })
+      }).then(() => null, (e: unknown) => e as Error)
 
     if (sendError) {
       console.error('Follow-up email failed', { proposalId: proposal.id, sendError })
