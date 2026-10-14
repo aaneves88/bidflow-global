@@ -1,18 +1,8 @@
 /// <reference types="npm:@types/react@18.3.1" />
 
 import * as React from 'npm:react@18.3.1'
-
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Link,
-  Preview,
-  Text,
-} from 'npm:@react-email/components@0.0.22'
+import { Body, Head, Heading, Html, Preview, Text } from 'npm:@react-email/components@0.0.22'
+import { CtaWithFallback, Shell, h1, main, text } from './_brand.tsx'
 
 interface InviteEmailProps {
   siteName: string
@@ -20,71 +10,28 @@ interface InviteEmailProps {
   confirmationUrl: string
 }
 
-export const InviteEmail = ({
-  siteName,
-  siteUrl,
-  confirmationUrl,
-}: InviteEmailProps) => (
-  <Html lang="en" dir="ltr">
-    <Head>
-      <style>{darkModeCss}</style>
-    </Head>
-    <Preview>You've been invited to join {siteName}</Preview>
+export const InviteEmail = ({ confirmationUrl }: InviteEmailProps) => (
+  <Html lang="pt-BR" dir="ltr">
+    <Head><meta charSet="utf-8" /></Head>
+    <Preview>Você foi convidada para a Orca 🐋</Preview>
     <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>You've been invited</Heading>
+      <Shell>
+        <Heading style={h1}>Você foi convidada</Heading>
         <Text style={text}>
-          You've been invited to join{' '}
-          <Link href={siteUrl} style={link}>
-            <strong>{siteName}</strong>
-          </Link>
-          . Click the button below to accept the invitation and create your
-          account.
+          Alguém convidou você para usar a <strong>Orca</strong> — o CRM de
+          propostas que ajuda pequenos negócios a fechar mais clientes com
+          menos esforço.
         </Text>
-        <Button className="dm-btn" style={button} href={confirmationUrl}>
-          Accept Invitation
-        </Button>
-        <Text style={footer}>
-          If you weren't expecting this invitation, you can safely ignore this
-          email.
+        <Text style={text}>
+          Aceite o convite abaixo para criar sua conta e começar.
         </Text>
-      </Container>
+        <CtaWithFallback href={confirmationUrl} label="Aceitar convite" />
+        <Text style={text}>
+          Se você não estava esperando este convite, pode ignorar este e-mail.
+        </Text>
+      </Shell>
     </Body>
   </Html>
 )
 
 export default InviteEmail
-
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const link = { color: 'inherit', textDecoration: 'underline' }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  border: '1px solid #000000',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
-// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
-const darkModeCss = `
-  @media (prefers-color-scheme: dark) {
-    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-  }
-  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-`

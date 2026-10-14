@@ -1,25 +1,11 @@
 /// <reference types="npm:@types/react@18.3.1" />
 
 import * as React from 'npm:react@18.3.1'
-
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Link,
-  Preview,
-  Text,
-} from 'npm:@react-email/components@0.0.22'
+import { Body, Head, Heading, Html, Preview, Section, Text } from 'npm:@react-email/components@0.0.22'
+import { CtaWithFallback, ORCA, Shell, h1, main, text } from './_brand.tsx'
 
 interface EmailChangeEmailProps {
   siteName: string
-  // oldEmail is the user's current address (HookData.OldEmail). For the
-  // NEW-recipient half of a secure email_change fanout, `email` equals the
-  // recipient (NEW), so the "from" line must render oldEmail to read
-  // "from OLD to NEW" instead of "from NEW to NEW".
   oldEmail: string
   email: string
   newEmail: string
@@ -27,77 +13,52 @@ interface EmailChangeEmailProps {
 }
 
 export const EmailChangeEmail = ({
-  siteName,
   oldEmail,
   newEmail,
   confirmationUrl,
 }: EmailChangeEmailProps) => (
-  <Html lang="en" dir="ltr">
-    <Head>
-      <style>{darkModeCss}</style>
-    </Head>
-    <Preview>Confirm your email change for {siteName}</Preview>
+  <Html lang="pt-BR" dir="ltr">
+    <Head><meta charSet="utf-8" /></Head>
+    <Preview>Confirme a alteração de e-mail na Orca</Preview>
     <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Confirm your email change</Heading>
+      <Shell>
+        <Heading style={h1}>Confirme a alteração de e-mail</Heading>
         <Text style={text}>
-          You requested to change your email address for {siteName} from{' '}
-          <Link href={`mailto:${oldEmail}`} style={link}>
+          Você pediu para alterar o e-mail da sua conta na Orca. Confirme
+          abaixo para concluir a mudança.
+        </Text>
+
+        <Section
+          style={{
+            backgroundColor: ORCA.mint,
+            border: `1px solid ${ORCA.mintEdge}`,
+            borderRadius: '12px',
+            padding: '16px 20px',
+            margin: '16px 0',
+          }}
+        >
+          <Text style={{ ...text, margin: '0 0 6px', fontSize: '13px', color: ORCA.slateMuted }}>
+            De
+          </Text>
+          <Text style={{ ...text, margin: '0 0 12px', fontWeight: 'bold', color: ORCA.deep }}>
             {oldEmail}
-          </Link>{' '}
-          to{' '}
-          <Link href={`mailto:${newEmail}`} style={link}>
+          </Text>
+          <Text style={{ ...text, margin: '0 0 6px', fontSize: '13px', color: ORCA.slateMuted }}>
+            Para
+          </Text>
+          <Text style={{ ...text, margin: 0, fontWeight: 'bold', color: ORCA.deep }}>
             {newEmail}
-          </Link>
-          .
-        </Text>
+          </Text>
+        </Section>
+
+        <CtaWithFallback href={confirmationUrl} label="Confirmar alteração" />
         <Text style={text}>
-          Click the button below to confirm this change:
+          Se você não solicitou essa alteração, proteja sua conta agora — pode
+          ser uma tentativa de acesso indevido.
         </Text>
-        <Button className="dm-btn" style={button} href={confirmationUrl}>
-          Confirm Email Change
-        </Button>
-        <Text style={footer}>
-          If you didn't request this change, please secure your account
-          immediately.
-        </Text>
-      </Container>
+      </Shell>
     </Body>
   </Html>
 )
 
 export default EmailChangeEmail
-
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const link = { color: 'inherit', textDecoration: 'underline' }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  border: '1px solid #000000',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
-// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
-const darkModeCss = `
-  @media (prefers-color-scheme: dark) {
-    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-  }
-  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-`

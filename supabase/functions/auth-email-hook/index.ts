@@ -15,7 +15,7 @@ const corsHeaders = {
 }
 
 // Configuration
-const SITE_NAME = "CloseFlow Pro"
+const SITE_NAME = "Orca"
 const SENDER_DOMAIN = "notify.orca-mento.app"
 const ROOT_DOMAIN = "orca-mento.app"
 const FROM_DOMAIN = "orca-mento.app"
