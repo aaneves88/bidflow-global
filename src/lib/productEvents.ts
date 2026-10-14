@@ -26,8 +26,15 @@ export async function trackProductEvent(
 ): Promise<void> {
   try {
     const isAnonAllowed = (ANON_EVENTS as readonly string[]).includes(eventName);
+    // Se o chamador não informou usuário, usa o da sessão atual (visitante
+    // logado navegando páginas de marketing também deve ser registrado).
+    let effectiveUserId = userId;
+    if (!effectiveUserId) {
+      const { data } = await supabase.auth.getSession();
+      effectiveUserId = data.session?.user?.id ?? null;
+    }
     // Sem usuário só é permitido para os eventos de marketing (RLS)
-    if (!userId && !isAnonAllowed) return;
+    if (!effectiveUserId && !isAnonAllowed) return;
 
     const a = readAttribution();
     const niche = readNicheOrigin();
@@ -37,7 +44,7 @@ export async function trackProductEvent(
     };
 
     await supabase.from('product_events').insert({
-      user_id: userId,
+      user_id: effectiveUserId,
       event_name: eventName,
       properties: (Object.keys(props).length ? props : null) as never,
       utm_source: a?.utm_source ?? null,
