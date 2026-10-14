@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { SupportDialog } from '@/components/SupportDialog';
+import { FeedbackDialog } from '@/components/FeedbackDialog';
 
 
 export function AppSidebar() {
@@ -94,6 +95,7 @@ export function AppSidebar() {
           <p className="text-xs text-muted-foreground truncate px-2 mb-1">{user.email}</p>
         )}
         {!collapsed && <SupportDialog />}
+        {!collapsed && <FeedbackDialog mode="manual" />}
         <Button variant="ghost" size="sm" className="w-full justify-start" onClick={signOut}>
           <LogOut className="mr-2 h-4 w-4" />
           {!collapsed && t('nav.signOut')}

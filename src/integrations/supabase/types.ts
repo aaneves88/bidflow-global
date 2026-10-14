@@ -292,6 +292,27 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback_prompts_shown: {
+        Row: {
+          id: string
+          shown_at: string
+          threshold_days: number
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          shown_at?: string
+          threshold_days: number
+          user_id: string
+        }
+        Update: {
+          id?: string
+          shown_at?: string
+          threshold_days?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       plans: {
         Row: {
           allow_custom_branding: boolean
@@ -1403,7 +1424,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      support_category: "bug" | "question" | "suggestion"
+      support_category: "bug" | "question" | "suggestion" | "feedback"
       support_status: "open" | "answered" | "closed"
     }
     CompositeTypes: {
@@ -1533,7 +1554,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      support_category: ["bug", "question", "suggestion"],
+      support_category: ["bug", "question", "suggestion", "feedback"],
       support_status: ["open", "answered", "closed"],
     },
   },

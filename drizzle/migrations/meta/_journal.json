@@ -15,6 +15,13 @@
       "when": 1789528627081,
       "tag": "0001_niche_funnel_tracking",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791998566923,
+      "tag": "0002_feedback_prompts",
+      "breakpoints": true
     }
   ]
 }
