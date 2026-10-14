@@ -619,6 +619,7 @@
     "week": "Week",
     "newUsers": "New users",
     "proposals": "Proposals created",
-    "paid": "Paid subscriptions"
+    "paid": "Paid subscriptions",
+    "trial": "In trial period"
   }
 }

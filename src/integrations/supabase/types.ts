@@ -1335,6 +1335,7 @@ export type Database = {
           new_users: number
           paid_subscriptions: number
           proposals_created: number
+          trial_subscriptions: number
           week_end: string
           week_start: string
         }[]
