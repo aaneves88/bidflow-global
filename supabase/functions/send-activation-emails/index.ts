@@ -4,7 +4,7 @@
 // checks whether the user already created at least one proposal, and sends
 // either the "progress" or the "stuck" activation email — once per account.
 //
-// Sending goes through send-transactional-email, so suppression list and
+// Sending goes through the managed app-email helper; suppression and
 // unsubscribe handling are respected exactly like every other app email.
 
 import { createClient } from 'npm:@supabase/supabase-js@2'

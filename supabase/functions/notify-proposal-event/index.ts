@@ -120,7 +120,7 @@ Deno.serve(async (req) => {
       }).then(() => null, (e: unknown) => e as Error)
 
   if (sendErr) {
-    console.error('send-transactional-email failed', { sendErr })
+    console.error('owner notification email failed', { sendErr })
     return new Response(JSON.stringify({ error: 'send_failed' }), {
       status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })

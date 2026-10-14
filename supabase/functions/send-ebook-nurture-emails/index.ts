@@ -8,7 +8,7 @@
 //
 // Same pattern as send-activation-emails / send-coupon-nudge-email:
 // service-role only, claim-first idempotency, sends via
-// send-transactional-email (suppression + unsubscribe respected).
+// the managed app-email helper (suppression + unsubscribe handled by Lovable).
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'

@@ -4,7 +4,7 @@
 // 10+ days old since profiles.created_at OR already used all free proposals
 // (free plan max_proposals) — whichever comes first.
 //
-// Sending goes through send-transactional-email, so suppression list and
+// Sending goes through the managed app-email helper; suppression and
 // unsubscribe handling are respected. coupon_email_log (unique user_id) makes
 // sure each account receives this email exactly once, ever.
 
