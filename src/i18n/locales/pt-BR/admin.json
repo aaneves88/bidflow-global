@@ -619,6 +619,7 @@
     "week": "Semana",
     "newUsers": "Novos usuários",
     "proposals": "Propostas criadas",
-    "paid": "Assinaturas pagas"
+    "paid": "Assinaturas pagas",
+    "trial": "Em período de teste"
   }
 }

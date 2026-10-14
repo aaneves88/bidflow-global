@@ -39,6 +39,7 @@ export default function AdminWeekly() {
                 <TableHead className="text-right">{t('weekly.newUsers')}</TableHead>
                 <TableHead className="text-right">{t('weekly.proposals')}</TableHead>
                 <TableHead className="text-right">{t('weekly.paid')}</TableHead>
+                <TableHead className="text-right">{t('weekly.trial')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -48,6 +49,7 @@ export default function AdminWeekly() {
                   <TableCell className="text-right font-medium">{r.new_users}</TableCell>
                   <TableCell className="text-right font-medium">{r.proposals_created}</TableCell>
                   <TableCell className="text-right font-medium">{r.paid_subscriptions}</TableCell>
+                  <TableCell className="text-right font-medium">{r.trial_subscriptions}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
