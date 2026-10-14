@@ -44,7 +44,7 @@ export async function trackProductEvent(
     };
 
     await supabase.from('product_events').insert({
-      user_id: userId,
+      user_id: effectiveUserId,
       event_name: eventName,
       properties: (Object.keys(props).length ? props : null) as never,
       utm_source: a?.utm_source ?? null,
