@@ -6,7 +6,8 @@
   "categories": {
     "bug": "Bug",
     "question": "Dúvida",
-    "suggestion": "Sugestão"
+    "suggestion": "Sugestão",
+    "feedback": "Feedback"
   },
   "description": "Descrição",
   "descriptionPlaceholder": "Descreva o problema, dúvida ou sugestão com o máximo de detalhes.",
@@ -37,5 +38,17 @@
     "attachment": "Ver print anexado",
     "you": "Equipe Orca",
     "user": "Usuário"
+  },
+  "feedbackDialog": {
+    "trigger": "Deixar feedback",
+    "title": "Deixar feedback",
+    "subtitle": "Sua opinião ajuda a Orca a melhorar.",
+    "promptTitle": "Como está sendo?",
+    "promptSubtitle": "Faz {{days}} dias que você está com a gente — como está sendo?",
+    "label": "O que você achou da Orca até agora? O que podemos melhorar?",
+    "submit": "Enviar feedback",
+    "sending": "Enviando...",
+    "success": "Obrigado pelo feedback!",
+    "error": "Não foi possível enviar. Tente novamente."
   }
 }
