@@ -9,6 +9,7 @@
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAppEmail } from '../_shared/app-email.ts'
 
 const WINDOW_START_HOURS = 48
 const WINDOW_END_HOURS = 96
@@ -81,14 +82,10 @@ Deno.serve(async (req) => {
     const templateName = (count ?? 0) > 0 ? 'activation-progress' : 'activation-stuck'
     const firstName = (profile.full_name || '').trim().split(/\s+/)[0] || undefined
 
-    const { error: sendError } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName,
-        recipientEmail: profile.email,
+    const sendError = await sendAppEmail(supabase, templateName, profile.email, {
         idempotencyKey: `activation-48h-${profile.id}`,
         templateData: { firstName, appUrl: 'https://orca-mento.app' },
-      },
-    })
+      }).then(() => null, (e: unknown) => e as Error)
 
     if (sendError) {
       console.error('Activation email failed', { userId: profile.id, sendError })

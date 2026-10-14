@@ -12,6 +12,7 @@
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAppEmail } from '../_shared/app-email.ts'
 
 const APP_URL = 'https://orca-mento.app'
 const COUPON_CODE = 'PROMOORCA20'
@@ -106,14 +107,10 @@ Deno.serve(async (req) => {
 
     if (!(await claim(lead.id, 'day3_reinforce'))) { skipped++; continue }
 
-    const { error: sendError } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'ebook-nurture-day3',
-        recipientEmail: lead.email,
+    const sendError = await sendAppEmail(supabase, 'ebook-nurture-day3', lead.email, {
         idempotencyKey: `ebook-nurture-day3-${lead.id}`,
         templateData: { firstName: firstName(lead.name), appUrl: APP_URL },
-      },
-    })
+      }).then(() => null, (e: unknown) => e as Error)
 
     if (sendError) {
       console.error('Day3 nurture email failed', { leadId: lead.id, sendError })
@@ -160,18 +157,14 @@ Deno.serve(async (req) => {
 
     if (!(await claim(lead.id, 'day7_coupon'))) { skipped++; continue }
 
-    const { error: sendError } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'coupon-offer',
-        recipientEmail: lead.email,
+    const sendError = await sendAppEmail(supabase, 'coupon-offer', lead.email, {
         idempotencyKey: `ebook-nurture-day7-${lead.id}`,
         templateData: {
           firstName: firstName(lead.name),
           couponCode: COUPON_CODE,
           appUrl: APP_URL,
         },
-      },
-    })
+      }).then(() => null, (e: unknown) => e as Error)
 
     if (sendError) {
       console.error('Day7 coupon email failed', { leadId: lead.id, sendError })

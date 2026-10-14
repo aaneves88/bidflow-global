@@ -10,6 +10,7 @@
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAppEmail } from '../_shared/app-email.ts'
 
 const COUPON_CODE = 'PROMOORCA20'
 const DAYS_THRESHOLD = 10
@@ -100,14 +101,10 @@ Deno.serve(async (req) => {
 
     const firstName = (profile.full_name || '').trim().split(/\s+/)[0] || undefined
 
-    const { error: sendError } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'coupon-offer',
-        recipientEmail: profile.email,
+    const sendError = await sendAppEmail(supabase, 'coupon-offer', profile.email, {
         idempotencyKey: `coupon-nudge-${profile.id}`,
         templateData: { firstName, couponCode: COUPON_CODE, appUrl: APP_URL },
-      },
-    })
+      }).then(() => null, (e: unknown) => e as Error)
 
     if (sendError) {
       console.error('Coupon email failed', { userId: profile.id, sendError })

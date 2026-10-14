@@ -4,6 +4,7 @@
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAppEmail } from '../_shared/app-email.ts'
 
 type EventType = 'viewed' | 'accepted' | 'signed' | 'rejected'
 
@@ -113,14 +114,10 @@ Deno.serve(async (req) => {
     })
   }
 
-  const { error: sendErr } = await supabase.functions.invoke('send-transactional-email', {
-    body: {
-      templateName: entry.templateName,
-      recipientEmail: owner.email,
-      idempotencyKey: `${event}-${proposal.id}-${Date.now().toString(36)}`,
-      templateData: entry.data,
-    },
-  })
+  const sendErr = await sendAppEmail(supabase, entry.templateName, owner.email, {
+        idempotencyKey: `${event}-${proposal.id}-${Date.now().toString(36)}`,
+        templateData: entry.data,
+      }).then(() => null, (e: unknown) => e as Error)
 
   if (sendErr) {
     console.error('send-transactional-email failed', { sendErr })
@@ -133,10 +130,7 @@ Deno.serve(async (req) => {
   let clientCopy = false
   const clientEmail = (proposal as any).clients?.email as string | undefined
   if (event === 'signed' && clientEmail) {
-    const { error: copyErr } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'proposal-client-copy',
-        recipientEmail: clientEmail,
+    const copyErr = await sendAppEmail(supabase, 'proposal-client-copy', clientEmail, {
         idempotencyKey: `client-copy-${proposal.id}-${Date.now().toString(36)}`,
         templateData: {
           clientName: body.signerName || clientName,
@@ -146,8 +140,7 @@ Deno.serve(async (req) => {
           signedAt: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
           publicUrl: `${APP_URL}/p/${proposal.public_code}`,
         },
-      },
-    })
+      }).then(() => null, (e: unknown) => e as Error)
     if (copyErr) console.error('client copy failed', { copyErr })
     else clientCopy = true
   }

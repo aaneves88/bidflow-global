@@ -5,6 +5,7 @@
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { sendAppEmail } from '../_shared/app-email.ts'
 
 const MAX_SIGNUPS_PER_DAY = 3;
 
@@ -82,17 +83,13 @@ Deno.serve(async (req) => {
     // Welcome email: awaited server-side so it can't be aborted by the browser
     // navigating away. Best-effort — a failure is logged but never blocks signup.
     try {
-      const { error: mailErr } = await admin.functions.invoke('send-transactional-email', {
-        body: {
-          templateName: 'welcome',
-          recipientEmail: email,
-          idempotencyKey: `welcome-${email.toLowerCase()}`,
-          templateData: {
+      const mailErr = await sendAppEmail(admin, 'welcome', email, {
+        idempotencyKey: `welcome-${email.toLowerCase()}`,
+        templateData: {
             firstName: fullName.split(' ')[0] || undefined,
             appUrl: 'https://orca-mento.app',
           },
-        },
-      });
+      }).then(() => null, (e: unknown) => e as Error);
       if (mailErr) console.error('welcome email failed', mailErr.message ?? mailErr);
     } catch (mailErr) {
       console.error('welcome email threw', mailErr);
