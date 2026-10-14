@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
-const SUPPORT_INBOX = 'statematch@statematch.global';
 
 interface Props {
   mode: 'manual' | 'prompt';

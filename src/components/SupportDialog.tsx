@@ -18,7 +18,6 @@ import { useAuth } from '@/contexts/AuthContext';
 
 type Category = 'bug' | 'question' | 'suggestion';
 
-const SUPPORT_INBOX = 'statematch@statematch.global';
 
 export function SupportDialog({ trigger }: { trigger?: React.ReactNode }) {
   const { t } = useTranslation('support');
