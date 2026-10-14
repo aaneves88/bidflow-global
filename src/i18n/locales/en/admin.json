@@ -13,7 +13,8 @@
     "leads": "Ebook leads",
     "referrals": "Referrals",
     "partners": "Partners",
-    "niches": "Niches"
+    "niches": "Niches",
+    "weekly": "Weekly"
   },
   "niches": {
     "title": "Funnel by niche",
@@ -610,5 +611,14 @@
       "cancel": "Cancel",
       "save": "Save"
     }
+  },
+  "weekly": {
+    "title": "Weekly report",
+    "subtitle": "Weeks run Monday to Sunday (Brasília time). Each week's report is available from 7am the following Monday.",
+    "empty": "The first report (week of Oct 12–18) will be available Monday, Oct 19 at 7am.",
+    "week": "Week",
+    "newUsers": "New users",
+    "proposals": "Proposals created",
+    "paid": "Paid subscriptions"
   }
 }

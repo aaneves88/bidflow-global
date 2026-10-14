@@ -16,6 +16,7 @@ import AdminEbookLeads from './AdminEbookLeads';
 import AdminReferrals from './AdminReferrals';
 import AdminPartners from './AdminPartners';
 import AdminNicheFunnel from './AdminNicheFunnel';
+import AdminWeekly from './AdminWeekly';
 
 
 
@@ -46,6 +47,7 @@ export default function Admin() {
           className="relative flex w-full justify-start overflow-x-auto rounded-md bg-muted p-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
+          <TabsTrigger value="weekly">{t('tabs.weekly')}</TabsTrigger>
           <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
           <TabsTrigger value="referrals">{t('tabs.referrals')}</TabsTrigger>
           <TabsTrigger value="partners">{t('tabs.partners')}</TabsTrigger>
@@ -61,6 +63,7 @@ export default function Admin() {
           <TabsTrigger value="brand">{t('tabs.brand')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
+        <TabsContent value="weekly"><AdminWeekly /></TabsContent>
         <TabsContent value="users"><AdminUsers /></TabsContent>
         <TabsContent value="referrals"><AdminReferrals /></TabsContent>
         <TabsContent value="partners"><AdminPartners /></TabsContent>

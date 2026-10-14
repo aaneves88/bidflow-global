@@ -13,7 +13,8 @@
     "leads": "Leads e-book",
     "referrals": "Indicações",
     "partners": "Parceiros",
-    "niches": "Nichos"
+    "niches": "Nichos",
+    "weekly": "Semanal"
   },
   "niches": {
     "title": "Funil por nicho",
@@ -610,5 +611,14 @@
       "cancel": "Cancelar",
       "save": "Salvar"
     }
+  },
+  "weekly": {
+    "title": "Relatório semanal",
+    "subtitle": "Semanas de segunda a domingo (horário de Brasília). O relatório de cada semana fica disponível a partir das 7h da segunda-feira seguinte.",
+    "empty": "O primeiro relatório (semana de 12 a 18/10) ficará disponível na segunda-feira, 19/10, às 7h.",
+    "week": "Semana",
+    "newUsers": "Novos usuários",
+    "proposals": "Propostas criadas",
+    "paid": "Assinaturas pagas"
   }
 }

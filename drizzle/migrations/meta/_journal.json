@@ -22,6 +22,13 @@
       "when": 1791998566923,
       "tag": "0002_feedback_prompts",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792008519403,
+      "tag": "0003_admin_weekly_report",
+      "breakpoints": true
     }
   ]
 }
