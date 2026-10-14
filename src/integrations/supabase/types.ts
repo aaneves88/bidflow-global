@@ -1329,6 +1329,16 @@ export type Database = {
           proposals_count: number
         }[]
       }
+      get_admin_weekly_report: {
+        Args: never
+        Returns: {
+          new_users: number
+          paid_subscriptions: number
+          proposals_created: number
+          week_end: string
+          week_start: string
+        }[]
+      }
       get_my_referrals: {
         Args: never
         Returns: {
