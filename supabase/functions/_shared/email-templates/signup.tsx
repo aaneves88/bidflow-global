@@ -1,8 +1,18 @@
 /// <reference types="npm:@types/react@18.3.1" />
 
 import * as React from 'npm:react@18.3.1'
-import { Body, Head, Heading, Html, Preview, Text } from 'npm:@react-email/components@0.0.22'
-import { CtaWithFallback, Shell, h1, main, text } from './_brand.tsx'
+
+import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Link,
+  Preview,
+  Text,
+} from 'npm:@react-email/components@0.0.22'
 
 interface SignupEmailProps {
   siteName: string
@@ -11,28 +21,77 @@ interface SignupEmailProps {
   confirmationUrl: string
 }
 
-export const SignupEmail = ({ recipient, confirmationUrl }: SignupEmailProps) => (
-  <Html lang="pt-BR" dir="ltr">
-    <Head><meta charSet="utf-8" /></Head>
-    <Preview>Confirme seu e-mail para começar a usar a Orca 🐋</Preview>
+export const SignupEmail = ({
+  siteName,
+  siteUrl,
+  recipient,
+  confirmationUrl,
+}: SignupEmailProps) => (
+  <Html lang="en" dir="ltr">
+    <Head>
+      <style>{darkModeCss}</style>
+    </Head>
+    <Preview>Confirm your email for {siteName}</Preview>
     <Body style={main}>
-      <Shell>
-        <Heading style={h1}>Bem-vinda à Orca 🐋</Heading>
+      <Container style={container}>
+        <Heading style={h1}>Confirm your email</Heading>
         <Text style={text}>
-          Que bom ter você por aqui. Estamos quase prontos — falta só confirmar
-          que <strong>{recipient}</strong> é mesmo seu e-mail.
+          Thanks for signing up for{' '}
+          <Link href={siteUrl} style={link}>
+            <strong>{siteName}</strong>
+          </Link>
+          !
         </Text>
         <Text style={text}>
-          Depois disso, você cria sua primeira proposta em poucos minutos,
-          compartilha um link bonito com o cliente e acompanha cada visualização.
+          Please confirm your email address (
+          <Link href={`mailto:${recipient}`} style={link}>
+            {recipient}
+          </Link>
+          ) by clicking the button below:
         </Text>
-        <CtaWithFallback href={confirmationUrl} label="Confirmar meu e-mail" />
-        <Text style={text}>
-          Se você não criou esta conta, pode ignorar este e-mail com segurança.
+        <Button className="dm-btn" style={button} href={confirmationUrl}>
+          Verify Email
+        </Button>
+        <Text style={footer}>
+          If you didn't create an account, you can safely ignore this email.
         </Text>
-      </Shell>
+      </Container>
     </Body>
   </Html>
 )
 
 export default SignupEmail
+
+const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
+const container = { padding: '20px 25px' }
+const h1 = {
+  fontSize: '22px',
+  fontWeight: 'bold' as const,
+  color: '#000000',
+  margin: '0 0 20px',
+}
+const text = {
+  fontSize: '14px',
+  color: '#55575d',
+  lineHeight: '1.5',
+  margin: '0 0 25px',
+}
+const link = { color: 'inherit', textDecoration: 'underline' }
+const button = {
+  backgroundColor: '#000000',
+  color: '#ffffff',
+  fontSize: '14px',
+  border: '1px solid #000000',
+  borderRadius: '8px',
+  padding: '12px 20px',
+  textDecoration: 'none',
+}
+const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
+const darkModeCss = `
+  @media (prefers-color-scheme: dark) {
+    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  }
+  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+`
