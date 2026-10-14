@@ -105,19 +105,15 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
   const sendEmail = async () => {
     setSendingEmail(true);
     try {
-      const { error } = await supabase.functions.invoke('send-transactional-email', {
+      const { error } = await supabase.functions.invoke('send-proposal-email', {
         body: {
-          templateName: 'proposal-sent',
+          proposalId: proposal.id,
           recipientEmail: emailTo.trim(),
-          idempotencyKey: `proposal-sent-${proposal.id}-${emailTo.trim().toLowerCase()}`,
-          templateData: {
-            clientName: proposal.clients?.name || null,
-            senderName: branding?.companyName || null,
-            proposalTitle: proposal.title,
-            proposalTotal: totalFmt,
-            publicUrl,
-            validUntil: proposal.valid_until ? formatDate(proposal.valid_until) : null,
-          },
+          clientName: proposal.clients?.name || null,
+          senderName: branding?.companyName || null,
+          proposalTotal: totalFmt,
+          publicUrl,
+          validUntil: proposal.valid_until ? formatDate(proposal.valid_until) : null,
         },
       });
       if (error) throw error;

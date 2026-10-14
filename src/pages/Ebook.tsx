@@ -80,17 +80,8 @@ export default function Ebook() {
 
       // Envia o PDF por e-mail (não bloqueia o download imediato)
       supabase.functions
-        .invoke('send-transactional-email', {
-          body: {
-            templateName: 'ebook-delivery',
-            recipientEmail: cleanEmail,
-            idempotencyKey: `ebook-delivery-${cleanEmail}`,
-            templateData: {
-              firstName: cleanName ? cleanName.split(' ')[0] : undefined,
-              downloadUrl: `${SITE_URL}${DOWNLOAD_PATH}`,
-              appUrl: SITE_URL,
-            },
-          },
+        .invoke('send-ebook-email', {
+          body: { email: cleanEmail, downloadUrl: `${SITE_URL}${DOWNLOAD_PATH}` },
         })
         .catch(() => undefined);
 

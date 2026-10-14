@@ -23,18 +23,7 @@ async function sendWelcomeIfNewAccount() {
       .maybeSingle();
     const createdAt = profile?.created_at ?? user.created_at;
     if (!createdAt || Date.now() - new Date(createdAt).getTime() > NEW_ACCOUNT_WINDOW_MS) return;
-    const fullName = (profile?.full_name ?? '').trim();
-    const { error } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'welcome',
-        recipientEmail: user.email,
-        idempotencyKey: `welcome-${user.email.toLowerCase()}`,
-        templateData: {
-          firstName: fullName.split(' ')[0] || undefined,
-          appUrl: 'https://orca-mento.app',
-        },
-      },
-    });
+    const { error } = await supabase.functions.invoke('send-welcome-email', { body: {} });
     if (error) console.warn('welcome email failed', error);
   } catch (e) {
     console.warn('welcome email failed', e);
