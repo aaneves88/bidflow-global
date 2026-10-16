@@ -21,20 +21,25 @@ Deno.serve(async (req) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-  if (!supabaseUrl || !serviceKey) {
-    return new Response(JSON.stringify({ error: 'Server configuration error' }), {
-      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
-  }
+  const supabase = createClient(supabaseUrl, serviceKey)
+
+  // The scheduler authenticates with the internal cron token; direct calls
+  // with the service role key are still accepted.
+  const { data: tokenRow } = await supabase
+    .from('internal_secrets')
+    .select('value')
+    .eq('key', 'email_queue_token')
+    .maybeSingle()
+  const validTokens = new Set(
+    [`Bearer ${serviceKey}`, tokenRow?.value ? `Bearer ${tokenRow.value}` : null].filter(Boolean) as string[],
+  )
 
   const auth = req.headers.get('Authorization') || ''
-  if (auth !== `Bearer ${serviceKey}`) {
+  if (!validTokens.has(auth)) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   }
-
-  const supabase = createClient(supabaseUrl, serviceKey)
 
   // Free plan limit (fallback 3 if not configured)
   const { data: freePlan } = await supabase
