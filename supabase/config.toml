@@ -33,3 +33,5 @@ project_id = "mhsyllzvzuorzyacobar"
     verify_jwt = false
   [functions.handle-email-events]
     verify_jwt = false
+  [functions.send-feedback-emails]
+    verify_jwt = false
