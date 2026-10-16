@@ -19,6 +19,7 @@ import { template as activationProgress } from './activation-progress.tsx'
 import { template as couponOffer } from './coupon-offer.tsx'
 import { template as ebookDelivery } from './ebook-delivery.tsx'
 import { template as ebookNurtureDay3 } from './ebook-nurture-day3.tsx'
+import { template as feedbackRequest } from './feedback-request.tsx'
 
 
 export interface TemplateEntry {
@@ -46,5 +47,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'coupon-offer': couponOffer,
   'ebook-delivery': ebookDelivery,
   'ebook-nurture-day3': ebookNurtureDay3,
+  'feedback-request': feedbackRequest,
 }
 
