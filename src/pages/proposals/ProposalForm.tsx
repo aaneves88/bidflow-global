@@ -259,6 +259,12 @@ export default function ProposalForm() {
         }}
       />
 
+      <ClientDialog
+        open={clientDialogOpen}
+        onOpenChange={setClientDialogOpen}
+        onCreated={(created) => setClientId(created.id)}
+      />
+
       {showPicker && (
         <Card>
           <CardHeader>
