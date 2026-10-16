@@ -29,6 +29,7 @@
     "termsPlaceholder": "e.g. 50% upfront, 50% on delivery. Proposal valid for 30 days. 90-day warranty after completion.",
     "client": "Client",
     "noClient": "No client",
+    "newClient": "+ New client",
     "selectClient": "Select client",
     "status": "Status",
     "selectStatus": "Select status",
