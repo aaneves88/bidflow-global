@@ -14,6 +14,8 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   client?: any;
+  /** Chamado após criar um cliente novo (não na edição), com o registro criado. */
+  onCreated?: (client: any) => void;
 };
 
 const empty: ClientFormData = {
@@ -21,7 +23,7 @@ const empty: ClientFormData = {
   logo_url: '', tax_id: '', address_line: '', city: '', state: '', postal_code: '', country: '',
 };
 
-export function ClientDialog({ open, onOpenChange, client }: Props) {
+export function ClientDialog({ open, onOpenChange, client, onCreated }: Props) {
   const { t } = useTranslation(['clients', 'common']);
   const create = useCreateClient();
   const update = useUpdateClient();
@@ -54,7 +56,8 @@ export function ClientDialog({ open, onOpenChange, client }: Props) {
     if (isEditing) {
       await update.mutateAsync({ ...data, id: client.id });
     } else {
-      await create.mutateAsync(data);
+      const created = await create.mutateAsync(data);
+      onCreated?.(created);
     }
     onOpenChange(false);
   };

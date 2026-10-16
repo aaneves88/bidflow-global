@@ -17,6 +17,7 @@ import {
 import { useSubscription } from '@/hooks/useSubscription';
 import { useAuth } from '@/contexts/AuthContext';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { ClientDialog } from '@/pages/clients/ClientDialog';
 import { ProductPicker } from '@/components/ProductPicker';
 import { SnippetPicker } from '@/components/SnippetPicker';
 import { Switch } from '@/components/ui/switch';
@@ -85,6 +86,7 @@ export default function ProposalForm() {
   const [pixKeyType, setPixKeyType] = useState<PixKeyType>('cpf');
   const [appliedTemplate, setAppliedTemplate] = useState<ProposalTemplateId | null>(null);
   const [pickerDismissed, setPickerDismissed] = useState(false);
+  const [clientDialogOpen, setClientDialogOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const applyTemplate = (templateId: ProposalTemplateId) => {
@@ -219,10 +221,12 @@ export default function ProposalForm() {
     };
     if (isEditing) {
       await update.mutateAsync({ ...data, id: id! });
+      navigate('/proposals');
     } else {
-      await create.mutateAsync(data);
+      const created = await create.mutateAsync(data);
+      // Proposta nova: leva direto pra tela de compartilhamento.
+      navigate(`/proposals/${created.id}`);
     }
-    navigate('/proposals');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -253,6 +257,12 @@ export default function ProposalForm() {
           setBlocked(open);
           if (!open) navigate('/proposals');
         }}
+      />
+
+      <ClientDialog
+        open={clientDialogOpen}
+        onOpenChange={setClientDialogOpen}
+        onCreated={(created) => setClientId(created.id)}
       />
 
       {showPicker && (
@@ -334,13 +344,27 @@ export default function ProposalForm() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>{t('form.client')}</Label>
-                <Select value={clientId} onValueChange={setClientId}>
+                <Select
+                  value={clientId}
+                  onValueChange={(v) => {
+                    if (v === '__new__') {
+                      setClientDialogOpen(true);
+                    } else {
+                      setClientId(v);
+                    }
+                  }}
+                >
                   <SelectTrigger><SelectValue placeholder={t('form.selectClient')} /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">{t('form.noClient')}</SelectItem>
                     {clients?.map((c) => (
                       <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                     ))}
+                    <SelectItem value="__new__">
+                      <span className="flex items-center gap-1 text-primary">
+                        <Plus className="h-3.5 w-3.5" /> {t('form.newClient')}
+                      </span>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
