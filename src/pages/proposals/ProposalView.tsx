@@ -27,6 +27,7 @@ import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { buildPixPayload, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
+import { useTaxIdGate } from '@/hooks/useTaxIdGate';
 import { ProposalStatusChangePopup, findSentStatusId, type SendableProposal } from '@/components/proposals/ProposalStatusChangePopup';
 
 
@@ -50,6 +51,7 @@ export default function ProposalView() {
   const canBrand = useCanCustomBrand();
   const updateStatus = useUpdateProposalStatus();
   const publicBase = usePublicAppUrl();
+  const taxGate = useTaxIdGate();
 
   const [closeOpen, setCloseOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
@@ -250,21 +252,21 @@ export default function ProposalView() {
       </div>
 
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        <Button variant="outline" onClick={copyLink}>
+        <Button variant="outline" onClick={() => taxGate.guard(copyLink)}>
           <Copy className="mr-2 h-4 w-4" />
           {t('view.copyLink')}
         </Button>
         <Button
           variant="outline"
-          onClick={() => {
+          onClick={() => taxGate.guard(() => {
             setEmailTo(proposal.clients?.email || '');
             setEmailOpen(true);
-          }}
+          })}
         >
           <Mail className="mr-2 h-4 w-4" />
           {t('view.sendEmail')}
         </Button>
-        <Button variant="outline" onClick={handleWhatsappClick}>
+        <Button variant="outline" onClick={() => taxGate.guard(handleWhatsappClick)}>
           <MessageCircle className="mr-2 h-4 w-4" />
           {t('view.sendWhatsapp')}
         </Button>
@@ -406,6 +408,7 @@ export default function ProposalView() {
         </Card>
       )}
 
+      {taxGate.dialog}
       <ProposalStatusChangePopup
         open={sendOpen}
         onOpenChange={setSendOpen}

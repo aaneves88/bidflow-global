@@ -15,10 +15,8 @@ import {
   useCreateProposal, useUpdateProposal, type ProposalItem,
 } from '@/hooks/useProposals';
 import { useSubscription } from '@/hooks/useSubscription';
-import { useTaxId } from '@/hooks/useTaxId';
 import { useAuth } from '@/contexts/AuthContext';
 import { UpgradeModal } from '@/components/UpgradeModal';
-import { TaxIdDialog } from '@/components/TaxIdDialog';
 import { ProductPicker } from '@/components/ProductPicker';
 import { SnippetPicker } from '@/components/SnippetPicker';
 import { Switch } from '@/components/ui/switch';
@@ -61,9 +59,7 @@ export default function ProposalForm() {
   const update = useUpdateProposal();
   const limits = useSubscription();
   const { isAdmin } = useAuth();
-  const { data: taxIdState, isLoading: taxIdLoading } = useTaxId();
   const [blocked, setBlocked] = useState(false);
-  const [taxIdPrompt, setTaxIdPrompt] = useState(false);
 
   useEffect(() => {
     if (!isEditing && limits.isReady && limits.proposalLimitReached) {
@@ -204,9 +200,7 @@ export default function ProposalForm() {
   const discountValueApplied = discountValue(subtotal, discountAmount, discountType);
   const grandTotal = applyDiscount(subtotal, discountAmount, discountType);
 
-  /** Trava anti-abuso: plano grátis precisa ter CPF/CNPJ no perfil antes da 1ª proposta. */
-  const needsTaxId =
-    !isEditing && !isAdmin && limits.isReady && limits.isFree && !taxIdLoading && !taxIdState?.taxId;
+  // CPF/CNPJ não é pedido ao salvar — só ao compartilhar (ver useTaxIdGate).
 
   const persistProposal = async () => {
     const trimmedPix = pixKey.trim();
@@ -238,10 +232,6 @@ export default function ProposalForm() {
       toast({ title: t('form.pix.invalid'), variant: 'destructive' });
       return;
     }
-    if (needsTaxId) {
-      setTaxIdPrompt(true);
-      return;
-    }
     await persistProposal();
   };
 
@@ -263,12 +253,6 @@ export default function ProposalForm() {
           setBlocked(open);
           if (!open) navigate('/proposals');
         }}
-      />
-
-      <TaxIdDialog
-        open={taxIdPrompt}
-        onOpenChange={setTaxIdPrompt}
-        onConfirmed={() => { void persistProposal(); }}
       />
 
       {showPicker && (

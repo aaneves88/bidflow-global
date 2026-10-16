@@ -1,4 +1,4 @@
-// Signup wrapper with a simple per-IP rate limit: max 3 successful signups
+// Signup wrapper with a simple per-IP rate limit: max 10 successful signups
 // per IP every 24h. The IP is never stored raw — only a salted SHA-256 hash.
 // The auth flow itself (email confirmation, redirects) is unchanged: the
 // function calls the normal signUp endpoint and returns the session, if any.
@@ -7,7 +7,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { sendAppEmail } from '../_shared/app-email.ts'
 
-const MAX_SIGNUPS_PER_DAY = 3;
+const MAX_SIGNUPS_PER_DAY = 10;
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
