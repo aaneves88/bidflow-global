@@ -11,6 +11,7 @@ import { useBranding } from '@/hooks/useBranding';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
+import { useTaxIdGate } from '@/hooks/useTaxIdGate';
 
 export type SendableProposal = {
   id: string;
@@ -47,6 +48,7 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
   const { t } = useTranslation(['proposals', 'common']);
   const branding = useBranding();
   const publicBase = usePublicAppUrl();
+  const taxGate = useTaxIdGate();
 
   const [phoneInput, setPhoneInput] = useState('');
   const [savePhone, setSavePhone] = useState(true);
@@ -126,6 +128,8 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
   };
 
   return (
+    <>
+    {taxGate.dialog}
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
@@ -163,7 +167,7 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
           </div>
         ) : (
           <div className="space-y-4">
-            <Button variant="outline" className="w-full justify-start" onClick={handleWhatsappClick}>
+            <Button variant="outline" className="w-full justify-start" onClick={() => taxGate.guard(handleWhatsappClick)}>
               <MessageCircle className="mr-2 h-4 w-4" />
               {t('view.sendWhatsapp')}
             </Button>
@@ -182,7 +186,7 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
                 className="w-full"
                 variant="outline"
                 disabled={sendingEmail || !/^\S+@\S+\.\S+$/.test(emailTo)}
-                onClick={sendEmail}
+                onClick={() => taxGate.guard(() => { void sendEmail(); })}
               >
                 {sendingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
                 {t('view.sendEmailConfirm')}
@@ -192,10 +196,10 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
             <Button
               variant="outline"
               className="w-full justify-start"
-              onClick={() => {
+              onClick={() => taxGate.guard(() => {
                 navigator.clipboard.writeText(publicUrl);
                 toast({ title: t('messages.linkCopied'), description: publicUrl });
-              }}
+              })}
             >
               <Copy className="mr-2 h-4 w-4" />
               {t('view.copyLink')}
@@ -212,5 +216,6 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
         )}
       </DialogContent>
     </Dialog>
+    </>
   );
 }

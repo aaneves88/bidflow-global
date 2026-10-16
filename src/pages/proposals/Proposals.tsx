@@ -13,6 +13,7 @@ import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl
 import { useSubscription } from '@/hooks/useSubscription';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
+import { useTaxIdGate } from '@/hooks/useTaxIdGate';
 import { UsageIndicator } from '@/components/UsageIndicator';
 import { UpgradeModal } from '@/components/UpgradeModal';
 import {
@@ -49,11 +50,12 @@ export default function Proposals() {
   });
 
   const publicBase = usePublicAppUrl();
-  const copyPublicLink = (code: string) => {
+  const taxGate = useTaxIdGate();
+  const copyPublicLink = (code: string) => taxGate.guard(() => {
     const url = buildPublicProposalUrl(publicBase, code);
     navigator.clipboard.writeText(url);
     toast({ title: t('messages.linkCopied'), description: url });
-  };
+  });
 
   // Só bloqueia com dados de plano já resolvidos e limite FINITO de PROPOSTAS atingido.
   const proposalsBlocked = limits.isReady && limits.proposalLimitReached;
