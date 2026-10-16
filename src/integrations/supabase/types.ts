@@ -1285,6 +1285,7 @@ export type Database = {
     Functions: {
       accept_proposal: { Args: { p_code: string }; Returns: undefined }
       generate_referral_code: { Args: never; Returns: string }
+      get_admin_activation_by_channel: { Args: never; Returns: Json }
       get_admin_activation_stats: { Args: never; Returns: Json }
       get_admin_niche_funnel: {
         Args: { p_days?: number }
