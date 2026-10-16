@@ -56,7 +56,8 @@ export function ClientDialog({ open, onOpenChange, client, onCreated }: Props) {
     if (isEditing) {
       await update.mutateAsync({ ...data, id: client.id });
     } else {
-      await create.mutateAsync(data);
+      const created = await create.mutateAsync(data);
+      onCreated?.(created);
     }
     onOpenChange(false);
   };
