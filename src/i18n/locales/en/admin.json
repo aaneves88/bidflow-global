@@ -468,6 +468,21 @@
     "loading": "Loading stats...",
     "internalNote": "Internal accounts (admins and the demo account) are excluded from these numbers.",
     "funnelTitle": "Activation funnel",
+    "channel": {
+      "title": "Funnel by acquisition channel",
+      "direct": "direct/organic",
+      "internal": "internal/bkaro",
+      "internalNote": "Agency team and security scanners — not counted as real users",
+      "cols": {
+        "channel": "Channel",
+        "accounts": "Accounts",
+        "with_proposal": "With proposal",
+        "with_client": "With client",
+        "with_paywall_viewed": "Saw paywall",
+        "with_checkout_started": "Started checkout",
+        "paid": "Paid"
+      }
+    },
     "steps": {
       "accounts": "Accounts created",
       "withClient": "Added at least 1 client",
