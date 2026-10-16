@@ -51,6 +51,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
           </header>
           <main className="flex-1 p-4 md:p-6 pb-safe">
             {children}
+            {/* Spacer so the floating upsell pill never covers the last action on a page (e.g. "Criar proposta"). */}
+            <div aria-hidden className="h-20" />
+
           </main>
           <BrandUpsellBanner />
         </div>
