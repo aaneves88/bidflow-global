@@ -468,6 +468,21 @@
     "loading": "Carregando estatísticas...",
     "internalNote": "Contas internas (administradores e a conta de demonstração) não entram nestes cálculos.",
     "funnelTitle": "Funil de ativação",
+    "channel": {
+      "title": "Funil por canal de aquisição",
+      "direct": "direto/orgânico",
+      "internal": "interno/bkaro",
+      "internalNote": "Equipe da agência e robôs de varredura — não conta como usuário real",
+      "cols": {
+        "channel": "Canal",
+        "accounts": "Contas",
+        "with_proposal": "Com proposta",
+        "with_client": "Com cliente",
+        "with_paywall_viewed": "Viu paywall",
+        "with_checkout_started": "Iniciou checkout",
+        "paid": "Pago"
+      }
+    },
     "steps": {
       "accounts": "Contas criadas",
       "withClient": "Cadastraram ao menos 1 cliente",

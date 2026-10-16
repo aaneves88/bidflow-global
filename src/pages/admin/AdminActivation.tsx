@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '@/lib/format';
 import { Info } from 'lucide-react';
+import AdminActivationByChannel from './AdminActivationByChannel';
 
 type Funnel = {
   accounts: number;
@@ -106,6 +107,8 @@ export default function AdminActivation() {
           })}
         </CardContent>
       </Card>
+
+      <AdminActivationByChannel />
 
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
