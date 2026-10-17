@@ -111,6 +111,42 @@ All colors MUST be HSL.
   }
 }
 
+/* Homepage-only theme: never changes the signed-in application. */
+.orca-landing {
+  --background: 210 12% 7%;
+  --foreground: 160 20% 96%;
+  --card: 210 10% 11%;
+  --card-foreground: 160 20% 96%;
+  --popover: 210 10% 11%;
+  --popover-foreground: 160 20% 96%;
+  --primary: 187 85% 53%;
+  --primary-foreground: 210 20% 7%;
+  --secondary: 210 10% 15%;
+  --secondary-foreground: 160 20% 96%;
+  --muted: 210 10% 15%;
+  --muted-foreground: 210 10% 72%;
+  --accent: 158 64% 55%;
+  --accent-foreground: 210 20% 7%;
+  --border: 210 10% 23%;
+  --input: 210 10% 23%;
+  --ring: 187 85% 53%;
+  --landing-shadow: 0 24px 70px hsl(210 20% 2% / 0.5);
+  color: hsl(var(--foreground));
+  letter-spacing: 0;
+}
+
+.orca-landing .landing-hero-shade {
+  background: linear-gradient(180deg, hsl(var(--background) / 0.15), hsl(var(--background) / 0.4) 65%, hsl(var(--background)));
+}
+
+.orca-landing .landing-product {
+  box-shadow: var(--landing-shadow);
+}
+
+.orca-landing :is(h1, h2, h3, span) {
+  letter-spacing: 0;
+}
+
 /* Acentos das landing pages por nicho — variações sutis dentro da paleta da marca */
 @layer base {
   :root {

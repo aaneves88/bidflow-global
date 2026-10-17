@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { LegalFooter } from '@/components/LegalFooter';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import financeBackground from '@/assets/landing-finance-background.jpg';
 import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
@@ -100,20 +100,20 @@ export default function Landing() {
 
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="orca-landing min-h-screen bg-background">
       <Seo
         title="Orca — Propostas e Orçamentos Profissionais"
         description="O app mais simples para freelancers e pequenas empresas criarem propostas comerciais e orçamentos. Envie pelo WhatsApp, receba pelo PIX. Comece grátis."
         path="/"
       />
-      <nav className="border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <nav className="border-b bg-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-3 flex flex-wrap gap-3 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img src={orcaMark} alt="Orca — propostas e orçamentos" className="h-8 w-8 object-contain" />
             <span className="text-xl font-bold tracking-tight">Orca</span>
           </Link>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" asChild>
+          <div className="flex items-center gap-1 sm:gap-3">
+            <Button variant="ghost" className="hidden sm:inline-flex" asChild>
               <Link to="/pricing">{t('common:nav.pricing')}</Link>
             </Button>
             <Button variant="ghost" asChild>
@@ -126,21 +126,23 @@ export default function Landing() {
         </div>
       </nav>
 
-      <section className="py-20 sm:py-28">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm text-muted-foreground mb-6">
+      <section className="relative overflow-hidden pt-12 sm:pt-16 pb-12">
+        <img src={financeBackground} alt="" aria-hidden="true" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover object-left sm:object-center opacity-60" fetchPriority="high" />
+        <div aria-hidden="true" className="landing-hero-shade absolute inset-0" />
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 text-sm text-accent mb-5">
             <Zap className="h-3.5 w-3.5" />
             {t('tagline')}
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-            {t('hero.title1')}<br />
-            {t('hero.title2')}<br />
-            <span className="text-primary">{t('hero.title3')}</span>
-          </h1>
-          <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h1 className="text-6xl sm:text-7xl font-bold leading-none mb-5">Orca<span className="text-primary">.</span></h1>
+          <p className="text-3xl sm:text-4xl font-semibold leading-tight">
+            {t('hero.title1')} {t('hero.title2')}<br className="hidden sm:block" />
+            <span className="text-accent"> {t('hero.title3')}</span>
+          </p>
+          <p className="mt-5 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
             {t('hero.subtitle')}
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button size="lg" className="text-base px-8" asChild>
               <Link to="/register">
                 {t('hero.ctaPrimary')}
@@ -153,14 +155,14 @@ export default function Landing() {
           </div>
 
           {/* Captura real do produto */}
-          <div className="mt-16 max-w-xs sm:max-w-sm mx-auto">
-            <div className="rounded-[2rem] border-8 border-foreground/90 bg-foreground/90 shadow-2xl overflow-hidden">
+          <div className="mt-10 max-w-3xl mx-auto">
+            <div className="landing-product rounded-lg border border-border bg-card p-1.5 overflow-hidden">
               <img
-                src="/marketing/mobile-01-dashboard.png"
+                src="/marketing/desktop-01-dashboard.png"
                 alt={t('screenshots.items.dashboard')}
-                width={1080}
-                height={1920}
-                className="w-full h-auto rounded-[1.4rem] bg-background"
+                width={1920}
+                height={1080}
+                className="w-full h-auto max-h-64 object-cover object-top rounded bg-background"
               />
             </div>
           </div>
@@ -180,7 +182,7 @@ export default function Landing() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((f) => (
-              <div key={f.key} className="rounded-xl border bg-card p-6 space-y-3">
+              <div key={f.key} className="rounded-lg border bg-card p-6 space-y-3">
                 <div className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary/10">
                   <f.icon className="h-5 w-5 text-primary" />
                 </div>
@@ -202,7 +204,7 @@ export default function Landing() {
               <ul className="mt-6 space-y-4">
                 {brazilianItems.map((key) => (
                   <li key={key} className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-accent mt-0.5 shrink-0" />
                     <div>
                       <strong>{t(`brazilian.items.${key}.title`)}</strong>
                       <p className="text-sm text-muted-foreground">{t(`brazilian.items.${key}.description`)}</p>
@@ -212,23 +214,23 @@ export default function Landing() {
               </ul>
             </div>
             <div className="flex justify-center">
-              <div className="w-72 rounded-3xl border-4 border-gray-800 p-2 bg-gray-800 shadow-xl">
-                <div className="rounded-2xl overflow-hidden bg-white">
-                  <div className="bg-green-600 px-4 py-3 flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-green-400" />
+              <div className="w-72 rounded-3xl border-4 border-border p-2 bg-card">
+                <div className="rounded-2xl overflow-hidden bg-background">
+                  <div className="bg-accent px-4 py-3 flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-accent-foreground/20" />
                     <div>
-                      <p className="text-white text-sm font-medium">{t('brazilian.chat.name')}</p>
-                      <p className="text-green-200 text-xs">{t('brazilian.chat.status')}</p>
+                      <p className="text-accent-foreground text-sm font-medium">{t('brazilian.chat.name')}</p>
+                      <p className="text-accent-foreground/80 text-xs">{t('brazilian.chat.status')}</p>
                     </div>
                   </div>
                   <div className="p-4 space-y-3 min-h-[200px]">
-                    <div className="bg-white border rounded-lg p-3 max-w-[85%] shadow-sm">
-                      <p className="text-sm text-gray-900">{t('brazilian.chat.message')}</p>
-                      <a className="text-sm text-blue-600 underline block mt-1">{t('brazilian.chat.link')}</a>
-                      <p className="text-sm mt-1 font-medium text-gray-900">{t('brazilian.chat.value')}</p>
+                    <div className="bg-card border rounded-lg p-3 max-w-[85%]">
+                      <p className="text-sm text-foreground">{t('brazilian.chat.message')}</p>
+                      <span className="text-sm text-primary underline block mt-1 break-all">{t('brazilian.chat.link')}</span>
+                      <p className="text-sm mt-1 font-medium text-foreground">{t('brazilian.chat.value')}</p>
                     </div>
-                    <div className="bg-green-100 rounded-lg p-3 max-w-[70%] ml-auto shadow-sm">
-                      <p className="text-sm text-gray-900">{t('brazilian.chat.approved')}</p>
+                    <div className="bg-accent/15 rounded-lg p-3 max-w-[70%] ml-auto">
+                      <p className="text-sm text-foreground">{t('brazilian.chat.approved')}</p>
                     </div>
                   </div>
                 </div>
@@ -268,7 +270,7 @@ export default function Landing() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {screenshots.map((s) => (
               <figure key={s.src} className="space-y-3">
-                <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
+                <div className="rounded-lg border bg-card overflow-hidden">
                   <img
                     src={s.src}
                     alt={s.caption}
@@ -298,7 +300,7 @@ export default function Landing() {
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Free */}
-            <div className="rounded-xl border bg-card p-6 space-y-4">
+            <div className="rounded-lg border bg-card p-6 space-y-4">
               <h3 className="font-bold text-xl">{freePlan?.name ?? t('pricing.free.name')}</h3>
               <p className="text-muted-foreground text-sm">{t('pricing.free.description')}</p>
               <p className="text-3xl font-bold">
@@ -308,7 +310,7 @@ export default function Landing() {
               <ul className="space-y-2 text-sm">
                 {planFeatures(freePlan).map((label) => (
                   <li key={label} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-accent" />
                     {label}
                   </li>
                 ))}
@@ -319,7 +321,7 @@ export default function Landing() {
             </div>
 
             {/* Premium */}
-            <div className="rounded-xl border-2 border-primary bg-card p-6 space-y-4 relative">
+            <div className="rounded-lg border-2 border-primary bg-card p-6 space-y-4 relative">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-medium">
                 {t('pricing.recommended')}
               </span>
@@ -332,7 +334,7 @@ export default function Landing() {
               <ul className="space-y-2 text-sm">
                 {planFeatures(premiumPlan).map((label) => (
                   <li key={label} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-accent" />
                     {label}
                   </li>
                 ))}
