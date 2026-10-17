@@ -126,22 +126,20 @@ export default function Landing() {
         </div>
       </nav>
 
-      <section className="relative overflow-hidden pt-14 sm:pt-24 pb-16 sm:pb-24">
-        <img src={financeBackground} alt="" aria-hidden="true" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover object-right opacity-80" fetchPriority="high" />
+      <section className="relative overflow-hidden pt-12 sm:pt-16 pb-14 sm:pb-16">
+        <img src={financeBackground} alt="" aria-hidden="true" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover object-right opacity-[0.06] sm:opacity-[0.1]" fetchPriority="high" />
         <div aria-hidden="true" className="landing-hero-shade absolute inset-0" />
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
-          <div className="text-left">
-            <div className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-accent mb-5">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl text-left">
+            <div className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground mb-5">
               <Zap className="h-3.5 w-3.5" />
               {t('tagline')}
             </div>
-            <h1 className="landing-display text-4xl sm:text-5xl font-extrabold uppercase leading-tight">
+            <h1 className="landing-display text-3xl sm:text-5xl font-bold leading-tight">
               {t('hero.title1')} {t('hero.title2')}{' '}
               <span className="text-accent">{t('hero.title3')}</span>
             </h1>
-            <div className="landing-highlight mt-6 inline-block rounded-xl bg-foreground px-5 py-4 max-w-xl">
-              <p className="text-base sm:text-lg font-bold text-background">{t('hero.subtitle')}</p>
-            </div>
+            <p className="mt-5 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">{t('hero.subtitle')}</p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <Button size="lg" className="text-base px-8 font-semibold" asChild>
                 <Link to="/register">
@@ -153,15 +151,6 @@ export default function Landing() {
                 <Link to="/login">{t('hero.ctaSecondary')}</Link>
               </Button>
             </div>
-          </div>
-          <div className="landing-product rounded-xl border border-border bg-card/80 p-1.5 overflow-hidden backdrop-blur">
-            <img
-              src="/marketing/desktop-01-dashboard.png"
-              alt={t('screenshots.items.dashboard')}
-              width={1920}
-              height={1080}
-              className="w-full h-auto rounded-lg bg-background"
-            />
           </div>
         </div>
       </section>
