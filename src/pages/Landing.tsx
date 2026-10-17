@@ -109,7 +109,7 @@ export default function Landing() {
       <nav className="border-b bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-3 flex flex-wrap gap-3 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={orcaMark} alt="Orca — propostas e orçamentos" className="h-8 w-8 object-contain" />
+            <img src={orcaMarkLight} alt="Orca — propostas e orçamentos" className="h-8 w-8 object-contain" />
             <span className="text-xl font-bold tracking-tight">Orca</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-3">
