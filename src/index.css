@@ -136,7 +136,17 @@ All colors MUST be HSL.
 }
 
 .orca-landing .landing-hero-shade {
-  background: linear-gradient(180deg, hsl(var(--background) / 0.15), hsl(var(--background) / 0.4) 65%, hsl(var(--background)));
+  background:
+    linear-gradient(90deg, hsl(var(--background) / 0.85), hsl(var(--background) / 0.2) 60%, transparent),
+    linear-gradient(180deg, transparent 70%, hsl(var(--background)));
+}
+
+.orca-landing .landing-display {
+  letter-spacing: 0.04em;
+}
+
+.orca-landing .landing-highlight {
+  box-shadow: 0 6px 0 hsl(var(--accent));
 }
 
 .orca-landing .landing-product {
