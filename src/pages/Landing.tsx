@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
-import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import orcaMarkLight from '@/assets/brand/orca-mark-light.png';
 import financeBackground from '@/assets/landing-finance-background.jpg';
 import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
@@ -109,7 +109,7 @@ export default function Landing() {
       <nav className="border-b bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-3 flex flex-wrap gap-3 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={orcaMark} alt="Orca — propostas e orçamentos" className="h-8 w-8 object-contain" />
+            <img src={orcaMarkLight} alt="Orca — propostas e orçamentos" className="h-8 w-8 object-contain" />
             <span className="text-xl font-bold tracking-tight">Orca</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-3">
