@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
-import orcaMark from '@/assets/brand/orca-mark-sm.png';
+import orcaMarkLight from '@/assets/brand/orca-mark-light.png';
 import financeBackground from '@/assets/landing-finance-background.jpg';
 import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
