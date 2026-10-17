@@ -136,8 +136,8 @@ All colors MUST be HSL.
 
 .orca-landing .landing-hero-shade {
   background:
-    linear-gradient(90deg, hsl(var(--background) / 0.7), hsl(var(--background) / 0.25)),
-    linear-gradient(180deg, transparent 60%, hsl(var(--background)));
+    linear-gradient(90deg, hsl(var(--background) / 0.3), hsl(var(--background) / 0.05)),
+    linear-gradient(180deg, transparent 75%, hsl(var(--background)));
 }
 
 .orca-landing :is(h1, h2, h3, span) {
