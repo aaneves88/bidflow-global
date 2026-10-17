@@ -132,12 +132,29 @@ All colors MUST be HSL.
   --ring: 187 85% 53%;
   color: hsl(var(--foreground));
   letter-spacing: 0;
+  position: relative;
+  isolation: isolate;
 }
 
-.orca-landing .landing-hero-shade {
-  background:
-    linear-gradient(90deg, hsl(var(--background) / 0.3), hsl(var(--background) / 0.05)),
-    linear-gradient(180deg, transparent 75%, hsl(var(--background)));
+.orca-landing .landing-watermark {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.orca-landing .landing-watermark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 639px) {
+  .orca-landing .landing-watermark {
+    opacity: 0.5;
+  }
 }
 
 .orca-landing :is(h1, h2, h3, span) {

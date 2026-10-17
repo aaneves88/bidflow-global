@@ -2,6 +2,7 @@
 
 ## Homepage styling
 - Scope the homepage theme to `.orca-landing` with semantic CSS variables so marketing design changes never retheme the authenticated app.
+- Keep the homepage watermark in a page-owned fixed decorative layer so it remains continuous while scrolling and disappears when leaving the homepage.
 
 ## Scheduled email jobs (cron → edge functions)
 - The daily scheduled email jobs (`send-activation-emails`, `send-coupon-nudge-email`, `send-proposal-followup`, `send-ebook-nurture-emails`) authenticate with the internal token stored in `public.internal_secrets` (key `email_queue_token`; RLS enabled, no public policies, service role/postgres bypass).

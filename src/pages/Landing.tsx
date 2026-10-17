@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { FileText, BarChart3, Send, CheckCircle, ArrowRight, Zap } from 'lucide-react';
 import orcaMarkLight from '@/assets/brand/orca-mark-light.png';
-import financeBackground from '@/assets/landing-finance-background.jpg';
+import financeBackground from '@/assets/landing-finance-watermark.jpg';
 import { usePlans } from '@/hooks/usePlans';
 import { formatCurrency } from '@/lib/format';
 import { isUnlimited } from '@/lib/planLimits';
@@ -101,12 +101,15 @@ export default function Landing() {
 
   return (
     <div className="orca-landing min-h-screen bg-background">
+      <div className="landing-watermark" aria-hidden="true">
+        <img src={financeBackground} alt="" width={1376} height={768} fetchPriority="high" />
+      </div>
       <Seo
         title="Orca — Propostas e Orçamentos Profissionais"
         description="O app mais simples para freelancers e pequenas empresas criarem propostas comerciais e orçamentos. Envie pelo WhatsApp, receba pelo PIX. Comece grátis."
         path="/"
       />
-      <nav className="border-b bg-background">
+      <nav className="border-b bg-background/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-3 flex flex-wrap gap-3 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img src={orcaMarkLight} alt="Orca — propostas e orçamentos" className="h-8 w-8 object-contain" />
@@ -127,8 +130,6 @@ export default function Landing() {
       </nav>
 
       <section className="relative overflow-hidden pt-12 sm:pt-16 pb-14 sm:pb-16">
-        <img src={financeBackground} alt="" aria-hidden="true" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover object-right opacity-70 sm:opacity-90" fetchPriority="high" />
-        <div aria-hidden="true" className="landing-hero-shade absolute inset-0" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl text-left">
             <div className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground mb-5">
@@ -155,7 +156,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-20 border-t bg-muted/30">
+      <section className="py-20 border-t bg-muted/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
@@ -276,7 +277,7 @@ export default function Landing() {
 
 
       {/* Pricing */}
-      <section className="py-20 border-t bg-muted/30">
+      <section className="py-20 border-t bg-muted/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('pricing.heading')}</h2>
@@ -373,7 +374,7 @@ export default function Landing() {
       </section>
 
 
-      <section className="py-20 border-t bg-muted/30">
+      <section className="py-20 border-t bg-muted/10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
             {t('cta.heading')}
