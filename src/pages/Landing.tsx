@@ -127,7 +127,7 @@ export default function Landing() {
       </nav>
 
       <section className="relative overflow-hidden pt-12 sm:pt-16 pb-12">
-        <img src={financeBackground} alt="" aria-hidden="true" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover opacity-60" fetchPriority="high" />
+        <img src={financeBackground} alt="" aria-hidden="true" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover object-left sm:object-center opacity-60" fetchPriority="high" />
         <div aria-hidden="true" className="landing-hero-shade absolute inset-0" />
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 text-sm text-accent mb-5">
