@@ -292,6 +292,21 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback_email_log: {
+        Row: {
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       feedback_prompts_shown: {
         Row: {
           id: string
