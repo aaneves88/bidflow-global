@@ -655,7 +655,36 @@
       "manageProposal": {
         "title": "Gerenciar proposta",
         "description": "Enviar, acompanhar visualização e mudar status."
+      },
+      "approachClient": {
+        "title": "Como abordar um cliente",
+        "description": "Primeiro contato e confiança."
+      },
+      "followUp": {
+        "title": "Enviar e cobrar a proposta",
+        "description": "Acompanhar e cobrar sem ser chato."
+      },
+      "pricing": {
+        "title": "Precificação",
+        "description": "Custo, tempo e margem para um preço justo."
+      },
+      "mei": {
+        "title": "Dicas para MEI",
+        "description": "Limite, nota fiscal e organização."
+      },
+      "simples": {
+        "title": "Dicas para o Simples",
+        "description": "Imposto no preço e margem."
+      },
+      "partner": {
+        "title": "Seja nosso parceiro",
+        "description": "Indique o Orca com 10% de desconto."
       }
+    },
+    "categories": {
+      "tutorials": "Tutoriais do app",
+      "education": "Educativos",
+      "partners": "Parceiros"
     }
   }
 }

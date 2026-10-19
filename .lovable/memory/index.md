@@ -18,3 +18,4 @@ Every wave generates a release doc + version bump — see releases-process memor
 - [Architecture rules](mem://constraints/architecture) — Key technical constraints and patterns
 - [i18n setup](mem://features/i18n) — i18next stack, namespaces per area, locales pt-BR + en
 - [Releases process](mem://features/releases-process) — Every wave produces a versioned release doc + marketing updates
+- [Partner coupon](mem://features/partner-coupon) — Partner ad advertises 10% off for partner's clients
