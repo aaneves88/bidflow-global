@@ -17,6 +17,7 @@ import AdminReferrals from './AdminReferrals';
 import AdminPartners from './AdminPartners';
 import AdminNicheFunnel from './AdminNicheFunnel';
 import AdminWeekly from './AdminWeekly';
+import AdminVideos from './AdminVideos';
 
 
 
@@ -61,6 +62,7 @@ export default function Admin() {
           <TabsTrigger value="niches">{t('tabs.niches')}</TabsTrigger>
           <TabsTrigger value="marketing">{t('tabs.marketing')}</TabsTrigger>
           <TabsTrigger value="brand">{t('tabs.brand')}</TabsTrigger>
+          <TabsTrigger value="videos">{t('tabs.videos')}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><AdminOverview /></TabsContent>
         <TabsContent value="weekly"><AdminWeekly /></TabsContent>
@@ -77,6 +79,7 @@ export default function Admin() {
         <TabsContent value="niches"><AdminNicheFunnel /></TabsContent>
         <TabsContent value="marketing"><AdminMarketing /></TabsContent>
         <TabsContent value="brand"><AdminBrand /></TabsContent>
+        <TabsContent value="videos"><AdminVideos /></TabsContent>
 
       </Tabs>
     </div>
