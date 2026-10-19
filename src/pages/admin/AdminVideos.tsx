@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { TUTORIAL_VIDEOS } from '@/content/tutorialVideos';
+import { TUTORIAL_VIDEOS, VIDEO_CATEGORIES } from '@/content/tutorialVideos';
 
 async function download(url: string, name: string) {
   const res = await fetch(url);
