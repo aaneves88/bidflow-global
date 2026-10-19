@@ -14,7 +14,8 @@
     "referrals": "Indicações",
     "partners": "Parceiros",
     "niches": "Nichos",
-    "weekly": "Semanal"
+    "weekly": "Semanal",
+    "videos": "Vídeos"
   },
   "niches": {
     "title": "Funil por nicho",
@@ -636,5 +637,25 @@
     "proposals": "Propostas criadas",
     "paid": "Assinaturas pagas",
     "trial": "Em período de teste"
+  },
+  "videos": {
+    "title": "Vídeos",
+    "subtitle": "Tutoriais de uso do Orca para baixar ou liberar aos usuários.",
+    "download": "Baixar",
+    "pending": "Vídeo em produção…",
+    "items": {
+      "createClient": {
+        "title": "Criar cliente",
+        "description": "Como cadastrar um cliente novo."
+      },
+      "createProposal": {
+        "title": "Criar proposta",
+        "description": "Do zero até a tela de compartilhar."
+      },
+      "manageProposal": {
+        "title": "Gerenciar proposta",
+        "description": "Enviar, acompanhar visualização e mudar status."
+      }
+    }
   }
 }

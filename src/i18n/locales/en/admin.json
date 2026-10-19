@@ -14,7 +14,8 @@
     "referrals": "Referrals",
     "partners": "Partners",
     "niches": "Niches",
-    "weekly": "Weekly"
+    "weekly": "Weekly",
+    "videos": "Videos"
   },
   "niches": {
     "title": "Funnel by niche",
@@ -636,5 +637,25 @@
     "proposals": "Proposals created",
     "paid": "Paid subscriptions",
     "trial": "In trial period"
+  },
+  "videos": {
+    "title": "Videos",
+    "subtitle": "Orca how-to tutorials to download or share with users.",
+    "download": "Download",
+    "pending": "Video in production…",
+    "items": {
+      "createClient": {
+        "title": "Create a client",
+        "description": "How to add a new client."
+      },
+      "createProposal": {
+        "title": "Create a proposal",
+        "description": "From scratch to the share screen."
+      },
+      "manageProposal": {
+        "title": "Manage a proposal",
+        "description": "Send, track views and change status."
+      }
+    }
   }
 }
