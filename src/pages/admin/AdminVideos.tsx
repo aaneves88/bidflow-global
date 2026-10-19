@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { TUTORIAL_VIDEOS } from '@/content/tutorialVideos';
+import { TUTORIAL_VIDEOS, VIDEO_CATEGORIES } from '@/content/tutorialVideos';
 
 async function download(url: string, name: string) {
   const res = await fetch(url);
@@ -25,8 +25,11 @@ export default function AdminVideos() {
         <h2 className="text-xl font-semibold">{t('videos.title')}</h2>
         <p className="text-sm text-muted-foreground">{t('videos.subtitle')}</p>
       </div>
+      {VIDEO_CATEGORIES.map((cat) => (
+      <section key={cat} className="space-y-3">
+      <h3 className="text-lg font-medium">{t(`videos.categories.${cat}`)}</h3>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {TUTORIAL_VIDEOS.map((v) => (
+        {TUTORIAL_VIDEOS.filter((v) => v.category === cat).map((v) => (
           <Card key={v.key}>
             <CardContent className="space-y-3 p-4">
               {v.asset ? (
@@ -48,6 +51,8 @@ export default function AdminVideos() {
           </Card>
         ))}
       </div>
+      </section>
+      ))}
     </div>
   );
 }

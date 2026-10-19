@@ -655,7 +655,36 @@
       "manageProposal": {
         "title": "Manage a proposal",
         "description": "Send, track views and change status."
+      },
+      "approachClient": {
+        "title": "Approaching a client",
+        "description": "First contact and trust."
+      },
+      "followUp": {
+        "title": "Send and follow up",
+        "description": "Follow up without being pushy."
+      },
+      "pricing": {
+        "title": "Pricing",
+        "description": "Cost, time and margin for a fair price."
+      },
+      "mei": {
+        "title": "Tips for MEI",
+        "description": "Limit, invoices and organization."
+      },
+      "simples": {
+        "title": "Tips for Simples",
+        "description": "Tax in the price and margin."
+      },
+      "partner": {
+        "title": "Become a partner",
+        "description": "Recommend Orca with 10% off."
       }
+    },
+    "categories": {
+      "tutorials": "App tutorials",
+      "education": "Educational",
+      "partners": "Partners"
     }
   }
 }
