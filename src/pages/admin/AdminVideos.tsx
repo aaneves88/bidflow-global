@@ -51,6 +51,8 @@ export default function AdminVideos() {
           </Card>
         ))}
       </div>
+      </section>
+      ))}
     </div>
   );
 }
