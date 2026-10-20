@@ -39,7 +39,7 @@ export function UpgradeModal({ open, onOpenChange, title, description, context }
     if (paymentLink) {
       window.open(paymentLink, '_blank', 'noopener,noreferrer');
     } else {
-      navigate('/pricing');
+      navigate('/app/planos');
     }
   };
 
