@@ -111,5 +111,17 @@
     "credentialPlaceholder": "Ex.: 8 anos em marcenaria sob medida, certificada pelo SENAI.",
     "testimonial": "Depoimento curto de cliente",
     "testimonialPlaceholder": "Ex.: \"Entregou no prazo e o acabamento ficou impecável.\" — Marina, Pinheiros"
+  },
+  "paymentLink": {
+    "title": "Link de pagamento (cartão)",
+    "description": "Cole o link de pagamento do seu negócio (Mercado Pago, PagSeguro, InfinitePay ou outro). Ele aparece nas propostas com um botão \"Pagar com cartão\". O pagamento vai direto para você — o Orca não processa nem intermedeia.",
+    "url": "Link de pagamento",
+    "label": "Texto para o cliente (opcional)",
+    "labelPlaceholder": "Ex.: Pague em até 12x no cartão",
+    "save": "Salvar link",
+    "remove": "Remover link",
+    "saved": "Link de pagamento salvo",
+    "removed": "Link de pagamento removido",
+    "invalid": "Link inválido: use um endereço que comece com https://"
   }
 }

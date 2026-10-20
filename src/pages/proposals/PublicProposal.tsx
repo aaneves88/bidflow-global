@@ -18,6 +18,7 @@ import { toast } from '@/hooks/use-toast';
 import { SignatureDialog } from '@/components/SignatureDialog';
 import { LegalFooter } from '@/components/LegalFooter';
 import { PixPayment } from '@/components/PixPayment';
+import { PaymentLinkBlock } from '@/components/PaymentLinkBlock';
 import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 import { Seo } from '@/components/Seo';
@@ -39,6 +40,7 @@ export default function PublicProposal() {
   const branding = bundle?.branding;
   const signature = bundle?.signature;
   const pix = bundle?.pix;
+  const paymentLink = bundle?.paymentLink;
 
 
 
@@ -401,6 +403,8 @@ export default function PublicProposal() {
           />
         )}
 
+        <PaymentLinkBlock url={paymentLink?.url} label={paymentLink?.label} accentColor={accent} />
+
         <ProductAttachment products={((proposal as any).products || []) as AttachmentProduct[]} />
 
 
@@ -445,6 +449,9 @@ export default function PublicProposal() {
                     credential: branding?.credentialNote || undefined,
                     testimonial: branding?.trustNote || undefined,
                   }
+                : undefined,
+              paymentLink: paymentLink?.url
+                ? { url: paymentLink.url, label: paymentLink.label || t('paymentLink.defaultLabel'), title: t('paymentLink.title') }
                 : undefined,
               pix: pixPayload
                 ? {

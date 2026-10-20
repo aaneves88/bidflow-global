@@ -20,6 +20,7 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { useStripePortal } from '@/hooks/useStripePortal';
 import { formatDate } from '@/lib/format';
 import { PixKeyCard } from '@/components/PixKeyCard';
+import { PaymentLinkCard } from '@/components/PaymentLinkCard';
 
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -134,6 +135,7 @@ export default function AccountPage() {
       </Card>
 
       <PixKeyCard />
+      <PaymentLinkCard />
 
 
 

@@ -60,6 +60,7 @@ interface Options {
   products?: { name: string; description?: string | null; imageUrls?: string[] }[];
   annexTitle?: string;
   annexProductLabel?: string;
+  paymentLink?: { url: string; label?: string; title?: string };
   pix?: {
     payload: string;
     merchantName?: string;
@@ -637,6 +638,29 @@ export async function generateProposalPdf(
     } catch {
       /* QR generation failure must not break the PDF */
     }
+  }
+
+  // === Owner's card payment link (Orca does not process the payment) ===
+  if (options.paymentLink?.url) {
+    ensureSpace(60);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(sr, sg, sb);
+    doc.text(options.paymentLink.title || 'Pagar com cartão', margin, y);
+    y += 14;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(80, 80, 80);
+    for (const line of doc.splitTextToSize(options.paymentLink.label || '', contentWidth)) {
+      doc.text(line, margin, y);
+      y += 12;
+    }
+    doc.setTextColor(37, 99, 235);
+    for (const line of doc.splitTextToSize(options.paymentLink.url, contentWidth)) {
+      doc.textWithLink(line, margin, y, { url: options.paymentLink.url });
+      y += 12;
+    }
+    y += 12;
   }
 
   // === Annex: products with technical description and images ===
