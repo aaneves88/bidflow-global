@@ -12,8 +12,7 @@ Diagnóstico: o tráfego vem quase todo de anúncios Meta (49 de 77 visitas, pes
    - O item A6 (teste de 7 dias) fica absorvido aqui.
 3. **Proposta de exemplo pronta no 1º acesso** (decidido): ao terminar o onboarding, criamos uma proposta já preenchida do ofício dela; só edita e envia.
 4. **Aviso de "cliente abriu"** (decidido): sininho + e-mail "Seu cliente abriu agora", com botão pronto de WhatsApp para o cliente.
-5. **Paywall no momento certo**: no grátis, liberar criar; mostrar o upgrade quando a pessoa tenta a 2ª proposta ou quer tirar a marca d'água, com mensagem "Você já fechou R$ X com a Orca".
-6. **Teste do Premium por 7 dias sem cartão** para quem enviou a 1ª proposta (recompensa a ativação, não o cadastro).
+5. **Contagem do teste + lembretes** (decidido): faixa "faltam X dias" no app e e-mails no dia 5 e no dia 7, mostrando quanto ela já enviou em propostas; ao tentar criar depois do teste, tela de assinar (mensal ou anual).
 7. **Indicação com recompensa real**: hoje a página /convidar promete "créditos" sem regra. Definir: quem indica ganha 1 mês grátis quando o indicado assina; indicado ganha 10%.
 8. **Página "Seja parceiro"** (contadores, escolas de cursos, influenciadores de MEI) com cadastro e cupom de 10% — o vídeo de parceiro já existe e aponta para algo que ainda não existe.
 
