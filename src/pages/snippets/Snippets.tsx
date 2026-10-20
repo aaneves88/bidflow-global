@@ -15,6 +15,11 @@ import { SnippetDialog } from '@/pages/snippets/SnippetDialog';
 
 export default function Snippets() {
   const { t } = useTranslation(['snippets', 'common']);
+  const [showHelp, setShowHelp] = useState(() => localStorage.getItem('orca:snippets-help-dismissed') !== '1');
+  const dismissHelp = () => {
+    localStorage.setItem('orca:snippets-help-dismissed', '1');
+    setShowHelp(false);
+  };
   const { data: snippets, isLoading } = useSnippets();
   const deleteSnippet = useDeleteSnippet();
   const createSnippet = useCreateSnippet();
@@ -41,6 +46,26 @@ export default function Snippets() {
           <Plus className="mr-2 h-4 w-4" /> {t('newButton')}
         </Button>
       </div>
+
+      {showHelp && (
+        <div className="relative rounded-lg border bg-muted/40 p-4 pr-10 text-sm">
+          <button
+            type="button"
+            onClick={dismissHelp}
+            aria-label={t('help.close')}
+            className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+          >
+            <X className="h-4 w-4" />
+          </button>
+          <p className="font-semibold mb-1">{t('help.title')}</p>
+          <p className="text-muted-foreground">{t('help.what')}</p>
+          <ul className="mt-2 list-disc pl-5 text-muted-foreground space-y-1">
+            <li>{t('help.step1')}</li>
+            <li>{t('help.step2')}</li>
+            <li>{t('help.step3')}</li>
+          </ul>
+        </div>
+      )}
 
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
