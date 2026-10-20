@@ -679,12 +679,50 @@
       "partner": {
         "title": "Seja nosso parceiro",
         "description": "Indique o Orca com 10% de desconto."
+      },
+      "adCreateProposals": {
+        "title": "Anúncio — criar propostas",
+        "description": "Vídeo vertical para anúncios: crie propostas em minutos."
+      },
+      "adTrackProposals": {
+        "title": "Anúncio — acompanhar propostas",
+        "description": "Vídeo vertical para anúncios: saiba quando o cliente abre a proposta."
+      },
+      "adBudgets": {
+        "title": "Anúncio — organizar orçamentos",
+        "description": "Vídeo vertical para anúncios: organize seus orçamentos."
+      },
+      "creativeCreate": {
+        "title": "Criar propostas",
+        "description": "Anúncio para campanhas."
+      },
+      "creativeTrack": {
+        "title": "Acompanhar propostas",
+        "description": "Anúncio para campanhas."
+      },
+      "creativeOrganize": {
+        "title": "Organizar orçamentos",
+        "description": "Anúncio para campanhas."
+      },
+      "creativeNext": {
+        "title": "Seu próximo orçamento",
+        "description": "Anúncio para campanhas."
       }
     },
     "categories": {
       "tutorials": "Tutoriais do app",
       "education": "Educativos",
-      "partners": "Parceiros"
+      "partners": "Parceiros",
+      "ads": "Anúncios"
+    },
+    "creatives": {
+      "title": "Criativos de anúncio",
+      "subtitle": "Imagens prontas para campanhas — baixe e use nas plataformas de anúncios."
+    },
+    "format": {
+      "square": "Quadrado (1:1)",
+      "portrait": "Retrato (4:5)",
+      "vertical": "Vertical (9:16)"
     }
   }
 }

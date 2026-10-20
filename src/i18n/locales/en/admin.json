@@ -679,12 +679,50 @@
       "partner": {
         "title": "Become a partner",
         "description": "Recommend Orca with 10% off."
+      },
+      "adCreateProposals": {
+        "title": "Ad — create proposals",
+        "description": "Vertical video for ads: create proposals in minutes."
+      },
+      "adTrackProposals": {
+        "title": "Ad — track proposals",
+        "description": "Vertical video for ads: know when the client opens your proposal."
+      },
+      "adBudgets": {
+        "title": "Ad — organize budgets",
+        "description": "Vertical video for ads: organize your budgets."
+      },
+      "creativeCreate": {
+        "title": "Create proposals",
+        "description": "Ad creative for campaigns."
+      },
+      "creativeTrack": {
+        "title": "Track proposals",
+        "description": "Ad creative for campaigns."
+      },
+      "creativeOrganize": {
+        "title": "Organize budgets",
+        "description": "Ad creative for campaigns."
+      },
+      "creativeNext": {
+        "title": "Your next budget",
+        "description": "Ad creative for campaigns."
       }
     },
     "categories": {
       "tutorials": "App tutorials",
       "education": "Educational",
-      "partners": "Partners"
+      "partners": "Partners",
+      "ads": "Ads"
+    },
+    "creatives": {
+      "title": "Ad creatives",
+      "subtitle": "Ready-to-use campaign images — download and use them on ad platforms."
+    },
+    "format": {
+      "square": "Square (1:1)",
+      "portrait": "Portrait (4:5)",
+      "vertical": "Vertical (9:16)"
     }
   }
 }
