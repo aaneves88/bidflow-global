@@ -12,6 +12,7 @@ import { useRecordProposalView } from '@/hooks/useProposalViews';
 import { ORCA_BRANDING } from '@/hooks/useBranding';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
+import { buildPdfProducts } from '@/lib/productImages';
 import { discountValue } from '@/lib/discount';
 import { toast } from '@/hooks/use-toast';
 import { SignatureDialog } from '@/components/SignatureDialog';
@@ -20,6 +21,7 @@ import { PixPayment } from '@/components/PixPayment';
 import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 import { Seo } from '@/components/Seo';
+import { ProductAttachment, type AttachmentProduct } from '@/components/ProductAttachment';
 
 const ORCA_CTA_URL =
   'https://orca-mento.app/register?utm_source=proposta&utm_medium=link_publico&utm_campaign=viral_cta';
@@ -399,6 +401,8 @@ export default function PublicProposal() {
           />
         )}
 
+        <ProductAttachment products={((proposal as any).products || []) as AttachmentProduct[]} />
+
 
 
         <div className="flex gap-3 justify-center pt-2 flex-wrap">
@@ -421,7 +425,10 @@ export default function PublicProposal() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => generateProposalPdf(proposal as any, sortedItems as any[], {
+            onClick={async () => generateProposalPdf(proposal as any, sortedItems as any[], {
+              products: await buildPdfProducts(((proposal as any).products || []) as any[]),
+              annexTitle: t('attachment.title'),
+              annexProductLabel: t('attachment.productWord'),
               publicUrlBase: window.location.origin,
               companyName: isFreeOwner ? 'Orca' : branding?.companyName,
               tagline: isFreeOwner ? undefined : branding?.tagline || undefined,

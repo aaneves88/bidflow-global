@@ -15,6 +15,7 @@ export type Product = {
   default_price: number;
   unit: string | null;
   is_active: boolean;
+  image_urls?: string[] | null;
   created_at: string;
   updated_at: string;
 };
@@ -25,6 +26,7 @@ export type ProductFormData = {
   default_price: number;
   unit?: string;
   is_active?: boolean;
+  image_urls?: string[];
 };
 
 export function useProducts(activeOnly = false) {

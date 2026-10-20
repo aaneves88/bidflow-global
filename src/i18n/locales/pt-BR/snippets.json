@@ -88,5 +88,14 @@
       "title": "Resumo do escopo",
       "body": "Este orçamento contempla o desenvolvimento das entregas descritas abaixo, com acompanhamento durante todo o projeto."
     }
+  },
+  "help": {
+    "title": "Para que servem os blocos de texto?",
+    "what": "São textos prontos que você reutiliza nas propostas: termos, condições de pagamento, garantia, \"por que eu\" e observações.",
+    "step1": "Crie um bloco aqui com um título e o texto.",
+    "step2": "Na proposta, clique em \"Inserir bloco\" ao lado do campo.",
+    "step3": "O texto entra no campo e você ainda pode editar.",
+    "close": "Fechar",
+    "picker": "Escolha um texto pronto da sua biblioteca para inserir neste campo. Crie novos em Blocos de texto."
   }
 }

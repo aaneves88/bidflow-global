@@ -250,7 +250,7 @@ export default function Dashboard() {
               <AlertTriangle className="h-5 w-5 text-destructive" />
               <p className="text-sm">{t('trial.expired')}</p>
             </div>
-            <Button asChild><Link to="/pricing">{t('trial.upgrade')}</Link></Button>
+            <Button asChild><Link to="/app/planos">{t('trial.upgrade')}</Link></Button>
           </CardContent>
         </Card>
       )}
@@ -259,7 +259,7 @@ export default function Dashboard() {
         <Card>
           <CardContent className="pt-6 flex items-center justify-between gap-4">
             <p className="text-sm">{t('trial.active', { days: currentPlan.daysLeft })}</p>
-            <Button variant="outline" asChild><Link to="/pricing">{t('trial.upgrade')}</Link></Button>
+            <Button variant="outline" asChild><Link to="/app/planos">{t('trial.upgrade')}</Link></Button>
           </CardContent>
         </Card>
       )}

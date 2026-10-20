@@ -82,5 +82,10 @@
   },
   "whyMe": {
     "title": "Why me"
+  },
+  "attachment": {
+    "title": "Annex — Products",
+    "product": "Product {{letter}}",
+    "productWord": "Product"
   }
 }

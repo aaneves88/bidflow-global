@@ -57,6 +57,9 @@ interface Options {
     testimonial?: string;
   };
   /** Owner's PIX BR Code — rendered as a QR block at the end of the document. */
+  products?: { name: string; description?: string | null; imageUrls?: string[] }[];
+  annexTitle?: string;
+  annexProductLabel?: string;
   pix?: {
     payload: string;
     merchantName?: string;
@@ -636,6 +639,52 @@ export async function generateProposalPdf(
     }
   }
 
+  // === Annex: products with technical description and images ===
+  if (options.products?.length) {
+    doc.addPage();
+    y = margin;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(sr, sg, sb);
+    doc.text(options.annexTitle || 'Anexo — Produtos', margin, y);
+    y += 22;
+    const imgSize = (contentWidth - 20) / 3;
+    for (let i = 0; i < options.products.length; i++) {
+      const p = options.products[i];
+      ensureSpace(40);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(30, 41, 59);
+      doc.text(`${options.annexProductLabel || 'Produto'} ${String.fromCharCode(65 + (i % 26))} — ${p.name}`, margin, y);
+      y += 15;
+      if (p.description) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9.5);
+        doc.setTextColor(60, 60, 60);
+        for (const line of doc.splitTextToSize(p.description, contentWidth)) {
+          ensureSpace(13);
+          doc.text(line, margin, y);
+          y += 12;
+        }
+      }
+      if (p.imageUrls?.length) {
+        y += 6;
+        ensureSpace(imgSize + 10);
+        let x = margin;
+        for (const url of p.imageUrls.slice(0, 3)) {
+          try {
+            const dataUrl = await urlToJpegDataUrl(url);
+            doc.addImage(dataUrl, 'JPEG', x, y, imgSize, imgSize, undefined, 'FAST');
+          } catch { /* skip broken image */ }
+          x += imgSize + 10;
+        }
+        y += imgSize + 10;
+      }
+      y += 12;
+    }
+  }
+
+
 
   // === Footer + watermark on every page (cover page stays clean) ===
   const pageCount = doc.getNumberOfPages();
@@ -689,4 +738,18 @@ export async function generateProposalPdf(
   }
 
   doc.save(`proposta-${proposal.public_code}.pdf`);
+}
+
+/** Loads an image URL and returns a square-cropped JPEG data URL for the PDF. */
+async function urlToJpegDataUrl(url: string): Promise<string> {
+  const blob = await (await fetch(url)).blob();
+  const bmp = await createImageBitmap(blob);
+  const side = Math.min(bmp.width, bmp.height);
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = Math.min(side, 800);
+  const ctx = canvas.getContext('2d')!;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/jpeg', 0.82);
 }

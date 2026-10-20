@@ -30,7 +30,7 @@ const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | '
 
 export default function AccountPage() {
   const { t } = useTranslation(['settings', 'common']);
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState('');
   const [deleting, setDeleting] = useState(false);
@@ -89,7 +89,9 @@ export default function AccountPage() {
                 <div>
                   <p className="text-sm text-muted-foreground">{t('subscription.currentPlan')}</p>
                   <p className="text-lg font-semibold">
-                    {subscription.hasActivePlan ? subscription.planName : t('subscription.freePlan')}
+                    {isAdmin && !subscription.hasActivePlan
+                      ? t('subscription.adminPlan')
+                      : subscription.hasActivePlan ? subscription.planName : t('subscription.freePlan')}
                   </p>
                 </div>
                 {subscription.hasActivePlan && (

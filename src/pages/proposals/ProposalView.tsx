@@ -24,6 +24,7 @@ import { useBranding, ORCA_BRANDING } from '@/hooks/useBranding';
 import { useCanCustomBrand } from '@/hooks/useSubscription';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
+import { buildPdfProducts, loadItemProducts } from '@/lib/productImages';
 import { generateProposalPdf } from '@/lib/proposalPdf';
 import { buildPixPayload, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
@@ -153,7 +154,7 @@ export default function ProposalView() {
     setCloseOpen(false);
   };
 
-  const handlePdf = () => {
+  const handlePdf = async () => {
     if (!items) return;
     const companyName = canBrand
       ? (branding.companyName || (getSetting('company_name') as string) || undefined)
@@ -187,7 +188,11 @@ export default function ProposalView() {
       }
     }
 
+    const annexProducts = await buildPdfProducts(await loadItemProducts((items as any[]) || []));
     generateProposalPdf(proposal as any, items as any[], {
+      products: annexProducts,
+      annexTitle: t('public:attachment.title'),
+      annexProductLabel: t('public:attachment.productWord'),
       pix: pixBlock,
       companyName,
 

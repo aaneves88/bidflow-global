@@ -150,6 +150,7 @@ export default function ProposalForm() {
         unit_price: Number(i.unit_price),
         total: Number(i.total),
         position: i.position,
+        product_id: (i as any).product_id ?? null,
       })));
       setItemsHydrated(true);
     }
@@ -186,6 +187,7 @@ export default function ProposalForm() {
         quantity: qty,
         unit_price: price,
         total: qty * price,
+        product_id: product.id,
       };
       return updated;
     });

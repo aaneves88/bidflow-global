@@ -31,7 +31,12 @@
     "price": "Preço padrão",
     "unit": "Unidade",
     "unitPlaceholder": "un, hora, mês...",
-    "isActive": "Ativo (aparece no catálogo ao criar propostas)"
+    "isActive": "Ativo (aparece no catálogo ao criar propostas)",
+    "images": "Imagens (até 3)",
+    "imagesHint": "JPG, PNG ou WebP, até 5 MB cada. Aparecem no anexo da proposta.",
+    "addImage": "Adicionar imagem",
+    "removeImage": "Remover imagem",
+    "imageInvalid": "Imagem inválida: use JPG, PNG ou WebP de até 5 MB."
   },
   "delete": {
     "title": "Remover item?",

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { LibraryBig, Bookmark } from 'lucide-react';
+import { HelpCircle, LibraryBig, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -49,6 +49,17 @@ export function SnippetPicker({ kind, value, onInsert }: Props) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
+      <Popover>
+        <PopoverTrigger asChild>
+          <button type="button" aria-label={t('help.title')} className="text-muted-foreground hover:text-foreground">
+            <HelpCircle className="h-4 w-4" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-72 text-sm" align="start">
+          <p className="font-semibold mb-1">{t('help.title')}</p>
+          <p className="text-muted-foreground">{t('help.picker')}</p>
+        </PopoverContent>
+      </Popover>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

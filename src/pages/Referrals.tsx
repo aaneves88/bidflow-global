@@ -10,7 +10,7 @@ import { useReferralProgram } from '@/hooks/useReferralProgram';
 import { useAuth } from '@/contexts/AuthContext';
 import { Gift, Copy, Users, ArrowLeft, CheckCircle } from 'lucide-react';
 
-export default function Referrals() {
+export default function Referrals({ embedded = false }: { embedded?: boolean } = {}) {
   const { t } = useTranslation('referrals');
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -55,17 +55,17 @@ export default function Referrals() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b">
+    <div className={embedded ? "" : "min-h-screen bg-background"}>
+      {!embedded && <nav className="border-b">
         <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link to="/dashboard" className="font-semibold text-lg">Orca</Link>
           <Button variant="ghost" size="sm" asChild>
             <Link to="/dashboard"><ArrowLeft className="mr-2 h-4 w-4" />{t('back')}</Link>
           </Button>
         </div>
-      </nav>
+      </nav>}
 
-      <main className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+      <main className={embedded ? "max-w-3xl mx-auto space-y-6" : "max-w-3xl mx-auto px-4 py-8 space-y-6"}>
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">{t('subtitle')}</p>

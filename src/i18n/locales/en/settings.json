@@ -99,7 +99,8 @@
     "manage": "Manage subscription",
     "upgrade": "Upgrade",
     "portalError": "Couldn't open the billing portal",
-    "portalErrorHint": "Please try again shortly. If it persists, contact support."
+    "portalErrorHint": "Please try again shortly. If it persists, contact support.",
+    "adminPlan": "Administrator — full access"
   },
   "whyMe": {
     "title": "Why me",

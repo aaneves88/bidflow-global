@@ -147,6 +147,22 @@ const App = () => (
               }
             />
             <Route
+              path="/app/planos"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>{isNativeMobile() ? <MobilePaywall /> : <Pricing embedded />}</AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/indique"
+              element={
+                <ProtectedRoute>
+                  <AppLayout><Referrals embedded /></AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/account"
               element={
                 <ProtectedRoute>

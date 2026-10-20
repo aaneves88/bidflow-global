@@ -54,7 +54,7 @@ export default function Clients() {
             <TooltipContent>
               <div className="space-y-2">
                 <p>{t('dashboard:limit.clientsReached')}</p>
-                <Button size="sm" asChild><Link to="/pricing">{t('dashboard:limit.upgrade')}</Link></Button>
+                <Button size="sm" asChild><Link to="/app/planos">{t('dashboard:limit.upgrade')}</Link></Button>
               </div>
             </TooltipContent>
           </Tooltip>
