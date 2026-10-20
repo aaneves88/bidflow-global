@@ -12,3 +12,4 @@
 - [ ] Engatilhado: contagem do teste + e-mails dias 5 e 7 — depende do item acima.
 - [ ] Engatilhado: indicação automática e página "Seja parceiro" — decisão do Antonio de adiar.
 - [ ] Engatilhado: ações fora do app (mensagens, anúncios, contadores, diretórios).
+- [ ] Futuro, sem implementar agora: página pública de orçamento para os clientes da Orca, incluída em um plano mais caro. O usuário poderá gerar um formulário para receber pedidos de orçamento dos próprios clientes a partir dos produtos que tem cadastrados. Preço e detalhes dependem de definição com Antonio.
