@@ -17,6 +17,7 @@ export interface UnseenView {
   proposal_title: string;
   viewed_at: string;
   client_name: string | null;
+  client_phone: string | null;
   seen: boolean;
 }
 
@@ -34,7 +35,7 @@ export function useUnseenViews() {
       const from = new Date(Date.now() - HISTORY_DAYS * 86400000).toISOString();
       const { data: proposals } = await supabase
         .from('proposals')
-        .select('id, title, clients(name)')
+        .select('id, title, clients(name, phone)')
         .eq('user_id', user!.id);
       const ids = (proposals ?? []).map((p) => p.id);
       if (ids.length === 0) return [] as UnseenView[];
@@ -49,9 +50,9 @@ export function useUnseenViews() {
 
       if (error) throw error;
 
-      const map = new Map<string, { title: string; client_name: string | null }>();
+      const map = new Map<string, { title: string; client_name: string | null; client_phone: string | null }>();
       (proposals ?? []).forEach((p: any) => {
-        map.set(p.id, { title: p.title, client_name: p.clients?.name ?? null });
+        map.set(p.id, { title: p.title, client_name: p.clients?.name ?? null, client_phone: p.clients?.phone ?? null });
       });
 
       const out: UnseenView[] = (views ?? []).map((v: any) => ({
@@ -59,6 +60,7 @@ export function useUnseenViews() {
         viewed_at: v.viewed_at,
         proposal_title: map.get(v.proposal_id)?.title ?? '—',
         client_name: map.get(v.proposal_id)?.client_name ?? null,
+        client_phone: map.get(v.proposal_id)?.client_phone ?? null,
         seen: v.viewed_at <= since,
       }));
       return out;

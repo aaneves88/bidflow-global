@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Bell, Eye } from 'lucide-react';
+import { Bell, Eye, MessageCircle } from 'lucide-react';
+import { whatsAppUrl } from '@/lib/whatsapp';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
@@ -54,11 +55,16 @@ export function NotificationsBell() {
             <p className="text-sm text-muted-foreground p-4 text-center">{t('notifications.empty')}</p>
           ) : (
             <div className="divide-y">
-              {list.map((v, i) => (
+              {list.map((v, i) => {
+                const wa = whatsAppUrl(
+                  v.client_phone,
+                  t('notifications.whatsappMessage', { name: v.client_name ?? '', title: v.proposal_title }),
+                );
+                return (
+                <div key={`${v.proposal_id}-${i}`} className={v.seen ? '' : 'bg-primary/5'}>
                 <button
-                  key={`${v.proposal_id}-${i}`}
                   onClick={() => { setOpen(false); markRead(); navigate(`/proposals/${v.proposal_id}`); }}
-                  className={`w-full text-left p-3 hover:bg-muted/50 transition-colors flex gap-3 ${v.seen ? '' : 'bg-primary/5'}`}
+                  className="w-full text-left p-3 hover:bg-muted/50 transition-colors flex gap-3"
                 >
                   <Eye className={`h-4 w-4 mt-0.5 shrink-0 ${v.seen ? 'text-muted-foreground' : 'text-primary'}`} />
                   <div className="min-w-0 flex-1">
@@ -76,7 +82,19 @@ export function NotificationsBell() {
                     <p className="text-xs text-muted-foreground mt-0.5">{formatDateTime(v.viewed_at)}</p>
                   </div>
                 </button>
-              ))}
+                {wa && (
+                  <div className="px-3 pb-3 pl-10">
+                    <Button asChild size="sm" variant="outline" className="h-7 text-xs">
+                      <a href={wa} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle className="mr-1 h-3.5 w-3.5" />
+                        {t('notifications.whatsapp')}
+                      </a>
+                    </Button>
+                  </div>
+                )}
+                </div>
+                );
+              })}
             </div>
           )}
         </div>
