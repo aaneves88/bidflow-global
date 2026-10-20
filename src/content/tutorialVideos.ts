@@ -33,6 +33,8 @@ const RAW_VIDEOS = ([
   { key: 'adCreateProposals', file: 'criar_propostas_vertical.mp4', category: 'ads', publicPath: '/ads/videos/criar_propostas_vertical.mp4' },
   { key: 'adTrackProposals', file: 'acompanhar_clientes_vertical.mp4', category: 'ads', publicPath: '/ads/videos/acompanhar_clientes_vertical.mp4' },
   { key: 'adBudgets', file: 'organizar_orcamentos_vertical.mp4', category: 'ads', publicPath: '/ads/videos/organizar_orcamentos_vertical.mp4' },
+  { key: 'adWhatsapp', file: 'envie_whatsapp_vertical.mp4', category: 'ads', publicPath: '/ads/videos/envie_whatsapp_vertical.mp4' },
+  { key: 'adOpened', file: 'cliente_abriu_vertical.mp4', category: 'ads', publicPath: '/ads/videos/cliente_abriu_vertical.mp4' },
 ] as { key: string; file: string; category: VideoCategory; publicPath?: string }[]).map((v) => ({ ...v, asset: find(v.file) }));
 
 export const TUTORIAL_VIDEOS: LibraryVideo[] = RAW_VIDEOS;
