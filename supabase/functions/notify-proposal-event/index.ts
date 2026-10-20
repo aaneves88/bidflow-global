@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
   // Fetch proposal + client (service role bypasses RLS — safe; we only resolve owner)
   const { data: proposal, error: pErr } = await supabase
     .from('proposals')
-    .select('id, user_id, title, total_amount, currency, public_code, clients(name, email)')
+    .select('id, user_id, title, total_amount, currency, public_code, clients(name, email, phone)')
     .eq('public_code', publicCode)
     .maybeSingle()
 
@@ -72,7 +72,25 @@ Deno.serve(async (req) => {
     })
   }
 
+  // "Cliente abriu": avisar só na primeira abertura da proposta.
+  if (event === 'viewed') {
+    const { count } = await supabase
+      .from('proposal_views')
+      .select('id', { count: 'exact', head: true })
+      .eq('proposal_id', proposal.id)
+    if ((count ?? 0) > 1) {
+      return new Response(JSON.stringify({ skipped: true, reason: 'already_viewed' }), {
+        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+  }
+
   const clientName = (proposal as any).clients?.name || null
+  const phoneDigits = String((proposal as any).clients?.phone || '').replace(/\D/g, '')
+  const waNumber = phoneDigits.length >= 10 ? (phoneDigits.length <= 11 ? `55${phoneDigits}` : phoneDigits) : null
+  const whatsappUrl = waNumber
+    ? `https://wa.me/${waNumber}?text=${encodeURIComponent(`Oi${clientName ? ' ' + clientName : ''}! Vi que você abriu a proposta "${proposal.title}". Ficou alguma dúvida?`)}`
+    : null
   const proposalTotal = formatBRL(Number(proposal.total_amount), proposal.currency || 'BRL')
   const appProposalUrl = `${APP_URL}/proposals/${proposal.id}`
 
@@ -84,6 +102,7 @@ Deno.serve(async (req) => {
         clientName,
         proposalTitle: proposal.title,
         appProposalUrl,
+        whatsappUrl,
         viewedAt: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
       },
     },
@@ -115,7 +134,7 @@ Deno.serve(async (req) => {
   }
 
   const sendErr = await sendAppEmail(supabase, entry.templateName, owner.email, {
-        idempotencyKey: `${event}-${proposal.id}-${Date.now().toString(36)}`,
+        idempotencyKey: event === 'viewed' ? `viewed-${proposal.id}` : `${event}-${proposal.id}-${Date.now().toString(36)}`,
         templateData: entry.data,
       }).then(() => null, (e: unknown) => e as Error)
 

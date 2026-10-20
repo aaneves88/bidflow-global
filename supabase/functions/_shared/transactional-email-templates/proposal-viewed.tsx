@@ -10,9 +10,10 @@ interface Props {
   proposalTitle?: string
   appProposalUrl?: string
   viewedAt?: string
+  whatsappUrl?: string | null
 }
 
-const Email = ({ clientName, proposalTitle, appProposalUrl = 'https://orca-mento.app', viewedAt }: Props) => (
+const Email = ({ clientName, proposalTitle, appProposalUrl = 'https://orca-mento.app', viewedAt, whatsappUrl }: Props) => (
   <Html lang="pt-BR" dir="ltr">
     <Head><meta charSet="utf-8" /></Head>
     <Preview>
@@ -20,7 +21,7 @@ const Email = ({ clientName, proposalTitle, appProposalUrl = 'https://orca-mento
     </Preview>
     <Body style={main}>
       <Shell>
-        <Heading style={h1}>👀 Sua proposta foi vista</Heading>
+        <Heading style={h1}>👀 Seu cliente abriu agora</Heading>
         <Text style={text}>
           <strong>{clientName || 'O cliente'}</strong> acabou de abrir a
           proposta <strong>"{proposalTitle || 'sem título'}"</strong>
@@ -30,7 +31,16 @@ const Email = ({ clientName, proposalTitle, appProposalUrl = 'https://orca-mento
           É um bom momento para fazer um follow-up — talvez uma mensagem rápida
           perguntando se ficou alguma dúvida.
         </Text>
-        <CtaWithFallback href={appProposalUrl} label="Ver proposta na Orca" />
+        {whatsappUrl ? (
+          <>
+            <CtaWithFallback href={whatsappUrl} label="Chamar no WhatsApp" />
+            <Text style={text}>
+              Ou <a href={appProposalUrl}>veja a proposta na Orca</a>.
+            </Text>
+          </>
+        ) : (
+          <CtaWithFallback href={appProposalUrl} label="Ver proposta na Orca" />
+        )}
       </Shell>
     </Body>
   </Html>
@@ -50,5 +60,6 @@ export const template = {
     proposalTitle: 'Identidade visual completa',
     appProposalUrl: 'https://orca-mento.app/proposals/123',
     viewedAt: 'há instantes',
+    whatsappUrl: 'https://wa.me/5511999999999',
   },
 } satisfies TemplateEntry

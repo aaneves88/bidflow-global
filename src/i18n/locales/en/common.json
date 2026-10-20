@@ -63,7 +63,9 @@
     "empty": "Nothing new here",
     "viewed": "Your proposal was viewed",
     "viewedBy": "{{name}} viewed your proposal",
-    "new": "new"
+    "new": "new",
+    "whatsapp": "Message on WhatsApp",
+    "whatsappMessage": "Hi {{name}}! I saw you opened the proposal \"{{title}}\". Any questions?"
   },
   "notFound": {
     "title": "404",
