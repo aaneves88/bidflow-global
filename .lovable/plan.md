@@ -4,8 +4,12 @@ Diagnóstico: o tráfego vem quase todo de anúncios Meta (49 de 77 visitas, pes
 
 ## Parte A — Mudanças no app (em ordem)
 
-1. **Site sempre em português**: página inicial e de preços aparecem em inglês para parte dos visitantes e para o Google. Forçar pt-BR em todas as páginas públicas.
-2. **Preço igual em todo lugar**: alinhar limite grátis, valor (R$29,90) e teste grátis entre landing, /pricing, banco e anúncios. Mostrar o plano anual R$239,90 ("2 meses grátis").
+1. **Site sempre em português** (decidido): todas as páginas públicas em pt-BR, sem exceção e sem botão de idioma.
+2. **Novo modelo de preço** (decidido):
+   - Novas contas: 7 dias de Premium completo, sem cartão. Depois, conta em "somente leitura": vê e compartilha propostas antigas (links enviados continuam funcionando), mas não cria/edita sem assinar. Não há mais plano grátis para novos.
+   - Contas existentes: continuam no modelo antigo (Gratuito 3 propostas / 5 clientes).
+   - Premium R$29,90/mês e anual R$239,90 ("2 meses grátis"), iguais em landing, /pricing, banco e Stripe (exige criar os dois preços no Stripe).
+   - O item A6 (teste de 7 dias) fica absorvido aqui.
 3. **Proposta de exemplo pronta no 1º acesso**: ao entrar, a pessoa já vê uma proposta preenchida do seu ofício (escolhido no onboarding), só edita e envia. Reduz a tela em branco.
 4. **Momento "uau" visível**: quando o cliente abre a proposta, notificação + e-mail "Seu cliente abriu agora — mande um WhatsApp". É a dor nº 1 do público.
 5. **Paywall no momento certo**: no grátis, liberar criar; mostrar o upgrade quando a pessoa tenta a 2ª proposta ou quer tirar a marca d'água, com mensagem "Você já fechou R$ X com a Orca".
