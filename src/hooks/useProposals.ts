@@ -19,6 +19,7 @@ export type ProposalItem = {
   unit_price: number;
   total: number;
   position: number;
+  product_id?: string | null;
 };
 
 export type Proposal = {
