@@ -20,6 +20,7 @@ import { PixPayment } from '@/components/PixPayment';
 import { buildPixPayload } from '@/lib/pix';
 import orcaMark from '@/assets/brand/orca-mark-sm.png';
 import { Seo } from '@/components/Seo';
+import { ProductAttachment, type AttachmentProduct } from '@/components/ProductAttachment';
 
 const ORCA_CTA_URL =
   'https://orca-mento.app/register?utm_source=proposta&utm_medium=link_publico&utm_campaign=viral_cta';
@@ -398,6 +399,8 @@ export default function PublicProposal() {
             accentColor={accent}
           />
         )}
+
+        <ProductAttachment products={((proposal as any).products || []) as AttachmentProduct[]} />
 
 
 
