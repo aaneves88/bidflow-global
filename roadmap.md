@@ -4,6 +4,9 @@
 - [x] Verify the homepage and signup link on desktop and mobile.
 - [x] Make the background barely perceptible, with abstract texture instead of concrete forms, and verify the result.
 - [x] Simplify the homepage opening, soften financial imagery and verify desktop/mobile.
+# Criativos e vídeos de anúncio
+- [x] 12 criativos de anúncio (4 temas × quadrado/retrato/vertical) na aba Materiais do admin, com download individual e ZIP.
+- [x] 3 vídeos verticais de anúncio na aba Vídeos do admin (seção Anúncios), com download.
 # Usuários pagantes (plano aprovado 2026-10-20)
 - [x] Site sempre em português (sem detectar idioma do navegador).
 - [x] Proposta de exemplo no 1º acesso (onboarding já abre proposta preenchida pelo modelo escolhido).
