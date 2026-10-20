@@ -56,32 +56,6 @@ export default function AdminVideos() {
       </div>
       </section>
       ))}
-      <section className="space-y-3">
-        <h3 className="text-lg font-medium">{t('videos.creatives.title')}</h3>
-        <p className="text-sm text-muted-foreground">{t('videos.creatives.subtitle')}</p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {AD_CREATIVES.map((c) => (
-            <Card key={c.file}>
-              <CardContent className="space-y-3 p-4">
-                <img
-                  src={c.src}
-                  alt={t(`videos.items.${c.key}.title`)}
-                  loading="lazy"
-                  className="w-full rounded-md border border-border object-cover"
-                />
-                <div>
-                  <h3 className="font-medium">{t(`videos.items.${c.key}.title`)}</h3>
-                  <p className="text-sm text-muted-foreground">{t(`videos.format.${c.format}`)}</p>
-                </div>
-                <Button size="sm" variant="outline" className="w-full" onClick={() => download(c.src, c.file)}>
-                  <Download className="mr-2 h-4 w-4" />
-                  {t('videos.download')}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
