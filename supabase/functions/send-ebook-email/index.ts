@@ -12,7 +12,8 @@ Deno.serve(async (req) => {
   try { body = await req.json() } catch { return json({ error: 'invalid_json' }, 400) }
   const email = str(body.email, 254)?.toLowerCase() ?? null
   const downloadUrl = str(body.downloadUrl, 500)
-  if (!email || !downloadUrl || !/^https:\/\//.test(downloadUrl)) return json({ error: 'invalid_input' }, 400)
+  // Only links on our own site, so nobody can use this to send a foreign link.
+  if (!email || !downloadUrl || !downloadUrl.startsWith(`${SITE_URL}/`)) return json({ error: 'invalid_input' }, 400)
 
   const admin = adminClient()
   // Only send to an address that just signed up on the e-book page.

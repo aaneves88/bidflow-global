@@ -691,6 +691,14 @@
       "adBudgets": {
         "title": "Anúncio — organizar orçamentos",
         "description": "Vídeo vertical para anúncios: organize seus orçamentos."
+      },
+      "adWhatsapp": {
+        "title": "Anúncio — envie pelo WhatsApp",
+        "description": "Vídeo vertical para anúncios: envie a proposta pelo WhatsApp."
+      },
+      "adOpened": {
+        "title": "Anúncio — saiba quando o cliente abriu",
+        "description": "Vídeo vertical para anúncios: aviso de proposta visualizada."
       }
     },
     "categories": {

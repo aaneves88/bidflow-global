@@ -691,6 +691,14 @@
       "adBudgets": {
         "title": "Ad — organize budgets",
         "description": "Vertical video for ads: organize your budgets."
+      },
+      "adWhatsapp": {
+        "title": "Ad — send via WhatsApp",
+        "description": "Vertical video for ads: send the proposal via WhatsApp."
+      },
+      "adOpened": {
+        "title": "Ad — know when the client opened",
+        "description": "Vertical video for ads: proposal viewed alert."
       }
     },
     "categories": {
