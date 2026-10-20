@@ -27,3 +27,23 @@ export async function uploadProductImage(userId: string, file: File): Promise<st
 export async function removeProductImage(path: string) {
   await supabase.storage.from(PRODUCT_IMAGES_BUCKET).remove([path]);
 }
+
+type RawProduct = { id: string; name: string; description: string | null; image_urls: string[] | null };
+
+/** Products for the PDF annex, in item order, with signed image URLs. */
+export async function buildPdfProducts(products: RawProduct[]) {
+  return Promise.all(products.map(async (p) => ({
+    name: p.name,
+    description: p.description,
+    imageUrls: await signProductImages(p.image_urls ?? []),
+  })));
+}
+
+/** Loads the linked products of a proposal's items (owner side). */
+export async function loadItemProducts(items: { product_id?: string | null }[]): Promise<RawProduct[]> {
+  const ids = [...new Set(items.map((i) => i.product_id).filter(Boolean))] as string[];
+  if (!ids.length) return [];
+  const { data } = await supabase.from('products').select('id, name, description, image_urls').in('id', ids);
+  const byId = new Map((data ?? []).map((p: any) => [p.id, p as RawProduct]));
+  return ids.map((id) => byId.get(id)).filter(Boolean) as RawProduct[];
+}

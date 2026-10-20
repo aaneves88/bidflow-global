@@ -12,6 +12,7 @@ import { useRecordProposalView } from '@/hooks/useProposalViews';
 import { ORCA_BRANDING } from '@/hooks/useBranding';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { generateProposalPdf } from '@/lib/proposalPdf';
+import { buildPdfProducts } from '@/lib/productImages';
 import { discountValue } from '@/lib/discount';
 import { toast } from '@/hooks/use-toast';
 import { SignatureDialog } from '@/components/SignatureDialog';
@@ -424,7 +425,10 @@ export default function PublicProposal() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => generateProposalPdf(proposal as any, sortedItems as any[], {
+            onClick={async () => generateProposalPdf(proposal as any, sortedItems as any[], {
+              products: await buildPdfProducts(((proposal as any).products || []) as any[]),
+              annexTitle: t('attachment.title'),
+              annexProductLabel: t('attachment.productWord'),
               publicUrlBase: window.location.origin,
               companyName: isFreeOwner ? 'Orca' : branding?.companyName,
               tagline: isFreeOwner ? undefined : branding?.tagline || undefined,
