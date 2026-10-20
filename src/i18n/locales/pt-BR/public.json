@@ -87,5 +87,11 @@
     "title": "Anexo — Produtos",
     "product": "Produto {{letter}}",
     "productWord": "Produto"
+  },
+  "paymentLink": {
+    "title": "Pagar com cartão",
+    "defaultLabel": "Pague com cartão de crédito pelo link seguro do recebedor.",
+    "button": "Pagar com cartão",
+    "disclaimer": "O pagamento é feito diretamente ao recebedor. O Orca não processa nem intermedeia esta transação."
   }
 }

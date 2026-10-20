@@ -25,6 +25,7 @@ import { useBranding } from '@/hooks/useBranding';
 import type { Product } from '@/hooks/useProducts';
 import { formatCurrency } from '@/lib/format';
 import { applyDiscount, discountValue, type DiscountType } from '@/lib/discount';
+import { isValidPaymentLink } from '@/lib/paymentLink';
 import { PIX_KEY_TYPES, isValidPixKey, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -84,6 +85,8 @@ export default function ProposalForm() {
   const [showWhyMe, setShowWhyMe] = useState(false);
   const [pixKey, setPixKey] = useState('');
   const [pixKeyType, setPixKeyType] = useState<PixKeyType>('cpf');
+  const [payLink, setPayLink] = useState('');
+  const [payLinkLabel, setPayLinkLabel] = useState('');
   const [appliedTemplate, setAppliedTemplate] = useState<ProposalTemplateId | null>(null);
   const [pickerDismissed, setPickerDismissed] = useState(false);
   const [clientDialogOpen, setClientDialogOpen] = useState(false);
@@ -136,6 +139,8 @@ export default function ProposalForm() {
       setShowCover(!!(proposal as any).show_cover);
       setShowWhyMe(!!(proposal as any).show_why_me);
       setPixKey((proposal as any).pix_key || '');
+      setPayLink((proposal as any).payment_link || '');
+      setPayLinkLabel((proposal as any).payment_link_label || '');
       setPixKeyType((((proposal as any).pix_key_type as PixKeyType) || 'cpf'));
       setProposalHydrated(true);
       setStatusHydrated(true);
@@ -217,6 +222,8 @@ export default function ProposalForm() {
       discount_type: discountType,
       pix_key: trimmedPix || null,
       pix_key_type: trimmedPix ? pixKeyType : null,
+      payment_link: payLink.trim() || null,
+      payment_link_label: payLink.trim() ? payLinkLabel.trim() || null : null,
       show_cover: canShowCover && showCover,
       show_why_me: canShowWhyMe && showWhyMe,
       items,
@@ -236,6 +243,10 @@ export default function ProposalForm() {
     const trimmedPix = pixKey.trim();
     if (trimmedPix && !isValidPixKey(trimmedPix, pixKeyType)) {
       toast({ title: t('form.pix.invalid'), variant: 'destructive' });
+      return;
+    }
+    if (payLink.trim() && !isValidPaymentLink(payLink)) {
+      toast({ title: t('form.paymentLink.invalid'), variant: 'destructive' });
       return;
     }
     await persistProposal();
@@ -599,6 +610,21 @@ export default function ProposalForm() {
                   placeholder={t('form.pix.keyPlaceholder')}
                 />
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle>{t('form.paymentLink.title')}</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">{t('form.paymentLink.hint')}</p>
+            <div>
+              <Label htmlFor="payment_link">{t('form.paymentLink.url')}</Label>
+              <Input id="payment_link" value={payLink} onChange={(e) => setPayLink(e.target.value)} placeholder="https://mpago.la/..." />
+            </div>
+            <div>
+              <Label htmlFor="payment_link_label">{t('form.paymentLink.label')}</Label>
+              <Input id="payment_link_label" value={payLinkLabel} maxLength={80} onChange={(e) => setPayLinkLabel(e.target.value)} placeholder={t('form.paymentLink.labelPlaceholder')} />
             </div>
           </CardContent>
         </Card>

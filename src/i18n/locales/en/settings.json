@@ -111,5 +111,17 @@
     "credentialPlaceholder": "e.g. 8 years in custom woodworking, certified by SENAI.",
     "testimonial": "Short client testimonial",
     "testimonialPlaceholder": "e.g. \"Delivered on time and the finish was flawless.\" — Marina"
+  },
+  "paymentLink": {
+    "title": "Payment link (card)",
+    "description": "Paste your business payment link (Mercado Pago, PagSeguro, Stripe or other). It shows on proposals with a \"Pay by card\" button. Payment goes straight to you — Orca does not process it.",
+    "url": "Payment link",
+    "label": "Text for the client (optional)",
+    "labelPlaceholder": "E.g.: Pay in up to 12 installments",
+    "save": "Save link",
+    "remove": "Remove link",
+    "saved": "Payment link saved",
+    "removed": "Payment link removed",
+    "invalid": "Invalid link: use an address starting with https://"
   }
 }

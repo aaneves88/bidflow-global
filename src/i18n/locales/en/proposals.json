@@ -93,6 +93,14 @@
       "coverHelp": "Opening page with your brand, the proposal title, the client and the date.",
       "whyMe": "Why me",
       "whyMeHelp": "Your photo, credential and a short client testimonial (filled in Settings → Branding)."
+    },
+    "paymentLink": {
+      "title": "Payment link (card)",
+      "hint": "Optional. Leave blank to use the link saved in My account, or paste a link just for this proposal.",
+      "url": "Payment link",
+      "label": "Text for the client (optional)",
+      "labelPlaceholder": "E.g.: Pay in up to 12 installments",
+      "invalid": "Invalid payment link: use an address starting with https://"
     }
   },
   "view": {

@@ -93,6 +93,14 @@
       "coverHelp": "Página de abertura com sua marca, o título da proposta, o cliente e a data.",
       "whyMe": "Por que eu",
       "whyMeHelp": "Sua foto, credencial e um depoimento curto de cliente (preenchidos em Configurações → Marca)."
+    },
+    "paymentLink": {
+      "title": "Link de pagamento (cartão)",
+      "hint": "Opcional. Deixe em branco para usar o link salvo em Minha conta, ou cole um link só para esta proposta.",
+      "url": "Link de pagamento",
+      "label": "Texto para o cliente (opcional)",
+      "labelPlaceholder": "Ex.: Pague em até 12x no cartão",
+      "invalid": "Link de pagamento inválido: use um endereço que comece com https://"
     }
   },
   "view": {

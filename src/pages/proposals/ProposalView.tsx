@@ -75,7 +75,7 @@ export default function ProposalView() {
       if (!auth.user) return null;
       const { data } = await supabase
         .from('profiles')
-        .select('pix_key, pix_key_type, company_name, full_name')
+        .select('pix_key, pix_key_type, company_name, full_name, payment_link, payment_link_label')
         .eq('id', auth.user.id)
         .maybeSingle();
       return data;
@@ -194,6 +194,16 @@ export default function ProposalView() {
       annexTitle: t('public:attachment.title'),
       annexProductLabel: t('public:attachment.productWord'),
       pix: pixBlock,
+      paymentLink: (() => {
+        const own = ((proposal as any).payment_link || '').trim();
+        const url = own || (profilePix?.payment_link || '').trim();
+        if (!url) return undefined;
+        return {
+          url,
+          label: (own ? (proposal as any).payment_link_label : profilePix?.payment_link_label) || t('public:paymentLink.defaultLabel'),
+          title: t('public:paymentLink.title'),
+        };
+      })(),
       companyName,
 
       tagline: canBrand ? branding.tagline || undefined : undefined,

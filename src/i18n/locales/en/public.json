@@ -87,5 +87,11 @@
     "title": "Annex — Products",
     "product": "Product {{letter}}",
     "productWord": "Product"
+  },
+  "paymentLink": {
+    "title": "Pay by card",
+    "defaultLabel": "Pay by credit card through the recipient's secure link.",
+    "button": "Pay by card",
+    "disclaimer": "Payment goes directly to the recipient. Orca does not process or intermediate this transaction."
   }
 }
