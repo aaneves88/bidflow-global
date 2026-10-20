@@ -17,7 +17,7 @@ import { Seo } from '@/components/Seo';
 import { trackProductEvent } from '@/lib/productEvents';
 import { trackMeta } from '@/lib/analytics';
 
-export default function Pricing() {
+export default function Pricing({ embedded = false }: { embedded?: boolean } = {}) {
   const { t } = useTranslation(['pricing', 'common']);
   const { user } = useAuth();
   const { plans, isLoading } = usePlans();
@@ -88,13 +88,13 @@ export default function Pricing() {
     : `Comece grátis com ${freeLimit} e evolua para o plano pago com propostas e clientes ilimitados, PDF e marca própria. Sem fidelidade.`;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={embedded ? "" : "min-h-screen bg-background"}>
       <Seo
         title="Planos e preços — Orca | Grátis para começar"
         description={seoDescription}
         path="/pricing"
       />
-      <nav className="border-b">
+      {!embedded && <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="text-xl font-bold tracking-tight">Orca</Link>
           <div className="flex items-center gap-3">
@@ -110,9 +110,9 @@ export default function Pricing() {
             )}
           </div>
         </div>
-      </nav>
+      </nav>}
 
-      <section className="py-16 sm:py-24">
+      <section className={embedded ? "py-4" : "py-16 sm:py-24"}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">{t('title')}</h1>

@@ -32,8 +32,8 @@ export function AppSidebar() {
     { title: t('nav.products'), url: '/products', icon: Package },
     { title: t('nav.proposals'), url: '/proposals', icon: FileText },
     { title: t('nav.snippets'), url: '/snippets', icon: LibraryBig },
-    { title: t('nav.pricing'), url: '/pricing', icon: CreditCard },
-    { title: t('nav.referrals'), url: '/convidar', icon: Gift },
+    { title: t('nav.pricing'), url: '/app/planos', icon: CreditCard },
+    { title: t('nav.referrals'), url: '/app/indique', icon: Gift },
     { title: t('nav.account'), url: '/account', icon: UserCircle },
     { title: t('nav.settings'), url: '/settings', icon: Settings },
   ];
