@@ -51,7 +51,9 @@ i18n
     defaultNS,
     interpolation: { escapeValue: false },
     detection: {
-      order: ['localStorage', 'navigator'],
+      // Sem 'navigator': o site é sempre pt-BR (inclusive para o Google).
+      // Inglês só aparece se a pessoa escolher nas configurações.
+      order: ['localStorage'],
       caches: ['localStorage'],
       lookupLocalStorage: 'closeflow_lang',
     },
