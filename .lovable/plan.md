@@ -13,7 +13,7 @@ Diagnóstico: o tráfego vem quase todo de anúncios Meta (49 de 77 visitas, pes
 3. **Proposta de exemplo pronta no 1º acesso** (decidido): ao terminar o onboarding, criamos uma proposta já preenchida do ofício dela; só edita e envia.
 4. **Aviso de "cliente abriu"** (decidido): sininho + e-mail "Seu cliente abriu agora", com botão pronto de WhatsApp para o cliente.
 5. **Contagem do teste + lembretes** (decidido): faixa "faltam X dias" no app e e-mails no dia 5 e no dia 7, mostrando quanto ela já enviou em propostas; ao tentar criar depois do teste, tela de assinar (mensal ou anual).
-7. **Indicação com recompensa real**: hoje a página /convidar promete "créditos" sem regra. Definir: quem indica ganha 1 mês grátis quando o indicado assina; indicado ganha 10%.
+7. **Indicação** (decidido: fica como está): recompensa segue manual pelo admin (1 mês adicional). Sem mudança agora.
 8. **Página "Seja parceiro"** (contadores, escolas de cursos, influenciadores de MEI) com cadastro e cupom de 10% — o vídeo de parceiro já existe e aponta para algo que ainda não existe.
 
 ## Parte B — Estratégia (fora do app)
