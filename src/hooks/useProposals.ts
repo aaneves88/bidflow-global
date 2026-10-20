@@ -193,6 +193,7 @@ export function useCreateProposal() {
           unit_price: item.unit_price,
           total: item.total,
           position: idx,
+          product_id: item.product_id ?? null,
         }));
         const { error: itemsErr } = await supabase.from('proposal_items').insert(items);
         if (itemsErr) throw itemsErr;
@@ -276,6 +277,7 @@ export function useUpdateProposal() {
           unit_price: item.unit_price,
           total: item.total,
           position: idx,
+          product_id: item.product_id ?? null,
         }));
         const { error: itemsErr } = await supabase.from('proposal_items').insert(items);
         if (itemsErr) throw itemsErr;
@@ -425,6 +427,7 @@ export function useDuplicateProposal() {
           unit_price: it.unit_price,
           total: it.total,
           position: idx,
+          product_id: it.product_id ?? null,
         }));
         const { error: insErr } = await supabase.from('proposal_items').insert(newItems);
         if (insErr) throw insErr;
