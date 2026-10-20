@@ -692,22 +692,6 @@
         "title": "Anúncio — organizar orçamentos",
         "description": "Vídeo vertical para anúncios: organize seus orçamentos."
       },
-      "creativeCreate": {
-        "title": "Criar propostas",
-        "description": "Anúncio para campanhas."
-      },
-      "creativeTrack": {
-        "title": "Acompanhar propostas",
-        "description": "Anúncio para campanhas."
-      },
-      "creativeOrganize": {
-        "title": "Organizar orçamentos",
-        "description": "Anúncio para campanhas."
-      },
-      "creativeNext": {
-        "title": "Seu próximo orçamento",
-        "description": "Anúncio para campanhas."
-      }
     },
     "categories": {
       "tutorials": "Tutoriais do app",
