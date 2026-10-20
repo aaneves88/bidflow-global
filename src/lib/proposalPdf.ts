@@ -739,3 +739,17 @@ export async function generateProposalPdf(
 
   doc.save(`proposta-${proposal.public_code}.pdf`);
 }
+
+/** Loads an image URL and returns a square-cropped JPEG data URL for the PDF. */
+async function urlToJpegDataUrl(url: string): Promise<string> {
+  const blob = await (await fetch(url)).blob();
+  const bmp = await createImageBitmap(blob);
+  const side = Math.min(bmp.width, bmp.height);
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = Math.min(side, 800);
+  const ctx = canvas.getContext('2d')!;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/jpeg', 0.82);
+}
