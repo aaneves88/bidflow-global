@@ -40,7 +40,7 @@ export function BrandUpsellBanner() {
           {t('brandUpsell.message')}
         </p>
         <Button size="sm" variant="outline" asChild>
-          <Link to="/pricing">{t('brandUpsell.cta')}</Link>
+          <Link to="/app/planos">{t('brandUpsell.cta')}</Link>
         </Button>
         <button
           type="button"

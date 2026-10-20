@@ -241,7 +241,7 @@ function BrandingTab() {
           <Lock className="h-4 w-4" />
           <AlertDescription>
             {t('branding.freeLocked')}{' '}
-            <Link to="/pricing" className="font-medium underline">
+            <Link to="/app/planos" className="font-medium underline">
               {t('branding.freeLockedCta')}
             </Link>
           </AlertDescription>
