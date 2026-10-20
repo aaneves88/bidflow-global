@@ -707,5 +707,12 @@
       "partners": "Parceiros",
       "ads": "Anúncios"
     }
+  },
+  "groups": {
+    "numbers": "Números",
+    "people": "Usuários",
+    "sales": "Vendas",
+    "marketing": "Marketing",
+    "system": "Sistema"
   }
 }

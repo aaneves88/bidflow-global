@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useRef } from 'react';
 import AdminOverview from './AdminOverview';
 import AdminUsers from './AdminUsers';
 import AdminPlans from './AdminPlans';
@@ -21,69 +20,63 @@ import AdminVideos from './AdminVideos';
 
 
 
+const GROUPS: { key: string; tabs: string[] }[] = [
+  { key: 'numbers', tabs: ['overview', 'weekly', 'niches'] },
+  { key: 'people', tabs: ['users', 'support', 'leads'] },
+  { key: 'sales', tabs: ['plans', 'referrals', 'partners'] },
+  { key: 'marketing', tabs: ['marketing', 'videos', 'brand'] },
+  { key: 'system', tabs: ['statuses', 'integrations', 'qa', 'roadmap'] },
+];
+
+const PANELS: Record<string, JSX.Element> = {
+  overview: <AdminOverview />,
+  weekly: <AdminWeekly />,
+  niches: <AdminNicheFunnel />,
+  users: <AdminUsers />,
+  support: <AdminSupport />,
+  leads: <AdminEbookLeads />,
+  plans: <AdminPlans />,
+  referrals: <AdminReferrals />,
+  partners: <AdminPartners />,
+  marketing: <AdminMarketing />,
+  videos: <AdminVideos />,
+  brand: <AdminBrand />,
+  statuses: <AdminStatuses />,
+  integrations: <AdminIntegrations />,
+  qa: <AdminQAChecklist />,
+  roadmap: <AdminRoadmap />,
+};
+
 export default function Admin() {
   const { t } = useTranslation('admin');
   const { t: tSupport } = useTranslation('support');
-  const tabsListRef = useRef<HTMLDivElement>(null);
-
   const [searchParams, setSearchParams] = useSearchParams();
-  const tab = searchParams.get('tab') || 'overview';
+  const requested = searchParams.get('tab') || 'overview';
+  const tab = PANELS[requested] ? requested : 'overview';
+  const group = GROUPS.find((g) => g.tabs.includes(tab)) ?? GROUPS[0];
 
-  useEffect(() => {
-    const container = tabsListRef.current;
-    if (!container) return;
-
-    const active = container.querySelector('[role="tab"][data-state="active"]') as HTMLElement | null;
-    if (!active) return;
-
-    active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }, [tab]);
+  const tabLabel = (key: string) => (key === 'support' ? tSupport('admin.title') : t(`tabs.${key}`));
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
-      <Tabs value={tab} onValueChange={(v) => setSearchParams({ tab: v })}>
-        <TabsList
-          ref={tabsListRef}
-          className="relative flex w-full justify-start overflow-x-auto rounded-md bg-muted p-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
-          <TabsTrigger value="weekly">{t('tabs.weekly')}</TabsTrigger>
-          <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
-          <TabsTrigger value="referrals">{t('tabs.referrals')}</TabsTrigger>
-          <TabsTrigger value="partners">{t('tabs.partners')}</TabsTrigger>
-          <TabsTrigger value="plans">{t('tabs.plans')}</TabsTrigger>
-          <TabsTrigger value="statuses">{t('tabs.statuses')}</TabsTrigger>
-          <TabsTrigger value="integrations">{t('tabs.integrations')}</TabsTrigger>
-          <TabsTrigger value="qa">{t('tabs.qa')}</TabsTrigger>
-          <TabsTrigger value="roadmap">{t('tabs.roadmap')}</TabsTrigger>
-          <TabsTrigger value="support">{tSupport('admin.title')}</TabsTrigger>
-          <TabsTrigger value="leads">{t('tabs.leads')}</TabsTrigger>
-          <TabsTrigger value="niches">{t('tabs.niches')}</TabsTrigger>
-          <TabsTrigger value="marketing">{t('tabs.marketing')}</TabsTrigger>
-          <TabsTrigger value="brand">{t('tabs.brand')}</TabsTrigger>
-          <TabsTrigger value="videos">{t('tabs.videos')}</TabsTrigger>
+      <Tabs value={group.key} onValueChange={(g) => setSearchParams({ tab: GROUPS.find((x) => x.key === g)!.tabs[0] })}>
+        <TabsList className="flex w-full justify-start overflow-x-auto [scrollbar-width:none]">
+          {GROUPS.map((g) => (
+            <TabsTrigger key={g.key} value={g.key}>{t(`groups.${g.key}`)}</TabsTrigger>
+          ))}
         </TabsList>
-        <TabsContent value="overview"><AdminOverview /></TabsContent>
-        <TabsContent value="weekly"><AdminWeekly /></TabsContent>
-        <TabsContent value="users"><AdminUsers /></TabsContent>
-        <TabsContent value="referrals"><AdminReferrals /></TabsContent>
-        <TabsContent value="partners"><AdminPartners /></TabsContent>
-        <TabsContent value="plans"><AdminPlans /></TabsContent>
-        <TabsContent value="statuses"><AdminStatuses /></TabsContent>
-        <TabsContent value="integrations"><AdminIntegrations /></TabsContent>
-        <TabsContent value="qa"><AdminQAChecklist /></TabsContent>
-        <TabsContent value="roadmap"><AdminRoadmap /></TabsContent>
-        <TabsContent value="support"><AdminSupport /></TabsContent>
-        <TabsContent value="leads"><AdminEbookLeads /></TabsContent>
-        <TabsContent value="niches"><AdminNicheFunnel /></TabsContent>
-        <TabsContent value="marketing"><AdminMarketing /></TabsContent>
-        <TabsContent value="brand"><AdminBrand /></TabsContent>
-        <TabsContent value="videos"><AdminVideos /></TabsContent>
-
+      </Tabs>
+      <Tabs value={tab} onValueChange={(v) => setSearchParams({ tab: v })}>
+        <TabsList className="flex w-full justify-start overflow-x-auto bg-transparent p-0 gap-1 [scrollbar-width:none]">
+          {group.tabs.map((k) => (
+            <TabsTrigger key={k} value={k} className="rounded-full border data-[state=active]:border-primary">
+              {tabLabel(k)}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <TabsContent value={tab}>{PANELS[tab]}</TabsContent>
       </Tabs>
     </div>
   );
 }
-
-

@@ -99,7 +99,8 @@
     "manage": "Gerenciar assinatura",
     "upgrade": "Fazer upgrade",
     "portalError": "Não foi possível abrir o portal de assinatura",
-    "portalErrorHint": "Tente novamente em instantes. Se persistir, fale com o suporte."
+    "portalErrorHint": "Tente novamente em instantes. Se persistir, fale com o suporte.",
+    "adminPlan": "Administrador — acesso total"
   },
   "whyMe": {
     "title": "Por que eu",

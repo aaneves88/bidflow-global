@@ -88,5 +88,14 @@
       "title": "Scope summary",
       "body": "This quote covers the deliverables described below, with support throughout the project."
     }
+  },
+  "help": {
+    "title": "What are text blocks for?",
+    "what": "Ready-made texts you reuse in proposals: terms, payment conditions, warranty, \"why me\" and notes.",
+    "step1": "Create a block here with a title and text.",
+    "step2": "In the proposal, click \"Insert block\" next to the field.",
+    "step3": "The text goes into the field and you can still edit it.",
+    "close": "Close",
+    "picker": "Pick a ready-made text from your library for this field. Create new ones in Text blocks."
   }
 }

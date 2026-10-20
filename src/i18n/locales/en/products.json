@@ -31,7 +31,12 @@
     "price": "Default price",
     "unit": "Unit",
     "unitPlaceholder": "unit, hour, month...",
-    "isActive": "Active (shows in the catalog when creating proposals)"
+    "isActive": "Active (shows in the catalog when creating proposals)",
+    "images": "Images (up to 3)",
+    "imagesHint": "JPG, PNG or WebP, up to 5 MB each. Shown in the proposal annex.",
+    "addImage": "Add image",
+    "removeImage": "Remove image",
+    "imageInvalid": "Invalid image: use JPG, PNG or WebP up to 5 MB."
   },
   "delete": {
     "title": "Remove item?",
