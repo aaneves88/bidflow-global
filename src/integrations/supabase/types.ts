@@ -496,6 +496,8 @@ export type Database = {
           id: string
           logo_url: string | null
           onboarding_complete: boolean
+          payment_link: string | null
+          payment_link_label: string | null
           photo_url: string | null
           pix_key: string | null
           pix_key_type: string | null
@@ -524,6 +526,8 @@ export type Database = {
           id: string
           logo_url?: string | null
           onboarding_complete?: boolean
+          payment_link?: string | null
+          payment_link_label?: string | null
           photo_url?: string | null
           pix_key?: string | null
           pix_key_type?: string | null
@@ -552,6 +556,8 @@ export type Database = {
           id?: string
           logo_url?: string | null
           onboarding_complete?: boolean
+          payment_link?: string | null
+          payment_link_label?: string | null
           photo_url?: string | null
           pix_key?: string | null
           pix_key_type?: string | null
@@ -804,6 +810,8 @@ export type Database = {
           discount_type: string
           id: string
           notes: string | null
+          payment_link: string | null
+          payment_link_label: string | null
           pix_key: string | null
           pix_key_type: string | null
           public_code: string
@@ -829,6 +837,8 @@ export type Database = {
           discount_type?: string
           id?: string
           notes?: string | null
+          payment_link?: string | null
+          payment_link_label?: string | null
           pix_key?: string | null
           pix_key_type?: string | null
           public_code?: string
@@ -854,6 +864,8 @@ export type Database = {
           discount_type?: string
           id?: string
           notes?: string | null
+          payment_link?: string | null
+          payment_link_label?: string | null
           pix_key?: string | null
           pix_key_type?: string | null
           public_code?: string
@@ -1415,6 +1427,13 @@ export type Database = {
           secondary_color: string
           tagline: string
           trust_note: string
+        }[]
+      }
+      get_proposal_payment_link: {
+        Args: { p_code: string }
+        Returns: {
+          label: string
+          url: string
         }[]
       }
       get_proposal_pix: {
