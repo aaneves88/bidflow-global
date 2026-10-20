@@ -37,6 +37,8 @@ export type Proposal = {
   discount_type?: string | null;
   pix_key?: string | null;
   pix_key_type?: string | null;
+  payment_link?: string | null;
+  payment_link_label?: string | null;
   show_cover?: boolean | null;
   show_why_me?: boolean | null;
   status_id: string | null;
@@ -60,6 +62,8 @@ export type ProposalFormData = {
   discount_type?: DiscountType;
   pix_key?: string | null;
   pix_key_type?: string | null;
+  payment_link?: string | null;
+  payment_link_label?: string | null;
   show_cover?: boolean;
   show_why_me?: boolean;
   items: ProposalItem[];
@@ -177,6 +181,8 @@ export function useCreateProposal() {
           valid_until: data.valid_until || null,
           pix_key: data.pix_key?.trim() || null,
           pix_key_type: data.pix_key?.trim() ? data.pix_key_type || null : null,
+          payment_link: data.payment_link?.trim() || null,
+          payment_link_label: data.payment_link?.trim() ? data.payment_link_label?.trim() || null : null,
           show_cover: !!data.show_cover,
           show_why_me: !!data.show_why_me,
           public_code,
@@ -261,6 +267,8 @@ export function useUpdateProposal() {
           valid_until: data.valid_until || null,
           pix_key: data.pix_key?.trim() || null,
           pix_key_type: data.pix_key?.trim() ? data.pix_key_type || null : null,
+          payment_link: data.payment_link?.trim() || null,
+          payment_link_label: data.payment_link?.trim() ? data.payment_link_label?.trim() || null : null,
           show_cover: !!data.show_cover,
           show_why_me: !!data.show_why_me,
         })
@@ -411,6 +419,8 @@ export function useDuplicateProposal() {
           status_id: initial?.id ?? null,
           valid_until: src.valid_until,
           pix_key: (src as any).pix_key ?? null,
+          payment_link: (src as any).payment_link ?? null,
+          payment_link_label: (src as any).payment_link_label ?? null,
           pix_key_type: (src as any).pix_key_type ?? null,
           show_cover: (src as any).show_cover ?? false,
           show_why_me: (src as any).show_why_me ?? false,
@@ -452,6 +462,7 @@ export type PublicProposalBundle = {
   proposal: any;
   signature: { signer_name: string; signed_at: string } | null;
   pix: { pix_key: string; pix_key_type: string | null; merchant_name: string } | null;
+  paymentLink: { url: string; label: string | null } | null;
   branding: PublicBranding;
 };
 
@@ -469,6 +480,7 @@ export function usePublicProposal(publicCode: string | undefined) {
         proposal: data.proposal,
         signature: data.signature ?? null,
         pix: data.pix ?? null,
+        paymentLink: data.paymentLink ?? null,
         branding: mapPublicBranding(data.branding),
       };
     },

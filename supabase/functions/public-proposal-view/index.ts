@@ -50,11 +50,12 @@ Deno.serve(async (req) => {
     }
 
     // action === 'load': one round-trip for everything the public page needs.
-    const [proposalRes, signatureRes, pixRes, brandingRes] = await Promise.all([
+    const [proposalRes, signatureRes, pixRes, brandingRes, payLinkRes] = await Promise.all([
       admin.rpc('get_public_proposal', { p_code: publicCode }),
       admin.rpc('get_proposal_signature', { p_code: publicCode }),
       admin.rpc('get_proposal_pix', { p_code: publicCode }),
       admin.rpc('get_proposal_branding', { p_code: publicCode }),
+      admin.rpc('get_proposal_payment_link', { p_code: publicCode }),
     ]);
 
     if (proposalRes.error) {
@@ -71,6 +72,7 @@ Deno.serve(async (req) => {
       signature: first(signatureRes),
       pix: first(pixRes),
       branding: first(brandingRes),
+      paymentLink: first(payLinkRes),
     });
   } catch (e) {
     console.error('public-proposal-view error', e);
