@@ -41,27 +41,3 @@ export function videoSource(v: LibraryVideo): string | null {
   return v.asset?.url ?? v.publicPath ?? null;
 }
 
-export type CreativeFormat = 'square' | 'portrait' | 'vertical';
-
-export interface AdCreative {
-  key: string;
-  src: string;
-  file: string;
-  format: CreativeFormat;
-}
-
-// Final corrected versions only: where a _v2 file exists, it supersedes the original.
-export const AD_CREATIVES: AdCreative[] = [
-  { key: 'creativeCreate', src: '/ads/creatives/criar_propostas_square.jpg', file: 'criar_propostas_square.jpg', format: 'square' },
-  { key: 'creativeCreate', src: '/ads/creatives/criar_propostas_portrait.jpg', file: 'criar_propostas_portrait.jpg', format: 'portrait' },
-  { key: 'creativeCreate', src: '/ads/creatives/criar_propostas_vertical.jpg', file: 'criar_propostas_vertical.jpg', format: 'vertical' },
-  { key: 'creativeTrack', src: '/ads/creatives/acompanhar_propostas_square_v2.jpg', file: 'acompanhar_propostas_square_v2.jpg', format: 'square' },
-  { key: 'creativeTrack', src: '/ads/creatives/acompanhar_propostas_portrait_v2.jpg', file: 'acompanhar_propostas_portrait_v2.jpg', format: 'portrait' },
-  { key: 'creativeTrack', src: '/ads/creatives/acompanhar_propostas_vertical_v2.jpg', file: 'acompanhar_propostas_vertical_v2.jpg', format: 'vertical' },
-  { key: 'creativeOrganize', src: '/ads/creatives/organizar_orcamentos_square.jpg', file: 'organizar_orcamentos_square.jpg', format: 'square' },
-  { key: 'creativeOrganize', src: '/ads/creatives/organizar_orcamentos_portrait.jpg', file: 'organizar_orcamentos_portrait.jpg', format: 'portrait' },
-  { key: 'creativeOrganize', src: '/ads/creatives/organizar_orcamentos_vertical_v2.jpg', file: 'organizar_orcamentos_vertical_v2.jpg', format: 'vertical' },
-  { key: 'creativeNext', src: '/ads/creatives/proximo_orcamento_square.jpg', file: 'proximo_orcamento_square.jpg', format: 'square' },
-  { key: 'creativeNext', src: '/ads/creatives/proximo_orcamento_portrait_v2.jpg', file: 'proximo_orcamento_portrait_v2.jpg', format: 'portrait' },
-  { key: 'creativeNext', src: '/ads/creatives/proximo_orcamento_vertical_v2.jpg', file: 'proximo_orcamento_vertical_v2.jpg', format: 'vertical' },
-];
