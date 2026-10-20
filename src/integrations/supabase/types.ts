@@ -451,6 +451,7 @@ export type Database = {
           default_price: number
           description: string | null
           id: string
+          image_urls: string[]
           is_active: boolean
           name: string
           unit: string | null
@@ -462,6 +463,7 @@ export type Database = {
           default_price?: number
           description?: string | null
           id?: string
+          image_urls?: string[]
           is_active?: boolean
           name: string
           unit?: string | null
@@ -473,6 +475,7 @@ export type Database = {
           default_price?: number
           description?: string | null
           id?: string
+          image_urls?: string[]
           is_active?: boolean
           name?: string
           unit?: string | null
@@ -603,6 +606,7 @@ export type Database = {
           description: string
           id: string
           position: number
+          product_id: string | null
           proposal_id: string
           quantity: number
           total: number
@@ -613,6 +617,7 @@ export type Database = {
           description?: string
           id?: string
           position?: number
+          product_id?: string | null
           proposal_id: string
           quantity?: number
           total?: number
@@ -623,12 +628,20 @@ export type Database = {
           description?: string
           id?: string
           position?: number
+          product_id?: string | null
           proposal_id?: string
           quantity?: number
           total?: number
           unit_price?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "proposal_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "proposal_items_proposal_id_fkey"
             columns: ["proposal_id"]
