@@ -154,7 +154,7 @@ export default function ProposalView() {
     setCloseOpen(false);
   };
 
-  const handlePdf = () => {
+  const handlePdf = async () => {
     if (!items) return;
     const companyName = canBrand
       ? (branding.companyName || (getSetting('company_name') as string) || undefined)
