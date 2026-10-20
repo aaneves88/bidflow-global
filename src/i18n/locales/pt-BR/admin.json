@@ -679,12 +679,25 @@
       "partner": {
         "title": "Seja nosso parceiro",
         "description": "Indique o Orca com 10% de desconto."
+      },
+      "adCreateProposals": {
+        "title": "Anúncio — criar propostas",
+        "description": "Vídeo vertical para anúncios: crie propostas em minutos."
+      },
+      "adTrackProposals": {
+        "title": "Anúncio — acompanhar propostas",
+        "description": "Vídeo vertical para anúncios: saiba quando o cliente abre a proposta."
+      },
+      "adBudgets": {
+        "title": "Anúncio — organizar orçamentos",
+        "description": "Vídeo vertical para anúncios: organize seus orçamentos."
       }
     },
     "categories": {
       "tutorials": "Tutoriais do app",
       "education": "Educativos",
-      "partners": "Parceiros"
+      "partners": "Parceiros",
+      "ads": "Anúncios"
     }
   }
 }

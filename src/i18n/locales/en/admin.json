@@ -679,12 +679,25 @@
       "partner": {
         "title": "Become a partner",
         "description": "Recommend Orca with 10% off."
+      },
+      "adCreateProposals": {
+        "title": "Ad — create proposals",
+        "description": "Vertical video for ads: create proposals in minutes."
+      },
+      "adTrackProposals": {
+        "title": "Ad — track proposals",
+        "description": "Vertical video for ads: know when the client opens your proposal."
+      },
+      "adBudgets": {
+        "title": "Ad — organize budgets",
+        "description": "Vertical video for ads: organize your budgets."
       }
     },
     "categories": {
       "tutorials": "App tutorials",
       "education": "Educational",
-      "partners": "Partners"
+      "partners": "Partners",
+      "ads": "Ads"
     }
   }
 }
