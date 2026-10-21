@@ -699,6 +699,10 @@
       "adOpened": {
         "title": "Ad — know when the client opened",
         "description": "Vertical video for ads: proposal viewed alert."
+      },
+      "adPayment": {
+        "title": "Ad — your client approves and pays",
+        "description": "Vertical video for ads: PIX or card payment on the proposal."
       }
     },
     "categories": {
