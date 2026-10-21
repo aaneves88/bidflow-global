@@ -19,7 +19,10 @@ function HelpVideo({ video }: { video: LibraryVideo }) {
               src={src}
               aria-label={title}
               controls
-              controlsList="nodownload"
+              controlsList="nodownload noplaybackrate"
+              disablePictureInPicture
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
               playsInline
               preload="metadata"
               onError={() => setFailed(true)}
