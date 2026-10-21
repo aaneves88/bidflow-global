@@ -24,6 +24,7 @@ import ProposalView from "@/pages/proposals/ProposalView";
 import PublicProposal from "@/pages/proposals/PublicProposal";
 import Admin from "@/pages/admin/Admin";
 import SettingsPage from "@/pages/settings/SettingsPage";
+import Help from "@/pages/Help";
 import NotFound from "@/pages/NotFound";
 import LegalPage from "@/pages/legal/LegalPage";
 import Privacy from "@/pages/Privacy";
@@ -175,6 +176,14 @@ const App = () => (
               element={
                 <ProtectedRoute requireAdmin>
                   <AppLayout><Admin /></AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ajuda"
+              element={
+                <ProtectedRoute>
+                  <AppLayout><Help /></AppLayout>
                 </ProtectedRoute>
               }
             />

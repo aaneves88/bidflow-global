@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, FileText, Package, LibraryBig, Settings, Shield, LogOut, CreditCard, UserCircle, Gift } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Package, LibraryBig, Settings, Shield, LogOut, CreditCard, UserCircle, Gift, CircleHelp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from '@/components/NavLink';
 import { useLocation } from 'react-router-dom';
@@ -34,6 +34,7 @@ export function AppSidebar() {
     { title: t('nav.snippets'), url: '/snippets', icon: LibraryBig },
     { title: t('nav.pricing'), url: '/app/planos', icon: CreditCard },
     { title: t('nav.referrals'), url: '/app/indique', icon: Gift },
+    { title: t('nav.help'), url: '/ajuda', icon: CircleHelp },
     { title: t('nav.account'), url: '/account', icon: UserCircle },
     { title: t('nav.settings'), url: '/settings', icon: Settings },
   ];
