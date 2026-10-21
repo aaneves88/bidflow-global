@@ -699,6 +699,10 @@
       "adOpened": {
         "title": "Anúncio — saiba quando o cliente abriu",
         "description": "Vídeo vertical para anúncios: aviso de proposta visualizada."
+      },
+      "adPayment": {
+        "title": "Anúncio — seu cliente aprova e já paga",
+        "description": "Vídeo vertical para anúncios: pagamento por PIX ou cartão na proposta."
       }
     },
     "categories": {
