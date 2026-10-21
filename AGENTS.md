@@ -1,5 +1,8 @@
 # Project Rules (Orca)
 
+## Customer help
+- The authenticated help page filters the shared video catalog to tutorials and education, reuses its translated metadata, and has no plan/admin gate; this keeps customer help available to every plan without duplicating content.
+
 ## Homepage styling
 - Scope the homepage theme to `.orca-landing` with semantic CSS variables so marketing design changes never retheme the authenticated app.
 - Keep the homepage watermark in a page-owned fixed decorative layer so it remains continuous while scrolling and disappears when leaving the homepage.

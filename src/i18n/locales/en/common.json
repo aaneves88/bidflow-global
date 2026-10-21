@@ -56,7 +56,16 @@
     "administration": "Administration",
     "products": "Products",
     "snippets": "Text blocks",
-    "referrals": "Refer and earn"
+    "referrals": "Refer and earn",
+    "help": "Help and tutorials"
+  },
+  "help": {
+    "title": "Help and tutorials",
+    "unavailable": "This video could not be loaded. Please try again later.",
+    "categories": {
+      "tutorials": "Getting started",
+      "education": "Tips and best practices"
+    }
   },
   "notifications": {
     "title": "Notifications",

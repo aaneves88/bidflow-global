@@ -56,7 +56,16 @@
     "administration": "Administração",
     "products": "Produtos",
     "snippets": "Blocos de texto",
-    "referrals": "Indique e ganhe"
+    "referrals": "Indique e ganhe",
+    "help": "Ajuda e tutoriais"
+  },
+  "help": {
+    "title": "Ajuda e tutoriais",
+    "unavailable": "Não foi possível carregar este vídeo. Tente novamente mais tarde.",
+    "categories": {
+      "tutorials": "Primeiros passos",
+      "education": "Dicas e boas práticas"
+    }
   },
   "notifications": {
     "title": "Notificações",

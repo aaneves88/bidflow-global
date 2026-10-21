@@ -40,6 +40,14 @@ const RAW_VIDEOS = ([
 
 export const TUTORIAL_VIDEOS: LibraryVideo[] = RAW_VIDEOS;
 
+export const HELP_VIDEO_CATEGORIES = ['tutorials', 'education'] as const;
+
+export function getHelpVideos() {
+  return TUTORIAL_VIDEOS.filter((video) =>
+    HELP_VIDEO_CATEGORIES.some((category) => category === video.category),
+  );
+}
+
 export function videoSource(v: LibraryVideo): string | null {
   return v.asset?.url ?? v.publicPath ?? null;
 }

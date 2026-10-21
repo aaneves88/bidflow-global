@@ -1,4 +1,5 @@
 # Homepage design
+- [x] Central de ajuda para usuários logados: oito tutoriais/educativos do catálogo existente, sem anúncios ou parceiros, acessível pelo menu em todos os planos.
 - [x] Scope the darker visual theme to the homepage.
 - [x] Replace literal banknotes with abstract business/growth imagery inspired by Schanna's television-opening reference.
 - [x] Verify the homepage and signup link on desktop and mobile.
