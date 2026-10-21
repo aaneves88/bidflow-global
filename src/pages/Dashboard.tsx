@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { formatCurrency, formatDate } from '@/lib/format';
 import { UsageIndicator } from '@/components/UsageIndicator';
 import { AttentionPanel } from '@/components/dashboard/AttentionPanel';
+import { WhatsNewBanner } from '@/components/dashboard/WhatsNewBanner';
 import {
   FileText, Clock, CheckCircle, TrendingUp, AlertTriangle,
   DollarSign, ArrowUpRight, ArrowDownRight, Users, PlusCircle, Activity, Palette,
@@ -222,6 +223,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <WhatsNewBanner />
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>

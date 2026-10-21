@@ -69,5 +69,19 @@
     "expiredOn": "expired on {{date}}",
     "stalledFor": "stalled for {{days}} day(s)",
     "viewAll": "View all {{count}}"
+  },
+  "whatsNew": {
+    "title": "What's new in Orca",
+    "close": "Close",
+    "payment": {
+      "title": "Payment link right in the proposal",
+      "body": "You can now add a card payment link to any proposal — it shows on the public proposal page and in the PDF, next to the PIX QR code.",
+      "cta": "Set up my link"
+    },
+    "help": {
+      "title": "Help and tutorials",
+      "body": "Short videos showing how to use Orca in practice. Find it in the menu under \"Help and tutorials\".",
+      "cta": "Watch tutorials"
+    }
   }
 }

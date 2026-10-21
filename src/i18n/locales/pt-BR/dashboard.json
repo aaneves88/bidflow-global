@@ -69,5 +69,19 @@
     "expiredOn": "venceu em {{date}}",
     "stalledFor": "parada há {{days}} dia(s)",
     "viewAll": "Ver todas as {{count}}"
+  },
+  "whatsNew": {
+    "title": "Novidades no Orca",
+    "close": "Fechar novidades",
+    "payment": {
+      "title": "Pagamento por link direto na proposta",
+      "body": "Agora é possível adicionar um link de pagamento (cartão de crédito) em qualquer proposta — ele aparece tanto na página pública da proposta quanto no PDF, ao lado do QR Code do PIX. Seu cliente escolhe como prefere pagar, sem sair da proposta.",
+      "cta": "Configurar meu link"
+    },
+    "help": {
+      "title": "Central de Ajuda e Tutoriais",
+      "body": "Criamos uma área com vídeos curtos mostrando como usar o Orca na prática: criar cliente, criar e gerenciar proposta, como abordar um cliente, precificação, dicas pra quem é MEI ou está no Simples. Está disponível direto no menu, em \"Ajuda e tutoriais\".",
+      "cta": "Ver tutoriais"
+    }
   }
 }
