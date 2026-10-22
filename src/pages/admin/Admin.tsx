@@ -17,6 +17,8 @@ import AdminPartners from './AdminPartners';
 import AdminNicheFunnel from './AdminNicheFunnel';
 import AdminWeekly from './AdminWeekly';
 import AdminVideos from './AdminVideos';
+import AdminBroadcast from './AdminBroadcast';
+
 
 
 
