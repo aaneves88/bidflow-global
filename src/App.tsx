@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppLayout } from "@/components/AppLayout";
 import Login from "@/pages/auth/Login";
+import ForgotPassword from "@/pages/auth/ForgotPassword";
 import Register from "@/pages/auth/Register";
 import Landing from "@/pages/Landing";
 import Ebook from "@/pages/Ebook";
@@ -63,6 +64,7 @@ const App = () => (
             <Route path="/app" element={<MobileEntry />} />
             <Route path="/pricing" element={isNativeMobile() ? <MobilePaywall /> : <Pricing />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/esqueci-senha" element={<ForgotPassword />} />
             <Route path="/register" element={<Register />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />

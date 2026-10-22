@@ -77,6 +77,7 @@ export default function Login() {
             <div className="space-y-2">
               <Label htmlFor="password">{t('login.password')}</Label>
               <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
+              <Link to="/esqueci-senha" className="text-xs text-primary underline">{t('reset.link')}</Link>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-3">

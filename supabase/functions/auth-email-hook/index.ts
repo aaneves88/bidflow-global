@@ -52,6 +52,7 @@ const SAMPLE_DATA: Record<string, object> = {
   recovery: {
     siteName: SITE_NAME,
     confirmationUrl: SAMPLE_PROJECT_URL,
+    token: '123456',
   },
   invite: {
     siteName: SITE_NAME,
@@ -156,11 +157,12 @@ const handler = createAuthEmailHandler({
         }),
     },
     recovery: {
-      subject: 'Reset your password',
+      subject: 'Seu código para redefinir a senha',
       render: (data) =>
         React.createElement(RecoveryEmail, {
           siteName: SITE_NAME,
           confirmationUrl: data.url,
+          token: data.token ?? '',
         }),
     },
     email_change: {

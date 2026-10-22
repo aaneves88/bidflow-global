@@ -21,6 +21,7 @@ import { useStripePortal } from '@/hooks/useStripePortal';
 import { formatDate } from '@/lib/format';
 import { PixKeyCard } from '@/components/PixKeyCard';
 import { PaymentLinkCard } from '@/components/PaymentLinkCard';
+import { ChangePasswordCard } from '@/components/ChangePasswordCard';
 
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -74,6 +75,8 @@ export default function AccountPage() {
           </div>
         </CardContent>
       </Card>
+
+      <ChangePasswordCard />
 
       <Card>
         <CardHeader>

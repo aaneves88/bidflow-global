@@ -123,6 +123,9 @@ export default function MobileEntry() {
               minLength={6}
               className="h-12"
             />
+            {mode === 'signin' && (
+              <Link to="/esqueci-senha" className="block text-right text-xs text-primary underline">{t('reset.link')}</Link>
+            )}
             <Button type="submit" className="w-full h-12" disabled={loading}>
               {loading ? t('entry.loading') : mode === 'signin' ? t('entry.signInCta') : t('entry.signUpCta')}
             </Button>
