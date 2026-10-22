@@ -11,68 +11,78 @@ import { toast } from '@/hooks/use-toast';
 const DEFAULT_ROADMAP = `# Orca — Roadmap
 
 ## Fase 1 — Fundação
-- ✅ Autenticação (e-mail/senha)
-- ✅ Primeiro usuário vira admin
-- ✅ Perfis de usuário
-- ✅ Papéis e permissões
-- ✅ Modelo de planos
-- ✅ Configurações centralizadas
+- ✅ Autenticação (e-mail/senha) e login com Google
+- ✅ Primeiro usuário vira admin; papéis em tabela separada
+- ✅ Perfis, modelo de planos e configurações centralizadas
 
 ## Fase 2 — MVP Core
-- ✅ Dashboard
-- ✅ CRUD de clientes
-- ✅ CRUD de propostas
-- ✅ Status de propostas
-- ✅ Página pública da proposta
-- ✅ Aceitação pelo cliente
-- ✅ Mini pipeline de vendas
-- ✅ KPIs principais
+- ✅ Dashboard, clientes, propostas e status
+- ✅ Página pública da proposta, aceite e assinatura do cliente
+- ✅ Mini pipeline de vendas e KPIs
 
 ## Fase 3 — Admin & Configurações
-- ✅ Dashboard administrativo
-- ✅ Gestão de usuários
-- ✅ Concessão manual de plano
-- ✅ Gestão de planos
-- ✅ Configurações globais
-- ✅ Configurações Stripe
-- ✅ Configurações de marca
-- ✅ Gestão de status de propostas
+- ✅ Dashboard administrativo, usuários, concessão manual de plano
+- ✅ Gestão de planos, Stripe, marca e status de propostas
+- ✅ Menus do admin reorganizados em 5 grupos (Números, Usuários, Vendas, Marketing, Sistema)
 
 ## Fase 4 — Monetização
-- ✅ Primeira proposta grátis
-- ✅ Feature flags por plano (PDF, templates, branding)
-- ✅ Modal de upgrade
-- ✅ Indicador de uso no Dashboard e Propostas
-- 🔄 Stripe checkout fim-a-fim
-- 📋 Customer portal Stripe
-- 📋 Enforcement de limites por funcionalidade
+- ✅ Plano gratuito com limite de propostas; Premium R$29,90/mês
+- ✅ Feature flags por plano, modal de upgrade, indicador de uso
+- ✅ Planos e Indique com menu lateral; Minha conta mostra "Administrador — acesso total"
+- 🔄 Stripe checkout fim-a-fim e portal do cliente
+- 📋 Plano anual R$239,90
 
-## Fase 5 — Pronto para o comercial
-- ✅ Landing page
-- ✅ Localização pt-BR
-- ✅ Página de planos
-- ✅ Onboarding simples
-- ✅ Personalização visual (cores + logo)
-- ✅ Valor fechado por proposta
-- 🔄 Recuperação de senha
-- 📋 E-mails transacionais
-- 📋 Páginas legais (Privacidade, Termos)
+## Fase 5 — Segurança e base
+- ✅ Proteção (RLS) em todas as tabelas e revisão do linter
+- ✅ Funções do servidor revisadas (Stripe webhook e demais)
+- ✅ Limite de cadastros por IP (10 por dia)
+- ✅ Correção dos links públicos de proposta e rate limit
+- ✅ Validação de links no e-mail do e-book
+- 🔄 Nova varredura de segurança antes de divulgação em massa
 
-## Fase 6 — Crescimento
-- 📋 Filtros e busca avançada
-- 📋 Duplicar proposta
-- 📋 Templates de proposta
-- 📋 Notificação de proposta vista
-- 📋 Motivos de perda
-- 📋 Métricas por período
+## Fase 6 — Ativação
+- ✅ Auditoria completa de cadastro (desktop e celular) com relatório
+- ✅ CPF/CNPJ pedido só na hora de compartilhar a proposta
+- ✅ "+ Novo cliente" direto dentro do formulário da proposta
+- ✅ Proposta nova vai direto para a tela de compartilhar
+- ✅ Proposta de exemplo no primeiro acesso
+- ✅ Site sempre em português
 
-## Fase 7 — Escala
-- 📋 Times multi-usuário
-- 📋 Multi-workspace
-- 📋 Assinatura digital
-- 📋 Automação de follow-up
-- 📋 IA para sugestão de propostas
-- 📋 White-label
+## Fase 7 — Propostas
+- ✅ Até 3 imagens por produto (página pública e PDF)
+- ✅ PIX na proposta e no PDF
+- ✅ Link de pagamento com cartão (Mercado Pago e outros) na proposta e no PDF
+- ✅ Aviso "cliente abriu" no sininho, e-mail na 1ª abertura e botão de WhatsApp
+- ✅ Blocos de texto prontos com explicação de uso
+
+## Fase 8 — E-mails
+- ✅ Rotinas automáticas corrigidas (ativação, cupom, follow-up, e-book)
+- ✅ E-mail de feedback 7 dias após o cadastro
+- ✅ Disparo manual de novidades no admin, com modelos, prévia, teste e visual da marca
+- ✅ Recuperação de senha por código de 6 dígitos dentro do app
+- ✅ Alterar senha em Minha conta
+- 📋 Remetente @orca-mento.app para novidades (depende de configurar o domínio)
+
+## Fase 9 — Métricas e admin
+- ✅ Relatório semanal (cadastros, propostas, assinaturas)
+- ✅ Ativação por canal de aquisição (UTM)
+- ✅ Funil das páginas de nicho e hub de modelos
+- ✅ Google Ads e Tag Manager em produção
+
+## Fase 10 — Marketing
+- ✅ Kit de logotipo em alta definição (inclui versão clara)
+- ✅ Nova página inicial escura com marca d'água de fitas ciano
+- ✅ Vídeos tutoriais, educativos, parceiros e de anúncio na aba Vídeos
+- ✅ Criativos de anúncio (inclusive meios de pagamento) na aba Materiais
+- ✅ Central de ajuda (/ajuda) para usuários, sem download dos vídeos
+
+## Fase 11 — Engatilhado / Futuro
+- 📋 Teste de 7 dias + somente leitura e novo preço (aguardando Antonio)
+- 📋 E-mails dos dias 5 e 7 do teste
+- 📋 Indicação automática e página "Seja parceiro"
+- 📋 Ações fora do app (mensagens, anúncios, contadores, diretórios)
+- 📋 Página pública de orçamento para clientes do usuário (plano mais caro)
+- 📋 Times multi-usuário, IA para propostas, white-label
 `;
 
 interface ParsedSection {
