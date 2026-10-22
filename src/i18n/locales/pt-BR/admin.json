@@ -44,7 +44,9 @@
     "confirmTitle": "Confirmar envio",
     "confirmBody": "Você vai enviar este e-mail para {{count}} pessoas. Cada envio fica registrado e quem se descadastrou não recebe.",
     "cancel": "Cancelar",
-    "confirmSend": "Enviar agora"
+    "confirmSend": "Enviar agora",
+    "test": "Enviar teste para mim",
+    "testSent": "Teste enviado para {{email}}"
   },
   "niches": {
     "title": "Funil por nicho",

@@ -102,6 +102,22 @@ export default function AdminBroadcast() {
     }
   };
 
+  const [testing, setTesting] = useState(false);
+  const handleTest = async () => {
+    setTesting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-broadcast', {
+        body: { action: 'test', ...contentPayload() },
+      });
+      if (error) throw error;
+      toast({ title: t('broadcast.testSent', { email: data.email }) });
+    } catch (err) {
+      toast({ title: t('broadcast.sendError'), variant: 'destructive' });
+    } finally {
+      setTesting(false);
+    }
+  };
+
   const handleSend = async () => {
     setSending(true);
     try {
@@ -182,6 +198,10 @@ export default function AdminBroadcast() {
                 <Eye className="mr-2 h-4 w-4" />
               )}
               {t('broadcast.preview')}
+            </Button>
+            <Button variant="outline" onClick={handleTest} disabled={!contentValid || testing}>
+              {testing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
+              {t('broadcast.test')}
             </Button>
             <Button
               onClick={() => setConfirmOpen(true)}

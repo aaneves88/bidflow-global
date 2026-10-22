@@ -125,6 +125,42 @@ Deno.serve(async (req) => {
     })
   }
 
+  // Test send: only to the calling admin, ignores once-per-recipient,
+  // logged as 'test' so it never blocks the real send.
+  if (action === 'test') {
+    const email = (userData.user.email ?? '').toLowerCase()
+    if (!EMAIL_RE.test(email)) return json({ error: 'no_admin_email' }, 400)
+    const unsubscribeUrl = `${APP_URL}/unsubscribe?token=TESTE`
+    const response = await fetch(GATEWAY_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${lovableKey}`,
+        'X-Connection-Api-Key': brevoKey,
+      },
+      body: JSON.stringify({
+        sender: { name: SENDER_NAME, email: SENDER_EMAIL },
+        to: [{ email }],
+        replyTo: { email: REPLY_TO },
+        subject: `[Teste] ${subject}`,
+        htmlContent: renderHtml(unsubscribeUrl),
+        textContent: renderText(unsubscribeUrl),
+        tags: [templateId, 'test'],
+      }),
+    })
+    const ok = response.ok
+    const errText = ok ? null : `brevo ${response.status}: ${await response.text()}`
+    await admin.from('email_send_log').insert({
+      message_id: null,
+      template_name: templateId,
+      recipient_email: email,
+      status: ok ? 'test' : 'failed',
+      error_message: errText,
+    })
+    if (!ok) return json({ error: 'send_failed', details: errText }, 502)
+    return json({ success: true, email })
+  }
+
   if (action !== 'send') return json({ error: 'unknown_action' }, 400)
 
   if (!Array.isArray(body.emails) || body.emails.length === 0) {

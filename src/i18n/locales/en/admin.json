@@ -44,7 +44,9 @@
     "confirmTitle": "Confirm send",
     "confirmBody": "You are about to email {{count}} people. Every send is logged and unsubscribed users never receive it.",
     "cancel": "Cancel",
-    "confirmSend": "Send now"
+    "confirmSend": "Send now",
+    "test": "Send test to me",
+    "testSent": "Test sent to {{email}}"
   },
   "niches": {
     "title": "Funnel by niche",
