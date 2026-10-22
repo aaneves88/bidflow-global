@@ -1,15 +1,18 @@
-# Disparo manual de novidades pelo admin
+# Disparo manual de novidades saindo como noreply@orca-mento.app
 
-## O que já existe
-A tela de disparo já está no admin, pronta: você escolhe o modelo (ex.: "Novidades"), marca os usuários, vê a prévia e aperta o botão. Não precisa fazer mais nada no Brevo: ele já está conectado e funcionando por trás.
+## Situação
+A tela de disparo manual no admin já está pronta: você escolhe o modelo, marca os usuários, vê a prévia e envia. Falta só uma coisa: fazer o remetente aparecer como `Orca <noreply@orca-mento.app>`.
 
-## Por que não dá para usar o mesmo envio dos e-mails atuais
-Os e-mails de boas-vindas, follow-up e feedback saem por um serviço da Lovable. Esse serviço só aceita mensagens ligadas a uma ação da pessoa, como "seu cliente abriu". Novidades enviadas para vários usuários são proibidas lá, mesmo que o envio seja manual e um por um. Se usarmos esse serviço para novidades, a Lovable pode bloquear todos os e-mails do Orca, inclusive os de boas-vindas.
+Para isso não é preciso ter uma caixa de e-mail. Basta autorizar o domínio uma única vez, do mesmo jeito que já foi feito para os e-mails de boas-vindas.
 
-## O que proponho
-1. Manter a tela de disparo como está. O envio passa pelo Brevo, que já está conectado.
-2. Por enquanto, o remetente aparece como "Orca" e as respostas vão para statematch@statematch.global.
-3. Disparar agora um teste só para você, para conferir como o e-mail chega.
-4. Depois que você aprovar, publicar a tela no orca-mento.app.
+## Passos
+1. Eu registro o orca-mento.app no serviço que faz o envio e pego os códigos de autorização. São 2 ou 3 linhas de texto.
+2. Eu verifico onde o domínio é administrado:
+   - Se for pela Lovable, te passo os códigos prontos e o caminho exato: Configurações do projeto > Domínios > Registros DNS. Você só cola os códigos lá.
+   - Se for em outro lugar, como o registro.br, te passo o passo a passo desse painel.
+3. Depois que os códigos estiverem colados, eu confirmo a autorização e mudo o remetente para `Orca <noreply@orca-mento.app>`.
+4. Eu mando um teste só para você. Com a sua aprovação, eu publico a tela e você faz o disparo.
 
-Quando quiser que o remetente apareça como @orca-mento.app, basta autorizar o domínio uma vez. Isso fica opcional para depois.
+## O que não muda
+- Os e-mails automáticos atuais continuam como estão.
+- O descadastro continua funcionando e cada envio fica registrado.
