@@ -15,7 +15,36 @@
     "partners": "Partners",
     "niches": "Niches",
     "weekly": "Weekly",
-    "videos": "Videos"
+    "videos": "Videos",
+    "broadcast": "Broadcasts"
+  },
+  "broadcast": {
+    "messageTitle": "Message",
+    "templateLabel": "Template",
+    "templates": {
+      "novidades": "What's new: payment link + help center",
+      "custom": "Custom message"
+    },
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "E.g.: What's new in Orca",
+    "bodyLabel": "Body",
+    "bodyPlaceholder": "Write the message. Separate paragraphs with a blank line.",
+    "bodyHint": "The text is wrapped in the standard Orca layout, with logo and unsubscribe link added automatically.",
+    "preview": "Preview",
+    "previewError": "Could not generate the preview.",
+    "send": "Send to {{count}}",
+    "sendError": "Send failed. Please try again.",
+    "sentTitle": "Send finished: {{sent}} sent, {{failed}} failed.",
+    "recipientsTitle": "Recipients",
+    "searchPlaceholder": "Search by name or email",
+    "selectAll": "Select all",
+    "deselectAll": "Clear selection",
+    "selectedCount": "{{selected}} of {{total}} selected",
+    "unsubscribed": "Unsubscribed",
+    "confirmTitle": "Confirm send",
+    "confirmBody": "You are about to email {{count}} people. Every send is logged and unsubscribed users never receive it.",
+    "cancel": "Cancel",
+    "confirmSend": "Send now"
   },
   "niches": {
     "title": "Funnel by niche",

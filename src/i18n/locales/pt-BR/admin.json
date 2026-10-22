@@ -15,7 +15,36 @@
     "partners": "Parceiros",
     "niches": "Nichos",
     "weekly": "Semanal",
-    "videos": "Vídeos"
+    "videos": "Vídeos",
+    "broadcast": "Envios"
+  },
+  "broadcast": {
+    "messageTitle": "Mensagem",
+    "templateLabel": "Modelo",
+    "templates": {
+      "novidades": "Novidades: pagamento por link + central de ajuda",
+      "custom": "Mensagem personalizada"
+    },
+    "subjectLabel": "Assunto",
+    "subjectPlaceholder": "Ex.: Novidades no Orca",
+    "bodyLabel": "Texto",
+    "bodyPlaceholder": "Escreva a mensagem. Parágrafos separados por linha em branco.",
+    "bodyHint": "O texto entra no layout padrão do Orca, com logotipo e link de descadastro automáticos.",
+    "preview": "Ver prévia",
+    "previewError": "Não foi possível gerar a prévia.",
+    "send": "Enviar para {{count}}",
+    "sendError": "Falha no envio. Tente novamente.",
+    "sentTitle": "Envio concluído: {{sent}} enviados, {{failed}} falhas.",
+    "recipientsTitle": "Destinatários",
+    "searchPlaceholder": "Buscar por nome ou e-mail",
+    "selectAll": "Selecionar todos",
+    "deselectAll": "Limpar seleção",
+    "selectedCount": "{{selected}} de {{total}} selecionados",
+    "unsubscribed": "Descadastrado",
+    "confirmTitle": "Confirmar envio",
+    "confirmBody": "Você vai enviar este e-mail para {{count}} pessoas. Cada envio fica registrado e quem se descadastrou não recebe.",
+    "cancel": "Cancelar",
+    "confirmSend": "Enviar agora"
   },
   "niches": {
     "title": "Funil por nicho",
