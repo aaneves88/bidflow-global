@@ -150,13 +150,14 @@ Deno.serve(async (req) => {
     })
     const ok = response.ok
     const errText = ok ? null : `brevo ${response.status}: ${await response.text()}`
-    await admin.from('email_send_log').insert({
+    const { error: logError } = await admin.from('email_send_log').insert({
       message_id: null,
       template_name: templateId,
       recipient_email: email,
       status: ok ? 'test' : 'failed',
       error_message: errText,
     })
+    if (logError) console.error('test log insert failed', { email, message: logError.message })
     if (!ok) return json({ error: 'send_failed', details: errText }, 502)
     return json({ success: true, email })
   }
@@ -199,14 +200,15 @@ Deno.serve(async (req) => {
   const failures: Array<{ email: string; error: string }> = []
 
   for (const email of recipients) {
-    const log = async (status: 'sent' | 'failed', error_message?: string) => {
-      await admin.from('email_send_log').insert({
+    const log = async (status: 'sent' | 'failed' | 'test', error_message?: string) => {
+      const { error: logError } = await admin.from('email_send_log').insert({
         message_id: null,
         template_name: templateId,
         recipient_email: email,
         status,
         error_message: error_message ?? null,
       })
+      if (logError) console.error('send log insert failed', { email, status, message: logError.message })
     }
 
     try {
