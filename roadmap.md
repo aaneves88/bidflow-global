@@ -8,6 +8,8 @@
 # Criativos e vídeos de anúncio
 - [x] 12 criativos de anúncio (4 temas × quadrado/retrato/vertical) na aba Materiais do admin, com download individual e ZIP.
 - [x] 3 vídeos verticais de anúncio na aba Vídeos do admin (seção Anúncios), com download.
+# Conta
+- [x] Recuperação de senha por código de 6 dígitos dentro do app + alterar senha em Minha conta.
 # Usuários pagantes (plano aprovado 2026-10-20)
 - [x] Site sempre em português (sem detectar idioma do navegador).
 - [x] Proposta de exemplo no 1º acesso (onboarding já abre proposta preenchida pelo modelo escolhido).

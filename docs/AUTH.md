@@ -60,3 +60,9 @@ Todos usam o mesmo `GoogleSignInButton`. Ao adicionar uma nova tela de login, re
 2. Conferir no banco: `select email, raw_app_meta_data->>'providers', email_confirmed_at from auth.users where email = '...'`.
 3. Conferir `redirect_uri` — precisa ser rota pública.
 4. Conferir se `AuthContext` está hidratando `user` no `INITIAL_SESSION`.
+
+## Recuperação de senha (2026-10-22)
+
+- `/esqueci-senha` (`src/pages/auth/ForgotPassword.tsx`): `resetPasswordForEmail` → e-mail com **código** (template `recovery.tsx` mostra `token`, sem link) → `verifyOtp({ type: 'recovery' })` → `updateUser({ password })`.
+- Mensagem neutra sempre (não revela se o e-mail existe). Reenvio com espera de 60s.
+- Minha conta: `ChangePasswordCard` usa `updateUser({ password, current_password })`.
