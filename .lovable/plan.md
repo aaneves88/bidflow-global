@@ -1,19 +1,24 @@
-# Recuperação de senha
+# Recuperação de senha por código
 
 ## Como está hoje
-- O e-mail "Redefinir sua senha" com a marca Orca já existe e está pronto para sair.
-- Mas não existe nenhum caminho no app para usá-lo: as telas de entrada (/login, /app) não têm "Esqueci minha senha", e não existe a tela para criar a nova senha.
-- Resultado: quem esquece a senha fica travado (só entra se usar Google com o mesmo e-mail) ou precisa pedir ajuda.
+- O e-mail "Redefinir sua senha" com a marca Orca existe, mas o app não tem "Esqueci minha senha" nem tela para criar a nova senha. Quem esquece fica travado.
 
-## O que vou fazer
-1. Link "Esqueci minha senha" em /login e /app (abaixo do campo de senha).
-2. Tela /esqueci-senha: pessoa digita o e-mail e recebe o link. Mensagem sempre igual ("se o e-mail tiver conta, enviamos o link"), para não revelar quem é cadastrado.
-3. Tela /redefinir-senha (aberta pelo link do e-mail): nova senha + confirmação (mínimo 6 caracteres, igual ao cadastro), depois leva ao Painel.
-4. Em Minha conta: opção "Alterar senha" para quem já está logado.
-5. Textos em português (e inglês), seguindo o padrão atual.
-6. Teste completo: pedir o link, abrir, trocar a senha e entrar com a nova.
+## Como vai funcionar
+1. Link "Esqueci minha senha" em /login e /app.
+2. Tela /esqueci-senha, passo 1: a pessoa digita o e-mail. Mensagem sempre igual ("se o e-mail tiver conta, enviamos um código"), para não revelar quem é cadastrado.
+3. Ela recebe um e-mail da Orca com um **código de 6 dígitos** (sem link para clicar).
+4. Passo 2, na mesma tela: digita o código + nova senha + confirmação (mínimo 6 caracteres). Troca na hora e já entra no Painel.
+5. Botão "Reenviar código" (com espera de 60s) e aviso claro se o código estiver errado ou vencido (vale 1 hora).
+6. Em Minha conta: "Alterar senha" para quem já está logado (pede a senha atual).
+7. Textos em português e inglês.
+8. Teste completo: pedir código, digitar, trocar senha, entrar com a nova.
+
+## Por que assim
+- Tudo acontece dentro do Orca; não depende de clicar em link (que às vezes abre no navegador errado do celular ou é bloqueado pelo app de e-mail).
+- Usa o mesmo sistema de login que já guarda as senhas com segurança — não vou criar um armazenamento de senhas próprio, porque isso seria menos seguro.
 
 ## Detalhes técnicos
-- `supabase.auth.resetPasswordForEmail(email, { redirectTo: origin + '/redefinir-senha' })`; rota pública.
-- `/redefinir-senha` aguarda evento `PASSWORD_RECOVERY`/sessão e chama `supabase.auth.updateUser({ password })`.
-- Chaves i18n em `auth.json` (pt-BR/en); atualizar `docs/AUTH.md`.
+- `supabase.auth.resetPasswordForEmail(email)` dispara o hook `auth-email-hook`; o template `recovery.tsx` passa a mostrar o `token` (código) em destaque em vez do botão.
+- Validação: `supabase.auth.verifyOtp({ email, token, type: 'recovery' })` e em seguida `supabase.auth.updateUser({ password })`.
+- Logado: `updateUser({ password, current_password })`.
+- Garantir login por e-mail habilitado; redeploy de `auth-email-hook`; i18n em `auth.json`; atualizar `docs/AUTH.md` e `roadmap.md`.
