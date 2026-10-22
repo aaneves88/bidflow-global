@@ -24,7 +24,7 @@ import AdminBroadcast from './AdminBroadcast';
 
 const GROUPS: { key: string; tabs: string[] }[] = [
   { key: 'numbers', tabs: ['overview', 'weekly', 'niches'] },
-  { key: 'people', tabs: ['users', 'support', 'leads'] },
+  { key: 'people', tabs: ['users', 'support', 'leads', 'broadcast'] },
   { key: 'sales', tabs: ['plans', 'referrals', 'partners'] },
   { key: 'marketing', tabs: ['marketing', 'videos', 'brand'] },
   { key: 'system', tabs: ['statuses', 'integrations', 'qa', 'roadmap'] },
@@ -37,6 +37,7 @@ const PANELS: Record<string, JSX.Element> = {
   users: <AdminUsers />,
   support: <AdminSupport />,
   leads: <AdminEbookLeads />,
+  broadcast: <AdminBroadcast />,
   plans: <AdminPlans />,
   referrals: <AdminReferrals />,
   partners: <AdminPartners />,
