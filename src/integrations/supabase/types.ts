@@ -1360,6 +1360,13 @@ export type Database = {
       generate_referral_code: { Args: never; Returns: string }
       get_admin_activation_by_channel: { Args: never; Returns: Json }
       get_admin_activation_stats: { Args: never; Returns: Json }
+      get_admin_landing_funnel: {
+        Args: { _days?: number }
+        Returns: {
+          step: string
+          total: number
+        }[]
+      }
       get_admin_niche_funnel: {
         Args: { p_days?: number }
         Returns: {

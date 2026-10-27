@@ -11,6 +11,7 @@ import { isUnlimited } from '@/lib/planLimits';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Seo } from '@/components/Seo';
 import { hasOAuthReturn, OAUTH_CALLBACK_PATH } from '@/lib/oauthCallback';
+import { trackProductEvent } from '@/lib/productEvents';
 
 
 export default function Landing() {
@@ -36,6 +37,7 @@ export default function Landing() {
     if (isStandalone) {
       navigate('/app', { replace: true });
     }
+    void trackProductEvent('landing_viewed', null);
   }, [navigate]);
 
 
@@ -130,27 +132,60 @@ export default function Landing() {
       </nav>
 
       <section className="relative overflow-hidden pt-12 sm:pt-16 pb-14 sm:pb-16">
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10 lg:grid-cols-2 lg:items-center">
           <div className="max-w-2xl text-left">
             <div className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground mb-5">
               <Zap className="h-3.5 w-3.5" />
               {t('tagline')}
             </div>
             <h1 className="landing-display text-3xl sm:text-5xl font-bold leading-tight">
-              {t('hero.title1')} {t('hero.title2')}{' '}
-              <span className="text-accent">{t('hero.title3')}</span>
+              {t('hero.title1')} <span className="text-accent">{t('hero.title3')}</span>
             </h1>
-            <p className="mt-5 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">{t('hero.subtitle')}</p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <Button size="lg" className="text-base px-8 font-semibold" asChild>
-                <Link to="/register">
+            <ul className="mt-6 space-y-2 text-base sm:text-lg text-muted-foreground">
+              {(['b1', 'b2', 'b3'] as const).map((k) => (
+                <li key={k} className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-accent shrink-0" />
+                  {t(`hero.bullets.${k}`)}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8">
+              <Button size="lg" className="text-base px-8 font-semibold w-full sm:w-auto" asChild>
+                <Link to="/register" onClick={() => void trackProductEvent('landing_cta_clicked', null, { position: 'hero' })}>
                   {t('hero.ctaPrimary')}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="text-base px-8 bg-transparent" asChild>
-                <Link to="/login">{t('hero.ctaSecondary')}</Link>
-              </Button>
+              <p className="mt-3 text-sm text-muted-foreground">{t('hero.ctaNote')}</p>
+            </div>
+          </div>
+
+          <div className="mx-auto w-full max-w-sm rounded-2xl border bg-card text-card-foreground shadow-2xl p-5" aria-label={t('hero.example.aria')}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">{t('hero.example.from')}</p>
+                <p className="font-semibold">{t('hero.example.title')}</p>
+              </div>
+              <span className="rounded-full bg-accent/15 text-accent text-xs font-medium px-2 py-1">{t('hero.example.opened')}</span>
+            </div>
+            <div className="mt-4 space-y-2 text-sm">
+              {(['i1', 'i2', 'i3'] as const).map((k) => (
+                <div key={k} className="flex justify-between border-b pb-2">
+                  <span>{t(`hero.example.items.${k}.name`)}</span>
+                  <span className="font-medium">{t(`hero.example.items.${k}.price`)}</span>
+                </div>
+              ))}
+              <div className="flex justify-between pt-1 text-base font-bold">
+                <span>{t('hero.example.total')}</span>
+                <span>{t('hero.example.totalValue')}</span>
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+              <div className="rounded-lg border p-2 text-center">{t('hero.example.pix')}</div>
+              <div className="rounded-lg border p-2 text-center">{t('hero.example.card')}</div>
+            </div>
+            <div className="mt-3 rounded-lg bg-primary text-primary-foreground text-center text-sm font-semibold py-2">
+              {t('hero.example.accept')}
             </div>
           </div>
         </div>

@@ -10,6 +10,8 @@ const ANON_EVENTS = [
   'niche_template_copied',
   'niche_cta_clicked',
   'hub_niche_clicked',
+  'landing_viewed',
+  'landing_cta_clicked',
 ] as const;
 
 /**

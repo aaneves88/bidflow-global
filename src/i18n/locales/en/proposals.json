@@ -140,7 +140,11 @@
     "sendNudgeTitle": "Now just send it to your client",
     "sendNudgeBody": "The message with the link is ready. You get notified when they open it.",
     "whatsappPhoneSaved": "Number saved to the client record",
-    "whatsappPhoneConfirm": "Send"
+    "whatsappPhoneConfirm": "Send",
+    "guideStep1": "Your proposal",
+    "guideStep2": "Your client",
+    "guideStep3": "Send on WhatsApp",
+    "guideDone": "Done! We'll let you know when your client opens it."
   },
   "delete": {
     "title": "Delete proposal?",

@@ -140,7 +140,11 @@
     "sendNudgeTitle": "Agora é só enviar para o cliente",
     "sendNudgeBody": "A mensagem com o link já vai pronta. Você recebe um aviso quando ele abrir.",
     "whatsappPhoneSaved": "Número salvo no cadastro do cliente",
-    "whatsappPhoneConfirm": "Enviar"
+    "whatsappPhoneConfirm": "Enviar",
+    "guideStep1": "Sua proposta",
+    "guideStep2": "Seu cliente",
+    "guideStep3": "Enviar no WhatsApp",
+    "guideDone": "Pronto! Avisaremos quando seu cliente abrir."
   },
   "delete": {
     "title": "Excluir proposta?",

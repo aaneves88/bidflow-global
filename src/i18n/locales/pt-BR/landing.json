@@ -1,12 +1,43 @@
 {
-  "tagline": "Propostas e pipeline para pequenos negócios",
+  "tagline": "Orçamento profissional para quem presta serviço",
   "hero": {
-    "title1": "Crie propostas.",
+    "title1": "Mande seu orçamento pelo WhatsApp",
     "title2": "Acompanhe conversões.",
-    "title3": "Feche mais negócios.",
+    "title3": "em 2 minutos.",
     "subtitle": "A Orca ajuda freelancers e pequenos negócios a enviar propostas profissionais, acompanhar o pipeline de vendas e entender o que converte — tudo em uma plataforma simples.",
-    "ctaPrimary": "Comece grátis",
-    "ctaSecondary": "Entrar"
+    "ctaPrimary": "Criar minha proposta grátis",
+    "ctaSecondary": "Entrar",
+    "bullets": {
+      "b1": "Saiba na hora quando o cliente abriu",
+      "b2": "Receba por PIX ou cartão",
+      "b3": "Cliente aceita com um toque"
+    },
+    "ctaNote": "Grátis, sem cartão de crédito.",
+    "example": {
+      "aria": "Exemplo de proposta",
+      "from": "Proposta de João Elétrica",
+      "title": "Instalação elétrica — Ana",
+      "opened": "Cliente abriu",
+      "items": {
+        "i1": {
+          "name": "Troca de 6 tomadas",
+          "price": "R$ 240,00"
+        },
+        "i2": {
+          "name": "Chuveiro novo",
+          "price": "R$ 180,00"
+        },
+        "i3": {
+          "name": "Visita técnica",
+          "price": "R$ 80,00"
+        }
+      },
+      "total": "Total",
+      "totalValue": "R$ 500,00",
+      "pix": "Pagar com PIX",
+      "card": "Pagar com cartão",
+      "accept": "Aceitar proposta"
+    }
   },
   "mockup": {
     "title": "Proposta de Consultoria",
