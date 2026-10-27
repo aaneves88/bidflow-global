@@ -71,6 +71,13 @@
       "when": 1793114582333,
       "tag": "0009_checkout_rescue_log",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793129979541,
+      "tag": "0010_landing_funnel",
+      "breakpoints": true
     }
   ]
 }
