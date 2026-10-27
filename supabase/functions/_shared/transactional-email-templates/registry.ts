@@ -17,6 +17,7 @@ import { template as supportReply } from './support-reply.tsx'
 import { template as activationStuck } from './activation-stuck.tsx'
 import { template as activationProgress } from './activation-progress.tsx'
 import { template as couponOffer } from './coupon-offer.tsx'
+import { template as checkoutRescue } from './checkout-rescue.tsx'
 import { template as ebookDelivery } from './ebook-delivery.tsx'
 import { template as ebookNurtureDay3 } from './ebook-nurture-day3.tsx'
 import { template as feedbackRequest } from './feedback-request.tsx'
@@ -45,6 +46,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'activation-stuck': activationStuck,
   'activation-progress': activationProgress,
   'coupon-offer': couponOffer,
+  'checkout-rescue': checkoutRescue,
   'ebook-delivery': ebookDelivery,
   'ebook-nurture-day3': ebookNurtureDay3,
   'feedback-request': feedbackRequest,
