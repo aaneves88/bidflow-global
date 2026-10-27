@@ -19,11 +19,11 @@ Conclusão: a pessoa não vê valor nos primeiros minutos. Ela precisa entender 
    - O botão leva direto ao cadastro, e logo depois a pessoa cai na primeira proposta já preenchida.
 
 
-3. **O anúncio e a página falam a mesma coisa**
+3. **Anúncio e página com frases curtas e objetivas** (ex.: "Orçamento no WhatsApp em 2 minutos", "Saiba quando o cliente abriu", "Receba por PIX ou cartão"). Vou escrever 5 textos de anúncio para você usar. O anúncio e a página falam a mesma coisa:
    - Quem vem de um anúncio de ramo (eletricista, fotógrafo etc.) cai direto na página daquele ramo, não na página inicial geral.
    - Vou listar quais links dos anúncios devem ser trocados (essa troca é feita por você nos anúncios).
 
-4. **Primeiro acesso em 3 passos visíveis**
+4. **Depois do cadastro inicial: guia até o envio** (o cadastro inicial de hoje, com nome do negócio e primeira proposta, continua igual)
    - Depois do cadastro, uma barra simples: "1. Sua proposta  2. Seu cliente  3. Enviar no WhatsApp", com o passo atual em destaque.
    - Ao terminar o passo 3: mensagem "Pronto! Avisaremos quando seu cliente abrir."
 
