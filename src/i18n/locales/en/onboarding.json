@@ -32,6 +32,9 @@
   },
   "template": {
     "title": "Ready for your first proposal?",
-    "description": "Pick a template and start with items, deadline and validity already filled in — edit anything later."
+    "description": "Pick a template and start with items, deadline and validity already filled in — edit anything later.",
+    "nicheTitle": "Start with the {{label}} template",
+    "nicheDescription": "The same template you saw on the site, already inside your proposal. Just change the prices and send.",
+    "nicheBadge": "Recommended for you"
   }
 }

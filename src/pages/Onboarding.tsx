@@ -9,8 +9,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { ArrowRight, FileText, Layers, Repeat, PenLine } from 'lucide-react';
+import { ArrowRight, FileText, Layers, Repeat, PenLine, Sparkles } from 'lucide-react';
 import { PROPOSAL_TEMPLATE_IDS, type ProposalTemplateId } from '@/lib/proposalTemplates';
+import { readNicheOrigin } from '@/lib/attribution';
+import { getNiche } from '@/content/niches';
 
 const TOTAL_STEPS = 2;
 const DRAFT_KEY = 'orca:onboarding:draft';
@@ -43,6 +45,7 @@ export default function Onboarding() {
   const [step, setStep] = useState<number>(() => loadDraft().step ?? 1);
   const [businessName, setBusinessName] = useState(() => loadDraft().businessName ?? '');
   const [namePrefilled, setNamePrefilled] = useState(false);
+  const [originNiche] = useState(() => getNiche(readNicheOrigin() ?? undefined));
 
   useEffect(() => {
     sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ step, businessName }));
@@ -122,6 +125,26 @@ export default function Onboarding() {
                 <p className="text-sm text-muted-foreground">{t('template.description')}</p>
               </div>
               <div className="grid gap-3">
+                {originNiche && (
+                  <button
+                    type="button"
+                    onClick={() => finishAndGo(`/proposals/new?niche=${originNiche.slug}`)}
+                    className="flex items-start gap-3 rounded-lg border-2 border-primary bg-primary/5 p-4 text-left transition-colors hover:bg-primary/10"
+                  >
+                    <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                    <span>
+                      <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-primary">
+                        {t('template.nicheBadge')}
+                      </span>
+                      <span className="block font-medium">
+                        {t('template.nicheTitle', { label: originNiche.label })}
+                      </span>
+                      <span className="block text-sm text-muted-foreground">
+                        {t('template.nicheDescription')}
+                      </span>
+                    </span>
+                  </button>
+                )}
                 {PROPOSAL_TEMPLATE_IDS.map((tplId) => {
                   const Icon = TEMPLATE_ICONS[tplId];
                   return (

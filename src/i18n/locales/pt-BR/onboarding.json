@@ -32,6 +32,9 @@
   },
   "template": {
     "title": "Pronto para sua primeira proposta?",
-    "description": "Escolha um modelo e comece com itens, prazo e validade já preenchidos — você edita tudo depois."
+    "description": "Escolha um modelo e comece com itens, prazo e validade já preenchidos — você edita tudo depois.",
+    "nicheTitle": "Começar com o modelo de {{label}}",
+    "nicheDescription": "O mesmo modelo que você viu no site, já dentro da sua proposta. É só trocar os valores e enviar.",
+    "nicheBadge": "Recomendado para você"
   }
 }

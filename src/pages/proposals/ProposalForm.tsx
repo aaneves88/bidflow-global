@@ -31,6 +31,7 @@ import { toast } from '@/hooks/use-toast';
 import {
   buildProposalTemplate, PROPOSAL_TEMPLATE_IDS, type ProposalTemplateId,
 } from '@/lib/proposalTemplates';
+import { getNiche } from '@/content/niches';
 
 
 const emptyItem = (): ProposalItem => ({
@@ -109,9 +110,17 @@ export default function ProposalForm() {
   useEffect(() => {
     if (isEditing || appliedTemplate) return;
     const param = searchParams.get('template') as ProposalTemplateId | null;
+    const nicheParam = getNiche(searchParams.get('niche') ?? undefined);
     if (param && PROPOSAL_TEMPLATE_IDS.includes(param)) {
       applyTemplate(param);
       searchParams.delete('template');
+      setSearchParams(searchParams, { replace: true });
+    } else if (nicheParam) {
+      // Modelo do ramo visto no site: base "simples" + texto do ramo na descrição
+      applyTemplate('simple');
+      setTitle(nicheParam.h1.replace(/^Modelo de /i, '').replace(/^./, (c) => c.toUpperCase()));
+      setDescription(nicheParam.template);
+      searchParams.delete('niche');
       setSearchParams(searchParams, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
