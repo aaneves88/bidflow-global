@@ -31,6 +31,7 @@ import { toast } from '@/hooks/use-toast';
 import {
   buildProposalTemplate, PROPOSAL_TEMPLATE_IDS, type ProposalTemplateId,
 } from '@/lib/proposalTemplates';
+import { getNiche } from '@/content/niches';
 
 
 const emptyItem = (): ProposalItem => ({
