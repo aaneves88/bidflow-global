@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown, Mail, Loader2 } from 'lucide-react';
@@ -58,6 +58,8 @@ export default function ProposalView() {
   const [sendOpen, setSendOpen] = useState(false);
   const [phoneOpen, setPhoneOpen] = useState(false);
   const [phoneInput, setPhoneInput] = useState('');
+  const [clientNameInput, setClientNameInput] = useState('');
+  const queryClient = useQueryClient();
   const [savePhone, setSavePhone] = useState(true);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailTo, setEmailTo] = useState('');
@@ -126,6 +128,22 @@ export default function ProposalView() {
         .update({ phone: phoneInput.trim() })
         .eq('id', proposal.client_id);
       if (!error) toast({ title: t('view.whatsappPhoneSaved') });
+    } else if (!proposal.client_id && clientNameInput.trim()) {
+      // Cadastro rápido: cria o cliente com nome + telefone e liga à proposta
+      const { data: auth } = await supabase.auth.getUser();
+      if (auth.user) {
+        const { data: created, error } = await supabase
+          .from('clients')
+          .insert({ user_id: auth.user.id, name: clientNameInput.trim(), phone: phoneInput.trim() })
+          .select('id')
+          .single();
+        if (!error && created) {
+          await supabase.from('proposals').update({ client_id: created.id }).eq('id', proposal.id);
+          queryClient.invalidateQueries({ queryKey: ['proposals'] });
+          queryClient.invalidateQueries({ queryKey: ['clients'] });
+          toast({ title: t('view.quickClientSaved') });
+        }
+      }
     }
     setPhoneOpen(false);
     openWhatsapp(digits);
@@ -265,6 +283,21 @@ export default function ProposalView() {
           <span className="hidden sm:inline">{t('view.edit')}</span>
         </Button>
       </div>
+
+      {(views?.count ?? 0) === 0 && (
+        <Card className="border-2 border-primary bg-primary/5">
+          <CardContent className="flex flex-col gap-3 pt-6 sm:flex-row sm:items-center">
+            <div className="flex-1">
+              <p className="font-semibold">{t('view.sendNudgeTitle')}</p>
+              <p className="text-sm text-muted-foreground">{t('view.sendNudgeBody')}</p>
+            </div>
+            <Button size="lg" onClick={() => taxGate.guard(handleWhatsappClick)}>
+              <MessageCircle className="mr-2 h-5 w-5" />
+              {t('view.sendWhatsapp')}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <Button variant="outline" onClick={() => taxGate.guard(copyLink)}>
@@ -446,11 +479,22 @@ export default function ProposalView() {
               placeholder={t('view.whatsappPhonePlaceholder')}
             />
             <p className="text-xs text-muted-foreground">{t('view.whatsappPhoneHelp')}</p>
-            {proposal.client_id && (
+            {proposal.client_id ? (
               <label className="flex items-center gap-2 text-sm">
                 <Checkbox checked={savePhone} onCheckedChange={(v) => setSavePhone(v === true)} />
                 {t('view.whatsappPhoneSave')}
               </label>
+            ) : (
+              <div className="space-y-2">
+                <Label htmlFor="wa-name">{t('view.quickClientName')}</Label>
+                <Input
+                  id="wa-name"
+                  value={clientNameInput}
+                  onChange={(e) => setClientNameInput(e.target.value)}
+                  placeholder={t('view.quickClientNamePlaceholder')}
+                />
+                <p className="text-xs text-muted-foreground">{t('view.quickClientHelp')}</p>
+              </div>
             )}
           </div>
           <DialogFooter>
