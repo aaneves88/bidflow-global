@@ -15,6 +15,7 @@ import AdminEbookLeads from './AdminEbookLeads';
 import AdminReferrals from './AdminReferrals';
 import AdminPartners from './AdminPartners';
 import AdminNicheFunnel from './AdminNicheFunnel';
+import AdminLandingFunnel from './AdminLandingFunnel';
 import AdminWeekly from './AdminWeekly';
 import AdminVideos from './AdminVideos';
 import AdminBroadcast from './AdminBroadcast';
@@ -33,7 +34,7 @@ const GROUPS: { key: string; tabs: string[] }[] = [
 const PANELS: Record<string, JSX.Element> = {
   overview: <AdminOverview />,
   weekly: <AdminWeekly />,
-  niches: <AdminNicheFunnel />,
+  niches: <div className="space-y-6"><AdminLandingFunnel /><AdminNicheFunnel /></div>,
   users: <AdminUsers />,
   support: <AdminSupport />,
   leads: <AdminEbookLeads />,
