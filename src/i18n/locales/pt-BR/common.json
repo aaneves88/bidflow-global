@@ -68,6 +68,7 @@
     }
   },
   "notifications": {
+    "unopened": "Ainda não foi aberta. Toque para reenviar no WhatsApp.",
     "title": "Notificações",
     "empty": "Nenhuma novidade por aqui",
     "viewed": "Sua proposta foi visualizada",

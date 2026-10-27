@@ -68,6 +68,7 @@
     }
   },
   "notifications": {
+    "unopened": "Not opened yet. Tap to resend on WhatsApp.",
     "title": "Notifications",
     "empty": "Nothing new here",
     "viewed": "Your proposal was viewed",

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Bell, Eye, MessageCircle } from 'lucide-react';
+import { Bell, Eye, MessageCircle, Clock } from 'lucide-react';
+import { useUnopenedProposals } from '@/hooks/useUnopenedProposals';
 import { whatsAppUrl } from '@/lib/whatsapp';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -17,6 +18,8 @@ export function NotificationsBell() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const list = views ?? [];
+  const { data: unopened } = useUnopenedProposals();
+  const pending = unopened ?? [];
   const count = list.filter((v) => !v.seen).length;
 
   const markRead = () => {
@@ -36,12 +39,12 @@ export function NotificationsBell() {
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
-          {count > 0 && (
+          {count + pending.length > 0 && (
             <Badge
               variant="destructive"
               className="absolute -top-1 -right-1 h-4 min-w-4 px-1 text-[10px] flex items-center justify-center rounded-full"
             >
-              {count > 9 ? '9+' : count}
+              {count + pending.length > 9 ? '9+' : count + pending.length}
             </Badge>
           )}
         </Button>
@@ -51,7 +54,20 @@ export function NotificationsBell() {
           <p className="text-sm font-semibold">{t('notifications.title')}</p>
         </div>
         <div className="max-h-80 overflow-y-auto">
-          {list.length === 0 ? (
+          {pending.map((p) => (
+            <button
+              key={`unopened-${p.id}`}
+              onClick={() => { setOpen(false); navigate(`/proposals/${p.id}`); }}
+              className="w-full text-left p-3 border-b bg-primary/5 hover:bg-muted/50 transition-colors flex gap-3"
+            >
+              <Clock className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium truncate">{p.title}</p>
+                <p className="text-xs text-muted-foreground">{t('notifications.unopened')}</p>
+              </div>
+            </button>
+          ))}
+          {list.length === 0 && pending.length === 0 ? (
             <p className="text-sm text-muted-foreground p-4 text-center">{t('notifications.empty')}</p>
           ) : (
             <div className="divide-y">
