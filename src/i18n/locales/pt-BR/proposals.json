@@ -133,6 +133,12 @@
     "whatsappPhonePlaceholder": "(11) 99999-9999",
     "whatsappPhoneHelp": "Este cliente ainda não tem telefone cadastrado. Informe o número com DDD para abrir a conversa já com a mensagem pronta.",
     "whatsappPhoneSave": "Salvar este número no cadastro do cliente",
+    "quickClientName": "Nome do cliente",
+    "quickClientNamePlaceholder": "Ex.: Maria Souza",
+    "quickClientHelp": "Opcional. Se preencher, o cliente fica salvo e ligado a esta proposta.",
+    "quickClientSaved": "Cliente salvo nesta proposta",
+    "sendNudgeTitle": "Agora é só enviar para o cliente",
+    "sendNudgeBody": "A mensagem com o link já vai pronta. Você recebe um aviso quando ele abrir.",
     "whatsappPhoneSaved": "Número salvo no cadastro do cliente",
     "whatsappPhoneConfirm": "Enviar"
   },
