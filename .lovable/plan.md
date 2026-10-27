@@ -14,9 +14,10 @@ Conclusão: a pessoa não vê valor nos primeiros minutos. Ela precisa entender 
    - Logo abaixo, uma proposta de exemplo de verdade (com logo, itens, PIX e botão de aceitar), para a pessoa ver o resultado antes de se cadastrar.
    - Um único botão principal: "Criar minha proposta grátis".
 
-2. **Testar sem cadastro**
-   - Botão "Ver como meu cliente recebe" abre a proposta de exemplo como o cliente veria no celular.
-   - O cadastro só é pedido na hora de salvar ou enviar.
+2. **Cadastro continua sendo o primeiro passo**
+   - Nada de criar proposta sem conta. A proposta de exemplo na página inicial é só uma imagem para mostrar o resultado.
+   - O botão leva direto ao cadastro, e logo depois a pessoa cai na primeira proposta já preenchida.
+
 
 3. **O anúncio e a página falam a mesma coisa**
    - Quem vem de um anúncio de ramo (eletricista, fotógrafo etc.) cai direto na página daquele ramo, não na página inicial geral.
