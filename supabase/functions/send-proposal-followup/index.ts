@@ -8,7 +8,8 @@ import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { sendAppEmail } from '../_shared/app-email.ts'
 
-const MIN_HOURS = 48
+const MIN_HOURS = 24 // não aberta: lembra com 24h
+const VIEWED_MIN_HOURS = 48 // já aberta: espera 48h
 const MAX_DAYS = 30
 const APP_URL = 'https://orca-mento.app'
 
@@ -69,6 +70,14 @@ Deno.serve(async (req) => {
   let skipped = 0
 
   for (const proposal of proposals ?? []) {
+    const { count: viewCount } = await supabase
+      .from('proposal_views')
+      .select('id', { count: 'exact', head: true })
+      .eq('proposal_id', proposal.id)
+    const ageHours = (now - new Date(proposal.created_at).getTime()) / 3600_000
+    // Aberta mas ainda com menos de 48h: espera o próximo dia (sem consumir o lembrete)
+    if ((viewCount ?? 0) > 0 && ageHours < VIEWED_MIN_HOURS) { skipped++; continue }
+
     // Idempotency: claim first (unique proposal_id).
     const { error: claimError } = await supabase
       .from('proposal_followup_log')
@@ -82,11 +91,6 @@ Deno.serve(async (req) => {
       .maybeSingle()
 
     if (!owner?.email) { skipped++; continue }
-
-    const { count: viewCount } = await supabase
-      .from('proposal_views')
-      .select('id', { count: 'exact', head: true })
-      .eq('proposal_id', proposal.id)
 
     const daysWaiting = Math.max(
       1,

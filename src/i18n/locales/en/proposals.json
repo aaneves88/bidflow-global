@@ -133,6 +133,12 @@
     "whatsappPhonePlaceholder": "+1 555 123 4567",
     "whatsappPhoneHelp": "This client has no phone on file. Enter the number with area code to open the chat with the message ready.",
     "whatsappPhoneSave": "Save this number to the client record",
+    "quickClientName": "Client name",
+    "quickClientNamePlaceholder": "E.g. Maria Souza",
+    "quickClientHelp": "Optional. If filled, the client is saved and linked to this proposal.",
+    "quickClientSaved": "Client saved to this proposal",
+    "sendNudgeTitle": "Now just send it to your client",
+    "sendNudgeBody": "The message with the link is ready. You get notified when they open it.",
     "whatsappPhoneSaved": "Number saved to the client record",
     "whatsappPhoneConfirm": "Send"
   },
