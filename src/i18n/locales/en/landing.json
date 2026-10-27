@@ -1,12 +1,43 @@
 {
-  "tagline": "Proposals & pipeline for small businesses",
+  "tagline": "Professional quotes for service providers",
   "hero": {
-    "title1": "Create proposals.",
+    "title1": "Send your quote on WhatsApp",
     "title2": "Track conversions.",
-    "title3": "Close more deals.",
+    "title3": "in 2 minutes.",
     "subtitle": "Orca helps freelancers and small businesses send professional proposals, follow their sales pipeline, and understand what converts — all in one simple platform.",
-    "ctaPrimary": "Start for free",
-    "ctaSecondary": "Sign in"
+    "ctaPrimary": "Create my free proposal",
+    "ctaSecondary": "Sign in",
+    "bullets": {
+      "b1": "Know right away when the client opened it",
+      "b2": "Get paid by PIX or card",
+      "b3": "Client accepts with one tap"
+    },
+    "ctaNote": "Free, no credit card.",
+    "example": {
+      "aria": "Example proposal",
+      "from": "Proposal from João Electric",
+      "title": "Electrical work — Ana",
+      "opened": "Client opened",
+      "items": {
+        "i1": {
+          "name": "Replace 6 outlets",
+          "price": "R$ 240.00"
+        },
+        "i2": {
+          "name": "New shower",
+          "price": "R$ 180.00"
+        },
+        "i3": {
+          "name": "Site visit",
+          "price": "R$ 80.00"
+        }
+      },
+      "total": "Total",
+      "totalValue": "R$ 500.00",
+      "pix": "Pay with PIX",
+      "card": "Pay by card",
+      "accept": "Accept proposal"
+    }
   },
   "mockup": {
     "title": "Consulting Proposal",

@@ -749,5 +749,15 @@
     "sales": "Sales",
     "marketing": "Marketing",
     "system": "System"
+  },
+  "landingFunnel": {
+    "title": "Homepage funnel (30 days)",
+    "steps": {
+      "landing_viewed": "Homepage visits",
+      "landing_cta_clicked": "Create-proposal clicks",
+      "signup_completed": "Signups",
+      "first_proposal_created": "First proposal created",
+      "first_proposal_sent": "First proposal sent"
+    }
   }
 }

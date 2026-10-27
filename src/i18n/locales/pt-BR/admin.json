@@ -749,5 +749,15 @@
     "sales": "Vendas",
     "marketing": "Marketing",
     "system": "Sistema"
+  },
+  "landingFunnel": {
+    "title": "Funil da página inicial (30 dias)",
+    "steps": {
+      "landing_viewed": "Visitas à página inicial",
+      "landing_cta_clicked": "Cliques em criar proposta",
+      "signup_completed": "Cadastros",
+      "first_proposal_created": "Primeira proposta criada",
+      "first_proposal_sent": "Primeira proposta enviada"
+    }
   }
 }
