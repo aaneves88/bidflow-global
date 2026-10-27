@@ -29,6 +29,7 @@ import { generateProposalPdf } from '@/lib/proposalPdf';
 import { buildPixPayload, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
 import { useTaxIdGate } from '@/hooks/useTaxIdGate';
+import { trackProductEvent } from '@/lib/productEvents';
 import { ProposalStatusChangePopup, findSentStatusId, type SendableProposal } from '@/components/proposals/ProposalStatusChangePopup';
 
 
@@ -56,6 +57,7 @@ export default function ProposalView() {
 
   const [closeOpen, setCloseOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
+  const [sentNow, setSentNow] = useState(false);
   const [phoneOpen, setPhoneOpen] = useState(false);
   const [phoneInput, setPhoneInput] = useState('');
   const [clientNameInput, setClientNameInput] = useState('');
@@ -107,6 +109,10 @@ export default function ProposalView() {
 
   const openWhatsapp = (phone: string) => {
     window.open(buildWhatsAppUrl(phone, whatsappMessage), '_blank', 'noopener,noreferrer');
+    if (!sentNow && (views?.count ?? 0) === 0) {
+      void trackProductEvent('first_proposal_sent', null, { proposal_id: proposal.id });
+    }
+    setSentNow(true);
   };
 
   const handleWhatsappClick = () => {
@@ -286,15 +292,43 @@ export default function ProposalView() {
 
       {(views?.count ?? 0) === 0 && (
         <Card className="border-2 border-primary bg-primary/5">
-          <CardContent className="flex flex-col gap-3 pt-6 sm:flex-row sm:items-center">
-            <div className="flex-1">
-              <p className="font-semibold">{t('view.sendNudgeTitle')}</p>
-              <p className="text-sm text-muted-foreground">{t('view.sendNudgeBody')}</p>
-            </div>
-            <Button size="lg" onClick={() => taxGate.guard(handleWhatsappClick)}>
-              <MessageCircle className="mr-2 h-5 w-5" />
-              {t('view.sendWhatsapp')}
-            </Button>
+          <CardContent className="space-y-4 pt-6">
+            <ol className="grid grid-cols-3 gap-2 text-xs sm:text-sm">
+              {[
+                { label: t('view.guideStep1'), done: true },
+                { label: t('view.guideStep2'), done: !!proposal.client_id },
+                { label: t('view.guideStep3'), done: sentNow },
+              ].map((s, i, arr) => {
+                const current = !s.done && arr.slice(0, i).every((p) => p.done);
+                return (
+                  <li
+                    key={i}
+                    className={`flex items-center gap-2 rounded-md border px-2 py-1.5 ${
+                      s.done ? 'border-primary/40 text-primary' : current ? 'border-primary bg-background font-semibold' : 'text-muted-foreground'
+                    }`}
+                  >
+                    <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs ${s.done ? 'bg-primary text-primary-foreground' : 'border'}`}>
+                      {s.done ? '✓' : i + 1}
+                    </span>
+                    {s.label}
+                  </li>
+                );
+              })}
+            </ol>
+            {sentNow ? (
+              <p className="font-semibold text-primary">{t('view.guideDone')}</p>
+            ) : (
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <p className="font-semibold">{t('view.sendNudgeTitle')}</p>
+                  <p className="text-sm text-muted-foreground">{t('view.sendNudgeBody')}</p>
+                </div>
+                <Button size="lg" onClick={() => taxGate.guard(handleWhatsappClick)}>
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  {t('view.sendWhatsapp')}
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
