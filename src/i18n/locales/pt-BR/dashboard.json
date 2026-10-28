@@ -83,5 +83,14 @@
       "body": "Criamos uma área com vídeos curtos mostrando como usar o Orca na prática: criar cliente, criar e gerenciar proposta, como abordar um cliente, precificação, dicas pra quem é MEI ou está no Simples. Está disponível direto no menu, em \"Ajuda e tutoriais\".",
       "cta": "Ver tutoriais"
     }
+  },
+  "quickActions": {
+    "newQuote": "Novo orçamento",
+    "quote": "Criar orçamento",
+    "quoteDesc": "Monte e envie no WhatsApp em 2 minutos",
+    "client": "Cadastrar cliente",
+    "clientDesc": "Guarde nome e telefone de quem pediu preço",
+    "videos": "Ver vídeos rápidos",
+    "videosDesc": "Aprenda a usar a Orca em menos de 1 minuto"
   }
 }

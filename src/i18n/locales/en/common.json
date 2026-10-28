@@ -57,7 +57,11 @@
     "products": "Products",
     "snippets": "Text blocks",
     "referrals": "Refer and earn",
-    "help": "Help and tutorials"
+    "help": "Help and tutorials",
+    "groupMain": "Main",
+    "groupResources": "Resources",
+    "groupAccount": "Account",
+    "newProposal": "New proposal"
   },
   "help": {
     "title": "Help and tutorials",

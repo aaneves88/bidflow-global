@@ -57,7 +57,11 @@
     "products": "Produtos",
     "snippets": "Blocos de texto",
     "referrals": "Indique e ganhe",
-    "help": "Ajuda e tutoriais"
+    "help": "Ajuda e tutoriais",
+    "groupMain": "Principal",
+    "groupResources": "Recursos",
+    "groupAccount": "Conta",
+    "newProposal": "Nova proposta"
   },
   "help": {
     "title": "Ajuda e tutoriais",

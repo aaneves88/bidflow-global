@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { formatCurrency, formatDate } from '@/lib/format';
 import { UsageIndicator } from '@/components/UsageIndicator';
 import { AttentionPanel } from '@/components/dashboard/AttentionPanel';
+import { FileText as QAFileText, PlayCircle } from 'lucide-react';
 import { WhatsNewBanner } from '@/components/dashboard/WhatsNewBanner';
 import {
   FileText, Clock, CheckCircle, TrendingUp, AlertTriangle,
@@ -231,7 +232,8 @@ export default function Dashboard() {
             {t('welcomeBack')}{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''}!
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button asChild><Link to="/proposals/new"><PlusCircle className="mr-2 h-4 w-4" />{t('quickActions.newQuote')}</Link></Button>
           <span className="text-sm text-muted-foreground">{t('period.label')}:</span>
           <Select value={period} onValueChange={(v) => setPeriod(v as Period)}>
             <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
@@ -243,6 +245,26 @@ export default function Dashboard() {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        {[
+          { to: '/proposals/new', icon: QAFileText, title: t('quickActions.quote'), desc: t('quickActions.quoteDesc') },
+          { to: '/clients', icon: Users, title: t('quickActions.client'), desc: t('quickActions.clientDesc') },
+          { to: '/ajuda', icon: PlayCircle, title: t('quickActions.videos'), desc: t('quickActions.videosDesc') },
+        ].map((a) => (
+          <Link key={a.to} to={a.to} className="block">
+            <Card className="h-full transition-colors hover:border-primary">
+              <CardContent className="pt-6 flex items-start gap-3">
+                <a.icon className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-sm">{a.title}</p>
+                  <p className="text-xs text-muted-foreground">{a.desc}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
       </div>
 
       {currentPlan.isExpired && (

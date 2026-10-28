@@ -83,5 +83,14 @@
       "body": "Short videos showing how to use Orca in practice. Find it in the menu under \"Help and tutorials\".",
       "cta": "Watch tutorials"
     }
+  },
+  "quickActions": {
+    "newQuote": "New quote",
+    "quote": "Create quote",
+    "quoteDesc": "Build it and send on WhatsApp in 2 minutes",
+    "client": "Add client",
+    "clientDesc": "Save name and phone of who asked for a price",
+    "videos": "Watch quick videos",
+    "videosDesc": "Learn Orca in under a minute"
   }
 }
