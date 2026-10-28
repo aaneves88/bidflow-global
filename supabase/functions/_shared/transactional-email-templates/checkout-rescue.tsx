@@ -27,7 +27,7 @@ const Email = ({ firstName, appUrl = 'https://orca-mento.app' }: Props) => (
         </Text>
         <CtaWithFallback href={`${appUrl}/pricing`} label="Concluir minha assinatura" />
         <Text style={text}>
-          Teve algum problema no pagamento? É só responder este e-mail que a gente ajuda.
+          Teve algum problema no pagamento? Escreva para statematch@statematch.global que a gente ajuda (este endereço não recebe respostas).
         </Text>
       </Shell>
     </Body>

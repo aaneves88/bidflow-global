@@ -38,7 +38,12 @@ Deno.serve(async (req) => {
   let sent = 0
   let skipped = 0
 
+  const INTERNAL = new Set(['ssloboda@gmail.com', 'nvs.camilla5@gmail.com', 'aaneves88@gmail.com'])
+  const { data: admins } = await supabase.from('user_roles').select('user_id').eq('role', 'admin')
+  const adminIds = new Set((admins ?? []).map((a) => a.user_id as string))
+
   for (const userId of userIds) {
+    if (adminIds.has(userId)) { skipped++; continue }
     const { data: plans } = await supabase
       .from('user_plans').select('id, plans!inner(is_starter)').eq('user_id', userId).eq('status', 'active')
     // deno-lint-ignore no-explicit-any
@@ -53,7 +58,7 @@ Deno.serve(async (req) => {
 
     const { data: profile } = await supabase
       .from('profiles').select('email, full_name').eq('id', userId).maybeSingle()
-    if (!profile?.email) { skipped++; continue }
+    if (!profile?.email || INTERNAL.has(profile.email.toLowerCase())) { skipped++; continue }
 
     const { error: claimError } = await supabase.from('checkout_rescue_log').insert({ user_id: userId })
     if (claimError) { skipped++; continue }

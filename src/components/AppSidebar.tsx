@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, FileText, Package, LibraryBig, Settings, Shield, LogOut, CreditCard, UserCircle, Gift, CircleHelp } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Package, LibraryBig, Settings, Shield, LogOut, CreditCard, UserCircle, Gift, CircleHelp, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from '@/components/NavLink';
 import { useLocation } from 'react-router-dom';
@@ -26,17 +26,23 @@ export function AppSidebar() {
   };
 
 
-  const mainItems = [
-    { title: t('nav.dashboard'), url: '/dashboard', icon: LayoutDashboard },
-    { title: t('nav.clients'), url: '/clients', icon: Users },
-    { title: t('nav.products'), url: '/products', icon: Package },
-    { title: t('nav.proposals'), url: '/proposals', icon: FileText },
-    { title: t('nav.snippets'), url: '/snippets', icon: LibraryBig },
-    { title: t('nav.pricing'), url: '/app/planos', icon: CreditCard },
-    { title: t('nav.referrals'), url: '/app/indique', icon: Gift },
-    { title: t('nav.help'), url: '/ajuda', icon: CircleHelp },
-    { title: t('nav.account'), url: '/account', icon: UserCircle },
-    { title: t('nav.settings'), url: '/settings', icon: Settings },
+  const groups = [
+    { label: t('nav.groupMain'), items: [
+      { title: t('nav.dashboard'), url: '/dashboard', icon: LayoutDashboard },
+      { title: t('nav.proposals'), url: '/proposals', icon: FileText },
+      { title: t('nav.clients'), url: '/clients', icon: Users },
+      { title: t('nav.products'), url: '/products', icon: Package },
+    ]},
+    { label: t('nav.groupResources'), items: [
+      { title: t('nav.snippets'), url: '/snippets', icon: LibraryBig },
+      { title: t('nav.help'), url: '/ajuda', icon: CircleHelp },
+    ]},
+    { label: t('nav.groupAccount'), items: [
+      { title: t('nav.pricing'), url: '/app/planos', icon: CreditCard },
+      { title: t('nav.referrals'), url: '/app/indique', icon: Gift },
+      { title: t('nav.account'), url: '/account', icon: UserCircle },
+      { title: t('nav.settings'), url: '/settings', icon: Settings },
+    ]},
   ];
   const adminItems = [
     { title: t('nav.admin'), url: '/admin', icon: Shield },
@@ -55,20 +61,33 @@ export function AppSidebar() {
             {!collapsed && <span className="font-bold text-base">Orca</span>}
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {mainItems.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                    <NavLink to={item.url} end={item.url === '/'} onClick={closeMobileMenu} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <Button asChild size="sm" className="w-full" title={t('nav.newProposal')}>
+              <NavLink to="/proposals/new" onClick={closeMobileMenu}>
+                <Plus className="h-4 w-4" />
+                {!collapsed && <span className="ml-1">{t('nav.newProposal')}</span>}
+              </NavLink>
+            </Button>
           </SidebarGroupContent>
         </SidebarGroup>
+        {groups.map((g) => (
+          <SidebarGroup key={g.label}>
+            <SidebarGroupLabel>{!collapsed && g.label}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {g.items.map((item) => (
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton asChild isActive={isActive(item.url) && !(item.url === '/proposals' && location.pathname === '/proposals/new')}>
+                      <NavLink to={item.url} onClick={closeMobileMenu} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
+                        <item.icon className="mr-2 h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
 
         {isAdmin && (
           <SidebarGroup>
