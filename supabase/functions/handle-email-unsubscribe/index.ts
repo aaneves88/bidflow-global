@@ -38,7 +38,9 @@ Deno.serve(async (req) => {
     return json({ error: 'lookup_failed' }, 500)
   }
   if (!row) return json({ error: 'invalid_token' }, 404)
-  if (row.used_at) return json({ success: true, reason: 'already_unsubscribed' })
+  if (row.used_at) return json({ valid: false, success: false, reason: 'already_unsubscribed' })
+  // GET only validates (mail scanners/link previews must not unsubscribe).
+  if (req.method !== 'POST') return json({ valid: true })
 
   const { error: suppressError } = await admin
     .from('suppressed_emails')
