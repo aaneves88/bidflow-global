@@ -70,7 +70,6 @@ export function ProductDialog({ open, onOpenChange, product }: Props) {
 
   const removeImage = (path: string) => {
     setImages((prev) => prev.filter((p) => p !== path));
-    removeProductImage(path);
   };
 
   const { register, handleSubmit, reset, control, formState: { errors } } = useForm<ProductFormData>({
@@ -96,6 +95,8 @@ export function ProductDialog({ open, onOpenChange, product }: Props) {
     } else {
       await create.mutateAsync(payload);
     }
+    // Delete removed photos only after the product is saved.
+    (product?.image_urls ?? []).filter((p) => !images.includes(p)).forEach((p) => removeProductImage(p));
     onOpenChange(false);
   };
 
