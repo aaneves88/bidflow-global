@@ -119,6 +119,14 @@
     "iosHintPrefix": "Toque em Compartilhar",
     "iosHintSuffix": "→ Adicionar à Tela de Início."
   },
+  "planUpsell": {
+    "usage": "Você usou {{used}} de {{max}} propostas grátis. Com o Premium, é ilimitado.",
+    "reached": "Você usou suas {{max}} propostas grátis. Assine o Premium para continuar.",
+    "cta": "Assinar Premium",
+    "dismiss": "Fechar por 3 dias",
+    "popupTitle": "Você usou suas {{max}} propostas grátis",
+    "popupDescription": "Sua proposta foi salva e já pode ser enviada. Para criar as próximas, assine o Premium: propostas e clientes ilimitados."
+  },
   "brandUpsell": {
     "message": "No plano pago você pode usar sua própria marca (logo e cores) nas propostas.",
     "cta": "Ver planos",

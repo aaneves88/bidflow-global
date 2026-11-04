@@ -119,6 +119,14 @@
     "iosHintPrefix": "Tap Share",
     "iosHintSuffix": "→ Add to Home Screen."
   },
+  "planUpsell": {
+    "usage": "You've used {{used}} of {{max}} free proposals. Premium is unlimited.",
+    "reached": "You've used your {{max}} free proposals. Upgrade to Premium to continue.",
+    "cta": "Get Premium",
+    "dismiss": "Hide for 3 days",
+    "popupTitle": "You've used your {{max}} free proposals",
+    "popupDescription": "Your proposal is saved and ready to send. To create more, upgrade to Premium: unlimited proposals and clients."
+  },
   "brandUpsell": {
     "message": "On a paid plan you can use your own brand (logo and colors) on proposals.",
     "cta": "View plans",
