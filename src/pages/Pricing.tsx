@@ -37,7 +37,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
 
   const handleSubscribe = async (planId: string) => {
     if (!user) {
-      navigate(`/register?plan=${planId}`);
+      navigate('/register');
       return;
     }
 
@@ -117,6 +117,9 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">{t('title')}</h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">{t('subtitle')}</p>
+            {!user && (
+              <p className="mt-3 text-sm font-medium text-primary max-w-2xl mx-auto">{t('freeFirstNote')}</p>
+            )}
           </div>
 
           {isLoading ? (
@@ -206,7 +209,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
                         <Button className="w-full" disabled>{t('current')}</Button>
                       ) : !user ? (
                         <Button className="w-full" asChild>
-                          <Link to={`/register?plan=${p.id}`}>{t('getStarted')}</Link>
+                          <Link to="/register">{t('createFreeAccount')}</Link>
                         </Button>
                       ) : Number(p.price) === 0 ? (
                         <Button className="w-full" variant="outline" asChild>
