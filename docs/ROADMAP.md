@@ -18,6 +18,7 @@ Status atualizado em cada release. Documento vivo.
 | 8.1  | v0.8.1 | Automação de conversão no Stripe + créditos de indicação | 🚧 Em desenvolvimento |
 | 8.2  | v0.8.2 | Rastreamento de aquisição (GTM, Google Ads, funil por nicho) | ✅ Lançada |
 | 8.3  | v0.8.3 | Tag do Google Ads sob controle do app (conversões confiáveis) | ✅ Lançada |
+| 8.4  | v0.8.4 | Upsell no limite do plano grátis (barra + popup no momento certo) | ✅ Lançada |
 | 9    | v0.9.0 | SEO + landing institucional + páginas de nicho | ⏳ Planejada |
 | 10   | v0.10.0 | LGPD + termos + consentimento + ajustes pré-lançamento | ⏳ Planejada |
 | 11   | v1.0.0 | Observabilidade + lançamento comercial 🚀 | ⏳ Planejada |
