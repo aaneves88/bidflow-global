@@ -233,6 +233,7 @@ export function useCreateProposal() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['proposals'] });
+      qc.invalidateQueries({ queryKey: ['subscription'] });
       toast({ title: tr('messages.created') });
     },
     onError: (e: Error) => {

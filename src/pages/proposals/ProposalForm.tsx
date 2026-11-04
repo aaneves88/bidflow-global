@@ -243,7 +243,7 @@ export default function ProposalForm() {
     } else {
       const created = await create.mutateAsync(data);
       // Proposta nova: leva direto pra tela de compartilhamento.
-      navigate(`/proposals/${created.id}`);
+      navigate(`/proposals/${created.id}`, { state: { justCreated: true } });
     }
   };
 

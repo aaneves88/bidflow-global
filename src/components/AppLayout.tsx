@@ -6,7 +6,7 @@ import { BrandingStyle } from '@/components/BrandingStyle';
 import { NotificationsBell } from '@/components/NotificationsBell';
 import { OfflineBanner } from '@/components/OfflineBanner';
 import { InstallAppBanner } from '@/components/InstallAppBanner';
-import { BrandUpsellBanner } from '@/components/BrandUpsellBanner';
+import { PlanUpsellBar } from '@/components/PlanUpsellBar';
 import { FeedbackDialog } from '@/components/FeedbackDialog';
 import { useFeedbackPrompt } from '@/hooks/useFeedbackPrompt';
 
@@ -55,7 +55,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <div aria-hidden className="h-20" />
 
           </main>
-          <BrandUpsellBanner />
+          <PlanUpsellBar />
         </div>
       </div>
     </SidebarProvider>

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { UpgradeModal } from '@/components/UpgradeModal';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Copy, Pencil, MessageCircle, Eye, FileDown, Mail, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -21,7 +22,7 @@ import {
 import { useProposalViews } from '@/hooks/useProposalViews';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useBranding, ORCA_BRANDING } from '@/hooks/useBranding';
-import { useCanCustomBrand } from '@/hooks/useSubscription';
+import { useCanCustomBrand, useSubscription } from '@/hooks/useSubscription';
 import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/format';
 import { buildPdfProducts, loadItemProducts } from '@/lib/productImages';
@@ -51,6 +52,17 @@ export default function ProposalView() {
   const { getSetting } = useAppSettings('general');
   const branding = useBranding();
   const canBrand = useCanCustomBrand();
+  const location = useLocation();
+  const sub = useSubscription();
+  const [limitPopupOpen, setLimitPopupOpen] = useState(false);
+  const [limitPopupShown, setLimitPopupShown] = useState(false);
+  useEffect(() => {
+    const justCreated = (location.state as { justCreated?: boolean } | null)?.justCreated;
+    if (justCreated && !limitPopupShown && sub.isReady && sub.proposalLimitReached) {
+      setLimitPopupShown(true);
+      setLimitPopupOpen(true);
+    }
+  }, [location.state, sub.isReady, sub.proposalLimitReached, limitPopupShown]);
   const updateStatus = useUpdateProposalStatus();
   const publicBase = usePublicAppUrl();
   const taxGate = useTaxIdGate();
@@ -274,6 +286,13 @@ export default function ProposalView() {
 
   return (
     <div className="space-y-6 max-w-3xl">
+      <UpgradeModal
+        open={limitPopupOpen}
+        onOpenChange={setLimitPopupOpen}
+        context="proposal_limit_reached_on_save"
+        title={t('common:planUpsell.popupTitle', { max: sub.maxProposals ?? 3 })}
+        description={t('common:planUpsell.popupDescription')}
+      />
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => navigate('/proposals')}>
           <ArrowLeft className="h-4 w-4" />
