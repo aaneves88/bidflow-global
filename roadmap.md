@@ -6,6 +6,7 @@
 - [x] Make the background barely perceptible, with abstract texture instead of concrete forms, and verify the result.
 - [x] Simplify the homepage opening, soften financial imagery and verify desktop/mobile.
 # Criativos e vídeos de anúncio
+- [x] Carrossel SIM/MAS: frases curtas aprovadas e logo somente no canto superior esquerdo da foto superior; revisar e entregar cinco slides.
 - [x] 12 criativos de anúncio (4 temas × quadrado/retrato/vertical) na aba Materiais do admin, com download individual e ZIP.
 - [x] 3 vídeos verticais de anúncio na aba Vídeos do admin (seção Anúncios), com download.
 # Conta
