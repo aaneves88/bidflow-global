@@ -33,7 +33,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
   const annualPaid = plans.find((p: any) => !p.is_starter && p.interval === 'year');
   const hasAnnual = Boolean(annualPaid);
   const savings = annualSavingsPercent(Number(monthlyPaid?.price), Number(annualPaid?.price));
-  const visiblePlans = plans.filter(
+  const visiblePlans = [...plans].sort((a: any, b: any) => Number(b.is_starter) - Number(a.is_starter)).filter(
     (p: any) => p.is_starter || !hasAnnual || (billing === 'year' ? p.interval === 'year' : p.interval !== 'year'),
   );
 
@@ -62,7 +62,8 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
       return;
     }
 
-    if (!stripeEnabled) {
+    // Anual sempre vai pelo checkout do servidor, que confere o Stripe por conta própria.
+    if (!stripeEnabled && chosen?.interval !== 'year') {
       toast({ title: t('comingSoon'), description: t('comingSoonDescription') });
       return;
     }
@@ -254,7 +255,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
                         <Button className="w-full" variant="outline" asChild>
                           <Link to="/dashboard">{t('common:nav.dashboard')}</Link>
                         </Button>
-                      ) : canSubscribe ? (
+                      ) : canSubscribe || p.interval === 'year' ? (
                         <Button className="w-full" onClick={() => handleSubscribe(p.id)}>{t('subscribe')}</Button>
                       ) : (
                         <Button className="w-full" variant="outline" disabled title={t('comingSoonDescription')}>
