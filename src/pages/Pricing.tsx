@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { annualSavingsPercent } from '@/lib/annualSavings';
 import { useTranslation } from 'react-i18next';
 import { usePlans } from '@/hooks/usePlans';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -26,6 +28,15 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
   const navigate = useNavigate();
   const { openPortal, loading: portalLoading } = useStripePortal();
 
+  const [billing, setBilling] = useState<'month' | 'year'>('month');
+  const monthlyPaid = plans.find((p: any) => !p.is_starter && p.interval !== 'year');
+  const annualPaid = plans.find((p: any) => !p.is_starter && p.interval === 'year');
+  const hasAnnual = Boolean(annualPaid);
+  const savings = annualSavingsPercent(Number(monthlyPaid?.price), Number(annualPaid?.price));
+  const visiblePlans = plans.filter(
+    (p: any) => p.is_starter || !hasAnnual || (billing === 'year' ? p.interval === 'year' : p.interval !== 'year'),
+  );
+
   const stripeEnabled = getSetting('stripe_enabled') === true;
   const hasPaymentLink = Boolean(import.meta.env.VITE_STRIPE_PAYMENT_LINK);
   const canSubscribe = stripeEnabled || hasPaymentLink;
@@ -41,8 +52,9 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
       return;
     }
 
-    // Payment Link (com client_reference_id + prefilled_email) tem prioridade
-    const paymentLink = getStripePaymentLink(user);
+    // Payment Link (com client_reference_id + prefilled_email) só vale para o plano mensal
+    const chosen = plans.find((p: any) => p.id === planId);
+    const paymentLink = chosen?.interval === 'year' ? null : getStripePaymentLink(user);
     if (paymentLink) {
       void trackProductEvent('checkout_started', user.id, { context: 'pricing', plan_id: planId });
       trackMeta('InitiateCheckout');
@@ -127,8 +139,29 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
           ) : plans.length === 0 ? (
             <p className="text-center text-muted-foreground">{t('noPlans')}</p>
           ) : (
+            <>
+            {hasAnnual && (
+              <div className="flex justify-center mb-8">
+                <div className="inline-flex rounded-full border bg-muted p-1" role="group">
+                  {(['month', 'year'] as const).map((b) => (
+                    <button
+                      key={b}
+                      type="button"
+                      onClick={() => setBilling(b)}
+                      aria-pressed={billing === b}
+                      className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${billing === b ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground'}`}
+                    >
+                      {b === 'month' ? t('billing.monthly') : t('billing.annual')}
+                      {b === 'year' && savings > 0 && (
+                        <span className="ml-2 text-xs text-primary">-{savings}%</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
-              {plans.map((p: any) => {
+              {visiblePlans.map((p: any) => {
                 const isCurrent = subscription.plan?.id === p.id;
                 // Dedupe defensivo: evita item repetido caso o plano tenha features duplicadas.
                 const features: string[] = Array.from(
@@ -152,6 +185,12 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
                             <span className="text-3xl font-bold">{formatCurrency(Number(p.price), p.currency).replace(/[.,]00$/, '')}</span>
                             <span className="text-muted-foreground">{intervalSuffix(p.interval)}</span>
                           </>
+                        )}
+                        {p.interval === 'year' && Number(p.price) > 0 && (
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {t('billing.perMonthEquivalent', { value: formatCurrency(Number(p.price) / 12, p.currency) })}
+                            {savings > 0 && <Badge variant="secondary" className="ml-2">{t('billing.save', { pct: savings })}</Badge>}
+                          </p>
                         )}
                         {p.trial_days > 0 && (
                           <Badge variant="outline" className="ml-2">{t('trialBadge', { days: p.trial_days })}</Badge>
@@ -227,6 +266,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
                 );
               })}
             </div>
+            </>
           )}
         </div>
       </section>

@@ -32,5 +32,11 @@
   },
   "loading": "Loading plans...",
   "empty": "No plans available",
-  "manageSubscription": "Manage subscription"
+  "manageSubscription": "Manage subscription",
+  "billing": {
+    "monthly": "Monthly",
+    "annual": "Yearly",
+    "perMonthEquivalent": "just {{value}}/month",
+    "save": "Save {{pct}}%"
+  }
 }
