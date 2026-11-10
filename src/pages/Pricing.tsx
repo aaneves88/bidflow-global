@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { annualSavingsPercent } from '@/lib/annualSavings';
 import { useTranslation } from 'react-i18next';
 import { usePlans } from '@/hooks/usePlans';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -25,6 +27,15 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
   const { getSetting } = useAppSettings('integrations');
   const navigate = useNavigate();
   const { openPortal, loading: portalLoading } = useStripePortal();
+
+  const [billing, setBilling] = useState<'month' | 'year'>('month');
+  const monthlyPaid = plans.find((p: any) => !p.is_starter && p.interval !== 'year');
+  const annualPaid = plans.find((p: any) => !p.is_starter && p.interval === 'year');
+  const hasAnnual = Boolean(annualPaid);
+  const savings = annualSavingsPercent(Number(monthlyPaid?.price), Number(annualPaid?.price));
+  const visiblePlans = plans.filter(
+    (p: any) => p.is_starter || !hasAnnual || (billing === 'year' ? p.interval === 'year' : p.interval !== 'year'),
+  );
 
   const stripeEnabled = getSetting('stripe_enabled') === true;
   const hasPaymentLink = Boolean(import.meta.env.VITE_STRIPE_PAYMENT_LINK);
@@ -255,6 +266,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean } = {
                 );
               })}
             </div>
+            </>
           )}
         </div>
       </section>

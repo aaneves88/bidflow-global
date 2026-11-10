@@ -32,5 +32,11 @@
   },
   "loading": "Carregando planos...",
   "empty": "Nenhum plano disponível",
-  "manageSubscription": "Gerenciar assinatura"
+  "manageSubscription": "Gerenciar assinatura",
+  "billing": {
+    "monthly": "Mensal",
+    "annual": "Anual",
+    "perMonthEquivalent": "equivale a {{value}}/mês",
+    "save": "Economize {{pct}}%"
+  }
 }
