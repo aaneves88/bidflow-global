@@ -87,6 +87,7 @@ Deno.serve(async (req) => {
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
+      allow_promotion_codes: true,
       success_url: map.stripe_success_url || `${req.headers.get("origin")}/dashboard?checkout=success`,
       cancel_url: map.stripe_cancel_url || `${req.headers.get("origin")}/pricing?checkout=cancel`,
       customer_email: userEmail,
