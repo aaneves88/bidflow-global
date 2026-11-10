@@ -91,7 +91,13 @@ export function useSubscription() {
       const daysLeft = expires
         ? Math.max(0, Math.ceil((expires.getTime() - Date.now()) / 86400000))
         : null;
-      const hasActivePlan = !!row && row.status === 'active' && !isExpired && Number(rowPlan?.price) > 0;
+      // Anual com renovação falhando (past_due) mantém o acesso até o fim dos 12 meses pagos.
+      const hasActivePlan = isPaidAccessActive({
+        status: row?.status,
+        expiresAt: row?.expires_at ?? null,
+        price: Number(rowPlan?.price),
+        interval: rowPlan?.interval ?? null,
+      });
 
       // Sem assinatura paga ativa => plano gratuito. Nunca "premium por omissão".
       const plan = hasActivePlan ? rowPlan! : freePlan;
