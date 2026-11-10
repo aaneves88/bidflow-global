@@ -1,5 +1,5 @@
 // Stripe Checkout session creator (BYOK Stripe via STRIPE_SECRET_KEY)
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.95.0";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 
 const corsHeaders = {
