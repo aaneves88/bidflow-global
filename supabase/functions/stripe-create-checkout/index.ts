@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
     const { data: settings, error: sErr } = await admin
       .from("app_settings")
       .select("key, value")
-      .eq("category", "integrations");
+      .in("category", ["integrations", "stripe"]);
     if (sErr) throw sErr;
 
     const map = Object.fromEntries((settings ?? []).map((s: any) => [s.key, s.value]));
