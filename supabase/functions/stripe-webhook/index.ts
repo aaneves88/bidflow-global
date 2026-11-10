@@ -116,6 +116,24 @@ Deno.serve(async (req) => {
   };
 
   /** Atualiza a assinatura vigente do usuário (active ou past_due). */
+  /** Plano anual => acesso garantido por 12 meses a partir do pagamento. */
+  const isAnnualPlan = async (planId: string | null | undefined) => {
+    if (!planId) return false;
+    const { data } = await admin.from("plans").select("interval").eq("id", planId).maybeSingle();
+    return data?.interval === "year";
+  };
+  const currentPlanIsAnnual = async (userId: string) => {
+    const { data } = await admin
+      .from("user_plans").select("plan_id").eq("user_id", userId).in("status", ACTIVE_LIKE)
+      .order("created_at", { ascending: false }).limit(1).maybeSingle();
+    return isAnnualPlan(data?.plan_id);
+  };
+  const plusTwelveMonths = (from = new Date()) => {
+    const d = new Date(from);
+    d.setFullYear(d.getFullYear() + 1);
+    return d.toISOString();
+  };
+
   const patchCurrentPlan = async (userId: string, patch: Record<string, unknown>) => {
     const { error } = await admin
       .from("user_plans")
@@ -303,6 +321,15 @@ Deno.serve(async (req) => {
           d.setMonth(d.getMonth() + 1);
           expiresAt = d.toISOString();
         }
+        if (await isAnnualPlan(planId)) {
+          expiresAt = plusTwelveMonths();
+          if (subscriptionId) {
+            try {
+              const sub = await stripe.subscriptions.retrieve(subscriptionId);
+              expiresAt = toIso((sub as unknown as { current_period_end?: number }).current_period_end) ?? expiresAt;
+            } catch (_e) { /* fallback +12 meses */ }
+          }
+        }
 
         const couponCodes = await resolveCouponCodes(session);
         const referralPartnerId = await findReferralPartnerId(couponCodes);
@@ -344,7 +371,7 @@ Deno.serve(async (req) => {
             // reativa após inadimplência e confirma o período vigente
             patch.status = "active";
             // cancel_at_period_end: segue ativo até o fim do período pago
-            patch.expires_at = sub.cancel_at_period_end ? periodEnd : null;
+            patch.expires_at = sub.cancel_at_period_end || (await currentPlanIsAnnual(userId)) ? periodEnd : null;
             break;
           case "past_due":
           case "unpaid":
@@ -389,7 +416,7 @@ Deno.serve(async (req) => {
         if (subscriptionId) {
           try {
             const sub = await stripe.subscriptions.retrieve(subscriptionId);
-            if (sub.cancel_at_period_end) {
+            if (sub.cancel_at_period_end || (await currentPlanIsAnnual(userId))) {
               patch.expires_at = toIso((sub as unknown as { current_period_end?: number }).current_period_end);
             }
           } catch (e) {
