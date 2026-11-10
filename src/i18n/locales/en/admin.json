@@ -381,6 +381,15 @@
       "daysAgo_one": "{{count}} day ago",
       "daysAgo_other": "{{count}} days ago",
       "empty": "No users found"
+    },
+    "manage": {
+      "revokePremium": "Revoke Premium",
+      "deleteUser": "Delete",
+      "revokeConfirm": "Revoke {{name}}'s Premium? They go back to the Free plan.",
+      "deleteConfirm": "Permanently delete {{name}}? All proposals, clients and data will be erased. This cannot be undone.",
+      "revoked": "Premium revoked",
+      "deleted": "User deleted",
+      "errorDelete": "Could not delete"
     }
   },
   "plans": {

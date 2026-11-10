@@ -381,6 +381,15 @@
       "daysAgo_one": "há {{count}} dia",
       "daysAgo_other": "há {{count}} dias",
       "empty": "Nenhum usuário encontrado"
+    },
+    "manage": {
+      "revokePremium": "Revogar Premium",
+      "deleteUser": "Excluir",
+      "revokeConfirm": "Revogar o Premium de {{name}}? A pessoa volta para o plano Gratuito.",
+      "deleteConfirm": "Excluir {{name}} definitivamente? Todas as propostas, clientes e dados serão apagados. Isso não pode ser desfeito.",
+      "revoked": "Premium revogado",
+      "deleted": "Usuário excluído",
+      "errorDelete": "Não foi possível excluir"
     }
   },
   "plans": {
