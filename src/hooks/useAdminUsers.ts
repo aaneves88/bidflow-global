@@ -139,5 +139,33 @@ export function useAdminUsers() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin_users'] }),
   });
 
-  return { users: query.data ?? [], isLoading: query.isLoading, toggleAdmin, grantPlan };
+  const revokePlan = useMutation({
+    mutationFn: async ({ userId }: { userId: string }) => {
+      const { error } = await supabase
+        .from('user_plans')
+        .update({ status: 'cancelled', expires_at: new Date().toISOString() })
+        .eq('user_id', userId)
+        .in('status', ['active', 'past_due']);
+      if (error) throw error;
+      const { data: free } = await supabase.from('plans').select('id').eq('price', 0).limit(1).maybeSingle();
+      if (free) {
+        const { error: insErr } = await supabase
+          .from('user_plans')
+          .insert({ user_id: userId, plan_id: free.id, status: 'active' });
+        if (insErr) throw insErr;
+      }
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin_users'] }),
+  });
+
+  const deleteUser = useMutation({
+    mutationFn: async ({ userId }: { userId: string }) => {
+      const { data, error } = await supabase.functions.invoke('admin-delete-user', { body: { userId } });
+      if (error) throw error;
+      if (data?.results?.[userId] !== 'ok') throw new Error(data?.results?.[userId] ?? 'delete failed');
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin_users'] }),
+  });
+
+  return { users: query.data ?? [], isLoading: query.isLoading, toggleAdmin, grantPlan, revokePlan, deleteUser };
 }

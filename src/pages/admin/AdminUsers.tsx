@@ -12,7 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from '@/hooks/use-toast';
-import { Shield, Gift, Sparkles, Search } from 'lucide-react';
+import { Shield, Gift, Sparkles, Search, Ban, Trash2 } from 'lucide-react';
 
 type Duration = '1m' | '3m' | '6m' | '1y' | 'unlimited';
 type StatusFilter = 'all' | ActivityStatus;
@@ -42,7 +42,7 @@ const statusVariant: Record<ActivityStatus, 'default' | 'secondary' | 'outline' 
 
 export default function AdminUsers() {
   const { t } = useTranslation('admin');
-  const { users, isLoading, toggleAdmin, grantPlan } = useAdminUsers();
+  const { users, isLoading, toggleAdmin, grantPlan, revokePlan, deleteUser } = useAdminUsers();
   const { plans } = usePlans();
   const { user } = useAuth();
   const [grantDialog, setGrantDialog] = useState<string | null>(null);
@@ -110,6 +110,26 @@ export default function AdminUsers() {
       setReason('');
     } catch {
       toast({ title: t('users.messages.errorPlan'), variant: 'destructive' });
+    }
+  };
+
+  const handleRevoke = async (u: { id: string; full_name: string | null; email: string | null }) => {
+    if (!window.confirm(t('users.manage.revokeConfirm', { name: u.full_name || u.email }))) return;
+    try {
+      await revokePlan.mutateAsync({ userId: u.id });
+      toast({ title: t('users.manage.revoked') });
+    } catch {
+      toast({ title: t('users.messages.errorPlan'), variant: 'destructive' });
+    }
+  };
+
+  const handleDelete = async (u: { id: string; full_name: string | null; email: string | null }) => {
+    if (!window.confirm(t('users.manage.deleteConfirm', { name: u.full_name || u.email }))) return;
+    try {
+      await deleteUser.mutateAsync({ userId: u.id });
+      toast({ title: t('users.manage.deleted') });
+    } catch {
+      toast({ title: t('users.manage.errorDelete'), variant: 'destructive' });
     }
   };
 
@@ -294,6 +314,19 @@ export default function AdminUsers() {
                         </div>
                       </DialogContent>
                     </Dialog>
+                    {u.is_premium && (
+                      <Button size="sm" variant="outline" disabled={revokePlan.isPending} onClick={() => handleRevoke(u)}>
+                        <Ban className="h-3 w-3 mr-1" /> {t('users.manage.revokePremium')}
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      disabled={u.id === user?.id || deleteUser.isPending}
+                      onClick={() => handleDelete(u)}
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" /> {t('users.manage.deleteUser')}
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>
