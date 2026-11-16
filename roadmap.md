@@ -1,3 +1,8 @@
+# Indicadores de utilização (áudio Schanna)
+- [ ] Painel administrativo por usuário: propostas, média mensal, valor médio por moeda, downloads e ações de compartilhamento.
+- [ ] Histórico de downloads e compartilhamento na proposta e resumo no painel do usuário.
+- [ ] Confirmar abertura pelo link público, atualizar acompanhamento e orientar sobre limites de rastreamento de PDF.
+- [ ] Testar permissões, indicadores e fluxo desktop/mobile.
 # Homepage design
 - [x] Central de ajuda para usuários logados: oito tutoriais/educativos do catálogo existente, sem anúncios ou parceiros, acessível pelo menu em todos os planos.
 - [x] Scope the darker visual theme to the homepage.
