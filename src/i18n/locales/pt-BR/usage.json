@@ -1,0 +1,36 @@
+{
+  "adminTitle": "Utilização por usuário",
+  "adminNote": "Totais desde o cadastro. Média mensal por períodos de 30 dias desde o cadastro. Downloads e ações de compartilhamento passam a ser registrados a partir desta atualização; zeros não representam necessariamente ausência de uso anterior.",
+  "summaryTitle": "Downloads e compartilhamento",
+  "history": "Histórico de entrega",
+  "trackingNote": "Envie o link público para acompanhar as aberturas. Copiar o link ou abrir o WhatsApp não confirma o envio. PDFs baixados na Orca são registrados, mas não é possível saber se um arquivo foi aberto ou encaminhado fora do sistema. Aberturas do link não identificam a pessoa: podem incluir seus próprios testes.",
+  "account": "Usuário",
+  "search": "Buscar nome ou e-mail",
+  "refresh": "Atualizar indicadores",
+  "loading": "Carregando indicadores…",
+  "error": "Não foi possível carregar os registros. Tente novamente.",
+  "empty": "Nenhum usuário encontrado.",
+  "emptyHistory": "Nenhum download ou ação de compartilhamento registrado ainda.",
+  "viewed": "Visualizada pelo link",
+  "viewedTitle": "Aberturas recentes pelo link público",
+  "noViews": "Nenhuma abertura registrada neste período.",
+  "columns": {
+    "proposal_count": "Propostas",
+    "monthly_average": "Média mensal",
+    "average_values": "Valor médio por moeda",
+    "public_views": "Aberturas do link",
+    "pdf_owner": "PDFs pelo usuário",
+    "pdf_public": "PDFs pelo link",
+    "link_copied": "Links copiados",
+    "whatsapp_opened": "WhatsApp aberto",
+    "email_sent": "E-mails enviados"
+  },
+  "events": {
+    "pdf_owner": "PDF baixado pelo usuário",
+    "pdf_public": "PDF baixado pelo link público",
+    "link_copied": "Link público copiado",
+    "whatsapp_opened": "WhatsApp aberto para compartilhar",
+    "email_sent": "Proposta enviada por e-mail"
+  },
+  "summary": { "pdfOwner": "Seus downloads de PDF", "pdfPublic": "Downloads pelo link", "copied": "Links copiados", "whatsapp": "WhatsApp aberto", "email": "E-mails enviados" }
+}

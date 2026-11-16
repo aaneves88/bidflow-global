@@ -8,6 +8,7 @@ import { checkAndLog, clientIp, hashIp } from '../_shared/public-rate-limit.ts';
 const LIMITS: Record<string, number> = {
   load: 30,
   record_view: 15,
+  record_pdf: 15,
 };
 
 function json(body: unknown, status = 200) {
@@ -23,7 +24,7 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json().catch(() => null);
     const publicCode = typeof body?.publicCode === 'string' ? body.publicCode.trim() : '';
-    const action = body?.action === 'record_view' ? 'record_view' : body?.action === 'load' ? 'load' : '';
+    const action = ['record_view', 'record_pdf', 'load'].includes(body?.action) ? body.action as string : '';
     const userAgent = typeof body?.userAgent === 'string' ? body.userAgent.slice(0, 200) : '';
 
     if (!publicCode || publicCode.length < 4 || publicCode.length > 64) {
@@ -39,6 +40,12 @@ Deno.serve(async (req) => {
 
     const allowed = await checkAndLog(admin, ipHash, action, LIMITS[action]);
     if (!allowed) return json({ error: 'rate_limited' }, 200);
+
+    if (action === 'record_pdf') {
+      const { error } = await admin.rpc('record_public_pdf_download', { p_code: publicCode });
+      if (error) return json({ error: 'record_failed' }, 200);
+      return json({ ok: true });
+    }
 
     if (action === 'record_view') {
       const { error } = await admin.rpc('record_proposal_view', {

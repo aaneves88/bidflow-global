@@ -14,6 +14,7 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
 import { useTaxIdGate } from '@/hooks/useTaxIdGate';
+import { recordProposalUsage } from '@/lib/proposalUsage';
 import { UsageIndicator } from '@/components/UsageIndicator';
 import { UpgradeModal } from '@/components/UpgradeModal';
 import {
@@ -51,9 +52,11 @@ export default function Proposals() {
 
   const publicBase = usePublicAppUrl();
   const taxGate = useTaxIdGate();
-  const copyPublicLink = (code: string) => taxGate.guard(() => {
+  const copyPublicLink = (code: string) => taxGate.guard(async () => {
     const url = buildPublicProposalUrl(publicBase, code);
-    navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(url);
+    const proposalId = proposals?.find(p => p.public_code === code)?.id;
+    if (proposalId) void recordProposalUsage(proposalId, 'link_copied');
     toast({ title: t('messages.linkCopied'), description: url });
   });
 

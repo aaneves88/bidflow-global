@@ -429,7 +429,7 @@ export default function PublicProposal() {
           <Button
             size="lg"
             variant="outline"
-            onClick={async () => generateProposalPdf(proposal as any, sortedItems as any[], {
+            onClick={async () => { await generateProposalPdf(proposal as any, sortedItems as any[], {
               products: await buildPdfProducts(((proposal as any).products || []) as any[]),
               annexTitle: t('attachment.title'),
               annexProductLabel: t('attachment.productWord'),
@@ -461,7 +461,9 @@ export default function PublicProposal() {
                     instructions: t('pix.instructions'),
                   }
                 : undefined,
-            })}
+            });
+              await supabase.functions.invoke('public-proposal-view', { body: { publicCode, action: 'record_pdf' } });
+            }}
           >
             <FileDown className="mr-2 h-5 w-5" />
             {t('actions.downloadPdf')}

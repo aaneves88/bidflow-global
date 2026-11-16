@@ -12,6 +12,7 @@ import { usePublicAppUrl, buildPublicProposalUrl } from '@/hooks/usePublicAppUrl
 import { formatCurrency, formatDate } from '@/lib/format';
 import { toast } from '@/hooks/use-toast';
 import { useTaxIdGate } from '@/hooks/useTaxIdGate';
+import { recordProposalUsage } from '@/lib/proposalUsage';
 
 export type SendableProposal = {
   id: string;
@@ -80,6 +81,7 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
 
   const openWhatsapp = (phone: string) => {
     window.open(buildWhatsAppUrl(phone, whatsappMessage), '_blank', 'noopener,noreferrer');
+    void recordProposalUsage(proposal.id, 'whatsapp_opened');
   };
 
   const handleWhatsappClick = () => {
@@ -119,6 +121,7 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
         },
       });
       if (error) throw error;
+      void recordProposalUsage(proposal.id, 'email_sent');
       toast({ title: t('view.sendEmailSuccess') });
     } catch (e: any) {
       toast({ title: t('view.sendEmailError'), description: e.message, variant: 'destructive' });
@@ -196,8 +199,9 @@ export function ProposalStatusChangePopup({ open, onOpenChange, proposal }: Prop
             <Button
               variant="outline"
               className="w-full justify-start"
-              onClick={() => taxGate.guard(() => {
-                navigator.clipboard.writeText(publicUrl);
+              onClick={() => taxGate.guard(async () => {
+                await navigator.clipboard.writeText(publicUrl);
+                void recordProposalUsage(proposal.id, 'link_copied');
                 toast({ title: t('messages.linkCopied'), description: publicUrl });
               })}
             >
