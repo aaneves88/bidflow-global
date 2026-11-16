@@ -33,7 +33,7 @@ export default function LegalPage() {
   });
 
   const companyName = settings?.legal_company_name || settings?.company_name || 'Orca';
-  const contactEmail = settings?.legal_contact_email || 'contato@closeflow.app';
+  const contactEmail = settings?.legal_contact_email || 'statematch@statematch.global';
   const year = new Date().getFullYear();
 
   const sections = t(`${doc}.sections`, { returnObjects: true, company: companyName, email: contactEmail, year }) as Array<{ heading: string; body: string }>;
