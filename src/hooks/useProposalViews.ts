@@ -11,11 +11,13 @@ export function useProposalViews(proposalId: string | undefined) {
   return useQuery<ProposalViewsSummary>({
     queryKey: ['proposal-views', proposalId],
     enabled: !!proposalId,
+    refetchInterval: 15000,
     queryFn: async () => {
+      if (!proposalId) return { count: 0, firstView: null, lastView: null };
       const { data, error } = await supabase
         .from('proposal_views')
         .select('viewed_at')
-        .eq('proposal_id', proposalId!)
+        .eq('proposal_id', proposalId)
         .order('viewed_at', { ascending: true });
       if (error) throw error;
       const list = data ?? [];
@@ -34,17 +36,18 @@ export function useRecordProposalView() {
       // De-dupe per session
       const key = `cf_view_${proposalId}`;
       if (sessionStorage.getItem(key)) return;
-      sessionStorage.setItem(key, '1');
 
       // Recording requires knowing the proposal's public code (link holder only)
       // and goes through the rate-limited edge function.
-      await supabase.functions.invoke('public-proposal-view', {
+      const { data, error } = await supabase.functions.invoke('public-proposal-view', {
         body: {
           publicCode,
           action: 'record_view',
           userAgent: navigator.userAgent.slice(0, 200),
         },
       });
+      if (error || !data?.ok) throw error ?? new Error('View recording failed');
+      sessionStorage.setItem(key, '1');
     },
   });
 }

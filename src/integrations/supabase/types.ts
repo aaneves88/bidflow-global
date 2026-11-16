@@ -788,6 +788,35 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_usage_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          proposal_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          proposal_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          proposal_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_usage_events_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_views: {
         Row: {
           id: string
@@ -1379,6 +1408,7 @@ export type Database = {
           template_copies: number
         }[]
       }
+      get_admin_proposal_usage: { Args: never; Returns: Json }
       get_admin_referrals: {
         Args: never
         Returns: {
@@ -1483,6 +1513,10 @@ export type Database = {
       }
       record_proposal_view: {
         Args: { p_code: string; p_user_agent?: string }
+        Returns: undefined
+      }
+      record_public_pdf_download: {
+        Args: { p_code: string }
         Returns: undefined
       }
       sign_proposal: {

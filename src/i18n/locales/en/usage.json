@@ -1,0 +1,20 @@
+{
+  "adminTitle": "Usage by account",
+  "adminNote": "Lifetime totals. Monthly average uses 30-day periods since signup. Downloads and sharing actions are recorded starting with this update; zeros do not necessarily mean no prior usage.",
+  "summaryTitle": "Downloads and sharing",
+  "history": "Delivery history",
+  "trackingNote": "Send the public link to track views. Copying a link or opening WhatsApp does not confirm delivery. PDF downloads within Orca are recorded, but files opened or forwarded outside the system cannot be tracked. Link views do not identify the viewer and may include your own tests.",
+  "account": "Account",
+  "search": "Search name or email",
+  "refresh": "Refresh indicators",
+  "loading": "Loading indicators…",
+  "error": "Could not load records. Please try again.",
+  "empty": "No accounts found.",
+  "emptyHistory": "No downloads or sharing actions recorded yet.",
+  "viewed": "Viewed via public link",
+  "viewedTitle": "Recent public link views",
+  "noViews": "No views recorded in this period.",
+  "columns": { "proposal_count": "Proposals", "monthly_average": "Monthly average", "average_values": "Average value by currency", "public_views": "Link views", "pdf_owner": "Owner PDFs", "pdf_public": "Public PDFs", "link_copied": "Links copied", "whatsapp_opened": "WhatsApp opened", "email_sent": "Emails sent" },
+  "events": { "pdf_owner": "PDF downloaded by owner", "pdf_public": "PDF downloaded via public link", "link_copied": "Public link copied", "whatsapp_opened": "WhatsApp opened to share", "email_sent": "Proposal sent by email" },
+  "summary": { "pdfOwner": "Your PDF downloads", "pdfPublic": "Public PDF downloads", "copied": "Links copied", "whatsapp": "WhatsApp opened", "email": "Emails sent" }
+}

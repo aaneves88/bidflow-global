@@ -1,5 +1,10 @@
 # Project Rules (Orca)
 
+## Proposal usage
+- Store delivery actions in owner-scoped proposal_usage_events; expose only admin-checked aggregate RPCs across accounts to protect customer data.
+- Record public PDF downloads through the rate-limited public proposal function; never label copying or WhatsApp launch as confirmed delivery or infer external PDF opens.
+- Public view inserts move only draft/sent proposals to viewed via a database trigger; never override final statuses, and poll owner tracking screens for fresh views.
+
 ## Customer help
 - The authenticated help page filters the shared video catalog to tutorials and education, reuses its translated metadata, and has no plan/admin gate; this keeps customer help available to every plan without duplicating content.
 

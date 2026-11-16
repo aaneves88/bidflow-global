@@ -19,12 +19,13 @@ import AdminLandingFunnel from './AdminLandingFunnel';
 import AdminWeekly from './AdminWeekly';
 import AdminVideos from './AdminVideos';
 import AdminBroadcast from './AdminBroadcast';
+import AdminProposalUsage from './AdminProposalUsage';
 
 
 
 
 const GROUPS: { key: string; tabs: string[] }[] = [
-  { key: 'numbers', tabs: ['overview', 'weekly', 'niches'] },
+  { key: 'numbers', tabs: ['overview', 'weekly', 'usage', 'niches'] },
   { key: 'people', tabs: ['users', 'support', 'leads', 'broadcast'] },
   { key: 'sales', tabs: ['plans', 'referrals', 'partners'] },
   { key: 'marketing', tabs: ['marketing', 'videos', 'brand'] },
@@ -34,6 +35,7 @@ const GROUPS: { key: string; tabs: string[] }[] = [
 const PANELS: Record<string, JSX.Element> = {
   overview: <AdminOverview />,
   weekly: <AdminWeekly />,
+  usage: <AdminProposalUsage />,
   niches: <div className="space-y-6"><AdminLandingFunnel /><AdminNicheFunnel /></div>,
   users: <AdminUsers />,
   support: <AdminSupport />,
@@ -54,17 +56,18 @@ const PANELS: Record<string, JSX.Element> = {
 export default function Admin() {
   const { t } = useTranslation('admin');
   const { t: tSupport } = useTranslation('support');
+  const { t: tUsage } = useTranslation('usage');
   const [searchParams, setSearchParams] = useSearchParams();
   const requested = searchParams.get('tab') || 'overview';
   const tab = PANELS[requested] ? requested : 'overview';
   const group = GROUPS.find((g) => g.tabs.includes(tab)) ?? GROUPS[0];
 
-  const tabLabel = (key: string) => (key === 'support' ? tSupport('admin.title') : t(`tabs.${key}`));
+  const tabLabel = (key: string) => (key === 'usage' ? tUsage('adminTitle') : key === 'support' ? tSupport('admin.title') : t(`tabs.${key}`));
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
-      <Tabs value={group.key} onValueChange={(g) => setSearchParams({ tab: GROUPS.find((x) => x.key === g)!.tabs[0] })}>
+      <Tabs value={group.key} onValueChange={(g) => { const next = GROUPS.find((x) => x.key === g)?.tabs[0]; if (next) setSearchParams({ tab: next }); }}>
         <TabsList className="flex w-full justify-start overflow-x-auto [scrollbar-width:none]">
           {GROUPS.map((g) => (
             <TabsTrigger key={g.key} value={g.key}>{t(`groups.${g.key}`)}</TabsTrigger>

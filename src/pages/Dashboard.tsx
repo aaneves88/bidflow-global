@@ -19,6 +19,8 @@ import { UsageIndicator } from '@/components/UsageIndicator';
 import { AttentionPanel } from '@/components/dashboard/AttentionPanel';
 import { FileText as QAFileText, PlayCircle } from 'lucide-react';
 import { WhatsNewBanner } from '@/components/dashboard/WhatsNewBanner';
+import { ProposalUsageSummary } from '@/components/dashboard/ProposalUsageSummary';
+import { ProposalLinkViews } from '@/components/dashboard/ProposalLinkViews';
 import {
   FileText, Clock, CheckCircle, TrendingUp, AlertTriangle,
   DollarSign, ArrowUpRight, ArrowDownRight, Users, PlusCircle, Activity, Palette,
@@ -304,6 +306,8 @@ export default function Dashboard() {
       )}
 
       <UsageIndicator />
+      <ProposalUsageSummary proposals={filtered} start={start} end={end} />
+      <ProposalLinkViews proposals={proposals ?? []} start={start} end={end} />
 
       <AttentionPanel proposals={proposals ?? []} finalStatusIds={finalStatuses} />
 

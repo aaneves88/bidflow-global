@@ -31,6 +31,8 @@ import { buildPixPayload, type PixKeyType } from '@/lib/pix';
 import { toast } from '@/hooks/use-toast';
 import { useTaxIdGate } from '@/hooks/useTaxIdGate';
 import { trackProductEvent } from '@/lib/productEvents';
+import { recordProposalUsage } from '@/lib/proposalUsage';
+import { ProposalUsageHistory } from '@/components/proposals/ProposalUsageHistory';
 import { ProposalStatusChangePopup, findSentStatusId, type SendableProposal } from '@/components/proposals/ProposalStatusChangePopup';
 
 
@@ -42,6 +44,7 @@ function buildWhatsAppUrl(phone: string | null | undefined, message: string) {
 
 export default function ProposalView() {
   const { t } = useTranslation(['proposals', 'common']);
+  const { t: tUsage } = useTranslation('usage');
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: proposal, isLoading } = useProposal(id);
@@ -103,8 +106,9 @@ export default function ProposalView() {
   if (!proposal) return <p className="text-muted-foreground">{t('view.notFound')}</p>;
 
   const publicUrl = buildPublicProposalUrl(publicBase, proposal.public_code);
-  const copyLink = () => {
-    navigator.clipboard.writeText(publicUrl);
+  const copyLink = async () => {
+    await navigator.clipboard.writeText(publicUrl);
+    void recordProposalUsage(proposal.id, 'link_copied');
     toast({ title: t('messages.linkCopied') });
   };
 
@@ -121,6 +125,7 @@ export default function ProposalView() {
 
   const openWhatsapp = (phone: string) => {
     window.open(buildWhatsAppUrl(phone, whatsappMessage), '_blank', 'noopener,noreferrer');
+    void recordProposalUsage(proposal.id, 'whatsapp_opened');
     if (!sentNow && (views?.count ?? 0) === 0) {
       void trackProductEvent('first_proposal_sent', null, { proposal_id: proposal.id });
     }
@@ -225,7 +230,7 @@ export default function ProposalView() {
     }
 
     const annexProducts = await buildPdfProducts(await loadItemProducts((items as any[]) || []));
-    generateProposalPdf(proposal as any, items as any[], {
+    await generateProposalPdf(proposal as any, items as any[], {
       products: annexProducts,
       annexTitle: t('public:attachment.title'),
       annexProductLabel: t('public:attachment.productWord'),
@@ -281,6 +286,9 @@ export default function ProposalView() {
         whyMe: t('pdf.whyMe'),
       },
     });
+    await recordProposalUsage(proposal.id, 'pdf_owner');
+    void queryClient.invalidateQueries({ queryKey: ['proposal-usage'] });
+    void queryClient.invalidateQueries({ queryKey: ['dashboard-proposal-usage'] });
   };
 
 
@@ -378,6 +386,7 @@ export default function ProposalView() {
       </div>
 
       <div className="flex items-center gap-4 flex-wrap">
+        {(views?.count ?? 0) > 0 && <Badge variant="secondary"><Eye className="mr-1 h-3 w-3" />{tUsage('viewed')}</Badge>}
         {proposal.proposal_statuses && (
           <Badge variant="outline" style={{ borderColor: proposal.proposal_statuses.color, color: proposal.proposal_statuses.color }}>
             {proposal.proposal_statuses.name}
@@ -488,6 +497,8 @@ export default function ProposalView() {
           </CardContent>
         </Card>
       )}
+
+      <ProposalUsageHistory proposalId={proposal.id} />
 
       {history && history.length > 0 && (
         <Card>
@@ -605,6 +616,7 @@ export default function ProposalView() {
                     },
                   });
                   if (error) throw error;
+                  void recordProposalUsage(proposal.id, 'email_sent');
                   toast({ title: t('view.sendEmailSuccess') });
                   setEmailOpen(false);
                 } catch (e: any) {
