@@ -15,7 +15,7 @@ export function ProposalLinkViews({ proposals, start, end }: { proposals: Propos
     enabled: !!user,
     refetchInterval: 15000,
     queryFn: async () => {
-      const { data, error } = await supabase.from('proposal_views').select('proposal_id,viewed_at').gte('viewed_at',start.toISOString()).lte('viewed_at',end.toISOString()).order('viewed_at',{ ascending: false }).limit(100);
+      const { data, error } = await supabase.from('proposal_views').select('proposal_id,viewed_at').gte('viewed_at',start.toISOString()).lte('viewed_at',new Date().toISOString()).order('viewed_at',{ ascending: false }).limit(100);
       if (error) throw error;
       const seen = new Set<string>();
       return (data ?? []).filter(view => { if(seen.has(view.proposal_id)) return false; seen.add(view.proposal_id); return true; }).slice(0,5);

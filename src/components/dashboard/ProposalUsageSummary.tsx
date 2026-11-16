@@ -14,7 +14,7 @@ export function ProposalUsageSummary({ proposals, start, end }: { proposals: Pro
     enabled: !!user,
     refetchInterval: 15000,
     queryFn: async () => {
-      const { data, error } = await supabase.from('proposal_usage_events').select('proposal_id,event_type,created_at').gte('created_at', start.toISOString()).lte('created_at', end.toISOString());
+      const { data, error } = await supabase.from('proposal_usage_events').select('proposal_id,event_type,created_at').gte('created_at', start.toISOString()).lte('created_at', new Date().toISOString());
       if (error) throw error;
       return data as UsageEvent[];
     },
